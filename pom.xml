@@ -23,9 +23,9 @@
     </developer>
   </developers>
 
-  <modules>
-    <!--<module>georg-service</module>-->
+  <modules> 
     <module>georg-service</module>
+    <!--<module>georg-ui</module>-->
   </modules>
 
 
