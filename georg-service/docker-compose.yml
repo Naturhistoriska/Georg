@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+
+  ui:
+    image: georgnrm/georg-api:v0.1
+    container_name: georg-api
+    restart: always
+    environment:
+      - VIRTUAL_HOST=georg.nrm.se
+      - VIRTUAL_PORT=8180
+    ports:
+      - 8180:8180
+    volumes:
+      - ./project-initdata.yml:/usr/src/myapp/project-initdata.yml
+      # - ./logs:/usr/src/myapp/logs
+    external_links:
+      - pelias_api:pelias_api
+    networks:
+      - default
+      - pelias
+
+
+networks:
+  default:
+    external:
+      name: proxy_default
+  pelias:
+    external:
+      name: pelias_default
