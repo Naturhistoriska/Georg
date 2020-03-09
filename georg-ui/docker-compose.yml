@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  ui:
+    image: georgnrm/georg-ui:v0.1
+    container_name: georg-ui
+    restart: always
+    environment:
+      - VIRTUAL_HOST=local-georg-ui.nrm.se
+    expose:
+      - "80"
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: proxy_default
