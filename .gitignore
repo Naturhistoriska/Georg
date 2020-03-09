@@ -6,5 +6,7 @@
 
 nb-configuration.xml
 notes
-/georg-ui/target/
+
+/georg-ui/certs/*
+
 .DS_Store
