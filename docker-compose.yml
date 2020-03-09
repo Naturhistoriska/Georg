@@ -1,0 +1,44 @@
+version: '3.1'
+
+services:
+
+  api:
+    image: georgnrm/georg-api:v0.1
+    container_name: georg-api
+    restart: always
+    environment:
+      - VIRTUAL_PORT=8180
+    ports:
+      - 8180:8180
+    volumes:
+      - ./project-initdata.yml:/usr/src/myapp/project-initdata.yml
+      # - ./logs:/usr/src/myapp/logs
+    external_links:
+      - pelias_api:pelias_api
+    networks:
+      - default
+      - pelias
+
+  ui:
+    image: georgnrm/georg-ui:v0.1
+    container_name: georg-ui
+    restart: always
+    expose:
+      - "80"
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: proxy_default
+
+
+
+networks:
+  default:
+    external:
+      name: proxy_default
+  pelias:
+    external:
+      name: pelias_default
