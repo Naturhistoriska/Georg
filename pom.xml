@@ -10,7 +10,7 @@
   <name>${project.artifactId}</name>
 
   <organization>
-    <name>Swedish Natural History of Museum</name>
+    <name>Swedish Museum of Natural History</name>
     <url>http://www.nrm.se</url>
   </organization>
 
@@ -23,7 +23,7 @@
     </developer>
   </developers>
 
-  <modules> 
+  <modules>
     <module>georg-service</module>
     <!--<module>georg-ui</module>-->
   </modules>
@@ -68,7 +68,7 @@
       <version>1.18.10</version>
       <scope>provided</scope>
     </dependency>
-     
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -89,7 +89,7 @@
       <version>1.7.4</version>
       <scope>test</scope>
     </dependency>
-  
+
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-api</artifactId>
