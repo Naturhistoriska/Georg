@@ -1,7 +1,11 @@
 {
   "name": "georg-ui",
   "version": "0.1.0",
+  "license": "MIT",
   "private": true,
+  "contributors": [
+    "Ida Li <ida.li@nrm.se>"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
