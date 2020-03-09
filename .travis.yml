@@ -1,9 +1,35 @@
-language: java
-sudo: false
-jdk:
-  - openjdk8
-install: true
-script: "mvn cobertura:cobertura"
-after_success:
-  # - codecov
-  - bash <(curl -s https://codecov.io/bash)
+# language: java
+# sudo: false
+# jdk:
+#   - openjdk8
+# install: true
+# script: "mvn cobertura:cobertura"
+# after_success:
+#   # - codecov
+#   - bash <(curl -s https://codecov.io/bash)
+
+
+matrix:
+  include:
+    - language: java
+      sudo: false
+      jdk:
+        - openjdk8
+      install: true
+      script: "mvn cobertura:cobertura"
+      after_success:
+        # - codecov
+        - bash <(curl -s https://codecov.io/bash)
+
+    - language: node_js
+      node_js:
+        - 10.15.1
+      before_install:
+        - cd georg-ui
+      install:
+        - yarn install
+      # script:
+      #   - yarn test
+
+notifications:
+  email: ida.li@nrm.se
