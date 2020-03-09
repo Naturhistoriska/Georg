@@ -23,11 +23,7 @@ export default {
   },
 
   methods: {
-    clearSearch() {
-      console.log("reset clicked");
-    },
     doSearch(address) {
-      console.log("address..." + address);
       const proxyurl = "https://cors-anywhere.herokuapp.com/";
       const url = `https://georg.nrm.se/geoCoding?address=${address}`;
       // use fetch or axios?
