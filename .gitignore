@@ -1,5 +1,9 @@
 /georg-service/target/
 
+/georg-ui/dist
+/georg-ui/certs/*
+/georg-ui/node_modules
+
 nb-configuration.xml
 notes
 /georg-ui/target/
