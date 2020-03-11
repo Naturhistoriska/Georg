@@ -1,7 +1,7 @@
 module.exports = {
-  transpileDependencies: ["vuetify"],
+  transpileDependencies: ["vuetify"]
 
-  devServer: {
-    proxy: "https://georg.nrm.se"
-  }
+  // devServer: {
+  //   proxy: "https://georg.nrm.se"
+  // }
 };
