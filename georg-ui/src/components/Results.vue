@@ -20,25 +20,19 @@
         </v-row>
       </v-container>
     </v-col>
-    <v-col>
-      <Map v-bind:coordinates="coordinates" v-bind:latlon="latlon" />
-    </v-col>
   </v-row>
 </template>
 
 <script>
 import Result from "./Result";
-import Map from "./Map";
 
 export default {
   name: "Results",
   components: {
-    Result,
-    Map
+    Result
   },
 
   props: ["inactive", "results", "onScroll"],
-
   data() {
     return {
       coordinates: [61.4593, 17.6435],
@@ -58,8 +52,7 @@ export default {
   methods: {
     addMark(center) {
       let newCoordinates = [center[1], center[0]];
-      this.coordinates = newCoordinates;
-      this.latlon = newCoordinates;
+      this.$emit("add-mark", newCoordinates);
     }
   }
 };

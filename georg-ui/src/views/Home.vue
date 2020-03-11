@@ -1,54 +1,94 @@
 <template>
-  <div class="home">
-    <v-row>
-      <v-col cols="12" sm="12" md="12">
+  <div id="container">
+    <div id="navi">
+      <v-row>
         <Search v-on:search-address="doSearch" />
-      </v-col>
-    </v-row>
-    <v-row baseline start class="resultsRow">
-      <v-col cols="12" sm="12" md="12">
-        <Results v-bind:results="results" />
-      </v-col>
-    </v-row>
+      </v-row>
+      <v-row class="resultsRow">
+        <Results v-bind:results="results" v-on:add-mark="doAddMark" />
+      </v-row>
+    </div>
+    <div id="infoi">
+      <Map
+        v-bind:coordinates="coordinates"
+        v-bind:latlon="latlon"
+        v-bind:zoom="zoom"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import Search from "../components/Search";
+import Map from "../components/Map";
 import Results from "../components/Results";
 
 export default {
   name: "Home",
   components: {
     Search,
+    Map,
     Results
   },
   data() {
     return {
+      coordinates: [61.4593, 17.6435],
+      latlon: [0, 0],
+      zoom: 5,
       results: []
     };
   },
   methods: {
     doSearch(address) {
       const proxyurl = "https://cors-anywhere.herokuapp.com/";
-      const url = `https://georg.nrm.se/geoCoding?address=${address}`;
+      const url =
+        process.env.VUE_APP_GEORG_API + `geoCoding?address=${address}`;
       // use fetch or axios?
-      fetch(proxyurl + url, {
-        // mode: "no-cors",
-        method: "get"
-      })
+
+      axios
+        .get(proxyurl + url)
         .then(response => {
-          return response.text();
+          this.results = response.data.features;
         })
-        .then(jsonData => {
-          this.results = JSON.parse(jsonData).features;
-        });
+        .catch(function() {});
+    },
+
+    doAddMark(coordinates) {
+      this.coordinates = coordinates;
+      this.latlon = coordinates;
+      this.zoom = 8;
     }
   }
 };
 </script>
 <style scoped>
+#container {
+  width: 100px;
+  height: 100px;
+  position: relative;
+  background: transparent;
+}
+#navi {
+  padding-left: 2em;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+#infoi {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#infoi {
+  z-index: 0;
+}
 .resultsRow {
-  margin-top: 3em !important;
+  margin-top: 4em !important;
 }
 </style>
