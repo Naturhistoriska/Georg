@@ -7,7 +7,6 @@ services:
     container_name: georg-api
     restart: always
     environment:
-      - VIRTUAL_HOST=georg.nrm.se
       - VIRTUAL_PORT=8180
     ports:
       - 8180:8180
@@ -19,6 +18,21 @@ services:
     networks:
       - default
       - pelias
+
+  ui:
+    image: georgnrm/georg-ui:v0.1
+    container_name: georg-ui
+    restart: always
+    expose:
+      - "80"
+    networks:
+      - default
+
+networks:
+  default:
+    external:
+      name: proxy_default
+
 
 
 networks:
