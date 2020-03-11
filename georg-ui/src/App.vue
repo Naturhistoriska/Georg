@@ -3,14 +3,11 @@
     <v-app-bar app dark>
       <v-toolbar-title class="headline">Georg</v-toolbar-title>
       <v-spacer></v-spacer>
-      <!-- <div id="nav"> -->
-      <!-- <router-link to="/">Home</router-link> | -->
-      <!-- <router-link to="/about">About</router-link> -->
-      <!-- </div> -->
     </v-app-bar>
-    <v-container id="container">
+
+    <v-content id="topContent">
       <router-view />
-    </v-container>
+    </v-content>
   </v-app>
 </template>
 
@@ -18,7 +15,9 @@
 export default {
   name: "App",
 
-  data() {}
+  data: () => ({
+    //
+  })
 };
 </script>
 
@@ -30,17 +29,13 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
-// #nav {
-//   padding: 30px;
-//   a {
-//     font-weight: bold;
-//     color: #2c3e50;
-//     &.router-link-exact-active {
-//       color: #42b983;
-//     }
-//   }
-// }
-#container {
-  padding-top: 5em;
+
+#body {
+  background: transparent;
+}
+
+#topContent {
+  margin-left: 5em;
+  margin-top: 2em;
 }
 </style>
