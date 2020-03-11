@@ -1,49 +1,98 @@
 <template>
-  <v-container
-    class="grey lighten-5"
-    :class="[results.length === 0 ? 'mapInvisible' : 'mapVisible']"
-  >
-    <v-row>
-      <v-col>
-        <v-list v-for="result in results" :key="result.properties.id">
-          <Result v-bind:result="result" />
-        </v-list>
-      </v-col>
-      <v-col>
-        <v-map
-          :zoom="8"
-          :center="[47.41322, -1.219482]"
-          style="height: 250px; width: 300px; "
-        >
-          <v-tilelayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          ></v-tilelayer>
-          <v-marker :lat-lng="[47.41322, -1.219482]"></v-marker>
-        </v-map>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-row id="resultRow">
+    <v-col cols="12" sm="7" md="6" :class="resultVisibility">
+      <v-container id="st" class="overflow-y-auto">
+        <v-row v-scroll:#st="onScroll">
+          <v-card elevation>
+            <v-list id="scroll-target" class="overflow-y-auto">
+              <v-list-item-group v-model="result" color="primary">
+                <v-list-item
+                  v-for="result in results"
+                  :key="result.properties.id"
+                  :inactive="inactive"
+                  style="padding: 0px;"
+                >
+                  <Result v-bind:result="result" v-on:add-mark="addMark" />
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-card>
+        </v-row>
+      </v-container>
+    </v-col>
+    <v-col>
+      <Map v-bind:coordinates="coordinates" v-bind:latlon="latlon" />
+    </v-col>
+  </v-row>
 </template>
 
 <script>
 import Result from "./Result";
+import Map from "./Map";
 
 export default {
   name: "Results",
   components: {
-    Result
+    Result,
+    Map
   },
 
-  props: ["results"]
+  props: ["inactive", "results", "onScroll"],
+
+  data() {
+    return {
+      coordinates: [61.4593, 17.6435],
+      latlon: [0, 0],
+      zoom: 5,
+      result: {}
+    };
+  },
+  computed: {
+    resultVisibility: function() {
+      return this.results.length > 0
+        ? "resultColVisible"
+        : "resultColInvisible";
+    }
+  },
+
+  methods: {
+    addMark(center) {
+      let newCoordinates = [center[1], center[0]];
+      this.coordinates = newCoordinates;
+      this.latlon = newCoordinates;
+    }
+  }
 };
 </script>
-
 <style scoped>
-.mapVisible {
-  display: inline;
+#scroll-target {
+  max-height: 400px;
 }
 
-.mapInvisible {
+#st {
+  max-height: 400px;
+  padding: 0px;
+}
+
+#resultRow {
+  position: fixed;
+  width: 900px !important;
+  float: left;
+}
+
+.resultColInvisible {
   display: none;
+}
+
+.resultColVisible {
+  padding-left: 10px;
+}
+
+.v-card {
+  padding: 0px;
+}
+
+.v-list {
+  padding: 0px;
 }
 </style>

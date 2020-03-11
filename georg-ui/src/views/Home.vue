@@ -1,7 +1,15 @@
 <template>
-  <div class="page">
-    <Search v-on:search-address="doSearch" />
-    <Results v-bind:results="results" />
+  <div class="home">
+    <v-row>
+      <v-col cols="12" sm="12" md="12">
+        <Search v-on:search-address="doSearch" />
+      </v-col>
+    </v-row>
+    <v-row baseline start class="resultsRow">
+      <v-col cols="12" sm="12" md="12">
+        <Results v-bind:results="results" />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -11,7 +19,6 @@ import Results from "../components/Results";
 
 export default {
   name: "Home",
-  props: {},
   components: {
     Search,
     Results
@@ -21,7 +28,6 @@ export default {
       results: []
     };
   },
-
   methods: {
     doSearch(address) {
       const proxyurl = "https://cors-anywhere.herokuapp.com/";
@@ -41,3 +47,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.resultsRow {
+  margin-top: 3em !important;
+}
+</style>
