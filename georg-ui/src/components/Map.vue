@@ -1,7 +1,9 @@
 <template>
   <div id="map">
     <l-map :zoom="4" :center="coordinates" ref="myMap">
-      <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
+      <l-tile-layer
+        url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+      ></l-tile-layer>
       <l-marker :lat-lng="latlon"></l-marker>
     </l-map>
   </div>
