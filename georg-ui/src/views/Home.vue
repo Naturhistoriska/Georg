@@ -1,12 +1,15 @@
 <template>
-  <div id="container">
+  <div id="container" class="container container--fluid">
     <div id="navi">
       <v-row>
-        <Search v-on:search-address="doSearch" />
+        <Search v-on:search-address="doSearch" v-bind:loading="loading" />
       </v-row>
-      <v-row class="resultsRow">
+      <v-row class="resultsRow" v-if="hasResults">
         <Results v-bind:results="results" v-on:add-mark="doAddMark" />
       </v-row>
+      <v-row v-else class="resultsRow"
+        ><h2>{{ msg }}</h2></v-row
+      >
     </div>
     <div id="infoi">
       <Map
@@ -33,23 +36,33 @@ export default {
   },
   data() {
     return {
-      coordinates: [61.4593, 17.6435],
+      coordinates: [58.4593, 18.6435],
       latlon: [0, 0],
       zoom: 5,
-      results: []
+      results: [],
+      loading: false,
+      msg: ""
     };
+  },
+  computed: {
+    hasResults: function() {
+      return this.results.length > 0;
+    }
   },
   methods: {
     doSearch(address) {
+      this.loading = true;
       const proxyurl = "https://cors-anywhere.herokuapp.com/";
       const url =
         process.env.VUE_APP_GEORG_API + `geoCoding?address=${address}`;
       // use fetch or axios?
 
       axios
-        .get(proxyurl + url)
+        .get(proxyurl + url, { crossDomain: true })
         .then(response => {
           this.results = response.data.features;
+          this.loading = false;
+          this.msg = this.results.length > 0 ? "" : "No results";
         })
         .catch(function() {});
     },
@@ -64,8 +77,6 @@ export default {
 </script>
 <style scoped>
 #container {
-  width: 100px;
-  height: 100px;
   position: relative;
   background: transparent;
 }
@@ -89,6 +100,8 @@ export default {
   z-index: 0;
 }
 .resultsRow {
+  width: 600px;
   margin-top: 4em !important;
+  margin-left: 2px;
 }
 </style>
