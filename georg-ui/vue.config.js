@@ -1,7 +1,14 @@
 module.exports = {
-  transpileDependencies: ["vuetify"]
+  transpileDependencies: ["vuetify"],
 
-  // devServer: {
-  //   proxy: "https://georg.nrm.se"
-  // }
+  pluginOptions: {
+    proxy: {
+      enabled: true,
+      context: "/api",
+      options: {
+        target: "https://georg.nrm.se",
+        changeOrigin: true
+      }
+    }
+  }
 };
