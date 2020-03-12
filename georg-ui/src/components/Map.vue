@@ -44,8 +44,8 @@ export default {
 
 <style scoped>
 #map {
-  height: 600px;
-  width: 85% !important;
+  height: 1500px;
+  width: 100% !important;
   position: fixed;
   display: block;
   z-index: -10;
