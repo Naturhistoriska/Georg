@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 #map {
-  height: 1500px;
+  height: 1300px;
   width: 100% !important;
   position: fixed;
   display: block;
