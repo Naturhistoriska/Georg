@@ -1,15 +1,14 @@
 <template>
   <v-row id="resultRow">
-    <v-col cols="12" sm="7" md="6" :class="resultVisibility">
-      <v-container id="st" class="overflow-y-auto">
+    <v-col>
+      <v-container id="st">
         <v-row v-scroll:#st="onScroll">
           <v-card elevation>
-            <v-list id="scroll-target" class="overflow-y-auto">
+            <v-list id="scroll-target">
               <v-list-item-group v-model="result" color="primary">
                 <v-list-item
                   v-for="result in results"
                   :key="result.properties.id"
-                  :inactive="inactive"
                   style="padding: 0px;"
                 >
                   <Result v-bind:result="result" v-on:add-mark="addMark" />
@@ -32,7 +31,7 @@ export default {
     Result
   },
 
-  props: ["inactive", "results", "onScroll"],
+  props: ["results", "onScroll"],
   data() {
     return {
       coordinates: [61.4593, 17.6435],
@@ -40,13 +39,6 @@ export default {
       zoom: 5,
       result: {}
     };
-  },
-  computed: {
-    resultVisibility: function() {
-      return this.results.length > 0
-        ? "resultColVisible"
-        : "resultColInvisible";
-    }
   },
 
   methods: {
@@ -59,7 +51,7 @@ export default {
 </script>
 <style scoped>
 #scroll-target {
-  max-height: 400px;
+  max-height: 900px;
 }
 
 #st {
@@ -69,16 +61,8 @@ export default {
 
 #resultRow {
   position: fixed;
-  width: 900px !important;
+  width: 25em !important;
   float: left;
-}
-
-.resultColInvisible {
-  display: none;
-}
-
-.resultColVisible {
-  padding-left: 10px;
 }
 
 .v-card {
