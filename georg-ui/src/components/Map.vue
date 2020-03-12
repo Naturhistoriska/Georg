@@ -2,7 +2,7 @@
   <div id="map">
     <l-map :zoom="zoom" :center="coordinates" :options="mapOptions" ref="myMap">
       <l-tile-layer
-        url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+        url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
       ></l-tile-layer>
       <l-marker :lat-lng="latlon"></l-marker>
     </l-map>
