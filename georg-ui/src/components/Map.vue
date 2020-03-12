@@ -29,7 +29,6 @@ export default {
     }
   },
   watch: {
-    // whenever question changes, this function will run
     coordinates: function() {
       this.$nextTick(() => {
         this.$refs.myMap.mapObject.flyTo(
