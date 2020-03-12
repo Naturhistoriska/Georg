@@ -1,7 +1,10 @@
 import Vue from "vue";
+import VueAxios from "vue-axios";
+// import AxiosPlugin from "vue-axios-cors";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+
 import vuetify from "./plugins/vuetify";
 
 import "vuetify/dist/vuetify.css";
@@ -39,7 +42,9 @@ Vue.use(vuetify, {
     warning: "#EA80FC",
     info: "#29B6F6",
     success: "#64DD17"
-  }
+  },
+  VueAxios
+  // AxiosPlugin
 });
 
 new Vue({
