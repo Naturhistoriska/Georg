@@ -68,10 +68,13 @@ export default {
 
 <style scoped>
 .result-item {
-  background: #f4f4f4;
-  /* padding: 5px;
-  width: 500px; */
+  padding: 0px;
+  width: 25em;
   text-align: left;
+}
+
+.result-item:hover {
+  background: darkblue;
 }
 
 .selected {
@@ -80,9 +83,5 @@ export default {
 
 .unSelected {
   background: #f4f4f4;
-}
-
-.v-list-item {
-  border: blue 1px;
 }
 </style>

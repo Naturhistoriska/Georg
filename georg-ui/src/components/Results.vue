@@ -5,7 +5,7 @@
         <v-row v-scroll:#st="onScroll" class="overflow-y-auto">
           <v-card elevation>
             <v-list id="scroll-target">
-              <v-list-item-group v-model="result" color="primary">
+              <v-list-item-group v-model="result">
                 <v-list-item
                   inactive
                   v-for="result in results"
@@ -69,7 +69,7 @@ export default {
 
 #resultRow {
   position: fixed;
-  width: 26em !important;
+  width: 25em !important;
   float: left;
 }
 
