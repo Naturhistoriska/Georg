@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" sm="6" md="4" class="fixedPosition">
+    <v-col cols="12" md="3" class="fixedPosition">
       <v-text-field
         solo
         v-model="address"
@@ -8,22 +8,24 @@
         append-icon="search"
         autofocus
         clearable
+        :loading="loading"
         @click:append="search"
         @keyup.enter="search"
       ></v-text-field>
     </v-col>
   </v-row>
 </template>
-
 <script>
 export default {
   name: "Search",
-  components: {},
+  props: ["loading"],
   data() {
     return {
-      address: ""
+      address: "",
+      isSearch: false
     };
   },
+
   methods: {
     clearSearch() {
       this.address = "";

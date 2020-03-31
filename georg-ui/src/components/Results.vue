@@ -1,18 +1,22 @@
 <template>
   <v-row id="resultRow">
-    <v-col cols="12" sm="7" md="6" :class="resultVisibility">
-      <v-container id="st" class="overflow-y-auto">
-        <v-row v-scroll:#st="onScroll">
+    <v-col>
+      <v-container id="st">
+        <v-row v-scroll:#st="onScroll" class="overflow-y-auto">
           <v-card elevation>
-            <v-list id="scroll-target" class="overflow-y-auto">
-              <v-list-item-group v-model="result" color="primary">
+            <v-list id="scroll-target">
+              <v-list-item-group v-model="result">
                 <v-list-item
+                  inactive
                   v-for="result in results"
                   :key="result.properties.id"
-                  :inactive="inactive"
                   style="padding: 0px;"
                 >
-                  <Result v-bind:result="result" v-on:add-mark="addMark" />
+                  <Result
+                    v-bind:result="result"
+                    v-on:add-mark="addMark"
+                    v-bind:isActive="activeId === result.properties.id"
+                  />
                 </v-list-item>
               </v-list-item-group>
             </v-list>
@@ -32,25 +36,21 @@ export default {
     Result
   },
 
-  props: ["inactive", "results", "onScroll"],
+  props: ["results", "onScroll"],
   data() {
     return {
       coordinates: [61.4593, 17.6435],
       latlon: [0, 0],
       zoom: 5,
-      result: {}
+      result: {},
+      activeId: "",
+      isActive: false
     };
-  },
-  computed: {
-    resultVisibility: function() {
-      return this.results.length > 0
-        ? "resultColVisible"
-        : "resultColInvisible";
-    }
   },
 
   methods: {
-    addMark(center) {
+    addMark(center, id) {
+      this.activeId = id;
       let newCoordinates = [center[1], center[0]];
       this.$emit("add-mark", newCoordinates);
     }
@@ -59,7 +59,7 @@ export default {
 </script>
 <style scoped>
 #scroll-target {
-  max-height: 400px;
+  max-height: 900px;
 }
 
 #st {
@@ -69,16 +69,8 @@ export default {
 
 #resultRow {
   position: fixed;
-  width: 900px !important;
+  width: 25em !important;
   float: left;
-}
-
-.resultColInvisible {
-  display: none;
-}
-
-.resultColVisible {
-  padding-left: 10px;
 }
 
 .v-card {

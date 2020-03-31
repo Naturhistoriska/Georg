@@ -14,8 +14,8 @@ export function latlon(dd, longOrLat) {
   const absDD = Math.abs(dd);
   const degrees = truncate(absDD);
   const minutes = truncate((absDD - degrees) * 60);
-  const seconds = ((absDD - degrees - minutes / 60) * Math.pow(60, 2)).toFixed(
-    2
+  const seconds = ((absDD - degrees - minutes / 60) * Math.pow(60, 0)).toFixed(
+    0
   );
 
   let dmsArray = [degrees, minutes, seconds, hemisphere];

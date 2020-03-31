@@ -2,7 +2,7 @@
   <div id="map">
     <l-map :zoom="zoom" :center="coordinates" :options="mapOptions" ref="myMap">
       <l-tile-layer
-        url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+        url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
       ></l-tile-layer>
       <l-marker :lat-lng="latlon"></l-marker>
     </l-map>
@@ -29,7 +29,6 @@ export default {
     }
   },
   watch: {
-    // whenever question changes, this function will run
     coordinates: function() {
       this.$nextTick(() => {
         this.$refs.myMap.mapObject.flyTo(
@@ -44,8 +43,8 @@ export default {
 
 <style scoped>
 #map {
-  height: 600px;
-  width: 85% !important;
+  height: 1300px;
+  width: 100% !important;
   position: fixed;
   display: block;
   z-index: -10;

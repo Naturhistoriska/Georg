@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <v-app-bar app dark>
+    <v-app-bar app color="blue darken-2">
       <v-toolbar-title class="headline">Georg</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-app-bar>
 
-    <v-content id="topContent">
+    <v-content>
       <router-view />
     </v-content>
   </v-app>
@@ -32,10 +32,5 @@ export default {
 
 #body {
   background: transparent;
-}
-
-#topContent {
-  margin-left: 5em;
-  margin-top: 2em;
 }
 </style>
