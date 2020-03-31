@@ -106,8 +106,8 @@ export default {
     },
 
     handleResize() {
-      const windowHeight = window.innerHeight;
-      const boxHeight = windowHeight - 200;
+      const windowHeight = window.innerHeight - 50;
+      const boxHeight = windowHeight - 115;
       this.mapHeight = "height: " + windowHeight + "px";
       this.resultsHeight = "max-height: " + boxHeight + "px";
     }
