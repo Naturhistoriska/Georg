@@ -6,6 +6,7 @@
       :options="mapOptions"
       ref="myMap"
       :style="height"
+      @click="addMarker"
     >
       <l-tile-layer
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -17,6 +18,7 @@
         :key="marker.id"
         :visible="marker.visible"
         :lat-lng="marker.position"
+        :icon="marker.icon"
       >
       </l-marker>
     </l-map>
@@ -50,6 +52,11 @@ export default {
           this.zoom
         );
       });
+    }
+  },
+  methods: {
+    addMarker(event) {
+      this.$emit("add-new-marker", event.latlng);
     }
   }
 };
