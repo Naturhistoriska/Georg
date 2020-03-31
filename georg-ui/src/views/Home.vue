@@ -42,7 +42,7 @@ export default {
   },
   data() {
     return {
-      coordinates: [58.4593, 18.6435],
+      coordinates: [62.4593, 16.6435],
       latlon: [0, 0],
       zoom: 5,
       results: [],
