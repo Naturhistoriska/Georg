@@ -22,16 +22,29 @@
         v-bind:zoom="zoom"
         v-bind:height="mapHeight"
         v-bind:markers="markers"
+        v-on:add-new-marker="doAddNewMarker"
       />
     </div>
   </div>
 </template>
 
 <script>
+import L from "leaflet";
 import axios from "axios";
 import Search from "../components/Search";
 import Map from "../components/Map";
 import Results from "../components/Results";
+
+const MAP_ICONS = {
+  blueIcon: L.icon({
+    iconUrl: "http://maps.google.com/mapfiles/ms/micons/blue-dot.png",
+    iconSize: [30, 30] // size of the icon
+  }),
+  redIcon: L.icon({
+    iconUrl: "http://maps.google.com/mapfiles/ms/micons/red-dot.png",
+    iconSize: [30, 30] // size of the icon
+  })
+};
 
 export default {
   name: "Home",
@@ -40,17 +53,18 @@ export default {
     Map,
     Results
   },
+
   data() {
     return {
       coordinates: [62.4593, 16.6435],
       latlon: [0, 0],
-      zoom: 5,
-      results: [],
       loading: false,
-      msg: "",
+      markers: [],
       mapHeight: "height: 1500px",
+      msg: "",
+      results: [],
       resultsHeight: "height: 1400px",
-      markers: []
+      zoom: 5
     };
   },
   created() {
@@ -80,6 +94,8 @@ export default {
           this.loading = false;
           this.msg = this.results.length > 0 ? "" : "No results";
           this.createMarks();
+          this.zoom = 5;
+          this.rezoom = false;
         })
         .catch(function() {});
     },
@@ -92,21 +108,39 @@ export default {
         let marker = {
           id: result.properties.id,
           position: [lat, lon],
-          visible: true
+          visible: true,
+          icon: MAP_ICONS.blueIcon
         };
         array.push(marker);
       });
       this.markers = array;
     },
 
-    doAddMark(coordinates) {
+    doAddMark(coordinates, id) {
       this.coordinates = coordinates;
-      this.latlon = coordinates;
       this.zoom = 8;
+      this.markers.forEach(marker => {
+        if (marker.id === id) {
+          marker.icon = MAP_ICONS.redIcon;
+        } else {
+          marker.icon = MAP_ICONS.blueIcon;
+        }
+      });
+    },
+
+    doAddNewMarker(latlng) {
+      this.markers.length = 0;
+      let marker = {
+        id: 1,
+        position: latlng,
+        visible: true,
+        icon: MAP_ICONS.blueIcon
+      };
+      this.markers.push(marker);
     },
 
     handleResize() {
-      const windowHeight = window.innerHeight - 50;
+      const windowHeight = window.innerHeight - 64;
       const boxHeight = windowHeight - 115;
       this.mapHeight = "height: " + windowHeight + "px";
       this.resultsHeight = "max-height: " + boxHeight + "px";

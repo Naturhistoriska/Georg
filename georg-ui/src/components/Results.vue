@@ -52,7 +52,7 @@ export default {
     addMark(center, id) {
       this.activeId = id;
       let newCoordinates = [center[1], center[0]];
-      this.$emit("add-mark", newCoordinates);
+      this.$emit("add-mark", newCoordinates, id);
     }
   }
 };
