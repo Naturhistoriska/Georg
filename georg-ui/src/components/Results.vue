@@ -2,7 +2,7 @@
   <v-row id="resultRow">
     <v-col>
       <v-container id="st">
-        <v-row v-scroll:#st="onScroll" class="overflow-y-auto">
+        <v-row v-scroll:#st="onScroll" class="overflow-y-auto" :style="height">
           <v-card elevation>
             <v-list id="scroll-target">
               <v-list-item-group v-model="result">
@@ -36,7 +36,7 @@ export default {
     Result
   },
 
-  props: ["results", "onScroll"],
+  props: ["results", "onScroll", "height"],
   data() {
     return {
       coordinates: [61.4593, 17.6435],
@@ -58,10 +58,6 @@ export default {
 };
 </script>
 <style scoped>
-#scroll-target {
-  max-height: 900px;
-}
-
 #st {
   max-height: 400px;
   padding: 0px;

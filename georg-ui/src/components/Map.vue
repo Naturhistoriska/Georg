@@ -1,6 +1,12 @@
 <template>
   <div id="map">
-    <l-map :zoom="zoom" :center="coordinates" :options="mapOptions" ref="myMap">
+    <l-map
+      :zoom="zoom"
+      :center="coordinates"
+      :options="mapOptions"
+      ref="myMap"
+      :style="height"
+    >
       <l-tile-layer
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
       ></l-tile-layer>
@@ -12,7 +18,7 @@
 <script>
 export default {
   name: "MapTwo",
-  props: ["coordinates", "latlon", "zoom"],
+  props: ["coordinates", "latlon", "zoom", "height"],
 
   mounted() {
     this.$nextTick(() => {
@@ -43,7 +49,6 @@ export default {
 
 <style scoped>
 #map {
-  height: 1300px;
   width: 100% !important;
   position: fixed;
   display: block;

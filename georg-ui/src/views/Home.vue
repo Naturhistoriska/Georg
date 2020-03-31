@@ -5,17 +5,22 @@
         <Search v-on:search-address="doSearch" v-bind:loading="loading" />
       </v-row>
       <v-row class="resultsRow" v-if="hasResults">
-        <Results v-bind:results="results" v-on:add-mark="doAddMark" />
+        <Results
+          v-bind:results="results"
+          v-bind:height="resultsHeight"
+          v-on:add-mark="doAddMark"
+        />
       </v-row>
-      <v-row v-else class="resultsRow"
-        ><h2>{{ msg }}</h2></v-row
-      >
+      <v-row v-else class="resultsRow">
+        <h2>{{ msg }}</h2>
+      </v-row>
     </div>
     <div id="infoi">
       <Map
         v-bind:coordinates="coordinates"
         v-bind:latlon="latlon"
         v-bind:zoom="zoom"
+        v-bind:height="mapHeight"
       />
     </div>
   </div>
@@ -41,8 +46,17 @@ export default {
       zoom: 5,
       results: [],
       loading: false,
-      msg: ""
+      msg: "",
+      mapHeight: "height: 1500px",
+      resultsHeight: "height: 1400px"
     };
+  },
+  created() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+  },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
   },
   computed: {
     hasResults: function() {
@@ -71,6 +85,13 @@ export default {
       this.coordinates = coordinates;
       this.latlon = coordinates;
       this.zoom = 8;
+    },
+
+    handleResize() {
+      const windowHeight = window.innerHeight;
+      const boxHeight = windowHeight - 200;
+      this.mapHeight = "height: " + windowHeight + "px";
+      this.resultsHeight = "max-height: " + boxHeight + "px";
     }
   }
 };
