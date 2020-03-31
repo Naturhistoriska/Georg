@@ -29,7 +29,7 @@ export default {
 
   mounted() {
     this.$nextTick(() => {
-      this.$refs.myMap.mapObject.zoomControl.setPosition("topright");
+      this.$refs.myMap.mapObject.zoomControl.setPosition("bottomright");
       this.$refs.myMap.mapObject.invalidateSize();
     });
   },
@@ -37,7 +37,7 @@ export default {
     mapOptions: function() {
       return {
         zoomControl: true,
-        zoomControlPosition: "topright"
+        zoomControlPosition: "bottomright"
       };
     }
   },
