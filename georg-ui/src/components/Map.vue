@@ -11,14 +11,21 @@
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
       ></l-tile-layer>
       <l-marker :lat-lng="latlon"></l-marker>
+      <l-marker
+        v-for="marker in markers"
+        :key="marker.id"
+        :visible="marker.visible"
+        :lat-lng="marker.position"
+      >
+      </l-marker>
     </l-map>
   </div>
 </template>
 
 <script>
 export default {
-  name: "MapTwo",
-  props: ["coordinates", "latlon", "zoom", "height"],
+  name: "Map",
+  props: ["coordinates", "height", "latlon", "markers", "zoom"],
 
   mounted() {
     this.$nextTick(() => {

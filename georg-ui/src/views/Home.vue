@@ -21,6 +21,7 @@
         v-bind:latlon="latlon"
         v-bind:zoom="zoom"
         v-bind:height="mapHeight"
+        v-bind:markers="markers"
       />
     </div>
   </div>
@@ -48,7 +49,8 @@ export default {
       loading: false,
       msg: "",
       mapHeight: "height: 1500px",
-      resultsHeight: "height: 1400px"
+      resultsHeight: "height: 1400px",
+      markers: []
     };
   },
   created() {
@@ -77,8 +79,24 @@ export default {
           this.results = response.data.features;
           this.loading = false;
           this.msg = this.results.length > 0 ? "" : "No results";
+          this.createMarks();
         })
         .catch(function() {});
+    },
+
+    createMarks() {
+      const array = [];
+      this.results.forEach(result => {
+        const lat = result.geometry.coordinates[1];
+        const lon = result.geometry.coordinates[0];
+        let marker = {
+          id: result.properties.id,
+          position: [lat, lon],
+          visible: true
+        };
+        array.push(marker);
+      });
+      this.markers = array;
     },
 
     doAddMark(coordinates) {
