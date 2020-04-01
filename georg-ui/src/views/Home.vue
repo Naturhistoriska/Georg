@@ -8,7 +8,8 @@
         <Results
           v-bind:results="results"
           v-bind:height="resultsHeight"
-          v-on:add-mark="doAddMark"
+          v-on:showDetail="showDetail"
+          v-on:showMarker="showMarker"
         />
       </v-row>
       <v-row v-else class="resultsRow">
@@ -57,6 +58,7 @@ export default {
   data() {
     return {
       coordinates: [62.4593, 16.6435],
+      isDetailView: false,
       latlon: [0, 0],
       loading: false,
       markers: [],
@@ -64,6 +66,7 @@ export default {
       msg: "",
       results: [],
       resultsHeight: "height: 1400px",
+      selectedResult: {},
       zoom: 5
     };
   },
@@ -116,17 +119,17 @@ export default {
       this.markers = array;
     },
 
-    doAddMark(coordinates, id) {
-      this.coordinates = coordinates;
-      this.zoom = 8;
-      this.markers.forEach(marker => {
-        if (marker.id === id) {
-          marker.icon = MAP_ICONS.redIcon;
-        } else {
-          marker.icon = MAP_ICONS.blueIcon;
-        }
-      });
-    },
+    // doAddMark(coordinates, id) {
+    //   this.coordinates = coordinates;
+    //   this.zoom = 8;
+    //   this.markers.forEach(marker => {
+    //     if (marker.id === id) {
+    //       marker.icon = MAP_ICONS.redIcon;
+    //     } else {
+    //       marker.icon = MAP_ICONS.blueIcon;
+    //     }
+    //   });
+    // },
 
     doAddNewMarker(latlng) {
       this.markers.length = 0;
@@ -137,6 +140,24 @@ export default {
         icon: MAP_ICONS.blueIcon
       };
       this.markers.push(marker);
+    },
+
+    showDetail(result) {
+      this.isDetailView = true;
+      this.selectedResult = result;
+    },
+
+    showMarker(coordinates, id, isActive) {
+      this.coordinates = coordinates;
+      if (!isActive) {
+        this.markers.forEach(marker => {
+          if (marker.id === id) {
+            marker.icon = MAP_ICONS.redIcon;
+          } else {
+            marker.icon = MAP_ICONS.blueIcon;
+          }
+        });
+      }
     },
 
     handleResize() {

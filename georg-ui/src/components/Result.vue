@@ -2,7 +2,8 @@
   <div class="result-item">
     <v-list-item
       three-line
-      @click.prevent="addMark(result)"
+      @click.prevent="onclick(result)"
+      @mouseover="onhove"
       inactive
       :class="resultColor"
     >
@@ -54,11 +55,15 @@ export default {
   },
 
   methods: {
-    addMark() {
+    onclick() {
+      this.$emit("showDetail", this.result);
+    },
+    onhove() {
       this.$emit(
-        "add-mark",
+        "showMarker",
         this.result.geometry.coordinates,
-        this.result.properties.id
+        this.result.properties.id,
+        this.isActive
       );
     }
   }

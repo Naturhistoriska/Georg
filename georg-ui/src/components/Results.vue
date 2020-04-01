@@ -14,7 +14,8 @@
                 >
                   <Result
                     v-bind:result="result"
-                    v-on:add-mark="addMark"
+                    v-on:showDetail="showDetail"
+                    v-on:showMarker="showMarker"
                     v-bind:isActive="activeId === result.properties.id"
                   />
                 </v-list-item>
@@ -49,10 +50,14 @@ export default {
   },
 
   methods: {
-    addMark(center, id) {
-      this.activeId = id;
+    showDetail(result) {
+      // this.activeId = id;
+      // let newCoordinates = [center[1], center[0]];
+      this.$emit("showDetail", result);
+    },
+    showMarker(center, id, isActive) {
       let newCoordinates = [center[1], center[0]];
-      this.$emit("add-mark", newCoordinates, id);
+      this.$emit("showMarker", newCoordinates, id, isActive);
     }
   }
 };
