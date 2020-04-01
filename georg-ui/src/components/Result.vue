@@ -4,7 +4,6 @@
       three-line
       @click.prevent="addMark(result)"
       inactive
-      style="padding: 5px; background: isActive ? #c7d0ff : #f4f4f4"
       :class="resultColor"
     >
       <v-list-item-content>
