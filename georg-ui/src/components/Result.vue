@@ -49,7 +49,7 @@ export default {
       return latDms + " " + lonDms;
     },
     resultColor: function() {
-      return this.isActive ? "selected" : "unSelected";
+      return this.isActive ? "selected" : "";
     }
   },
 
@@ -73,7 +73,7 @@ export default {
 }
 
 .result-item:hover {
-  background: darkblue;
+  background: #c7d0ff;
 }
 
 .selected {
