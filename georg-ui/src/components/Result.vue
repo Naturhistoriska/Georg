@@ -31,6 +31,8 @@
 
 <script>
 import * as converter from "../assets/js/latlonConverter.js";
+import { mapMutations } from "vuex";
+
 export default {
   name: "Result",
   props: ["isActive", "result"],
@@ -55,16 +57,18 @@ export default {
   },
 
   methods: {
+    ...mapMutations([
+      "setDetailView",
+      "setHovedResultId",
+      "setSelectedResultId"
+    ]),
     onclick() {
-      this.$emit("showDetail", this.result);
+      // this.$emit("showDetail", this.result);
+      this.setDetailView(true);
+      this.setSelectedResultId(this.result.properties.id);
     },
     onhove() {
-      this.$emit(
-        "showMarker",
-        this.result.geometry.coordinates,
-        this.result.properties.id,
-        this.isActive
-      );
+      this.setHovedResultId(this.result.properties.id);
     }
   }
 };

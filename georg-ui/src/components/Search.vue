@@ -16,25 +16,37 @@
   </v-row>
 </template>
 <script>
+import { mapMutations } from "vuex";
+import Service from "../Service";
+const service = new Service();
+
 export default {
   name: "Search",
-  props: ["loading"],
+  props: [],
   data() {
     return {
       address: "",
-      isSearch: false
+      isSearch: false,
+      loading: false
     };
   },
 
   methods: {
+    ...mapMutations(["setResults", "setDidSearch"]),
     clearSearch() {
       this.address = "";
     },
-    search(e) {
-      e.preventDefault();
-      if (this.address != null && this.address.length > 0) {
-        this.$emit("search-address", this.address);
-      }
+    search() {
+      this.loading = true;
+      service
+        .fetchAddressResults(this.address)
+        .then(response => {
+          this.results = response.features;
+          this.loading = false;
+          this.setResults(this.results);
+          this.setDidSearch(true);
+        })
+        .catch(function() {});
     }
   }
 };

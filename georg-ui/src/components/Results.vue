@@ -1,5 +1,5 @@
 <template>
-  <v-row id="resultRow">
+  <v-row id="resultRow" v-if="!displayMessage">
     <v-col>
       <v-container id="st">
         <v-row v-scroll:#st="onScroll" class="overflow-y-auto" :style="height">
@@ -14,8 +14,6 @@
                 >
                   <Result
                     v-bind:result="result"
-                    v-on:showDetail="showDetail"
-                    v-on:showMarker="showMarker"
                     v-bind:isActive="activeId === result.properties.id"
                   />
                 </v-list-item>
@@ -26,43 +24,51 @@
       </v-container>
     </v-col>
   </v-row>
+  <v-row id="messageRow" v-else>
+    <Message />
+  </v-row>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import Result from "./Result";
+import Message from "../components/Message";
 
 export default {
   name: "Results",
   components: {
+    Message,
     Result
   },
 
-  props: ["results", "onScroll", "height"],
+  props: ["onScroll", "height"],
   data() {
     return {
-      coordinates: [61.4593, 17.6435],
-      latlon: [0, 0],
-      zoom: 5,
-      result: {},
       activeId: "",
-      isActive: false
+      isActive: false,
+      result: {}
     };
   },
 
-  methods: {
-    showDetail(result) {
-      // this.activeId = id;
-      // let newCoordinates = [center[1], center[0]];
-      this.$emit("showDetail", result);
-    },
-    showMarker(center, id, isActive) {
-      let newCoordinates = [center[1], center[0]];
-      this.$emit("showMarker", newCoordinates, id, isActive);
-    }
-  }
+  computed: {
+    ...mapGetters(["displayMessage", "results"])
+  },
+
+  methods: {}
 };
 </script>
 <style scoped>
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
 #st {
   max-height: 400px;
   padding: 0px;
@@ -71,6 +77,13 @@ export default {
 #resultRow {
   position: fixed;
   width: 25em !important;
+  float: left;
+}
+
+#messageRow {
+  padding-left: 1em;
+  padding-top: 2em;
+  position: fixed;
   float: left;
 }
 
