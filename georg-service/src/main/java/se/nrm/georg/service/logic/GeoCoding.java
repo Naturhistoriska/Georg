@@ -28,29 +28,33 @@ public class GeoCoding implements Serializable {
     
   }
   
+  public GeoCoding(InitialProperties props) {
+    this.props = props;
+  }
+  
   @PostConstruct 
   public void init() {
-    peliasPath = props.getPeliasPath(); 
-    client = ClientBuilder.newClient(); 
+    peliasPath = props.getPeliasPath();   
   }
   
   public String getGeoCode(String address) {
     log.info("getGeoCoding: address = {}", address);  
+    
+    client = ClientBuilder.newClient(); 
     target = client.target(Util.getInstance().buildGeoCodePath(peliasPath, address));
     Response response = target.request(MediaType.APPLICATION_JSON).get();
-    String jsonString = response.readEntity(String.class); 
-    log.info("jsonString: {}", jsonString);
+    String jsonString = response.readEntity(String.class);  
     return jsonString;
   }
   
   public String getReverseGeoCode(double lat, double lon) { 
     log.info("getReverseGeoCode : {} -- {}", lat, lon);
 
+    client = ClientBuilder.newClient(); 
     target = client.target(Util.getInstance()
             .buildReverseGeoCodePath(peliasPath, lat, lon));
     Response response = target.request(MediaType.APPLICATION_JSON).get();
-    String jsonString = response.readEntity(String.class); 
-    log.info("jsonString: {}", jsonString);
+    String jsonString = response.readEntity(String.class);  
     return jsonString;
   }
   
