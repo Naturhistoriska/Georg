@@ -5,7 +5,7 @@
         <v-row v-scroll:#st="onScroll" class="overflow-y-auto" :style="height">
           <v-card elevation>
             <v-list id="scroll-target">
-              <v-list-item-group v-model="result">
+              <v-list-item-group v-model="result" id="resultList">
                 <v-list-item
                   inactive
                   v-for="result in results"
