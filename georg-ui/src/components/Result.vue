@@ -2,7 +2,7 @@
   <div class="result-item">
     <v-list-item
       three-line
-      @click.prevent="onclick(result)"
+      @click.prevent="onclick()"
       @mouseover="onhove"
       inactive
       :class="resultColor"
