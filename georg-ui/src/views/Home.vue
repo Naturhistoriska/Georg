@@ -4,7 +4,7 @@
       <v-row>
         <Search />
       </v-row>
-      <v-row class="resultsRow">
+      <v-row class="resultsRow" id="results">
         <Results v-bind:height="resultsHeight" />
       </v-row>
     </div>
