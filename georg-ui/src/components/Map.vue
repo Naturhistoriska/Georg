@@ -1,10 +1,8 @@
 <template>
   <div id="map">
     <l-map
-      :center="coordinates"
       :options="mapOptions"
       ref="myMap"
-      @click="onclick"
       @ready="getMapBounds"
       :style="height"
     >
@@ -13,6 +11,7 @@
         attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
       ></l-tile-layer>
       <l-marker
+        id="markerList"
         v-for="marker in markers"
         :key="marker.id"
         :visible="marker.visible"
@@ -48,7 +47,7 @@ export default {
     LMap,
     LTileLayer
   },
-  props: ["coordinates", "height", "latlon"],
+  props: ["height", "latlon"],
   data() {
     return {
       bounds: {},
@@ -60,7 +59,6 @@ export default {
     };
   },
   mounted() {
-    console.log("mounted...");
     this.bounds = new L.LatLngBounds(southWest, northEast);
     this.$nextTick(() => {
       this.$refs.myMap.mapObject.zoomControl.setPosition("bottomright");
@@ -78,7 +76,6 @@ export default {
       });
     },
     hovedResultId() {
-      console.log("watch..." + this.hovedResultId);
       this.$nextTick(() => {
         this.selectedMark();
       });
@@ -91,7 +88,6 @@ export default {
       let south = -90;
       let west = -180;
       let east = 180;
-      console.log(this.results);
       this.results.forEach(result => {
         const lat = result.geometry.coordinates[1];
         const lon = result.geometry.coordinates[0];
@@ -116,7 +112,6 @@ export default {
     },
     selectedMark() {
       const id = this.hovedResultId;
-      console.log("selectedMark : " + id);
       this.markers.forEach(marker => {
         if (marker.id === id) {
           marker.icon = MAP_ICONS.redIcon;
@@ -125,10 +120,10 @@ export default {
         }
       });
     },
-    onclick(event) {
-      console.log(event);
-      // this.$emit("addMarker", event.latlng);
-    },
+    // onclick(event) {
+    //   // console.log(event);
+    //   // this.$emit("addMarker", event.latlng);
+    // },
     getMapBounds() {
       this.$refs.myMap.mapObject.fitBounds(this.bounds);
     }
