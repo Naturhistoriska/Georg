@@ -4,7 +4,7 @@
       :options="mapOptions"
       ref="myMap"
       @ready="getMapBounds"
-      :style="height"
+      :style="mapHeight"
     >
       <l-tile-layer
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"

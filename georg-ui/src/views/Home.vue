@@ -9,7 +9,7 @@
       </v-row>
     </div>
     <div id="infoi">
-      <Map v-bind:height="mapHeight" />
+      <Map v-bind:mapHeight="mapHeight" />
     </div>
   </div>
 </template>
