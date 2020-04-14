@@ -4,6 +4,7 @@
       three-line
       @click.prevent="onclick()"
       @mouseover="onhove"
+      @mouseleave="unhove"
       inactive
       :class="resultColor"
     >
@@ -60,6 +61,7 @@ export default {
     ...mapMutations([
       "setDetailView",
       "setHovedResultId",
+      "setMouseLeaveResultId",
       "setSelectedResultId"
     ]),
     onclick() {
@@ -69,6 +71,11 @@ export default {
     },
     onhove() {
       this.setHovedResultId(this.result.properties.id);
+      this.setMouseLeaveResultId("");
+    },
+    unhove() {
+      this.setMouseLeaveResultId(this.result.properties.id);
+      this.setHovedResultId("");
     }
   }
 };

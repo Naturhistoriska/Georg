@@ -47,7 +47,7 @@ export default {
     LMap,
     LTileLayer
   },
-  props: ["height", "latlon"],
+  props: ["mapHeight", "latlon"],
   data() {
     return {
       bounds: {},
@@ -66,7 +66,7 @@ export default {
     });
   },
   computed: {
-    ...mapGetters(["results", "hovedResultId"])
+    ...mapGetters(["results", "hovedResultId", "unhovedResultId"])
   },
   watch: {
     results: function() {
@@ -78,6 +78,11 @@ export default {
     hovedResultId() {
       this.$nextTick(() => {
         this.selectedMark();
+      });
+    },
+    unhovedResultId() {
+      this.$nextTick(() => {
+        this.unselectedMark();
       });
     }
   },
@@ -115,7 +120,13 @@ export default {
       this.markers.forEach(marker => {
         if (marker.id === id) {
           marker.icon = MAP_ICONS.redIcon;
-        } else {
+        }
+      });
+    },
+    unselectedMark() {
+      const id = this.unhovedResultId;
+      this.markers.forEach(marker => {
+        if (marker.id == id) {
           marker.icon = MAP_ICONS.blueIcon;
         }
       });
