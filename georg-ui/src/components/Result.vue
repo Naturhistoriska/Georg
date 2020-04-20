@@ -2,9 +2,10 @@
   <div class="result-item">
     <v-list-item
       three-line
-      @click.prevent="addMark(result)"
+      @click.prevent="onclick()"
+      @mouseover="onhove"
+      @mouseleave="unhove"
       inactive
-      style="padding: 5px; background: isActive ? #c7d0ff : #f4f4f4"
       :class="resultColor"
     >
       <v-list-item-content>
@@ -31,6 +32,8 @@
 
 <script>
 import * as converter from "../assets/js/latlonConverter.js";
+import { mapMutations } from "vuex";
+
 export default {
   name: "Result",
   props: ["isActive", "result"],
@@ -50,17 +53,29 @@ export default {
       return latDms + " " + lonDms;
     },
     resultColor: function() {
-      return this.isActive ? "selected" : "unSelected";
+      return this.isActive ? "selected" : "";
     }
   },
 
   methods: {
-    addMark() {
-      this.$emit(
-        "add-mark",
-        this.result.geometry.coordinates,
-        this.result.properties.id
-      );
+    ...mapMutations([
+      "setDetailView",
+      "setHovedResultId",
+      "setMouseLeaveResultId",
+      "setSelectedResultId"
+    ]),
+    onclick() {
+      // this.$emit("showDetail", this.result);
+      this.setDetailView(true);
+      this.setSelectedResultId(this.result.properties.id);
+    },
+    onhove() {
+      this.setHovedResultId(this.result.properties.id);
+      this.setMouseLeaveResultId("");
+    },
+    unhove() {
+      this.setMouseLeaveResultId(this.result.properties.id);
+      this.setHovedResultId("");
     }
   }
 };
@@ -74,7 +89,7 @@ export default {
 }
 
 .result-item:hover {
-  background: darkblue;
+  background: #c7d0ff;
 }
 
 .selected {

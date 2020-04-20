@@ -22,8 +22,7 @@ public class InitialProperties implements Serializable {
   }
   
   @Inject
-  public InitialProperties(@ConfigurationValue("swarm.pelias.path") String peliasPath, 
-          @ConfigurationValue("swarm.mapping-files.path") String defaultMappingFilePath) { 
+  public InitialProperties(@ConfigurationValue("swarm.pelias.path") String peliasPath) { 
     this.peliasPath = peliasPath; 
     log.info("test injection : {} ", peliasPath);
   }

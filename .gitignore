@@ -10,3 +10,4 @@ notes
 /georg-ui/certs/*
 
 .DS_Store
+/georg-service/nbproject/

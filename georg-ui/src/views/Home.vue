@@ -2,75 +2,65 @@
   <div id="container" class="container container--fluid">
     <div id="navi">
       <v-row>
-        <Search v-on:search-address="doSearch" v-bind:loading="loading" />
+        <Search />
       </v-row>
-      <v-row class="resultsRow" v-if="hasResults">
-        <Results v-bind:results="results" v-on:add-mark="doAddMark" />
+      <v-row class="resultsRow" id="results">
+        <Results v-bind:height="resultsHeight" />
       </v-row>
-      <v-row v-else class="resultsRow"
-        ><h2>{{ msg }}</h2></v-row
-      >
     </div>
     <div id="infoi">
-      <Map
-        v-bind:coordinates="coordinates"
-        v-bind:latlon="latlon"
-        v-bind:zoom="zoom"
-      />
+      <Map v-bind:mapHeight="mapHeight" />
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import L from "leaflet";
 import Search from "../components/Search";
 import Map from "../components/Map";
 import Results from "../components/Results";
 
+import { mapGetters } from "vuex";
+
+const southWest = new L.LatLng(55.1961173, 12.8018162);
+const northEast = new L.LatLng(68.346545, 23.2360731);
+const initialBound = new L.LatLngBounds(southWest, northEast);
+
 export default {
   name: "Home",
   components: {
-    Search,
     Map,
-    Results
+    Results,
+    Search
   },
+
   data() {
     return {
-      coordinates: [58.4593, 18.6435],
-      latlon: [0, 0],
-      zoom: 5,
-      results: [],
-      loading: false,
-      msg: ""
+      bounds: {},
+      mapHeight: "height: 1500px",
+      resultsHeight: "height: 1400px"
     };
   },
-  computed: {
-    hasResults: function() {
-      return this.results.length > 0;
-    }
+  created() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
   },
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
+  },
+  mounted() {
+    this.bounds = initialBound;
+  },
+  computed: {
+    ...mapGetters(["detailView"])
+  },
+
   methods: {
-    doSearch(address) {
-      this.loading = true;
-      const proxyurl = "https://cors-anywhere.herokuapp.com/";
-      const url =
-        process.env.VUE_APP_GEORG_API + `geoCoding?address=${address}`;
-      // use fetch or axios?
-
-      axios
-        .get(proxyurl + url, { crossDomain: true })
-        .then(response => {
-          this.results = response.data.features;
-          this.loading = false;
-          this.msg = this.results.length > 0 ? "" : "No results";
-        })
-        .catch(function() {});
-    },
-
-    doAddMark(coordinates) {
-      this.coordinates = coordinates;
-      this.latlon = coordinates;
-      this.zoom = 8;
+    handleResize() {
+      const windowHeight = window.innerHeight - 64;
+      const boxHeight = windowHeight - 115;
+      this.mapHeight = "height: " + windowHeight + "px";
+      this.resultsHeight = "max-height: " + boxHeight + "px";
     }
   }
 };
