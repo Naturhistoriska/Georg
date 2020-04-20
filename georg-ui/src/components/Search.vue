@@ -16,7 +16,7 @@
   </v-row>
 </template>
 <script>
-import { mapMutations } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import Service from "../Service";
 const service = new Service();
 
@@ -29,6 +29,10 @@ export default {
       isSearch: false,
       loading: false
     };
+  },
+
+  computed: {
+    ...mapGetters(["detailView"])
   },
 
   methods: {
