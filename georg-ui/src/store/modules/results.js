@@ -5,25 +5,31 @@ const state = {
   hovedResultId: "",
   unhovedResultId: "",
   results: [],
-  selectedResultId: ""
+  selectedResult: {},
+  selectedResultId: "",
+  detialViewId: ""
 };
 const getters = {
   detailView: state => state.isDetailView,
-  displayMessage: state => state.didSearch && state.results.length === 0,
+  displayMessage: state => state.didSearch,
   hovedResultId: state => state.hovedResultId,
   unhovedResultId: state => state.unhovedResultId,
+  selectedResult: state => state.selectedResult,
   results: state => state.results,
-  selectedResultId: state => state.selectedResultId
+  selectedResultId: state => state.selectedResultId,
+  detialViewId: state => state.detialViewId
 };
 
 const actions = {};
 const mutations = {
-  setDetailView: (state, payload) => (state.isDetailView = payload),
   setDidSearch: (state, payload) => (state.didSearch = payload),
   setHovedResultId: (state, payload) => (state.hovedResultId = payload),
   setMouseLeaveResultId: (state, payload) => (state.unhovedResultId = payload),
   setResults: (state, payload) => (state.results = payload),
-  setSelectedResultId: (state, payload) => (state.selectedResultId = payload)
+  setSelectedResult: (state, payload) => (state.selectedResult = payload),
+  setSelectedResultId: (state, payload) => (state.selectedResultId = payload),
+  setDetailView: (state, payload) => (state.isDetailView = payload),
+  setDetialViewId: (state, payload) => (state.detialViewId = payload)
 };
 
 export default {
