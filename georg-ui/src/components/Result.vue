@@ -115,7 +115,6 @@ export default {
 .result-item {
   padding: 0px;
   width: 25em;
-  text-align: left;
 }
 
 .result-item:hover {
