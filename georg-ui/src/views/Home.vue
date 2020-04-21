@@ -1,12 +1,12 @@
 <template>
   <div id="container" class="container container--fluid">
     <div id="navi">
-      <v-row>
+      <div>
         <Search />
-      </v-row>
-      <v-row class="resultsRow" id="results">
+      </div>
+      <div class="resultsRow" id="results">
         <Results v-bind:height="resultsHeight" />
-      </v-row>
+      </div>
     </div>
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
@@ -19,8 +19,6 @@ import L from "leaflet";
 import Search from "../components/Search";
 import Map from "../components/Map";
 import Results from "../components/Results";
-
-import { mapGetters } from "vuex";
 
 const southWest = new L.LatLng(55.1961173, 12.8018162);
 const northEast = new L.LatLng(68.346545, 23.2360731);
@@ -51,14 +49,11 @@ export default {
   mounted() {
     this.bounds = initialBound;
   },
-  computed: {
-    ...mapGetters(["detailView"])
-  },
 
   methods: {
     handleResize() {
       const windowHeight = window.innerHeight - 64;
-      const boxHeight = windowHeight - 115;
+      const boxHeight = windowHeight - 200;
       this.mapHeight = "height: " + windowHeight + "px";
       this.resultsHeight = "max-height: " + boxHeight + "px";
     }
@@ -69,11 +64,11 @@ export default {
 #container {
   position: relative;
   background: transparent;
+  overflow: auto;
 }
 #navi {
   padding-left: 2em;
-  width: 100%;
-  height: 100%;
+  width: 20em;
   position: absolute;
   top: 0;
   left: 0;
@@ -85,13 +80,11 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
-}
-#infoi {
   z-index: 0;
 }
 .resultsRow {
   width: 600px;
-  margin-top: 4em !important;
-  margin-left: 2px;
+  margin-top: 9em !important;
+  margin-left: 1em;
 }
 </style>
