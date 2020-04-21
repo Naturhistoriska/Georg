@@ -5,18 +5,20 @@
         <v-row v-scroll:#st="onScroll" class="overflow-y-auto" :style="height">
           <v-card elevation>
             <v-list id="scroll-target">
-              <v-list-item-group v-model="result" id="resultList">
-                <v-list-item
-                  inactive
-                  v-for="result in results"
-                  :key="result.properties.id"
-                  style="padding: 0px;"
-                >
+              <v-list-item-group 
+                mandatory 
+                v-model="result" 
+                id="resultList" 
+                active-class="blue--text text--darken-2"
+              >
+                <template v-for="(result, index) in results">             
                   <Result
                     v-bind:result="result"
                     v-bind:isActive="activeId === result.properties.id"
-                  />
-                </v-list-item>
+                    :key="result.properties.id"
+                  />    
+                  <v-divider v-if="index + 1 < results.length" :key="index"></v-divider>
+                </template>
               </v-list-item-group>
             </v-list>
           </v-card>
@@ -93,4 +95,5 @@ export default {
 .v-list {
   padding: 0px;
 }
+
 </style>

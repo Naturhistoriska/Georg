@@ -1,43 +1,48 @@
 <template>
-  <div class="result-item">
-    <v-list-item
-      three-line
-      @mouseover="onhove"
-      @mouseleave="unhove"
-      :class="resultColor"
-    >
-      <v-list-item-content>
-        <v-list-item-title>
-          {{ result.properties.name }}
-          <v-btn
-            id="iconBtn"
-            icon
-            color="indigo"
-            @click.prevent="onSelected()"
-            style="float: right;"
-          >
-            <v-icon>room</v-icon>
-          </v-btn>
-        </v-list-item-title>
-        <v-list-item-subtitle id="resultContent" @click.prevent="onclick()">
-          {{ result.properties.region }}
-          {{ result.properties.country }}
-          <br /><span class="text-capitalize">{{ result.properties.layer }}</span> enligt Who's on First.
-        </v-list-item-subtitle>
-
-        <v-list-item-subtitle v-if="false">
-          <template>
-            <v-row no-gutters>
-              <v-col sm="6">{{ latLonDms }}</v-col>
-              <v-col sm="1"></v-col>
-              <v-col sm="5">{{ latLon }}</v-col>
-            </v-row>
-          </template>
-        </v-list-item-subtitle>
-      </v-list-item-content>
+  <v-list-item
+    three-line
+    @mouseover="onhove"
+    @mouseleave="unhove"
+    :class="resultColor"              
+    :key="result.properties.id"
+    style="padding: 0px;"
+  >
+   <template v-slot:default="{ active }">
+    <v-list-item-content @click.prevent="onclick()">
+      <v-list-item-title>
+        {{ result.properties.name }}
+      </v-list-item-title>
+      <v-list-item-subtitle id="resultContent" >
+        {{ result.properties.region }}
+        {{ result.properties.country }}     
+      </v-list-item-subtitle>
+      <v-list-item-subtitle >    
+        <span class="text-capitalize">{{ result.properties.layer }}</span> enligt Who's on First.
+      </v-list-item-subtitle>
+     <!-- <v-list-item-subtitle v-if="false">
+        <template>
+          <v-row no-gutters>
+            <v-col sm="6">{{ latLonDms }}</v-col>
+            <v-col sm="1"></v-col>
+            <v-col sm="5">{{ latLon }}</v-col>
+          </v-row>
+        </template>
+      </v-list-item-subtitle>-->
+    </v-list-item-content>
+    <v-list-item-action @click.prevent="onSelected()">
+      <v-btn icon id="iconBtn"  v-if="!active" color="grey lighten-1">
+          <v-icon>
+            mdi-map-marker
+          </v-icon>
+        </v-btn>
+        <v-btn icon v-else>
+          <v-icon color="primary">
+            mdi-map-marker
+          </v-icon>
+        </v-btn>
+      </v-list-item-action>
+   </template>
     </v-list-item>
-    <v-divider></v-divider>
-  </div>
 </template>
 
 <script>
@@ -86,7 +91,7 @@ export default {
       "setDidSearch"
     ]),
 
-    onhove() {
+   onhove() {
       this.setHovedResultId(this.result.properties.id);
       this.setMouseLeaveResultId("");
     },
@@ -115,7 +120,7 @@ export default {
   padding: 0px;
   width: 25em;
 }
-
+/*
 .result-item:hover {
   background: #c7d0ff;
 }
@@ -126,5 +131,5 @@ export default {
 
 .unSelected {
   background: #f4f4f4;
-}
+}*/
 </style>
