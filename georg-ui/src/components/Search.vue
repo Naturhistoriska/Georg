@@ -15,7 +15,7 @@
             @keyup.enter="search"
           ></v-text-field>
         </div>
-        <div id="message" v-if="displayMessage">{{ numOfResults }} träffer</div>
+        <div id="message" v-if="displayMessage">{{ numOfResults }} träffar</div>
         <div id="backResultListLink" v-if="detailView">
           <v-btn small color="grey darken-2" text @click.prevent="onclick()">
             {{ linkText }}
