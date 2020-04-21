@@ -4,7 +4,6 @@
       three-line
       @mouseover="onhove"
       @mouseleave="unhove"
-      inactive
       :class="resultColor"
     >
       <v-list-item-content>
