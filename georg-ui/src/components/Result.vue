@@ -5,7 +5,6 @@
     @mouseleave="unhove"
     :class="resultColor"              
     :key="result.properties.id"
-    style="padding: 0px;"
   >
    <template v-slot:default="{ active }">
     <v-list-item-content @click.prevent="onclick()">
@@ -116,11 +115,11 @@ export default {
 </script>
 
 <style scoped>
+/*
 .result-item {
   padding: 0px;
   width: 25em;
 }
-/*
 .result-item:hover {
   background: #c7d0ff;
 }
