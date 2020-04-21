@@ -1,5 +1,5 @@
 <template>
-  <v-row id="resultRow" v-if="!displayMessage">
+  <v-row id="resultRow" v-if="!detailView">
     <v-col>
       <v-container id="st">
         <v-row v-scroll:#st="onScroll" class="overflow-y-auto" :style="height">
@@ -24,20 +24,20 @@
       </v-container>
     </v-col>
   </v-row>
-  <v-row id="messageRow" v-else>
-    <Message />
+  <v-row id="detailRow" v-else>
+    <Detail />
   </v-row>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
 import Result from "./Result";
-import Message from "../components/Message";
+import Detail from "../components/Detail";
 
 export default {
   name: "Results",
   components: {
-    Message,
+    Detail,
     Result
   },
 
@@ -51,7 +51,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["displayMessage", "results"])
+    ...mapGetters(["results", "detailView"])
   },
 
   methods: {}
@@ -76,12 +76,11 @@ export default {
 
 #resultRow {
   position: fixed;
-  width: 25em !important;
+  width: 23em !important;
   float: left;
 }
 
-#messageRow {
-  padding-left: 1em;
+#detailRow {
   padding-top: 2em;
   position: fixed;
   float: left;

@@ -16,18 +16,4 @@ describe("Search results", () => {
       .children()
       .should("have.length", 10);
   });
-
-  it("Hover result", () => {
-    cy.focused()
-      .type("tyre")
-      .type("{enter}");
-
-    cy.get("#resultList")
-      .children()
-      .first()
-      .next()
-      .next()
-      .next()
-      .trigger("mouseover");
-  });
 });

@@ -2,21 +2,32 @@
   <div class="result-item">
     <v-list-item
       three-line
-      @click.prevent="onclick()"
       @mouseover="onhove"
       @mouseleave="unhove"
       inactive
       :class="resultColor"
     >
       <v-list-item-content>
-        <v-list-item-title>{{ result.properties.name }}</v-list-item-title>
-        <v-list-item-subtitle>
+        <v-list-item-title>
+          {{ result.properties.name }}
+          <v-btn
+            id="iconBtn"
+            icon
+            color="indigo"
+            @click.prevent="onSelected()"
+            style="float: right;"
+          >
+            <v-icon>room</v-icon>
+          </v-btn>
+        </v-list-item-title>
+        <v-list-item-subtitle id="resultContent" @click.prevent="onclick()">
           {{ result.properties.region }}
           {{ result.properties.country }}
+          <br />Location enligt Who's on First
         </v-list-item-subtitle>
-        <v-list-item-subtitle>
+
+        <v-list-item-subtitle v-if="false">
           <template>
-            <br />
             <v-row no-gutters>
               <v-col sm="6">{{ latLonDms }}</v-col>
               <v-col sm="1"></v-col>
@@ -32,14 +43,20 @@
 
 <script>
 import * as converter from "../assets/js/latlonConverter.js";
-import { mapMutations } from "vuex";
-
+import { mapGetters, mapMutations } from "vuex";
 export default {
   name: "Result",
-  props: ["isActive", "result"],
+  props: ["result"],
+
+  data() {
+    return {
+      isActive: false
+    };
+  },
 
   computed: {
     // a computed getter
+    ...mapGetters(["selectedResultId"]),
     latLon: function() {
       return (
         this.result.geometry.coordinates[1] +
@@ -53,7 +70,9 @@ export default {
       return latDms + " " + lonDms;
     },
     resultColor: function() {
-      return this.isActive ? "selected" : "";
+      return this.selectedResultId == this.result.properties.id
+        ? "selected"
+        : "";
     }
   },
 
@@ -62,13 +81,12 @@ export default {
       "setDetailView",
       "setHovedResultId",
       "setMouseLeaveResultId",
-      "setSelectedResultId"
+      "setSelectedResultId",
+      "setSelectedResult",
+      "setDetialViewId",
+      "setDidSearch"
     ]),
-    onclick() {
-      // this.$emit("showDetail", this.result);
-      this.setDetailView(true);
-      this.setSelectedResultId(this.result.properties.id);
-    },
+
     onhove() {
       this.setHovedResultId(this.result.properties.id);
       this.setMouseLeaveResultId("");
@@ -76,6 +94,18 @@ export default {
     unhove() {
       this.setMouseLeaveResultId(this.result.properties.id);
       this.setHovedResultId("");
+    },
+    onclick() {
+      this.setDetailView(true);
+      this.setDetialViewId(this.result.properties.id);
+      this.setSelectedResult(this.result);
+      this.setDidSearch(false);
+    },
+    onSelected() {
+      this.setHovedResultId(this.result.properties.id);
+      this.setMouseLeaveResultId("");
+      this.setSelectedResultId(this.result.properties.id);
+      this.setDetailView(false);
     }
   }
 };

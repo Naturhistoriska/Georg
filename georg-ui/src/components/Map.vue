@@ -1,6 +1,7 @@
 <template>
   <div id="map">
     <l-map
+      :center="center"
       :options="mapOptions"
       ref="myMap"
       @ready="getMapBounds"
@@ -51,6 +52,8 @@ export default {
   data() {
     return {
       bounds: {},
+      center: [59.0, 15.0],
+      zoom: 12,
       mapOptions: {
         zoomControl: true,
         zoomControlPosition: "bottomright"
@@ -66,9 +69,22 @@ export default {
     });
   },
   computed: {
-    ...mapGetters(["results", "hovedResultId", "unhovedResultId"])
+    ...mapGetters([
+      "detailView",
+      "results",
+      "hovedResultId",
+      "unhovedResultId",
+      "selectedResult",
+      "selectedResultId"
+    ])
   },
   watch: {
+    detailView: function() {
+      this.$nextTick(() => {
+        this.createMarks();
+        this.getMapBounds();
+      });
+    },
     results: function() {
       this.$nextTick(() => {
         this.createMarks();
@@ -84,35 +100,54 @@ export default {
       this.$nextTick(() => {
         this.unselectedMark();
       });
+    },
+    selectedResultId() {
+      console.log("called");
+      this.$nextTick(() => {
+        this.removeOldSelectedMarker();
+      });
     }
   },
   methods: {
     createMarks() {
       const array = [];
-      let north = 90;
-      let south = -90;
-      let west = -180;
-      let east = 180;
-      this.results.forEach(result => {
-        const lat = result.geometry.coordinates[1];
-        const lon = result.geometry.coordinates[0];
-        north = north > lat ? lat : north;
-        south = south > lat ? south : lat;
-        west = west > lon ? west : lon;
-        east = east > lon ? lon : east;
-
-        let southWest = new L.LatLng(south + 1, west + 1);
-        let northEast = new L.LatLng(north - 1, east - 1);
-        this.bounds = new L.LatLngBounds(southWest, northEast);
-
+      if (this.detailView) {
+        const lat = this.selectedResult.geometry.coordinates[1];
+        const lon = this.selectedResult.geometry.coordinates[0];
+        this.center = [lat, lon];
         let marker = {
-          id: result.properties.id,
+          id: this.selectedResult.properties.id,
           position: [lat, lon],
           visible: true,
           icon: MAP_ICONS.blueIcon
         };
         array.push(marker);
-      });
+      } else {
+        let north = 90;
+        let south = -90;
+        let west = -180;
+        let east = 180;
+        this.results.forEach(result => {
+          const lat = result.geometry.coordinates[1];
+          const lon = result.geometry.coordinates[0];
+          north = north > lat ? lat : north;
+          south = south > lat ? south : lat;
+          west = west > lon ? west : lon;
+          east = east > lon ? lon : east;
+
+          let southWest = new L.LatLng(south + 1, west + 1);
+          let northEast = new L.LatLng(north - 1, east - 1);
+          this.bounds = new L.LatLngBounds(southWest, northEast);
+
+          let marker = {
+            id: result.properties.id,
+            position: [lat, lon],
+            visible: true,
+            icon: MAP_ICONS.blueIcon
+          };
+          array.push(marker);
+        });
+      }
       this.markers = array;
     },
     selectedMark() {
@@ -125,8 +160,17 @@ export default {
     },
     unselectedMark() {
       const id = this.unhovedResultId;
+      if (id != this.selectedResultId) {
+        this.markers.forEach(marker => {
+          if (marker.id == id) {
+            marker.icon = MAP_ICONS.blueIcon;
+          }
+        });
+      }
+    },
+    removeOldSelectedMarker() {
       this.markers.forEach(marker => {
-        if (marker.id == id) {
+        if (marker.id != this.selectedResultId) {
           marker.icon = MAP_ICONS.blueIcon;
         }
       });
