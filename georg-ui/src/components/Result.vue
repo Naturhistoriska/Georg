@@ -11,26 +11,17 @@
       <v-list-item-title>
         {{ result.properties.name }}
       </v-list-item-title>
-      <v-list-item-subtitle id="resultContent" >
+      <v-list-item-subtitle id="resultContent" class="text--primary">
         {{ result.properties.region }}
         {{ result.properties.country }}     
       </v-list-item-subtitle>
       <v-list-item-subtitle >    
         <span class="text-capitalize">{{ result.properties.layer }}</span> enligt Who's on First.
       </v-list-item-subtitle>
-     <!-- <v-list-item-subtitle v-if="false">
-        <template>
-          <v-row no-gutters>
-            <v-col sm="6">{{ latLonDms }}</v-col>
-            <v-col sm="1"></v-col>
-            <v-col sm="5">{{ latLon }}</v-col>
-          </v-row>
-        </template>
-      </v-list-item-subtitle>-->
     </v-list-item-content>
     <v-list-item-action @click.prevent="onSelected()">
-      <v-btn icon id="iconBtn"  v-if="!active" color="grey lighten-1">
-          <v-icon>
+      <v-btn icon id="iconBtn"  v-if="!active">
+          <v-icon color="grey lighten-1">
             mdi-map-marker
           </v-icon>
         </v-btn>
