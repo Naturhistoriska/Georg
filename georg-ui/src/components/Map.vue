@@ -100,6 +100,12 @@ export default {
       this.$nextTick(() => {
         this.unselectedMark();
       });
+    },
+    selectedResultId() {
+      console.log("called");
+      this.$nextTick(() => {
+        this.removeOldSelectedMarker();
+      });
     }
   },
   methods: {
@@ -161,6 +167,13 @@ export default {
           }
         });
       }
+    },
+    removeOldSelectedMarker() {
+      this.markers.forEach(marker => {
+        if (marker.id != this.selectedResultId) {
+          marker.icon = MAP_ICONS.blueIcon;
+        }
+      });
     },
     // onclick(event) {
     //   // console.log(event);
