@@ -23,7 +23,7 @@
         <v-list-item-subtitle id="resultContent" @click.prevent="onclick()">
           {{ result.properties.region }}
           {{ result.properties.country }}
-          <br />Location enligt Who's on First
+          <br /><span class="text-capitalize">{{ result.properties.layer }}</span> enligt Who's on First.
         </v-list-item-subtitle>
 
         <v-list-item-subtitle v-if="false">
