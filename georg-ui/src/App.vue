@@ -1,7 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar app color="blue darken-2">
-      <v-toolbar-title class="headline">Georg</v-toolbar-title>
+    <v-app-bar 
+      app 
+      color="blue darken-2" 
+      dark
+      dense
+    >
+      <v-toolbar-title class="title">Georg</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-app-bar>
 
