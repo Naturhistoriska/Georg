@@ -6,7 +6,7 @@
     :class="resultColor"
     :key="result.properties.id"
   >
-    <template v-slot:default="{ active }" v-if="!isNewMarker">
+    <template v-if="!isNewMarker">
       <v-list-item-content @click.prevent="onclick()">
         <v-list-item-title>{{ result.properties.name }}</v-list-item-title>
         <v-list-item-subtitle id="resultContent" class="text--primary">
@@ -19,7 +19,7 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
-        <v-btn icon id="iconBtn" v-if="!active">
+        <v-btn icon id="iconBtn" v-if="!isActive">
           <v-icon color="grey lighten-1">mdi-map-marker</v-icon>
         </v-btn>
         <v-btn icon v-else>
@@ -29,9 +29,9 @@
     </template>
     <template v-else>
       <v-list-item-content>
-        <v-list-item-title class="red--text darken-2">
-          {{ result.name }}
-        </v-list-item-title>
+        <v-list-item-title class="red--text darken-2">{{
+          result.name
+        }}</v-list-item-title>
         <v-list-item-subtitle id="resultContent" class="text--primary">
           {{ latDms }}
           {{ lngDms }}
@@ -62,8 +62,11 @@ export default {
   computed: {
     // a computed getter
     ...mapGetters(["selectedResultId"]),
+    isActive: function() {
+      return this.result.properties.id === this.selectedResultId;
+    },
     isNewMarker: function() {
-      return this.result.properties.id.includes("newMarker");
+      return this.result.properties.id === "newMarker";
     },
     lat: function() {
       return this.result.geometry.coordinates[1];
@@ -80,7 +83,7 @@ export default {
     resultColor: function() {
       return this.selectedResultId == this.result.properties.id
         ? "selected"
-        : "";
+        : "unSelected";
     }
   },
 
@@ -120,6 +123,17 @@ export default {
 </script>
 
 <style scoped>
+.selected {
+  background: #e6f2ff;
+}
+
+.unSelected {
+  background: transparent;
+}
+
+/* .unSelected {
+  background: #f4f4f4;
+} */
 /*
 .result-item {
   padding: 0px;
@@ -129,11 +143,7 @@ export default {
   background: #c7d0ff;
 }
 
-.selected {
-  background: #c7d0ff;
-}
 
-.unSelected {
-  background: #f4f4f4;
-}*/
+
+*/
 </style>

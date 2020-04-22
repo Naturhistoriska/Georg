@@ -42,7 +42,7 @@
         @click="enableAddMarker"
         style="cursor: pointer;"
       >
-        <v-icon color="indigo">room</v-icon>
+        <v-icon :color="iconColor">mdi-map-marker</v-icon>
       </v-btn>
     </div>
   </div>
@@ -107,7 +107,11 @@ export default {
       "unhovedResultId",
       "selectedResult",
       "selectedResultId"
-    ])
+    ]),
+
+    iconColor: function() {
+      return this.enableAddMapMarkers ? "green" : "primary";
+    }
   },
   watch: {
     detailView: function() {
@@ -227,7 +231,7 @@ export default {
     },
     enableAddMarker() {
       if (!this.detailView) {
-        this.enableAddMapMarkers = true;
+        this.enableAddMapMarkers = !this.enableAddMapMarkers;
       }
     },
 
@@ -268,7 +272,7 @@ export default {
 
         this.results.unshift(result);
         this.setResults(this.results);
-        this.setDidSearch(true);
+        // this.setDidSearch(true);
         // let accuracy = {
         //   center: [latlng.lat, latlng.lng],
         //   radius: 100,

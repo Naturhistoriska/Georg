@@ -25,11 +25,14 @@
         {{ numOfResults }} träffar
       </div>
       <div id="backResultListLink" v-if="detailView">
-        <v-btn small color="grey darken-2" text @click.prevent="onclick()">{{
-          linkText
-        }}</v-btn>
+        <v-btn small color="grey darken-2" text @click.prevent="onclick()">
+          {{ linkText }}
+        </v-btn>
       </div>
     </v-card-actions>
+    <div v-if="displayMessage">
+      <div v-if="!numOfResults">Sökningen gav inga träffar</div>
+    </div>
   </div>
 </template>
 
@@ -56,12 +59,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations([
-      "setResults",
-      "setDidSearch",
-      "setDetailView",
-      "setSelectedResultId"
-    ]),
+    ...mapMutations(["setResults", "setDidSearch", "setDetailView"]),
     clearSearch() {
       this.address = "";
     },
@@ -79,7 +77,7 @@ export default {
           this.setResults(this.results);
           this.setDidSearch(true);
           this.numOfResults = this.results.length;
-          this.setSelectedResultId(this.results[0].properties.id);
+          // this.setSelectedResultId(this.results[0].properties.id);
         })
         .catch(function() {});
     }
