@@ -25,13 +25,13 @@
         {{ numOfResults }} träffar
       </div>
       <div id="backResultListLink" v-if="detailView">
-        <v-btn small color="grey darken-2" text @click.prevent="onclick()">{{
-          linkText
-        }}</v-btn>
+        <v-btn small color="grey darken-2" text @click.prevent="onclick()">
+          {{ linkText }}
+        </v-btn>
       </div>
     </v-card-actions>
     <div v-if="displayMessage">
-      <div v-if="!numOfResults">No result</div>
+      <div v-if="!numOfResults">Sökningen gav inga träffar</div>
     </div>
   </div>
 </template>
