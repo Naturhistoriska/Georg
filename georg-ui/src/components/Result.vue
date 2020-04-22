@@ -6,7 +6,7 @@
     :class="resultColor"
     :key="result.properties.id"
   >
-    <template v-slot:default="{ active }">
+    <template v-slot:default="{ active }" v-if="!isNewMarker">
       <v-list-item-content @click.prevent="onclick()">
         <v-list-item-title>{{ result.properties.name }}</v-list-item-title>
         <v-list-item-subtitle id="resultContent" class="text--primary">
@@ -25,6 +25,24 @@
         <v-btn icon v-else>
           <v-icon color="primary">mdi-map-marker</v-icon>
         </v-btn>
+      </v-list-item-action>
+    </template>
+    <template v-else>
+      <v-list-item-content>
+        <v-list-item-title class="red--text darken-2">
+          {{ result.name }}
+        </v-list-item-title>
+        <v-list-item-subtitle id="resultContent" class="text--primary">
+          {{ latDms }}
+          {{ lngDms }}
+        </v-list-item-subtitle>
+        <v-list-item-subtitle>
+          {{ lat }}
+          {{ lng }}
+        </v-list-item-subtitle>
+      </v-list-item-content>
+      <v-list-item-action>
+        <v-icon color="red darken-2">mdi-map-marker</v-icon>
       </v-list-item-action>
     </template>
   </v-list-item>
