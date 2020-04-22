@@ -33,7 +33,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["results", "detailView"])
+    ...mapGetters(["results", "detailView", "newMarker"])
   },
 
   methods: {}
