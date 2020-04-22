@@ -1,19 +1,10 @@
 <template>
   <div id="container" class="container container--fluid">
- 
-      <v-card id="navi">
-        
+      <v-card id="navi">     
           <Search />
-      
-        <!--<div class="resultsRow" id="results">-->
-         <!-- <v-divider></v-divider>-->
-         
-          <Results v-if="!detailView" v-bind:height="resultsHeight" />
-         
-       <!--</div>-->
+          <Results v-if="!detailView" v-bind:height="resultsHeight" />        
       </v-card>
     <Detail v-if="detailView" />
-
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
     </div>
@@ -27,7 +18,6 @@ import Search from "../components/Search";
 import Map from "../components/Map";
 import Results from "../components/Results";
 import Detail from "../components/Detail";
-
 
 const southWest = new L.LatLng(55.1961173, 12.8018162);
 const northEast = new L.LatLng(68.346545, 23.2360731);

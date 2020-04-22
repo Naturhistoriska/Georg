@@ -17,14 +17,14 @@
       >
       </v-text-field>
     </v-card-text>
-    <v-card-actions>
+    <v-card-actions v-if="numOfResults">
       <div 
         id="message" 
-        class="pl-2 grey--text text--darken-3 body-2" 
+        class="pt-2 grey--text text--darken-3 body-2" 
         v-if="displayMessage"
       >
-        {{ numOfResults }} träffar
-      </div>     
+       {{ numOfResults }} träffar
+      </div>
       <div id="backResultListLink" v-if="detailView">
         <v-btn 
           small 
@@ -35,7 +35,6 @@
           {{ linkText }}
         </v-btn>
       </div>
-      <v-spacer></v-spacer>
     </v-card-actions>              
   </div>
 </template>
@@ -92,9 +91,9 @@ export default {
 .fixedPosition {
   position: fixed !important;
 }
-#message {
+/*#message {
   float: left;
-}
+}*/
 #backResultListLink {
   float: left;
 }

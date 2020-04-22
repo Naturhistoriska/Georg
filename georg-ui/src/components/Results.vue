@@ -1,8 +1,7 @@
-<template>
-  <v-list id="scroll-target" v-scroll:#st="onScroll" class="overflow-y-auto" :style="height">
+<template v-model="result" >
+  <v-list v-if="results.length" id="scroll-target" v-scroll:#st="onScroll" class="overflow-y-auto" :style="height">
     <v-list-item-group 
-      mandatory 
-      v-model="result" 
+      mandatory   
       id="resultList" 
       active-class="blue--text text--darken-2"
     >
