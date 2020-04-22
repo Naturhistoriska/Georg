@@ -30,6 +30,9 @@
         }}</v-btn>
       </div>
     </v-card-actions>
+    <div v-if="displayMessage">
+      <div v-if="!numOfResults">No result</div>
+    </div>
   </div>
 </template>
 
@@ -56,12 +59,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations([
-      "setResults",
-      "setDidSearch",
-      "setDetailView",
-      "setSelectedResultId"
-    ]),
+    ...mapMutations(["setResults", "setDidSearch", "setDetailView"]),
     clearSearch() {
       this.address = "";
     },
@@ -79,7 +77,7 @@ export default {
           this.setResults(this.results);
           this.setDidSearch(true);
           this.numOfResults = this.results.length;
-          this.setSelectedResultId(this.results[0].properties.id);
+          // this.setSelectedResultId(this.results[0].properties.id);
         })
         .catch(function() {});
     }
