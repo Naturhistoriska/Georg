@@ -272,7 +272,7 @@ export default {
 
         this.results.unshift(result);
         this.setResults(this.results);
-        this.setDidSearch(true);
+        // this.setDidSearch(true);
         // let accuracy = {
         //   center: [latlng.lat, latlng.lng],
         //   radius: 100,
