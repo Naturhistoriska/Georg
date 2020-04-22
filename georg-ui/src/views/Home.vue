@@ -1,13 +1,10 @@
 <template>
   <div id="container" class="container container--fluid">
-    <div id="navi">
-      <div>
-        <Search />
-      </div>
-      <div class="resultsRow" id="results">
-        <Results v-bind:height="resultsHeight" />
-      </div>
-    </div>
+      <v-card id="navi">     
+          <Search />
+          <Results v-if="!detailView" v-bind:height="resultsHeight" />        
+      </v-card>
+    <Detail v-if="detailView" />
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
     </div>
@@ -15,10 +12,12 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import L from "leaflet";
 import Search from "../components/Search";
 import Map from "../components/Map";
 import Results from "../components/Results";
+import Detail from "../components/Detail";
 
 const southWest = new L.LatLng(55.1961173, 12.8018162);
 const northEast = new L.LatLng(68.346545, 23.2360731);
@@ -29,6 +28,7 @@ export default {
   components: {
     Map,
     Results,
+    Detail,
     Search
   },
 
@@ -49,7 +49,9 @@ export default {
   mounted() {
     this.bounds = initialBound;
   },
-
+ computed: {
+    ...mapGetters(["results", "detailView"])
+  },
   methods: {
     handleResize() {
       const windowHeight = window.innerHeight - 64;
@@ -67,11 +69,8 @@ export default {
   overflow: auto;
 }
 #navi {
-  padding-left: 2em;
-  width: 20em;
-  position: absolute;
-  top: 0;
-  left: 0;
+  padding: 12px 16px;
+  width: 400px;
   z-index: 2;
 }
 #infoi {
