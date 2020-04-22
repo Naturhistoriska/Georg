@@ -3,7 +3,7 @@
     <v-card-title  class="headline blue--text text--darken-2">
       {{ selectedResult.properties.name }}
     </v-card-title>
-    <v-card-subtitle><strong>Localadmin</strong> engligt Who's On First</v-card-subtitle>
+    <v-card-subtitle><strong class="text-capitalize">{{ selectedResult.properties.layer }}</strong> enligt Who's On First</v-card-subtitle>
         <v-list>
           <v-list-item>
               <v-list-item-icon>
@@ -82,8 +82,6 @@ export default {
 </script>
 <style scoped>
 #v-card-detail {
-  padding: 0px;
-  width: 400px;
   z-index: 2;
 }
 </style>
