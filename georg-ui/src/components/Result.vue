@@ -3,36 +3,31 @@
     three-line
     @mouseover="onhove"
     @mouseleave="unhove"
-    :class="resultColor"              
+    :class="resultColor"
     :key="result.properties.id"
   >
-   <template v-slot:default="{ active }">
-    <v-list-item-content @click.prevent="onclick()">
-      <v-list-item-title>
-        {{ result.properties.name }}
-      </v-list-item-title>
-      <v-list-item-subtitle id="resultContent" class="text--primary">
-        {{ result.properties.region }}
-        {{ result.properties.country }}     
-      </v-list-item-subtitle>
-      <v-list-item-subtitle >    
-        <span class="text-capitalize">{{ result.properties.layer }}</span> enligt Who's on First.
-      </v-list-item-subtitle>
-    </v-list-item-content>
-    <v-list-item-action @click.prevent="onSelected()">
-      <v-btn icon id="iconBtn"  v-if="!active">
-          <v-icon color="grey lighten-1">
-            mdi-map-marker
-          </v-icon>
+    <template v-slot:default="{ active }">
+      <v-list-item-content @click.prevent="onclick()">
+        <v-list-item-title>{{ result.properties.name }}</v-list-item-title>
+        <v-list-item-subtitle id="resultContent" class="text--primary">
+          {{ result.properties.region }}
+          {{ result.properties.country }}
+        </v-list-item-subtitle>
+        <v-list-item-subtitle>
+          <span class="text-capitalize">{{ result.properties.layer }}</span>
+          enligt Who's on First.
+        </v-list-item-subtitle>
+      </v-list-item-content>
+      <v-list-item-action @click.prevent="onSelected()">
+        <v-btn icon id="iconBtn" v-if="!active">
+          <v-icon color="grey lighten-1">mdi-map-marker</v-icon>
         </v-btn>
         <v-btn icon v-else>
-          <v-icon color="primary">
-            mdi-map-marker
-          </v-icon>
+          <v-icon color="primary">mdi-map-marker</v-icon>
         </v-btn>
       </v-list-item-action>
-   </template>
-    </v-list-item>
+    </template>
+  </v-list-item>
 </template>
 
 <script>
@@ -43,25 +38,26 @@ export default {
   props: ["result"],
 
   data() {
-    return {
-      isActive: false
-    };
+    return {};
   },
 
   computed: {
     // a computed getter
     ...mapGetters(["selectedResultId"]),
-    latLon: function() {
-      return (
-        this.result.geometry.coordinates[1] +
-        " " +
-        this.result.geometry.coordinates[0]
-      );
+    isNewMarker: function() {
+      return this.result.properties.id.includes("newMarker");
     },
-    latLonDms: function() {
-      let latDms = converter.latlon(this.result.geometry.coordinates[1], "lat");
-      let lonDms = converter.latlon(this.result.geometry.coordinates[0], "lon");
-      return latDms + " " + lonDms;
+    lat: function() {
+      return this.result.geometry.coordinates[1];
+    },
+    lng: function() {
+      return this.result.geometry.coordinates[0];
+    },
+    latDms: function() {
+      return converter.latlon(this.result.geometry.coordinates[1], "lat");
+    },
+    lngDms: function() {
+      return converter.latlon(this.result.geometry.coordinates[0], "lon");
     },
     resultColor: function() {
       return this.selectedResultId == this.result.properties.id
@@ -81,7 +77,7 @@ export default {
       "setDidSearch"
     ]),
 
-   onhove() {
+    onhove() {
       this.setHovedResultId(this.result.properties.id);
       this.setMouseLeaveResultId("");
     },
