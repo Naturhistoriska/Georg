@@ -53,6 +53,10 @@ const MAP_ICONS = {
   redIcon: L.icon({
     iconUrl: "http://maps.google.com/mapfiles/ms/micons/red-dot.png",
     iconSize: [30, 30] // size of the icon
+  }),
+  yellowIcon: L.icon({
+    iconUrl: "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png",
+    iconSize: [30, 30] // size of the icon
   })
 };
 
@@ -73,7 +77,7 @@ export default {
       center: [59.0, 15.0],
       mapOptions: {
         zoomControl: true,
-        zoomControlPosition: "bottomright"
+        zoomControlPosition: "topright"
       },
       markers: [],
       enableAddMapMarkers: false,
