@@ -67,6 +67,7 @@ export default {
   position: relative;
   background: transparent;
   overflow: auto;
+  height: 100%; /* To make sure height is ok in Safari*/
 }
 #navi {
   padding: 12px 16px;
