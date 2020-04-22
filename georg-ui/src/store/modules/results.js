@@ -7,7 +7,9 @@ const state = {
   results: [],
   selectedResult: {},
   selectedResultId: "",
-  detialViewId: ""
+  detialViewId: "",
+  selectedMarkerId: "",
+  newMarker: {}
 };
 const getters = {
   detailView: state => state.isDetailView,
@@ -17,7 +19,9 @@ const getters = {
   selectedResult: state => state.selectedResult,
   results: state => state.results,
   selectedResultId: state => state.selectedResultId,
-  detialViewId: state => state.detialViewId
+  detialViewId: state => state.detialViewId,
+  selectedMarkerId: state => state.selectedMarkerId,
+  newMarker: state => state.newMarker
 };
 
 const actions = {};
@@ -29,7 +33,9 @@ const mutations = {
   setSelectedResult: (state, payload) => (state.selectedResult = payload),
   setSelectedResultId: (state, payload) => (state.selectedResultId = payload),
   setDetailView: (state, payload) => (state.isDetailView = payload),
-  setDetialViewId: (state, payload) => (state.detialViewId = payload)
+  setDetialViewId: (state, payload) => (state.detialViewId = payload),
+  setSelectedMarkerId: (state, payload) => (state.selectedMarkerId = payload),
+  setNewMarkers: (state, payload) => (state.newMarker = payload)
 };
 
 export default {
