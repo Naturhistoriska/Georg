@@ -1,6 +1,6 @@
 <template>
-  <v-card elevation>
-    <v-card-title class="headline blue--text text--darken-2">
+  <v-card elevation id="v-card-detail">
+    <v-card-title  class="headline blue--text text--darken-2 mt-2">
       {{ selectedResult.properties.name }}
     </v-card-title>
     <v-card-subtitle>Localadmin engligt Who's On First</v-card-subtitle>
@@ -86,10 +86,9 @@ export default {
 };
 </script>
 <style scoped>
-.v-card {
+#v-card-detail {
   padding: 0px;
-  width: 23em;
-  float: left;
-  text-align: left;
+  width: 400px;
+  z-index: 2;
 }
 </style>

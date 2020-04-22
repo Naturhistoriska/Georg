@@ -1,30 +1,45 @@
-<template>
-  <v-row>
-    <v-col cols="12" md="3" class="fixedPosition">
-      <div id="search">
-        <div>
-          <v-text-field
-            solo
-            v-model="address"
-            placeholder="Search address"
-            append-icon="search"
-            autofocus
-            clearable
-            :loading="loading"
-            @click:append="search"
-            @keyup.enter="search"
-          ></v-text-field>
-        </div>
-        <div id="message" v-if="displayMessage">{{ numOfResults }} träffar</div>
-        <div id="backResultListLink" v-if="detailView">
-          <v-btn small color="grey darken-2" text @click.prevent="onclick()">
-            {{ linkText }}
-          </v-btn>
-        </div>
+<template>    
+  <div class="ma-0 pa-0">
+    <v-card-text class="ma-0 pa-0">
+      <v-text-field
+        single-line
+        filled
+        dense
+        hide-details
+        v-model="address"
+        placeholder="Sök plats"
+        append-icon="search"
+        autofocus
+        clearable
+        :loading="loading"
+        @click:append="search"
+        @keyup.enter="search"
+      >
+      </v-text-field>
+    </v-card-text>
+    <v-card-actions>
+      <div 
+        id="message" 
+        class="pl-2 grey--text text--darken-3 body-2" 
+        v-if="displayMessage"
+      >
+        {{ numOfResults }} träffar
+      </div>     
+      <div id="backResultListLink" v-if="detailView">
+        <v-btn 
+          small 
+          color="grey darken-2" 
+          text 
+          @click.prevent="onclick()"
+        >
+          {{ linkText }}
+        </v-btn>
       </div>
-    </v-col>
-  </v-row>
+      <v-spacer></v-spacer>
+    </v-card-actions>              
+  </div>
 </template>
+
 <script>
 import { mapGetters, mapMutations } from "vuex";
 import Service from "../Service";
@@ -76,12 +91,6 @@ export default {
 <style scoped>
 .fixedPosition {
   position: fixed !important;
-}
-#search {
-  background: #ffffff;
-  padding: 1em;
-  overflow: auto;
-  width: 23em;
 }
 #message {
   float: left;
