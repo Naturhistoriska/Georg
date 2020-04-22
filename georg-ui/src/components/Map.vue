@@ -22,10 +22,18 @@
         :icon="marker.icon"
         @click="onMarkerClick(marker.id)"
       ></l-marker>
-      <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" />
+      <l-circle
+        :lat-lng="circle.center"
+        :radius="circle.radius"
+        :color="circle.color"
+      />
     </l-map>
 
-    <div id="icondiv" class="leaflet-bottom leaflet-right" style="padding-bottom: 80px;">
+    <div
+      id="icondiv"
+      class="leaflet-bottom leaflet-right"
+      style="padding-bottom: 80px;"
+    >
       <v-btn
         class="leaflet-control"
         fab
@@ -142,6 +150,8 @@ export default {
       if (this.detailView) {
         const lat = this.selectedResult.geometry.coordinates[1];
         const lon = this.selectedResult.geometry.coordinates[0];
+
+        this.enableAddMapMarkers = false;
         this.center = [lat, lon];
         let marker = {
           id: this.selectedResult.properties.id,
@@ -216,7 +226,9 @@ export default {
       });
     },
     enableAddMarker() {
-      this.enableAddMapMarkers = true;
+      if (!this.detailView) {
+        this.enableAddMapMarkers = true;
+      }
     },
 
     onMarkerClick(id) {
