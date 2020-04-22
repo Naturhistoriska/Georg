@@ -6,7 +6,11 @@
     class="overflow-y-auto"
     :style="height"
   >
-    <v-list-item-group mandatory id="resultList" active-class="blue--text text--darken-2">
+    <v-list-item-group
+      mandatory
+      id="resultList"
+      active-class="blue--text text--darken-2"
+    >
       <template v-for="(result, index) in results">
         <Result v-bind:result="result" :key="result.properties.id" />
         <v-divider v-if="index + 1 < results.length" :key="index"></v-divider>

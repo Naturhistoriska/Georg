@@ -21,9 +21,13 @@
         id="message"
         class="pt-2 grey--text text--darken-3 body-2"
         v-if="displayMessage"
-      >{{ numOfResults }} träffar</div>
+      >
+        {{ numOfResults }} träffar
+      </div>
       <div id="backResultListLink" v-if="detailView">
-        <v-btn small color="grey darken-2" text @click.prevent="onclick()">{{ linkText }}</v-btn>
+        <v-btn small color="grey darken-2" text @click.prevent="onclick()">{{
+          linkText
+        }}</v-btn>
       </div>
     </v-card-actions>
   </div>
