@@ -1,6 +1,6 @@
 <template>
   <v-card elevation id="v-card-detail">
-    <v-card-title  class="headline blue--text text--darken-2 mt-2">
+    <v-card-title class="headline blue--text text--darken-2 mt-2">
       {{ selectedResult.properties.name }}
     </v-card-title>
     <v-card-subtitle>Localadmin engligt Who's On First</v-card-subtitle>
