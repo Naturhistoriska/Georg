@@ -22,18 +22,10 @@
         :icon="marker.icon"
         @click="onMarkerClick(marker.id)"
       ></l-marker>
-      <l-circle
-        :lat-lng="circle.center"
-        :radius="circle.radius"
-        :color="circle.color"
-      />
+      <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" />
     </l-map>
 
-    <div
-      id="icondiv"
-      class="leaflet-bottom leaflet-right"
-      style="padding-bottom: 80px;"
-    >
+    <div id="icondiv" class="leaflet-bottom leaflet-right" style="padding-bottom: 80px;">
       <v-btn
         class="leaflet-control"
         fab
@@ -56,15 +48,15 @@ import { mapGetters, mapMutations } from "vuex";
 
 const MAP_ICONS = {
   blueIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/blue-dot.png",
+    iconUrl: "default-marker.png",
     iconSize: [30, 30] // size of the icon
   }),
   redIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/red-dot.png",
+    iconUrl: "added-marker.png",
     iconSize: [30, 30] // size of the icon
   }),
   yellowIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png",
+    iconUrl: "selected-map-marker.png",
     iconSize: [30, 30]
   })
 };
@@ -402,5 +394,7 @@ export default {
   position: absolute;
   right: 56px;
 }
-#iconbtn {margin-right: 8px;}
+#iconbtn {
+  margin-right: 8px;
+}
 </style>
