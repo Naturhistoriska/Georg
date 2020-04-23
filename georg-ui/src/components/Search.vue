@@ -25,14 +25,14 @@
       >
         {{ numOfResults }} träffar
       </div>
-      <div id="backResultListLink" v-if="detailView">
-        <v-btn small color="grey darken-2" text @click.prevent="onclick()">
+      
+        <v-btn v-if="detailView" small color="grey darken-2" id="backResultListLink" text @click.prevent="onclick()">
           {{ linkText }}
         </v-btn>
-      </div>
+     
     </v-card-actions>
     <div v-if="displayMessage">
-      <div v-if="!numOfResults">Sökningen gav inga träffar</div>
+      <div class="pt-4 pb-3 grey--text text--darken-3 body-2" v-if="!numOfResults">Sökningen gav inga träffar</div>
     </div>
   </div>
 </template>
@@ -51,7 +51,7 @@ export default {
       isSearch: false,
       loading: false,
       numOfResults: 0,
-      linkText: "< TILLBAKA TRÄFFLISTAN"
+      linkText: "< TILLBAKA TILL TRÄFFLISTAN"
     };
   },
 
@@ -96,6 +96,6 @@ export default {
   float: left;
 }*/
 #backResultListLink {
-  float: left;
+  margin-left: -10px;
 }
 </style>
