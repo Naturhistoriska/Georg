@@ -10,7 +10,7 @@ describe("Search results", () => {
 
     cy.get("#resultList")
       .children()
-      .should("have.length", 10);
+      .should("have.length", 19);
 
     cy.get(".leaflet-marker-pane")
       .children()
