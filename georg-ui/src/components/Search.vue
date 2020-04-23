@@ -1,4 +1,4 @@
-<template>    
+<template>
   <div class="ma-0 pa-0">
     <v-card-text class="ma-0 pa-0">
       <v-text-field
@@ -14,28 +14,25 @@
         :loading="loading"
         @click:append="search"
         @keyup.enter="search"
-      >
-      </v-text-field>
+      ></v-text-field>
     </v-card-text>
     <v-card-actions v-if="numOfResults">
-      <div 
-        id="message" 
-        class="pt-2 grey--text text--darken-3 body-2" 
+      <div
+        id="message"
+        class="pt-2 grey--text text--darken-3 body-2"
         v-if="displayMessage"
       >
-       {{ numOfResults }} träffar
+        {{ numOfResults }} träffar
       </div>
       <div id="backResultListLink" v-if="detailView">
-        <v-btn 
-          small 
-          color="grey darken-2" 
-          text 
-          @click.prevent="onclick()"
-        >
+        <v-btn small color="grey darken-2" text @click.prevent="onclick()">
           {{ linkText }}
         </v-btn>
       </div>
-    </v-card-actions>              
+    </v-card-actions>
+    <div v-if="displayMessage">
+      <div v-if="!numOfResults">Sökningen gav inga träffar</div>
+    </div>
   </div>
 </template>
 
@@ -80,6 +77,7 @@ export default {
           this.setResults(this.results);
           this.setDidSearch(true);
           this.numOfResults = this.results.length;
+          // this.setSelectedResultId(this.results[0].properties.id);
         })
         .catch(function() {});
     }

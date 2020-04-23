@@ -1,9 +1,10 @@
 <template>
   <div id="container" class="container container--fluid">
-      <v-card id="navi">     
-          <Search />
-          <Results v-if="!detailView" v-bind:height="resultsHeight" />        
-      </v-card>
+    <v-card id="navi">
+      <Search />
+      <v-divider v-if="!detailView"></v-divider>
+      <Results v-if="!detailView" v-bind:height="resultsHeight" />
+    </v-card>
     <Detail v-if="detailView" />
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
@@ -49,7 +50,7 @@ export default {
   mounted() {
     this.bounds = initialBound;
   },
- computed: {
+  computed: {
     ...mapGetters(["results", "detailView"])
   },
   methods: {

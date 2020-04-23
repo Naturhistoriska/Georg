@@ -3,36 +3,49 @@
     three-line
     @mouseover="onhove"
     @mouseleave="unhove"
-    :class="resultColor"              
+    :class="resultColor"
     :key="result.properties.id"
   >
-   <template v-slot:default="{ active }">
-    <v-list-item-content @click.prevent="onclick()">
-      <v-list-item-title>
-        {{ result.properties.name }}
-      </v-list-item-title>
-      <v-list-item-subtitle id="resultContent" class="text--primary">
-        {{ result.properties.region }}
-        {{ result.properties.country }}     
-      </v-list-item-subtitle>
-      <v-list-item-subtitle >    
-        <span class="text-capitalize">{{ result.properties.layer }}</span> enligt Who's on First.
-      </v-list-item-subtitle>
-    </v-list-item-content>
-    <v-list-item-action @click.prevent="onSelected()">
-      <v-btn icon id="iconBtn"  v-if="!active">
-          <v-icon color="grey lighten-1">
-            mdi-map-marker
-          </v-icon>
+    <template v-if="!isNewMarker">
+      <v-list-item-content @click.prevent="onclick()">
+        <v-list-item-title>{{ result.properties.name }}</v-list-item-title>
+        <v-list-item-subtitle id="resultContent" class="text--primary">
+          {{ result.properties.region }}
+          {{ result.properties.country }}
+        </v-list-item-subtitle>
+        <v-list-item-subtitle>
+          <span class="text-capitalize">{{ result.properties.layer }}</span>
+          enligt Who's on First.
+        </v-list-item-subtitle>
+      </v-list-item-content>
+      <v-list-item-action @click.prevent="onSelected()">
+        <v-btn icon id="iconBtn" v-if="!isActive">
+          <v-icon color="grey lighten-1">mdi-map-marker</v-icon>
         </v-btn>
         <v-btn icon v-else>
-          <v-icon color="primary">
-            mdi-map-marker
-          </v-icon>
+          <v-icon color="primary">mdi-map-marker</v-icon>
         </v-btn>
       </v-list-item-action>
-   </template>
-    </v-list-item>
+    </template>
+    <template v-else>
+      <v-list-item-content>
+        <v-list-item-title class="red--text darken-2">{{
+          result.name
+        }}</v-list-item-title>
+        <v-list-item-subtitle id="resultContent" class="text--primary">
+          {{ latDms }}
+          {{ lngDms }}
+        </v-list-item-subtitle>
+        <v-list-item-subtitle>
+          {{ lat }}
+          {{ lng }}
+        </v-list-item-subtitle>
+      </v-list-item-content>
+      <v-list-item-action>
+        <v-icon color="red darken-2">mdi-map-marker</v-icon>
+      </v-list-item-action>
+    </template>
+  </v-list-item>
 </template>
 
 <script>
@@ -43,30 +56,34 @@ export default {
   props: ["result"],
 
   data() {
-    return {
-      isActive: false
-    };
+    return {};
   },
 
   computed: {
     // a computed getter
     ...mapGetters(["selectedResultId"]),
-    latLon: function() {
-      return (
-        this.result.geometry.coordinates[1] +
-        " " +
-        this.result.geometry.coordinates[0]
-      );
+    isActive: function() {
+      return this.result.properties.id === this.selectedResultId;
     },
-    latLonDms: function() {
-      let latDms = converter.latlon(this.result.geometry.coordinates[1], "lat");
-      let lonDms = converter.latlon(this.result.geometry.coordinates[0], "lon");
-      return latDms + " " + lonDms;
+    isNewMarker: function() {
+      return this.result.properties.id === "newMarker";
+    },
+    lat: function() {
+      return this.result.geometry.coordinates[1];
+    },
+    lng: function() {
+      return this.result.geometry.coordinates[0];
+    },
+    latDms: function() {
+      return converter.latlon(this.result.geometry.coordinates[1], "lat");
+    },
+    lngDms: function() {
+      return converter.latlon(this.result.geometry.coordinates[0], "lon");
     },
     resultColor: function() {
       return this.selectedResultId == this.result.properties.id
         ? "selected"
-        : "";
+        : "unSelected";
     }
   },
 
@@ -81,7 +98,7 @@ export default {
       "setDidSearch"
     ]),
 
-   onhove() {
+    onhove() {
       this.setHovedResultId(this.result.properties.id);
       this.setMouseLeaveResultId("");
     },
@@ -106,6 +123,17 @@ export default {
 </script>
 
 <style scoped>
+.selected {
+  background: #e6f2ff;
+}
+
+.unSelected {
+  background: transparent;
+}
+
+/* .unSelected {
+  background: #f4f4f4;
+} */
 /*
 .result-item {
   padding: 0px;
@@ -115,11 +143,7 @@ export default {
   background: #c7d0ff;
 }
 
-.selected {
-  background: #c7d0ff;
-}
 
-.unSelected {
-  background: #f4f4f4;
-}*/
+
+*/
 </style>

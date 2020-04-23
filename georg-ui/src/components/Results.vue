@@ -1,16 +1,14 @@
-<template v-model="result" >
-  <v-list v-if="results.length" id="scroll-target" v-scroll:#st="onScroll" class="overflow-y-auto" :style="height">
-    <v-list-item-group 
-      mandatory   
-      id="resultList" 
-      active-class="blue--text text--darken-2"
-    >
-      <template v-for="(result, index) in results">             
-        <Result
-          v-bind:result="result"
-          v-bind:isActive="activeId === result.properties.id"
-          :key="result.properties.id"
-        />    
+<template v-model="result">
+  <v-list
+    v-if="results.length"
+    id="scroll-target"
+    v-scroll:#st="onScroll"
+    class="overflow-y-auto"
+    :style="height"
+  >
+    <v-list-item-group id="resultList" active-class="blue--text text--darken-2">
+      <template v-for="(result, index) in results">
+        <Result v-bind:result="result" :key="result.properties.id" />
         <v-divider v-if="index + 1 < results.length" :key="index"></v-divider>
       </template>
     </v-list-item-group>
@@ -30,14 +28,12 @@ export default {
   props: ["onScroll", "height"],
   data() {
     return {
-      activeId: "",
-      isActive: false,
       result: {}
     };
   },
 
   computed: {
-    ...mapGetters(["results", "detailView"])
+    ...mapGetters(["results", "detailView", "newMarker"])
   },
 
   methods: {}
@@ -54,5 +50,4 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
-
 </style>
