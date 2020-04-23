@@ -12,6 +12,7 @@
         autofocus
         clearable
         :loading="loading"
+        @click:clear="clearSearch"
         @click:append="search"
         @keyup.enter="search"
       ></v-text-field>
@@ -61,7 +62,9 @@ export default {
   methods: {
     ...mapMutations(["setResults", "setDidSearch", "setDetailView"]),
     clearSearch() {
-      this.address = "";
+      this.setResults([]);
+      this.numOfResults = 0;
+      this.setDidSearch(false);
     },
     onclick() {
       this.setDetailView(false);

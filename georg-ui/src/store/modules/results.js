@@ -13,6 +13,7 @@ const state = {
 };
 const getters = {
   detailView: state => state.isDetailView,
+  didSearch: state => state.didSearch,
   displayMessage: state => state.didSearch,
   hovedResultId: state => state.hovedResultId,
   unhovedResultId: state => state.unhovedResultId,
