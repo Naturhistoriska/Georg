@@ -41,9 +41,9 @@
         id="iconbtn"
         @click="enableAddMarker"
         style="cursor: pointer;"
-        :disabled="detailView"
+        :hidden="detailView"
       >
-        <v-icon :color="iconColor">mdi-map-marker</v-icon>
+        <v-icon :color="iconColor">mdi-map-marker-plus</v-icon>
       </v-btn>
     </div>
   </div>
@@ -113,7 +113,7 @@ export default {
     ]),
 
     iconColor: function() {
-      return this.enableAddMapMarkers ? "green" : "primary";
+      return this.enableAddMapMarkers ? "red darken-2" : "primary";
     }
   },
   watch: {
@@ -402,4 +402,5 @@ export default {
   position: absolute;
   right: 56px;
 }
+#iconbtn {margin-right: 8px;}
 </style>
