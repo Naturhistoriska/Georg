@@ -29,9 +29,9 @@
     </template>
     <template v-else>
       <v-list-item-content>
-        <v-list-item-title class="red--text darken-2">{{
-          result.name
-        }}</v-list-item-title>
+        <v-list-item-title class="red--text darken-2">
+          {{ result.name }}
+        </v-list-item-title>
         <v-list-item-subtitle id="resultContent" class="text--primary">
           {{ latDms }}
           {{ lngDms }}
@@ -99,7 +99,9 @@ export default {
     ]),
 
     onhove() {
-      this.setHovedResultId(this.result.properties.id);
+      if (this.result.properties.id !== "newMarker") {
+        this.setHovedResultId(this.result.properties.id);
+      }
       this.setMouseLeaveResultId("");
     },
     unhove() {
