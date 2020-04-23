@@ -13,7 +13,7 @@
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
       ></l-tile-layer>
-      <l-marker
+      <!-- <l-marker
         id="markerList"
         v-for="marker in markers"
         :key="marker.id"
@@ -21,7 +21,7 @@
         :lat-lng="marker.position"
         :icon="marker.icon"
         @click="onMarkerClick(marker.id)"
-      ></l-marker>
+      ></l-marker>-->
       <l-circle
         :lat-lng="circle.center"
         :radius="circle.radius"
@@ -57,16 +57,16 @@ import { mapGetters, mapMutations } from "vuex";
 const MAP_ICONS = {
   blueIcon: L.icon({
     iconUrl: "selected-marker.png",
-    iconSize: [22, 32] // size of the icon
+    iconSize: [22, 32], // size of the icon
   }),
   redIcon: L.icon({
     iconUrl: "added-marker.png",
-    iconSize: [22, 32] // size of the icon
+    iconSize: [22, 32], // size of the icon
   }),
   greyIcon: L.icon({
     iconUrl: "default-marker.png",
-    iconSize: [22, 32]
-  })
+    iconSize: [22, 32],
+  }),
 };
 
 const southWest = new L.LatLng(55.1961173, 12.8018162);
@@ -77,7 +77,7 @@ export default {
   components: {
     LMap,
     LTileLayer,
-    LCircle
+    LCircle,
   },
   props: ["mapHeight", "latlon"],
   data() {
@@ -86,13 +86,13 @@ export default {
       center: [59.0, 15.0],
       mapOptions: {
         zoomControl: true,
-        zoomControlPosition: "topright"
+        zoomControlPosition: "topright",
       },
       markers: [],
       enableAddMapMarkers: false,
       circle: {},
       zoom: 0,
-      rezoom: true
+      rezoom: true,
     };
   },
   mounted() {
@@ -110,17 +110,17 @@ export default {
       "hovedResultId",
       "unhovedResultId",
       "selectedResult",
-      "selectedResultId"
+      "selectedResultId",
     ]),
 
     iconColor: function() {
       return this.enableAddMapMarkers ? "red darken-2" : "primary";
-    }
+    },
   },
   watch: {
     detailView: function() {
       this.$nextTick(() => {
-        this.createMarks();
+        this.createMarkers();
         if (!this.detailView) {
           this.getMapBounds();
         }
@@ -136,7 +136,7 @@ export default {
     },
     results: function() {
       this.$nextTick(() => {
-        this.createMarks();
+        this.createMarkers();
         this.getMapBounds();
         // this.addActiveMarker();
       });
@@ -162,92 +162,105 @@ export default {
           this.enableAddMapMarkers = false;
         }
       });
-    }
+    },
   },
   methods: {
     ...mapMutations([
       "setSelectedMarkerId",
       "setNewMarkers",
       "setResults",
-      "setDidSearch"
+      "setDidSearch",
     ]),
-    addActiveMarker() {
+    addActiveMarker(lat, lng) {
       this.$refs.myMap.mapObject.createPane("locationMarker");
       this.$refs.myMap.mapObject.getPane("locationMarker").style.zIndex = 999;
-      let topMarker = L.marker([59.203241, 18.341203], {
-        pane: "locationMarker"
+      let topMarker = L.marker([lat, lng], {
+        pane: "locationMarker",
       });
       topMarker.addTo(this.$refs.myMap.mapObject);
-      topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
+      // topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
     },
-    // createMarkers() {
-    //   if (this.detailView) {
-    //     const lat = this.selectedResult.geometry.coordinates[1];
-    //     const lon = this.selectedResult.geometry.coordinates[0];
-    //     this.center = [lat, lon];
+    createMarkers() {
+      this.$refs.myMap.mapObject.markers = {};
+      if (this.detailView) {
+        const lat = this.selectedResult.geometry.coordinates[1];
+        const lon = this.selectedResult.geometry.coordinates[0];
+        this.center = [lat, lon];
 
-    //     let detailMarker = L.marker([lat, lon]);
-    //     detailMarker.addTo(this.$refs.myMap.mapObject);
-    //     // detailMarker.valueOf()._icon.style.filter = "hue-rotate(1E90FF)";
-    //     detailMarker.valueOf()._icon.style.filter = "hue-rotate(2.62rad)";
-    //     this.zoom = 18;
-    //     this.markers.push(detailMarker);
-    //   } else {
-    //     let north = 90;
-    //     let south = -90;
-    //     let west = -180;
-    //     let east = 180;
+        let detailMarker = L.marker([lat, lon]);
+        detailMarker.addTo(this.$refs.myMap.mapObject);
+        // detailMarker.valueOf()._icon.style.filter = "hue-rotate(2.62rad)";
+        this.zoom = 18;
+        this.markers.push(detailMarker);
+      } else {
+        let north = 90;
+        let south = -90;
+        let west = -180;
+        let east = 180;
 
-    //     this.results.forEach(result => {
-    //       const lat = result.geometry.coordinates[1];
-    //       const lon = result.geometry.coordinates[0];
-    //       north = north > lat ? lat : north;
-    //       south = south > lat ? south : lat;
-    //       west = west > lon ? west : lon;
-    //       east = east > lon ? lon : east;
+        this.results.forEach((result) => {
+          const lat = result.geometry.coordinates[1];
+          const lon = result.geometry.coordinates[0];
+          north = north > lat ? lat : north;
+          south = south > lat ? south : lat;
+          west = west > lon ? west : lon;
+          east = east > lon ? lon : east;
 
-    //       let southWest = new L.LatLng(south + 1, west + 1);
-    //       let northEast = new L.LatLng(north - 1, east - 1);
-    //       this.bounds = new L.LatLngBounds(southWest, northEast);
+          let southWest = new L.LatLng(south + 1, west + 1);
+          let northEast = new L.LatLng(north - 1, east - 1);
+          this.bounds = new L.LatLngBounds(southWest, northEast);
 
-    //       this.$refs.myMap.mapObject.createPane("top");
-    //       this.$refs.myMap.mapObject.getPane("top").style.zIndex = 999;
-    //       // let topMarker = L.marker([59.203241, 18.341203], {
-    //       //   pane: "top"
-    //       // });
-    //       // topMarker.addTo(this.$refs.myMap.mapObject);
-    //       // topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
-    //       let marker;
-    //       let icon;
-    //       if (result.properties.id === "newMarker") {
-    //         marker = L.marker([lat, lon]);
-    //         marker.addTo(this.$refs.myMap.mapObject);
-    //         marker.valueOf()._icon.style.filter = "hue-rotate(2.62rad)";
-    //       } else if (result.properties.id === this.selectedResultId) {
-    //         icon = MAP_ICONS.yellowIcon;
-    //         marker = {
-    //           id: result.properties.id,
-    //           position: [lat, lon],
-    //           accuracy: 100,
-    //           visible: true,
-    //           icon: icon,
-    //           pane: "top"
-    //         };
-    //       } else {
-    //         icon = MAP_ICONS.blueIcon;
-    //         marker = {
-    //           id: result.properties.id,
-    //           position: [lat, lon],
-    //           accuracy: 100,
-    //           visible: true,
-    //           icon: icon
-    //         };
-    //       }
+          this.$refs.myMap.mapObject.createPane("top");
+          this.$refs.myMap.mapObject.getPane("top").style.zIndex = 999;
 
-    //       // array.push(marker);
-    //     });
-    //   }
-    // },
+          if (result.properties.id === "newMarker") {
+            let newMarker = L.marker([lat, lon]);
+            newMarker.addTo(this.$refs.myMap.mapObject);
+            newMarker.valueOf()._icon.style.filter = "hue-rotate(2.62rad)";
+          } else if (result.properties.id === this.selectedResultId) {
+            this.addActiveMarker(lat, lon);
+          } else {
+            let marker = L.marker([lat, lon]);
+            marker.addTo(this.$refs.myMap.mapObject);
+            marker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
+          }
+
+          // let topMarker = L.marker([59.203241, 18.341203], {
+          //   pane: "top"
+          // });
+          // topMarker.addTo(this.$refs.myMap.mapObject);
+          // topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
+          // let marker;
+          // let icon;
+          // if (result.properties.id === "newMarker") {
+          //   marker = L.marker([lat, lon]);
+          //   marker.addTo(this.$refs.myMap.mapObject);
+          //   marker.valueOf()._icon.style.filter = "hue-rotate(2.62rad)";
+          // } else if (result.properties.id === this.selectedResultId) {
+          //   icon = MAP_ICONS.yellowIcon;
+          //   marker = {
+          //     id: result.properties.id,
+          //     position: [lat, lon],
+          //     accuracy: 100,
+          //     visible: true,
+          //     icon: icon,
+          //     pane: "top"
+          //   };
+          // } else {
+          //   icon = MAP_ICONS.blueIcon;
+          //   marker = {
+          //     id: result.properties.id,
+          //     position: [lat, lon],
+          //     accuracy: 100,
+          //     visible: true,
+          //     icon: icon
+          //   };
+          // }
+
+          // array.push(marker);
+        });
+      }
+    },
     createMarks() {
       const array = [];
       if (this.detailView) {
@@ -264,7 +277,7 @@ export default {
           id: this.selectedResult.properties.id,
           position: [lat, lon],
           visible: true,
-          icon: MAP_ICONS.blueIcon
+          icon: MAP_ICONS.blueIcon,
         };
         array.push(marker);
         this.zoom = 18;
@@ -274,7 +287,7 @@ export default {
         let west = -180;
         let east = 180;
 
-        this.results.forEach(result => {
+        this.results.forEach((result) => {
           const lat = result.geometry.coordinates[1];
           const lon = result.geometry.coordinates[0];
           north = north > lat ? lat : north;
@@ -304,7 +317,7 @@ export default {
             id: result.properties.id,
             position: [lat, lon],
             visible: true,
-            icon: icon
+            icon: icon,
           };
           array.push(marker);
         });
@@ -313,7 +326,7 @@ export default {
     },
     selectedMark() {
       const id = this.hovedResultId;
-      this.markers.forEach(marker => {
+      this.markers.forEach((marker) => {
         if (marker.id === id) {
           marker.icon = MAP_ICONS.blueIcon;
         }
@@ -322,7 +335,7 @@ export default {
     unselectedMark() {
       const id = this.unhovedResultId;
       if (id != this.selectedResultId) {
-        this.markers.forEach(marker => {
+        this.markers.forEach((marker) => {
           if (marker.id != "newMarker") {
             if (marker.id == id) {
               marker.icon = MAP_ICONS.greyIcon;
@@ -332,7 +345,7 @@ export default {
       }
     },
     removeOldSelectedMarker() {
-      this.markers.forEach(marker => {
+      this.markers.forEach((marker) => {
         if (marker.id != this.selectedResultId && marker.id != "newMarker") {
           marker.icon = MAP_ICONS.greyIcon;
         }
@@ -354,16 +367,16 @@ export default {
         let result = {
           isNew: true,
           properties: {
-            id: "newMarker"
+            id: "newMarker",
           },
           geometry: {
-            coordinates: [latlng.lng, latlng.lat]
+            coordinates: [latlng.lng, latlng.lat],
           },
-          name: "Din plats"
+          name: "Din plats",
         };
 
         let removeFirstResult = false;
-        this.results.forEach(result => {
+        this.results.forEach((result) => {
           if (result.properties.id == "newMarker") {
             removeFirstResult = true;
           }
@@ -392,8 +405,8 @@ export default {
         this.$refs.myMap.mapObject.fitBounds(this.bounds);
       }
       this.rezoom = true;
-    }
-  }
+    },
+  },
 };
 </script>
 
