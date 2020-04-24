@@ -65,6 +65,7 @@ export default {
       this.setResults([]);
       this.numOfResults = 0;
       this.setDidSearch(false);
+      this.setDetailView(false);
     },
     onclick() {
       this.setDetailView(false);
@@ -80,6 +81,7 @@ export default {
           this.setResults(this.results);
           this.setDidSearch(true);
           this.numOfResults = this.results.length;
+          this.setDetailView(false);
           // this.setSelectedResultId(this.results[0].properties.id);
         })
         .catch(function() {});

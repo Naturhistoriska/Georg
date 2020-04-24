@@ -22,18 +22,10 @@
         :icon="marker.icon"
         @click="onMarkerClick(marker.id)"
       ></l-marker>
-      <l-circle
-        :lat-lng="circle.center"
-        :radius="circle.radius"
-        :color="circle.color"
-      />
+      <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" />
     </l-map>
 
-    <div
-      id="icondiv"
-      class="leaflet-bottom leaflet-right"
-      style="padding-bottom: 80px;"
-    >
+    <div id="icondiv" class="leaflet-bottom leaflet-right" style="padding-bottom: 80px;">
       <v-btn
         class="leaflet-control"
         fab
@@ -56,16 +48,16 @@ import { mapGetters, mapMutations } from "vuex";
 
 const MAP_ICONS = {
   blueIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/blue-dot.png",
-    iconSize: [30, 30] // size of the icon
+    iconUrl: "selected-marker.png",
+    iconSize: [22, 32] // size of the icon
   }),
   redIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/red-dot.png",
-    iconSize: [30, 30] // size of the icon
+    iconUrl: "added-marker.png",
+    iconSize: [22, 32] // size of the icon
   }),
-  yellowIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png",
-    iconSize: [30, 30]
+  greyIcon: L.icon({
+    iconUrl: "default-marker.png",
+    iconSize: [22, 32]
   })
 };
 
@@ -263,7 +255,7 @@ export default {
           id: this.selectedResult.properties.id,
           position: [lat, lon],
           visible: true,
-          icon: MAP_ICONS.yellowIcon
+          icon: MAP_ICONS.blueIcon
         };
         array.push(marker);
         this.zoom = 18;
@@ -295,9 +287,9 @@ export default {
           if (result.properties.id === "newMarker") {
             icon = MAP_ICONS.redIcon;
           } else if (result.properties.id === this.selectedResultId) {
-            icon = MAP_ICONS.yellowIcon;
-          } else {
             icon = MAP_ICONS.blueIcon;
+          } else {
+            icon = MAP_ICONS.greyIcon;
           }
           let marker = {
             id: result.properties.id,
@@ -314,7 +306,7 @@ export default {
       const id = this.hovedResultId;
       this.markers.forEach(marker => {
         if (marker.id === id) {
-          marker.icon = MAP_ICONS.yellowIcon;
+          marker.icon = MAP_ICONS.blueIcon;
         }
       });
     },
@@ -324,7 +316,7 @@ export default {
         this.markers.forEach(marker => {
           if (marker.id != "newMarker") {
             if (marker.id == id) {
-              marker.icon = MAP_ICONS.blueIcon;
+              marker.icon = MAP_ICONS.greyIcon;
             }
           }
         });
@@ -333,7 +325,7 @@ export default {
     removeOldSelectedMarker() {
       this.markers.forEach(marker => {
         if (marker.id != this.selectedResultId && marker.id != "newMarker") {
-          marker.icon = MAP_ICONS.blueIcon;
+          marker.icon = MAP_ICONS.greyIcon;
         }
       });
     },
@@ -402,5 +394,7 @@ export default {
   position: absolute;
   right: 56px;
 }
-#iconbtn {margin-right: 8px;}
+#iconbtn {
+  margin-right: 8px;
+}
 </style>

@@ -21,16 +21,18 @@ describe("Results view", () => {
   it("Icon click to highligt result", () => {
     cy.get("#resultList")
       .children()
+      .first()
+      .next()
       .get("#iconBtn")
       .click();
   });
-  // it("Result click to display detail", () => {
-  //   cy.get("#resultList")
-  //     .children()
-  //     .first()
-  //     .get("#resultContent")
-  //     .children()
-  //     .click();
-  //   // cy.contains("TILLBAKA TRÄFFLISTAN").should("be.visible");
-  // });
+  it("Result click to display detail", () => {
+    cy.get("#resultList")
+      .children()
+      .first()
+      .get("#resultItem")
+      .children()
+      .click();
+    // cy.contains("TILLBAKA TRÄFFLISTAN").should("be.visible");
+  });
 });
