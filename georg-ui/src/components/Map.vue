@@ -22,10 +22,18 @@
         :icon="marker.icon"
         @click="onMarkerClick(marker.id)"
       ></l-marker>
-      <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" />
+      <l-circle
+        :lat-lng="circle.center"
+        :radius="circle.radius"
+        :color="circle.color"
+      />
     </l-map>
 
-    <div id="icondiv" class="leaflet-bottom leaflet-right" style="padding-bottom: 80px;">
+    <div
+      id="icondiv"
+      class="leaflet-bottom leaflet-right"
+      style="padding-bottom: 80px;"
+    >
       <v-btn
         class="leaflet-control"
         fab
