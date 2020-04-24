@@ -25,12 +25,6 @@
       >
         {{ numOfResults }} träffar
       </div>
-      <!-- <div id="backResultListLink" v-if="detailView">
-        <v-btn small color="grey darken-2" text @click.prevent="onclick()">
-          {{ linkText }}
-        </v-btn>
-      </div> -->
-
       <v-btn
         v-if="detailView"
         small
@@ -43,8 +37,6 @@
       </v-btn>
     </v-card-actions>
     <div v-if="displayMessage">
-      <!-- <div v-if="!numOfResults">Sökningen gav inga träffar</div> -->
-
       <div
         class="pt-4 pb-3 grey--text text--darken-3 body-2"
         v-if="!numOfResults"
@@ -78,12 +70,18 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setResults", "setDidSearch", "setDetailView"]),
+    ...mapMutations([
+      "setResults",
+      "setDidSearch",
+      "setDetailView",
+      "setSelectedResultId"
+    ]),
     clearSearch() {
       this.setResults([]);
       this.numOfResults = 0;
       this.setDidSearch(false);
       this.setDetailView(false);
+      this.setSelectedResultId("");
     },
     onclick() {
       this.setDetailView(false);
@@ -100,6 +98,7 @@ export default {
           this.setDidSearch(true);
           this.numOfResults = this.results.length;
           this.setDetailView(false);
+          this.setSelectedResultId("");
           // this.setSelectedResultId(this.results[0].properties.id);
         })
         .catch(function() {});
@@ -112,11 +111,7 @@ export default {
 .fixedPosition {
   position: fixed !important;
 }
-/*#message {
-  float: left;
-}*/
 #backResultListLink {
-  /* float: left; */
   margin-left: -10px;
 }
 </style>

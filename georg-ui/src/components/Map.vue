@@ -91,7 +91,8 @@ export default {
       markers: [],
       enableAddMapMarkers: false,
       circle: {},
-      zoom: 0
+      zoom: 0,
+      rezoom: true
     };
   },
   mounted() {
@@ -373,6 +374,8 @@ export default {
 
         this.results.unshift(result);
         this.setResults(this.results);
+        this.rezoom = false;
+
         // this.setDidSearch(true);
         // let accuracy = {
         //   center: [latlng.lat, latlng.lng],
@@ -385,7 +388,10 @@ export default {
       // this.$emit("addMarker", event.latlng);
     },
     getMapBounds() {
-      this.$refs.myMap.mapObject.fitBounds(this.bounds);
+      if (this.rezoom) {
+        this.$refs.myMap.mapObject.fitBounds(this.bounds);
+      }
+      this.rezoom = true;
     }
   }
 };
