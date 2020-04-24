@@ -10,7 +10,7 @@ describe("Home page", () => {
   it("Auto focus to search text field", () => {
     cy.focused()
       .should("have.attr", "placeholder")
-      .and("eq", "Search address");
+      .and("eq", "Sök plats");
   });
 
   it("Results not visible", () => {
