@@ -7,7 +7,7 @@
       ><strong class="text-capitalize">{{
         selectedResult.properties.layer
       }}</strong>
-      enligt Who's On First</v-card-subtitle
+      enligt {{ source }}</v-card-subtitle
     >
     <v-list>
       <v-list-item>
@@ -52,7 +52,7 @@
           <v-icon color="blue darken-2">mdi-database-import</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{ source }}</v-list-item-title>
+          <v-list-item-title>Data från {{ dataFromSource }}</v-list-item-title>
         </v-list-item-content>
         <v-btn
           icon
@@ -71,6 +71,21 @@ import * as converter from '../assets/js/latlonConverter.js'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Detail',
+  data() {
+    return {
+      source: '',
+      dataFromSource: '',
+    }
+  },
+  mounted() {
+    if (this.selectedResult.properties.source === 'GBIF') {
+      this.source = this.selectedResult.properties.source
+      this.dataFromSource = this.selectedResult.properties.source
+    } else {
+      this.dataFromSource = "Who's On First (WOF)"
+      this.source = "Who's On First"
+    }
+  },
   computed: {
     ...mapGetters(['selectedResult']),
     latLon: function() {
@@ -91,11 +106,14 @@ export default {
       )
       return latDms + ' ' + lonDms
     },
-    source: function() {
-      return this.selectedResult.properties.source === 'GBIF'
-        ? this.selectedResult.properties.source
-        : "Data från Who's On First (WOF)"
+    isNewMarker: function() {
+      return this.selectedResult.properties.id === 'newMarker'
     },
+    // source: function() {
+    //   return this.selectedResult.properties.source === 'GBIF'
+    //     ? this.selectedResult.properties.source
+    //     : "Who's On First (WOF)"
+    // },
   },
 }
 </script>
