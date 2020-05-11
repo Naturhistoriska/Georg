@@ -1,18 +1,18 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
-    <v-card-title class="headline blue--text text--darken-2">
+    <v-card-title :class="nameColor">
       {{ selectedResult.properties.name }}
     </v-card-title>
-    <v-card-subtitle
-      ><strong class="text-capitalize">{{
+    <v-card-subtitle v-if="!isNewMarker">
+      <strong class="text-capitalize">{{
         selectedResult.properties.layer
       }}</strong>
-      enligt {{ source }}</v-card-subtitle
-    >
+      enligt {{ source }}
+    </v-card-subtitle>
     <v-list>
       <v-list-item>
         <v-list-item-icon>
-          <v-icon color="blue darken-2">mdi-map-marker</v-icon>
+          <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>{{ latLonDms }}</v-list-item-title>
@@ -26,24 +26,26 @@
           <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-divider inset></v-divider>
+      <v-divider :inset="!isNewMarker"></v-divider>
+    </v-list>
+    <v-list v-if="!isNewMarker">
       <v-list-item>
         <v-list-item-icon>
           <v-icon color="blue darken-2">mdi-file-tree</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title
-            >{{ selectedResult.properties.county }}
-            <span class="text--secondary">county</span></v-list-item-title
-          >
-          <v-list-item-title
-            >{{ selectedResult.properties.region }}
-            <span class="text--secondary">region</span></v-list-item-title
-          >
-          <v-list-item-title
-            >{{ selectedResult.properties.country }}
-            <span class="text--secondary">country</span></v-list-item-title
-          >
+          <v-list-item-title>
+            {{ selectedResult.properties.county }}
+            <span class="text--secondary">county</span>
+          </v-list-item-title>
+          <v-list-item-title>
+            {{ selectedResult.properties.region }}
+            <span class="text--secondary">region</span>
+          </v-list-item-title>
+          <v-list-item-title>
+            {{ selectedResult.properties.country }}
+            <span class="text--secondary">country</span>
+          </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
       <v-divider inset></v-divider>
@@ -63,18 +65,71 @@
         </v-btn>
       </v-list-item>
     </v-list>
+    <v-list v-else>
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="grey--text text--darken-2"
+            >Din osäkerhetsradie</v-list-item-title
+          >
+          <v-list-item-subtitle>
+            <v-chip-group active-class="grey darken-1 white--text">
+              <v-chip
+                v-for="tag in tags"
+                :key="tag.label"
+                @click="addUncertaintyValue(tag.value)"
+                >{{ tag.label }}</v-chip
+              >
+            </v-chip-group>
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-subtitle>
+            <v-text-field
+              append-outer-icon="mdi-alert-circle-outline"
+              hide-details
+              single-line
+              suffix="meter"
+              type="number"
+              v-model="uncertainty"
+            ></v-text-field>
+          </v-list-item-subtitle>
+          <v-list-item-subtitle>
+            <v-btn
+              @click="setUncertaintyValue"
+              color="red darken-2"
+              style="padding-left: 0px;"
+              text
+              :disabled="disableSetUncertaintyBtn"
+              >Sätt osäkerhet</v-btn
+            >
+          </v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+    </v-list>
   </v-card>
 </template>
 
 <script>
 import * as converter from '../assets/js/latlonConverter.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Detail',
   data() {
     return {
-      source: '',
       dataFromSource: '',
+      disableSetUncertaintyBtn: true,
+      dividerInset: true,
+      source: '',
+      tags: [
+        { label: '100m', value: 100 },
+        { label: '1 km', value: 1000 },
+        { label: '10 km', value: 10000 },
+        { label: '100 km', value: 100000 },
+      ],
+      uncertainty: null,
     }
   },
   mounted() {
@@ -85,6 +140,13 @@ export default {
       this.dataFromSource = "Who's On First (WOF)"
       this.source = "Who's On First"
     }
+  },
+  watch: {
+    uncertainty: function() {
+      this.$nextTick(() => {
+        this.disableSetUncertaintyBtn = false
+      })
+    },
   },
   computed: {
     ...mapGetters(['selectedResult']),
@@ -109,11 +171,26 @@ export default {
     isNewMarker: function() {
       return this.selectedResult.properties.id === 'newMarker'
     },
-    // source: function() {
-    //   return this.selectedResult.properties.source === 'GBIF'
-    //     ? this.selectedResult.properties.source
-    //     : "Who's On First (WOF)"
-    // },
+    nameColor: function() {
+      return this.selectedResult.properties.id === 'newMarker'
+        ? 'headline red--text text--darken-2'
+        : 'headline blue--text text--darken-2'
+    },
+    makeIconColor: function() {
+      return this.selectedResult.properties.id === 'newMarker'
+        ? 'red darken-2'
+        : 'blue darken-2'
+    },
+  },
+  methods: {
+    ...mapMutations(['setUncertainty']),
+    setUncertaintyValue() {
+      this.setUncertainty(this.uncertainty)
+      this.disableSetUncertaintyBtn = true
+    },
+    addUncertaintyValue(value) {
+      this.uncertainty = value
+    },
   },
 }
 </script>

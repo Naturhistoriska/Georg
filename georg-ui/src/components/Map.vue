@@ -26,6 +26,8 @@
         :lat-lng="circle.center"
         :radius="circle.radius"
         :color="circle.color"
+        :fillColor="circle.fillColor"
+        :fillOpacity="circle.fillOpacity"
       />
     </l-map>
 
@@ -112,6 +114,7 @@ export default {
       'unhovedResultId',
       'selectedResult',
       'selectedResultId',
+      'uncertainty',
     ]),
 
     iconColor: function() {
@@ -164,6 +167,11 @@ export default {
         }
       })
     },
+    uncertainty() {
+      this.$nextTick(() => {
+        this.addUncertainty()
+      })
+    },
   },
   methods: {
     ...mapMutations([
@@ -171,6 +179,7 @@ export default {
       'setNewMarkers',
       'setResults',
       'setDidSearch',
+      'setUncertainty',
     ]),
     addActiveMarker() {
       this.$refs.myMap.mapObject.createPane('locationMarker')
@@ -261,15 +270,22 @@ export default {
         //   // iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
         // });
         this.center = [lat, lon]
+        const theIcon =
+          this.selectedResult.properties.id === 'newMarker'
+            ? MAP_ICONS.redIcon
+            : MAP_ICONS.blueIcon
         let marker = {
           id: this.selectedResult.properties.id,
           position: [lat, lon],
           visible: true,
-          icon: MAP_ICONS.blueIcon,
+          icon: theIcon,
         }
         array.push(marker)
         this.zoom = 18
       } else {
+        this.circle = {}
+        this.setUncertainty(0)
+
         let north = 90
         let south = -90
         let west = -180
@@ -316,7 +332,8 @@ export default {
       const id = this.hovedResultId
       this.markers.forEach(marker => {
         if (marker.id === id) {
-          marker.icon = MAP_ICONS.blueIcon
+          marker.icon =
+            marker.id === 'newMarker' ? MAP_ICONS.redIcon : MAP_ICONS.blueIcon
         }
       })
     },
@@ -346,7 +363,6 @@ export default {
     },
 
     onMarkerClick(id) {
-      // console.log("id..." + id);
       this.setSelectedMarkerId(id)
     },
     onMapClick(event) {
@@ -395,6 +411,18 @@ export default {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
       }
       this.rezoom = true
+    },
+    addUncertainty() {
+      console.log('uncertainty...' + this.uncertainty)
+
+      let accuracy = {
+        center: [this.center[0], this.center[1]],
+        radius: parseInt(this.uncertainty),
+        color: 'red',
+        fillColor: '#ff9999',
+        fillOpacity: 0.3,
+      }
+      this.circle = accuracy
     },
     fixLatLngToMaxSixDecimal(value) {
       const numOfDecimal =

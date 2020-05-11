@@ -10,6 +10,7 @@ const state = {
   detialViewId: '',
   selectedMarkerId: '',
   newMarker: {},
+  uncertainty: 0,
 }
 const getters = {
   detailView: state => state.isDetailView,
@@ -23,6 +24,7 @@ const getters = {
   detialViewId: state => state.detialViewId,
   selectedMarkerId: state => state.selectedMarkerId,
   newMarker: state => state.newMarker,
+  uncertainty: state => state.uncertainty,
 }
 
 const actions = {}
@@ -37,6 +39,7 @@ const mutations = {
   setDetialViewId: (state, payload) => (state.detialViewId = payload),
   setSelectedMarkerId: (state, payload) => (state.selectedMarkerId = payload),
   setNewMarkers: (state, payload) => (state.newMarker = payload),
+  setUncertainty: (state, payload) => (state.uncertainty = payload),
 }
 
 export default {
