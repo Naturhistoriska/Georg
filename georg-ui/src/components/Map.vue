@@ -352,13 +352,15 @@ export default {
     onMapClick(event) {
       if (this.enableAddMapMarkers) {
         const latlng = event.latlng
+        const lat = this.fixLatLngToMaxSixDecimal(latlng.lat)
+        const lng = this.fixLatLngToMaxSixDecimal(latlng.lng)
         let result = {
           isNew: true,
           properties: {
             id: 'newMarker',
           },
           geometry: {
-            coordinates: [latlng.lng, latlng.lat],
+            coordinates: [lng, lat],
           },
           name: 'Din plats',
         }
@@ -393,6 +395,13 @@ export default {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
       }
       this.rezoom = true
+    },
+    fixLatLngToMaxSixDecimal(value) {
+      const numOfDecimal =
+        Math.floor(value) === value
+          ? 0
+          : value.toString().split('.')[1].length || 0
+      return numOfDecimal > 6 ? value.toFixed(6) : value
     },
   },
 }
