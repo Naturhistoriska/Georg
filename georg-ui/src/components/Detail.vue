@@ -52,7 +52,7 @@
           <v-icon color="blue darken-2">mdi-database-import</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>Data från Who's On First (WOF)</v-list-item-title>
+          <v-list-item-title>{{ source }}</v-list-item-title>
         </v-list-item-content>
         <v-btn
           icon
@@ -67,32 +67,37 @@
 </template>
 
 <script>
-import * as converter from "../assets/js/latlonConverter.js";
-import { mapGetters } from "vuex";
+import * as converter from '../assets/js/latlonConverter.js'
+import { mapGetters } from 'vuex'
 export default {
-  name: "Detail",
+  name: 'Detail',
   computed: {
-    ...mapGetters(["selectedResult"]),
+    ...mapGetters(['selectedResult']),
     latLon: function() {
       return (
         this.selectedResult.geometry.coordinates[1] +
-        " " +
+        ' ' +
         this.selectedResult.geometry.coordinates[0]
-      );
+      )
     },
     latLonDms: function() {
       let latDms = converter.latlon(
         this.selectedResult.geometry.coordinates[1],
-        "lat"
-      );
+        'lat'
+      )
       let lonDms = converter.latlon(
         this.selectedResult.geometry.coordinates[0],
-        "lon"
-      );
-      return latDms + " " + lonDms;
-    }
-  }
-};
+        'lon'
+      )
+      return latDms + ' ' + lonDms
+    },
+    source: function() {
+      return this.selectedResult.properties.source === 'GBIF'
+        ? this.selectedResult.properties.source
+        : "Data från Who's On First (WOF)"
+    },
+  },
+}
 </script>
 <style scoped>
 #v-card-detail {

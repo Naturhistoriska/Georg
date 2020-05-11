@@ -16,28 +16,28 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Result from "./Result";
+import { mapGetters } from 'vuex'
+import Result from './Result'
 
 export default {
-  name: "Results",
+  name: 'Results',
   components: {
-    Result
+    Result,
   },
 
-  props: ["onScroll", "height"],
+  props: ['onScroll', 'height'],
   data() {
     return {
-      result: {}
-    };
+      result: {},
+    }
   },
 
   computed: {
-    ...mapGetters(["results", "detailView", "newMarker"])
+    ...mapGetters(['results', 'detailView', 'newMarker']),
   },
 
-  methods: {}
-};
+  methods: {},
+}
 </script>
 <style scoped>
 ::-webkit-scrollbar {

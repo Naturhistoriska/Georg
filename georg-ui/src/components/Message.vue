@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  name: "Message",
-  computed: mapGetters(["displayMessage"])
-};
+  name: 'Message',
+  computed: mapGetters(['displayMessage']),
+}
 </script>
