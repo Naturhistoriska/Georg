@@ -17,33 +17,21 @@
         @keyup.enter="search"
       ></v-text-field>
     </v-card-text>
-    <v-card-actions v-if="numOfResults">
-      <div
-        id="message"
-        class="pt-2 grey--text text--darken-3 body-2"
-        v-if="displayMessage"
-      >
-        {{ numOfResults }} träffar
-      </div>
+    <v-card-actions v-if="detailView">
       <v-btn
-        v-if="detailView"
         small
         color="grey darken-2"
         id="backResultListLink"
         text
         @click.prevent="onclick()"
+        >{{ linkText }}</v-btn
       >
-        {{ linkText }}
-      </v-btn>
     </v-card-actions>
-    <div v-if="displayMessage">
-      <div
-        class="pt-4 pb-3 grey--text text--darken-3 body-2"
-        v-if="!numOfResults"
-      >
-        Sökningen gav inga träffar
+    <v-card-actions v-if="!detailView">
+      <div id="message" class="pt-2 grey--text text--darken-3 body-2">
+        {{ message }}
       </div>
-    </div>
+    </v-card-actions>
   </div>
 </template>
 
@@ -60,8 +48,8 @@ export default {
       address: '',
       isSearch: false,
       loading: false,
-      numOfResults: 0,
       linkText: '< TILLBAKA TILL TRÄFFLISTAN',
+      message: '',
     }
   },
 
@@ -78,14 +66,13 @@ export default {
     ]),
     clearSearch() {
       this.setResults([])
-      this.numOfResults = 0
       this.setDidSearch(false)
       this.setDetailView(false)
       this.setSelectedResultId('')
+      this.message = ''
     },
     onclick() {
       this.setDetailView(false)
-      this.setDidSearch(true)
     },
     search() {
       this.loading = true
@@ -96,10 +83,12 @@ export default {
           this.loading = false
           this.setResults(this.results)
           this.setDidSearch(true)
-          this.numOfResults = this.results.length
           this.setDetailView(false)
           this.setSelectedResultId('')
-          // this.setSelectedResultId(this.results[0].properties.id);
+          this.message =
+            this.results.length > 0
+              ? this.results.length + ' träffar'
+              : 'Sökningen gav inga träffar'
         })
         .catch(function() {})
     },
