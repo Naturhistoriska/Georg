@@ -33,7 +33,7 @@
         id="iconbtn"
         @click="enableAddMarker"
         style="cursor: pointer;"
-        :hidden="detailView"
+        :disabled="detailView"
       >
         <v-icon :color="iconColor">mdi-map-marker-plus</v-icon>
       </v-btn>
