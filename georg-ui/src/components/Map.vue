@@ -358,11 +358,11 @@ export default {
           isNew: true,
           properties: {
             id: 'newMarker',
+            name: 'Din plats',
           },
           geometry: {
             coordinates: [lng, lat],
           },
-          name: 'Din plats',
         }
 
         let removeFirstResult = false
