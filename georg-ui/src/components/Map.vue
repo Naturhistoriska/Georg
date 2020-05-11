@@ -22,10 +22,18 @@
         :icon="marker.icon"
         @click="onMarkerClick(marker.id)"
       ></l-marker>
-      <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" />
+      <l-circle
+        :lat-lng="circle.center"
+        :radius="circle.radius"
+        :color="circle.color"
+      />
     </l-map>
 
-    <div id="icondiv" class="leaflet-bottom leaflet-right" style="padding-bottom: 80px;">
+    <div
+      id="icondiv"
+      class="leaflet-bottom leaflet-right"
+      style="padding-bottom: 80px;"
+    >
       <v-btn
         class="leaflet-control"
         fab
@@ -42,21 +50,21 @@
 </template>
 
 <script>
-import L from "leaflet"
-import { LMap, LTileLayer, LCircle } from "vue2-leaflet"
-import { mapGetters, mapMutations } from "vuex"
+import L from 'leaflet'
+import { LMap, LTileLayer, LCircle } from 'vue2-leaflet'
+import { mapGetters, mapMutations } from 'vuex'
 
 const MAP_ICONS = {
   blueIcon: L.icon({
-    iconUrl: "selected-marker.png",
+    iconUrl: 'selected-marker.png',
     iconSize: [22, 32], // size of the icon
   }),
   redIcon: L.icon({
-    iconUrl: "added-marker.png",
+    iconUrl: 'added-marker.png',
     iconSize: [22, 32], // size of the icon
   }),
   greyIcon: L.icon({
-    iconUrl: "default-marker.png",
+    iconUrl: 'default-marker.png',
     iconSize: [22, 32],
   }),
 }
@@ -66,20 +74,20 @@ const northEast = new L.LatLng(68.346545, 23.2360731)
 const initialBound = new L.LatLngBounds(southWest, northEast)
 
 export default {
-  name: "Map",
+  name: 'Map',
   components: {
     LMap,
     LTileLayer,
     LCircle,
   },
-  props: ["mapHeight", "latlon"],
+  props: ['mapHeight', 'latlon'],
   data() {
     return {
       bounds: {},
       center: [59.0, 15.0],
       mapOptions: {
         zoomControl: true,
-        zoomControlPosition: "topright",
+        zoomControlPosition: 'topright',
       },
       markers: [],
       enableAddMapMarkers: false,
@@ -91,23 +99,23 @@ export default {
   mounted() {
     this.bounds = initialBound
     this.$nextTick(() => {
-      this.$refs.myMap.mapObject.zoomControl.setPosition("bottomright")
+      this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
       this.$refs.myMap.mapObject.invalidateSize()
     })
   },
   computed: {
     ...mapGetters([
-      "detailView",
-      "didSearch",
-      "results",
-      "hovedResultId",
-      "unhovedResultId",
-      "selectedResult",
-      "selectedResultId",
+      'detailView',
+      'didSearch',
+      'results',
+      'hovedResultId',
+      'unhovedResultId',
+      'selectedResult',
+      'selectedResultId',
     ]),
 
     iconColor: function() {
-      return this.enableAddMapMarkers ? "red darken-2" : "primary"
+      return this.enableAddMapMarkers ? 'red darken-2' : 'primary'
     },
   },
   watch: {
@@ -159,19 +167,19 @@ export default {
   },
   methods: {
     ...mapMutations([
-      "setSelectedMarkerId",
-      "setNewMarkers",
-      "setResults",
-      "setDidSearch",
+      'setSelectedMarkerId',
+      'setNewMarkers',
+      'setResults',
+      'setDidSearch',
     ]),
     addActiveMarker() {
-      this.$refs.myMap.mapObject.createPane("locationMarker")
-      this.$refs.myMap.mapObject.getPane("locationMarker").style.zIndex = 999
+      this.$refs.myMap.mapObject.createPane('locationMarker')
+      this.$refs.myMap.mapObject.getPane('locationMarker').style.zIndex = 999
       let topMarker = L.marker([59.203241, 18.341203], {
-        pane: "locationMarker",
+        pane: 'locationMarker',
       })
       topMarker.addTo(this.$refs.myMap.mapObject)
-      topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)"
+      topMarker.valueOf()._icon.style.filter = 'hue-rotate(180deg)'
     },
     // createMarkers() {
     //   if (this.detailView) {
@@ -286,7 +294,7 @@ export default {
           // topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
 
           let icon
-          if (result.properties.id === "newMarker") {
+          if (result.properties.id === 'newMarker') {
             icon = MAP_ICONS.redIcon
           } else if (result.properties.id === this.selectedResultId) {
             icon = MAP_ICONS.blueIcon
@@ -316,7 +324,7 @@ export default {
       const id = this.unhovedResultId
       if (id != this.selectedResultId) {
         this.markers.forEach(marker => {
-          if (marker.id != "newMarker") {
+          if (marker.id != 'newMarker') {
             if (marker.id == id) {
               marker.icon = MAP_ICONS.greyIcon
             }
@@ -326,7 +334,7 @@ export default {
     },
     removeOldSelectedMarker() {
       this.markers.forEach(marker => {
-        if (marker.id != this.selectedResultId && marker.id != "newMarker") {
+        if (marker.id != this.selectedResultId && marker.id != 'newMarker') {
           marker.icon = MAP_ICONS.greyIcon
         }
       })
@@ -347,17 +355,17 @@ export default {
         let result = {
           isNew: true,
           properties: {
-            id: "newMarker",
+            id: 'newMarker',
           },
           geometry: {
             coordinates: [latlng.lng, latlng.lat],
           },
-          name: "Din plats",
+          name: 'Din plats',
         }
 
         let removeFirstResult = false
         this.results.forEach(result => {
-          if (result.properties.id == "newMarker") {
+          if (result.properties.id == 'newMarker') {
             removeFirstResult = true
           }
         })
