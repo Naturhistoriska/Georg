@@ -22,10 +22,20 @@
         :icon="marker.icon"
         @click="onMarkerClick(marker.id)"
       ></l-marker>
-      <l-circle :lat-lng="circle.center" :radius="circle.radius" :color="circle.color" />
+      <l-circle
+        :lat-lng="circle.center"
+        :radius="circle.radius"
+        :color="circle.color"
+        :fillColor="circle.fillColor"
+        :fillOpacity="circle.fillOpacity"
+      />
     </l-map>
 
-    <div id="icondiv" class="leaflet-bottom leaflet-right" style="padding-bottom: 80px;">
+    <div
+      id="icondiv"
+      class="leaflet-bottom leaflet-right"
+      style="padding-bottom: 80px;"
+    >
       <v-btn
         class="leaflet-control"
         fab
@@ -42,21 +52,21 @@
 </template>
 
 <script>
-import L from "leaflet"
-import { LMap, LTileLayer, LCircle } from "vue2-leaflet"
-import { mapGetters, mapMutations } from "vuex"
+import L from 'leaflet'
+import { LMap, LTileLayer, LCircle } from 'vue2-leaflet'
+import { mapGetters, mapMutations } from 'vuex'
 
 const MAP_ICONS = {
   blueIcon: L.icon({
-    iconUrl: "selected-marker.png",
+    iconUrl: 'selected-marker.png',
     iconSize: [22, 32], // size of the icon
   }),
   redIcon: L.icon({
-    iconUrl: "added-marker.png",
+    iconUrl: 'added-marker.png',
     iconSize: [22, 32], // size of the icon
   }),
   greyIcon: L.icon({
-    iconUrl: "default-marker.png",
+    iconUrl: 'default-marker.png',
     iconSize: [22, 32],
   }),
 }
@@ -66,20 +76,20 @@ const northEast = new L.LatLng(68.346545, 23.2360731)
 const initialBound = new L.LatLngBounds(southWest, northEast)
 
 export default {
-  name: "Map",
+  name: 'Map',
   components: {
     LMap,
     LTileLayer,
     LCircle,
   },
-  props: ["mapHeight", "latlon"],
+  props: ['mapHeight', 'latlon'],
   data() {
     return {
       bounds: {},
       center: [59.0, 15.0],
       mapOptions: {
         zoomControl: true,
-        zoomControlPosition: "topright",
+        zoomControlPosition: 'topright',
       },
       markers: [],
       enableAddMapMarkers: false,
@@ -91,23 +101,24 @@ export default {
   mounted() {
     this.bounds = initialBound
     this.$nextTick(() => {
-      this.$refs.myMap.mapObject.zoomControl.setPosition("bottomright")
+      this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
       this.$refs.myMap.mapObject.invalidateSize()
     })
   },
   computed: {
     ...mapGetters([
-      "detailView",
-      "didSearch",
-      "results",
-      "hovedResultId",
-      "unhovedResultId",
-      "selectedResult",
-      "selectedResultId",
+      'detailView',
+      'didSearch',
+      'results',
+      'hovedResultId',
+      'unhovedResultId',
+      'selectedResult',
+      'selectedResultId',
+      'uncertainty',
     ]),
 
     iconColor: function() {
-      return this.enableAddMapMarkers ? "red darken-2" : "primary"
+      return this.enableAddMapMarkers ? 'red darken-2' : 'primary'
     },
   },
   watch: {
@@ -156,22 +167,28 @@ export default {
         }
       })
     },
+    uncertainty() {
+      this.$nextTick(() => {
+        this.addUncertainty()
+      })
+    },
   },
   methods: {
     ...mapMutations([
-      "setSelectedMarkerId",
-      "setNewMarkers",
-      "setResults",
-      "setDidSearch",
+      'setSelectedMarkerId',
+      'setNewMarkers',
+      'setResults',
+      'setDidSearch',
+      'setUncertainty',
     ]),
     addActiveMarker() {
-      this.$refs.myMap.mapObject.createPane("locationMarker")
-      this.$refs.myMap.mapObject.getPane("locationMarker").style.zIndex = 999
+      this.$refs.myMap.mapObject.createPane('locationMarker')
+      this.$refs.myMap.mapObject.getPane('locationMarker').style.zIndex = 999
       let topMarker = L.marker([59.203241, 18.341203], {
-        pane: "locationMarker",
+        pane: 'locationMarker',
       })
       topMarker.addTo(this.$refs.myMap.mapObject)
-      topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)"
+      topMarker.valueOf()._icon.style.filter = 'hue-rotate(180deg)'
     },
     // createMarkers() {
     //   if (this.detailView) {
@@ -253,15 +270,22 @@ export default {
         //   // iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
         // });
         this.center = [lat, lon]
+        const theIcon =
+          this.selectedResult.properties.id === 'newMarker'
+            ? MAP_ICONS.redIcon
+            : MAP_ICONS.blueIcon
         let marker = {
           id: this.selectedResult.properties.id,
           position: [lat, lon],
           visible: true,
-          icon: MAP_ICONS.blueIcon,
+          icon: theIcon,
         }
         array.push(marker)
         this.zoom = 18
       } else {
+        this.circle = {}
+        this.setUncertainty(0)
+
         let north = 90
         let south = -90
         let west = -180
@@ -286,7 +310,7 @@ export default {
           // topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
 
           let icon
-          if (result.properties.id === "newMarker") {
+          if (result.properties.id === 'newMarker') {
             icon = MAP_ICONS.redIcon
           } else if (result.properties.id === this.selectedResultId) {
             icon = MAP_ICONS.blueIcon
@@ -308,7 +332,8 @@ export default {
       const id = this.hovedResultId
       this.markers.forEach(marker => {
         if (marker.id === id) {
-          marker.icon = MAP_ICONS.blueIcon
+          marker.icon =
+            marker.id === 'newMarker' ? MAP_ICONS.redIcon : MAP_ICONS.blueIcon
         }
       })
     },
@@ -316,7 +341,7 @@ export default {
       const id = this.unhovedResultId
       if (id != this.selectedResultId) {
         this.markers.forEach(marker => {
-          if (marker.id != "newMarker") {
+          if (marker.id != 'newMarker') {
             if (marker.id == id) {
               marker.icon = MAP_ICONS.greyIcon
             }
@@ -326,7 +351,7 @@ export default {
     },
     removeOldSelectedMarker() {
       this.markers.forEach(marker => {
-        if (marker.id != this.selectedResultId && marker.id != "newMarker") {
+        if (marker.id != this.selectedResultId && marker.id != 'newMarker') {
           marker.icon = MAP_ICONS.greyIcon
         }
       })
@@ -338,26 +363,27 @@ export default {
     },
 
     onMarkerClick(id) {
-      // console.log("id..." + id);
       this.setSelectedMarkerId(id)
     },
     onMapClick(event) {
       if (this.enableAddMapMarkers) {
         const latlng = event.latlng
+        const lat = this.fixLatLngToMaxSixDecimal(latlng.lat)
+        const lng = this.fixLatLngToMaxSixDecimal(latlng.lng)
         let result = {
           isNew: true,
           properties: {
-            id: "newMarker",
+            id: 'newMarker',
+            name: 'Din plats',
           },
           geometry: {
-            coordinates: [latlng.lng, latlng.lat],
+            coordinates: [lng, lat],
           },
-          name: "Din plats",
         }
 
         let removeFirstResult = false
         this.results.forEach(result => {
-          if (result.properties.id == "newMarker") {
+          if (result.properties.id == 'newMarker') {
             removeFirstResult = true
           }
         })
@@ -385,6 +411,25 @@ export default {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
       }
       this.rezoom = true
+    },
+    addUncertainty() {
+      console.log('uncertainty...' + this.uncertainty)
+
+      let accuracy = {
+        center: [this.center[0], this.center[1]],
+        radius: parseInt(this.uncertainty),
+        color: 'red',
+        fillColor: '#ff9999',
+        fillOpacity: 0.3,
+      }
+      this.circle = accuracy
+    },
+    fixLatLngToMaxSixDecimal(value) {
+      const numOfDecimal =
+        Math.floor(value) === value
+          ? 0
+          : value.toString().split('.')[1].length || 0
+      return numOfDecimal > 6 ? value.toFixed(6) : value
     },
   },
 }

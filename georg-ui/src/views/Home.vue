@@ -2,7 +2,7 @@
   <div id="container" class="container container--fluid">
     <v-card id="navi">
       <Search />
-      <v-divider v-if="!detailView"></v-divider>
+      <v-divider v-if="!detailView && results.length > 0"></v-divider>
       <Results v-if="!detailView" v-bind:height="resultsHeight" />
     </v-card>
     <Detail v-if="detailView" />

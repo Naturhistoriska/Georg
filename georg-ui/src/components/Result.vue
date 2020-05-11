@@ -28,9 +28,9 @@
       </v-list-item-action>
     </template>
     <template v-else>
-      <v-list-item-content>
+      <v-list-item-content @click.prevent="onclick()">
         <v-list-item-title class="red--text darken-2">{{
-          result.name
+          result.properties.name
         }}</v-list-item-title>
         <v-list-item-subtitle id="resultContent" class="text--primary">
           {{ latDms }}
