@@ -15,7 +15,7 @@
         </v-list-item-subtitle>
         <v-list-item-subtitle>
           <span class="text-capitalize">{{ result.properties.layer }}</span>
-          enligt Who's on First.
+          enligt {{ source }}.
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
@@ -84,6 +84,11 @@ export default {
       return this.selectedResultId == this.result.properties.id
         ? 'selected'
         : 'unSelected'
+    },
+    source: function() {
+      return this.result.properties.source === 'GBIF'
+        ? this.result.properties.source
+        : "Who's On First"
     },
   },
 

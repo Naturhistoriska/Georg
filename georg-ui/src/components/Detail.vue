@@ -52,7 +52,7 @@
           <v-icon color="blue darken-2">mdi-database-import</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>Data från Who's On First (WOF)</v-list-item-title>
+          <v-list-item-title>{{ source }}</v-list-item-title>
         </v-list-item-content>
         <v-btn
           icon
@@ -90,6 +90,11 @@ export default {
         'lon'
       )
       return latDms + ' ' + lonDms
+    },
+    source: function() {
+      return this.selectedResult.properties.source === 'GBIF'
+        ? this.selectedResult.properties.source
+        : "Data från Who's On First (WOF)"
     },
   },
 }
