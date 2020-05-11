@@ -1,19 +1,19 @@
-const visit = () => cy.visit("/");
+const visit = () => cy.visit('/')
 
-describe("Search results", () => {
-  beforeEach(visit);
+describe('Search results', () => {
+  beforeEach(visit)
 
-  it("Search address", () => {
+  it('Search address', () => {
     cy.focused()
-      .type("tyre")
-      .type("{enter}");
+      .type('tyre')
+      .type('{enter}')
 
-    cy.get("#resultList")
+    cy.get('#resultList')
       .children()
-      .should("have.length", 19);
+      .should('have.length', 19)
 
-    cy.get(".leaflet-marker-pane")
+    cy.get('.leaflet-marker-pane')
       .children()
-      .should("have.length", 10);
-  });
-});
+      .should('have.length', 10)
+  })
+})

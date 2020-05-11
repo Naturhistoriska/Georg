@@ -13,16 +13,16 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import L from "leaflet";
-import Search from "../components/Search";
-import Map from "../components/Map";
-import Results from "../components/Results";
-import Detail from "../components/Detail";
+import { mapGetters } from "vuex"
+// import L from 'leaflet'
+import Search from "../components/Search"
+import Map from "../components/Map"
+import Results from "../components/Results"
+import Detail from "../components/Detail"
 
-const southWest = new L.LatLng(55.1961173, 12.8018162);
-const northEast = new L.LatLng(68.346545, 23.2360731);
-const initialBound = new L.LatLngBounds(southWest, northEast);
+// const southWest = new L.LatLng(55.1961173, 12.8018162)
+// const northEast = new L.LatLng(68.346545, 23.2360731)
+// const initialBound = new L.LatLngBounds(southWest, northEast)
 
 export default {
   name: "Home",
@@ -30,38 +30,38 @@ export default {
     Map,
     Results,
     Detail,
-    Search
+    Search,
   },
 
   data() {
     return {
-      bounds: {},
+      // bounds: {},
       mapHeight: "height: 1500px",
-      resultsHeight: "height: 1400px"
-    };
+      resultsHeight: "height: 1400px",
+    }
   },
   created() {
-    window.addEventListener("resize", this.handleResize);
-    this.handleResize();
+    window.addEventListener("resize", this.handleResize)
+    this.handleResize()
   },
   destroyed() {
-    window.removeEventListener("resize", this.handleResize);
+    window.removeEventListener("resize", this.handleResize)
   },
-  mounted() {
-    this.bounds = initialBound;
-  },
+  // mounted() {
+  //   this.bounds = initialBound
+  // },
   computed: {
-    ...mapGetters(["results", "detailView"])
+    ...mapGetters(["results", "detailView"]),
   },
   methods: {
     handleResize() {
-      const windowHeight = window.innerHeight - 64;
-      const boxHeight = windowHeight - 200;
-      this.mapHeight = "height: " + windowHeight + "px";
-      this.resultsHeight = "max-height: " + boxHeight + "px";
-    }
-  }
-};
+      const windowHeight = window.innerHeight - 64
+      const boxHeight = windowHeight - 200
+      this.mapHeight = "height: " + windowHeight + "px"
+      this.resultsHeight = "max-height: " + boxHeight + "px"
+    },
+  },
+}
 </script>
 <style scoped>
 #container {

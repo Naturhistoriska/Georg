@@ -48,63 +48,63 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from "vuex";
-import Service from "../Service";
-const service = new Service();
+import { mapGetters, mapMutations } from 'vuex'
+import Service from '../Service'
+const service = new Service()
 
 export default {
-  name: "Search",
+  name: 'Search',
   props: [],
   data() {
     return {
-      address: "",
+      address: '',
       isSearch: false,
       loading: false,
       numOfResults: 0,
-      linkText: "< TILLBAKA TILL TRÄFFLISTAN"
-    };
+      linkText: '< TILLBAKA TILL TRÄFFLISTAN',
+    }
   },
 
   computed: {
-    ...mapGetters(["detailView", "displayMessage"])
+    ...mapGetters(['detailView', 'displayMessage']),
   },
 
   methods: {
     ...mapMutations([
-      "setResults",
-      "setDidSearch",
-      "setDetailView",
-      "setSelectedResultId"
+      'setResults',
+      'setDidSearch',
+      'setDetailView',
+      'setSelectedResultId',
     ]),
     clearSearch() {
-      this.setResults([]);
-      this.numOfResults = 0;
-      this.setDidSearch(false);
-      this.setDetailView(false);
-      this.setSelectedResultId("");
+      this.setResults([])
+      this.numOfResults = 0
+      this.setDidSearch(false)
+      this.setDetailView(false)
+      this.setSelectedResultId('')
     },
     onclick() {
-      this.setDetailView(false);
-      this.setDidSearch(true);
+      this.setDetailView(false)
+      this.setDidSearch(true)
     },
     search() {
-      this.loading = true;
+      this.loading = true
       service
         .fetchAddressResults(this.address)
         .then(response => {
-          this.results = response.features;
-          this.loading = false;
-          this.setResults(this.results);
-          this.setDidSearch(true);
-          this.numOfResults = this.results.length;
-          this.setDetailView(false);
-          this.setSelectedResultId("");
+          this.results = response.features
+          this.loading = false
+          this.setResults(this.results)
+          this.setDidSearch(true)
+          this.numOfResults = this.results.length
+          this.setDetailView(false)
+          this.setSelectedResultId('')
           // this.setSelectedResultId(this.results[0].properties.id);
         })
-        .catch(function() {});
-    }
-  }
-};
+        .catch(function() {})
+    },
+  },
+}
 </script>
 
 <style scoped>

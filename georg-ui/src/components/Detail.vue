@@ -67,32 +67,32 @@
 </template>
 
 <script>
-import * as converter from "../assets/js/latlonConverter.js";
-import { mapGetters } from "vuex";
+import * as converter from '../assets/js/latlonConverter.js'
+import { mapGetters } from 'vuex'
 export default {
-  name: "Detail",
+  name: 'Detail',
   computed: {
-    ...mapGetters(["selectedResult"]),
+    ...mapGetters(['selectedResult']),
     latLon: function() {
       return (
         this.selectedResult.geometry.coordinates[1] +
-        " " +
+        ' ' +
         this.selectedResult.geometry.coordinates[0]
-      );
+      )
     },
     latLonDms: function() {
       let latDms = converter.latlon(
         this.selectedResult.geometry.coordinates[1],
-        "lat"
-      );
+        'lat'
+      )
       let lonDms = converter.latlon(
         this.selectedResult.geometry.coordinates[0],
-        "lon"
-      );
-      return latDms + " " + lonDms;
-    }
-  }
-};
+        'lon'
+      )
+      return latDms + ' ' + lonDms
+    },
+  },
+}
 </script>
 <style scoped>
 #v-card-detail {

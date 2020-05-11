@@ -2,15 +2,15 @@ const state = {
   displayMessage: false,
   isDetailView: false,
   didSearch: false,
-  hovedResultId: "",
-  unhovedResultId: "",
+  hovedResultId: '',
+  unhovedResultId: '',
   results: [],
   selectedResult: {},
-  selectedResultId: "",
-  detialViewId: "",
-  selectedMarkerId: "",
-  newMarker: {}
-};
+  selectedResultId: '',
+  detialViewId: '',
+  selectedMarkerId: '',
+  newMarker: {},
+}
 const getters = {
   detailView: state => state.isDetailView,
   didSearch: state => state.didSearch,
@@ -22,10 +22,10 @@ const getters = {
   selectedResultId: state => state.selectedResultId,
   detialViewId: state => state.detialViewId,
   selectedMarkerId: state => state.selectedMarkerId,
-  newMarker: state => state.newMarker
-};
+  newMarker: state => state.newMarker,
+}
 
-const actions = {};
+const actions = {}
 const mutations = {
   setDidSearch: (state, payload) => (state.didSearch = payload),
   setHovedResultId: (state, payload) => (state.hovedResultId = payload),
@@ -36,12 +36,12 @@ const mutations = {
   setDetailView: (state, payload) => (state.isDetailView = payload),
   setDetialViewId: (state, payload) => (state.detialViewId = payload),
   setSelectedMarkerId: (state, payload) => (state.selectedMarkerId = payload),
-  setNewMarkers: (state, payload) => (state.newMarker = payload)
-};
+  setNewMarkers: (state, payload) => (state.newMarker = payload),
+}
 
 export default {
   state,
   getters,
   actions,
-  mutations
-};
+  mutations,
+}

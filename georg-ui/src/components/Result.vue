@@ -29,9 +29,9 @@
     </template>
     <template v-else>
       <v-list-item-content>
-        <v-list-item-title class="red--text darken-2">
-          {{ result.name }}
-        </v-list-item-title>
+        <v-list-item-title class="red--text darken-2">{{
+          result.name
+        }}</v-list-item-title>
         <v-list-item-subtitle id="resultContent" class="text--primary">
           {{ latDms }}
           {{ lngDms }}
@@ -49,79 +49,79 @@
 </template>
 
 <script>
-import * as converter from "../assets/js/latlonConverter.js";
-import { mapGetters, mapMutations } from "vuex";
+import * as converter from '../assets/js/latlonConverter.js'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
-  name: "Result",
-  props: ["result"],
+  name: 'Result',
+  props: ['result'],
 
   data() {
-    return {};
+    return {}
   },
 
   computed: {
     // a computed getter
-    ...mapGetters(["selectedResultId"]),
+    ...mapGetters(['selectedResultId']),
     isActive: function() {
-      return this.result.properties.id === this.selectedResultId;
+      return this.result.properties.id === this.selectedResultId
     },
     isNewMarker: function() {
-      return this.result.properties.id === "newMarker";
+      return this.result.properties.id === 'newMarker'
     },
     lat: function() {
-      return this.result.geometry.coordinates[1];
+      return this.result.geometry.coordinates[1]
     },
     lng: function() {
-      return this.result.geometry.coordinates[0];
+      return this.result.geometry.coordinates[0]
     },
     latDms: function() {
-      return converter.latlon(this.result.geometry.coordinates[1], "lat");
+      return converter.latlon(this.result.geometry.coordinates[1], 'lat')
     },
     lngDms: function() {
-      return converter.latlon(this.result.geometry.coordinates[0], "lon");
+      return converter.latlon(this.result.geometry.coordinates[0], 'lon')
     },
     resultColor: function() {
       return this.selectedResultId == this.result.properties.id
-        ? "selected"
-        : "unSelected";
-    }
+        ? 'selected'
+        : 'unSelected'
+    },
   },
 
   methods: {
     ...mapMutations([
-      "setDetailView",
-      "setHovedResultId",
-      "setMouseLeaveResultId",
-      "setSelectedResultId",
-      "setSelectedResult",
-      "setDetialViewId",
-      "setDidSearch"
+      'setDetailView',
+      'setHovedResultId',
+      'setMouseLeaveResultId',
+      'setSelectedResultId',
+      'setSelectedResult',
+      'setDetialViewId',
+      'setDidSearch',
     ]),
 
     onhove() {
-      if (this.result.properties.id !== "newMarker") {
-        this.setHovedResultId(this.result.properties.id);
+      if (this.result.properties.id !== 'newMarker') {
+        this.setHovedResultId(this.result.properties.id)
       }
-      this.setMouseLeaveResultId("");
+      this.setMouseLeaveResultId('')
     },
     unhove() {
-      this.setMouseLeaveResultId(this.result.properties.id);
-      this.setHovedResultId("");
+      this.setMouseLeaveResultId(this.result.properties.id)
+      this.setHovedResultId('')
     },
     onclick() {
-      this.setDetailView(true);
-      this.setDetialViewId(this.result.properties.id);
-      this.setSelectedResult(this.result);
-      this.setDidSearch(false);
+      this.setDetailView(true)
+      this.setDetialViewId(this.result.properties.id)
+      this.setSelectedResult(this.result)
+      this.setDidSearch(false)
     },
     onSelected() {
-      this.setHovedResultId(this.result.properties.id);
-      this.setMouseLeaveResultId("");
-      this.setSelectedResultId(this.result.properties.id);
-      this.setDetailView(false);
-    }
-  }
-};
+      this.setHovedResultId(this.result.properties.id)
+      this.setMouseLeaveResultId('')
+      this.setSelectedResultId(this.result.properties.id)
+      this.setDetailView(false)
+    },
+  },
+}
 </script>
 
 <style scoped>
