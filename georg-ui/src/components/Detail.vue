@@ -96,6 +96,7 @@
               suffix="meter"
               type="number"
               v-model="accuracy"
+              min="0"
             ></v-text-field>
           </v-list-item-subtitle>
           <v-list-item-subtitle>
