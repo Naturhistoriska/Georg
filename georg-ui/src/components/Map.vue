@@ -22,13 +22,6 @@
         :icon="marker.icon"
         @click="onMarkerClick(marker.id)"
       ></l-marker>
-      <l-circle
-        :lat-lng="circle.center"
-        :radius="circle.radius"
-        :color="circle.color"
-        :fillColor="circle.fillColor"
-        :fillOpacity="circle.fillOpacity"
-      />
     </l-map>
 
     <div
@@ -42,7 +35,7 @@
         x-small
         id="iconbtn"
         @click="enableAddMarker"
-        style="cursor: pointer;"
+        :style="iconCursor"
         :disabled="detailView"
       >
         <v-icon :color="iconColor">mdi-map-marker-plus</v-icon>
@@ -53,7 +46,7 @@
 
 <script>
 import L from 'leaflet'
-import { LMap, LTileLayer, LCircle } from 'vue2-leaflet'
+import { LMap, LTileLayer } from 'vue2-leaflet'
 import { mapGetters, mapMutations } from 'vuex'
 
 const MAP_ICONS = {
@@ -80,7 +73,6 @@ export default {
   components: {
     LMap,
     LTileLayer,
-    LCircle,
   },
   props: ['mapHeight', 'latlon'],
   data() {
@@ -120,6 +112,9 @@ export default {
     iconColor: function() {
       return this.enableAddMapMarkers ? 'red darken-2' : 'primary'
     },
+    iconCursor: function() {
+      return this.detailView ? '' : 'cursor: pointer;'
+    },
   },
   watch: {
     detailView: function() {
@@ -141,8 +136,9 @@ export default {
     results: function() {
       this.$nextTick(() => {
         this.createMarks()
-        this.getMapBounds()
-        // this.addActiveMarker();
+        if (this.results.length > 0) {
+          this.getMapBounds()
+        }
       })
     },
     hovedResultId() {
@@ -169,7 +165,9 @@ export default {
     },
     uncertainty() {
       this.$nextTick(() => {
-        this.addUncertainty()
+        if (this.uncertainty > 0) {
+          this.addUncertainty()
+        }
       })
     },
   },
@@ -264,11 +262,6 @@ export default {
         const lat = this.selectedResult.geometry.coordinates[1]
         const lon = this.selectedResult.geometry.coordinates[0]
 
-        // var greenIcon = L.icon({
-        //   iconUrl: "red-marker.png",
-        //   iconSize: [20, 30] // size of the icon
-        //   // iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-        // });
         this.center = [lat, lon]
         const theIcon =
           this.selectedResult.properties.id === 'newMarker'
@@ -281,34 +274,24 @@ export default {
           icon: theIcon,
         }
         array.push(marker)
-        this.zoom = 18
+        if (
+          this.selectedResult.properties.id === 'newMarker' &&
+          this.uncertainty > 0
+        ) {
+          this.rezoom = true
+          this.addUncertainty()
+        } else {
+          this.zoom = 18
+        }
       } else {
-        this.circle = {}
-        this.setUncertainty(0)
+        this.$refs.myMap.mapObject.removeLayer(this.circle)
 
-        let north = 90
-        let south = -90
-        let west = -180
-        let east = 180
-
+        this.bounds = L.latLngBounds()
         this.results.forEach(result => {
           const lat = result.geometry.coordinates[1]
           const lon = result.geometry.coordinates[0]
-          north = north > lat ? lat : north
-          south = south > lat ? south : lat
-          west = west > lon ? west : lon
-          east = east > lon ? lon : east
-
-          let southWest = new L.LatLng(south + 1, west + 1)
-          let northEast = new L.LatLng(north - 1, east - 1)
-          this.bounds = new L.LatLngBounds(southWest, northEast)
-
-          // let topMarker = L.marker([59.203241, 18.341203], {
-          //   pane: "top"
-          // });
-          // topMarker.addTo(this.$refs.myMap.mapObject);
-          // topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
-
+          let latlng = [lat, lon]
+          this.bounds.extend(latlng)
           let icon
           if (result.properties.id === 'newMarker') {
             icon = MAP_ICONS.redIcon
@@ -394,7 +377,7 @@ export default {
         this.results.unshift(result)
         this.setResults(this.results)
         this.rezoom = false
-
+        this.setUncertainty(0)
         // this.setDidSearch(true);
         // let accuracy = {
         //   center: [latlng.lat, latlng.lng],
@@ -409,20 +392,25 @@ export default {
     getMapBounds() {
       if (this.rezoom) {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
+        this.zoom = this.$refs.myMap.mapObject.getZoom()
       }
       this.rezoom = true
     },
     addUncertainty() {
-      console.log('uncertainty...' + this.uncertainty)
+      this.$refs.myMap.mapObject.removeLayer(this.circle)
 
-      let accuracy = {
-        center: [this.center[0], this.center[1]],
-        radius: parseInt(this.uncertainty),
+      let circleOptions = {
         color: 'red',
         fillColor: '#ff9999',
         fillOpacity: 0.3,
       }
-      this.circle = accuracy
+      this.circle = new L.Circle(
+        [this.center[0], this.center[1]],
+        parseInt(this.uncertainty),
+        circleOptions
+      ).addTo(this.$refs.myMap.mapObject)
+      this.bounds = this.circle.getBounds()
+      this.getMapBounds()
     },
     fixLatLngToMaxSixDecimal(value) {
       const numOfDecimal =

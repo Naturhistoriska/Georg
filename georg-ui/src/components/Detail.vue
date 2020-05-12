@@ -1,12 +1,12 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
-    <v-card-title :class="nameColor">
-      {{ selectedResult.properties.name }}
-    </v-card-title>
+    <v-card-title :class="nameColor">{{
+      selectedResult.properties.name
+    }}</v-card-title>
     <v-card-subtitle v-if="!isNewMarker">
-      <strong class="text-capitalize">{{
-        selectedResult.properties.layer
-      }}</strong>
+      <strong class="text-capitalize">
+        {{ selectedResult.properties.layer }}
+      </strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-list>
@@ -74,6 +74,8 @@
           <v-list-item-subtitle>
             <v-chip-group active-class="grey darken-1 white--text">
               <v-chip
+                active-class
+                inactive
                 v-for="tag in tags"
                 :key="tag.label"
                 @click="addUncertaintyValue(tag.value)"
@@ -93,7 +95,7 @@
               single-line
               suffix="meter"
               type="number"
-              v-model="uncertainty"
+              v-model="accuracy"
             ></v-text-field>
           </v-list-item-subtitle>
           <v-list-item-subtitle>
@@ -129,7 +131,8 @@ export default {
         { label: '10 km', value: 10000 },
         { label: '100 km', value: 100000 },
       ],
-      uncertainty: null,
+      uncertintyChangedByChip: false,
+      accuracy: null,
     }
   },
   mounted() {
@@ -140,16 +143,23 @@ export default {
       this.dataFromSource = "Who's On First (WOF)"
       this.source = "Who's On First"
     }
+    if (this.uncertainty > 0) {
+      this.accuracy = this.uncertainty
+      this.uncertintyChangedByChip = true
+    }
   },
   watch: {
-    uncertainty: function() {
+    accuracy: function() {
       this.$nextTick(() => {
-        this.disableSetUncertaintyBtn = false
+        if (!this.uncertintyChangedByChip) {
+          this.disableSetUncertaintyBtn = false
+        }
+        this.uncertintyChangedByChip = false
       })
     },
   },
   computed: {
-    ...mapGetters(['selectedResult']),
+    ...mapGetters(['selectedResult', 'uncertainty']),
     latLon: function() {
       return (
         this.selectedResult.geometry.coordinates[1] +
@@ -185,11 +195,13 @@ export default {
   methods: {
     ...mapMutations(['setUncertainty']),
     setUncertaintyValue() {
-      this.setUncertainty(this.uncertainty)
+      this.setUncertainty(this.accuracy)
       this.disableSetUncertaintyBtn = true
     },
     addUncertaintyValue(value) {
-      this.uncertainty = value
+      this.accuracy = value
+      this.setUncertaintyValue()
+      this.uncertintyChangedByChip = true
     },
   },
 }
