@@ -165,7 +165,7 @@ export default {
     },
     uncertainty() {
       this.$nextTick(() => {
-        if (this.uncertainty > 0) {
+        if (this.uncertainty >= 0) {
           this.addUncertainty()
         }
       })
@@ -377,7 +377,7 @@ export default {
         this.results.unshift(result)
         this.setResults(this.results)
         this.rezoom = false
-        this.setUncertainty(0)
+        this.setUncertainty(-1)
         // this.setDidSearch(true);
         // let accuracy = {
         //   center: [latlng.lat, latlng.lng],
