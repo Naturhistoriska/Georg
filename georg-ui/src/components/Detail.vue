@@ -74,6 +74,8 @@
           <v-list-item-subtitle>
             <v-chip-group active-class="grey darken-1 white--text">
               <v-chip
+                active-class
+                inactive
                 v-for="tag in tags"
                 :key="tag.label"
                 @click="addUncertaintyValue(tag.value)"
