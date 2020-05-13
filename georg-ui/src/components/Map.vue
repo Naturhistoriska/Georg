@@ -53,14 +53,17 @@ const MAP_ICONS = {
   blueIcon: L.icon({
     iconUrl: 'selected-marker.png',
     iconSize: [22, 32], // size of the icon
+    iconAnchor: [11, 32],
   }),
   redIcon: L.icon({
     iconUrl: 'added-marker.png',
     iconSize: [22, 32], // size of the icon
+    iconAnchor: [11, 32],
   }),
   greyIcon: L.icon({
     iconUrl: 'default-marker.png',
     iconSize: [22, 32],
+    iconAnchor: [11, 32],
   }),
 }
 

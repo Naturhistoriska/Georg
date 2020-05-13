@@ -9,6 +9,7 @@
       </strong>
       enligt {{ source }}
     </v-card-subtitle>
+
     <v-list>
       <v-list-item>
         <v-list-item-icon>
@@ -26,7 +27,10 @@
           <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-divider :inset="!isNewMarker"></v-divider>
+      <v-divider
+        v-bind:class="{ 'mx-4': isNewMarker }"
+        :inset="!isNewMarker"
+      ></v-divider>
     </v-list>
     <v-list v-if="!isNewMarker">
       <v-list-item>
@@ -65,53 +69,43 @@
         </v-btn>
       </v-list-item>
     </v-list>
-    <v-list v-else>
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-title class="grey--text text--darken-2"
-            >Din osäkerhetsradie</v-list-item-title
-          >
-          <v-list-item-subtitle>
-            <v-chip-group active-class="grey darken-1 white--text">
-              <v-chip
-                active-class
-                inactive
-                v-for="tag in tags"
-                :key="tag.label"
-                @click="addUncertaintyValue(tag.value)"
-                >{{ tag.label }}</v-chip
-              >
-            </v-chip-group>
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-
-      <v-list-item>
-        <v-list-item-content>
-          <v-list-item-subtitle>
+    <v-card-title v-if="isNewMarker" class="grey--text text--darken-2"
+      >Din osäkerhetsradie</v-card-title
+    >
+    <v-card-text v-if="isNewMarker">
+      <v-chip
+        class="mr-4 mt-2"
+        v-for="tag in tags"
+        :key="tag.label"
+        @click="addUncertaintyValue(tag.value)"
+        >{{ tag.label }}</v-chip
+      >
+      <v-container class="mb-0 pb-0">
+        <v-row>
+          <v-col cols="5" class="mt-0 pt-0 pl-1">
             <v-text-field
-              append-outer-icon="mdi-alert-circle-outline"
               hide-details
               single-line
               suffix="meter"
               type="number"
+              color="red darken-2"
               v-model="accuracy"
+              label="Radie ?"
               min="0"
             ></v-text-field>
-          </v-list-item-subtitle>
-          <v-list-item-subtitle>
-            <v-btn
-              @click="setUncertaintyValue"
-              color="red darken-2"
-              style="padding-left: 0px;"
-              text
-              :disabled="disableSetUncertaintyBtn"
-              >Sätt osäkerhet</v-btn
-            >
-          </v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-    </v-list>
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card-text>
+    <v-card-actions v-if="isNewMarker">
+      <v-btn
+        @click="setUncertaintyValue"
+        color="red darken-2"
+        text
+        :disabled="disableSetUncertaintyBtn"
+        >Sätt osäkerhet</v-btn
+      >
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -127,7 +121,7 @@ export default {
       dividerInset: true,
       source: '',
       tags: [
-        { label: '100m', value: 100 },
+        { label: '100 m', value: 100 },
         { label: '1 km', value: 1000 },
         { label: '10 km', value: 10000 },
         { label: '100 km', value: 100000 },
