@@ -121,7 +121,7 @@ export default {
       dividerInset: true,
       source: '',
       tags: [
-        { label: '100m', value: 100 },
+        { label: '100 m', value: 100 },
         { label: '1 km', value: 1000 },
         { label: '10 km', value: 10000 },
         { label: '100 km', value: 100000 },
