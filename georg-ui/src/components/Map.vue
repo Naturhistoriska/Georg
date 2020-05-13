@@ -49,6 +49,8 @@ import L from 'leaflet'
 import { LMap, LTileLayer } from 'vue2-leaflet'
 import { mapGetters, mapMutations } from 'vuex'
 
+import * as fixer from '../assets/js/decimalPlacesFixer.js'
+
 const MAP_ICONS = {
   blueIcon: L.icon({
     iconUrl: 'selected-marker.png',
@@ -354,8 +356,9 @@ export default {
     onMapClick(event) {
       if (this.enableAddMapMarkers) {
         const latlng = event.latlng
-        const lat = this.fixLatLngToMaxSixDecimal(latlng.lat)
-        const lng = this.fixLatLngToMaxSixDecimal(latlng.lng)
+
+        const lat = fixer.digits(latlng.lat)
+        const lng = fixer.digits(latlng.lng)
         let result = {
           isNew: true,
           properties: {
@@ -381,13 +384,6 @@ export default {
         this.setResults(this.results)
         this.rezoom = false
         this.setUncertainty(-1)
-        // this.setDidSearch(true);
-        // let accuracy = {
-        //   center: [latlng.lat, latlng.lng],
-        //   radius: 100,
-        //   color: "green"
-        // };
-        // this.circle = accuracy;
       }
 
       // this.$emit("addMarker", event.latlng);
@@ -414,13 +410,6 @@ export default {
       ).addTo(this.$refs.myMap.mapObject)
       this.bounds = this.circle.getBounds()
       this.getMapBounds()
-    },
-    fixLatLngToMaxSixDecimal(value) {
-      const numOfDecimal =
-        Math.floor(value) === value
-          ? 0
-          : value.toString().split('.')[1].length || 0
-      return numOfDecimal > 6 ? value.toFixed(6) : value
     },
   },
 }
