@@ -73,16 +73,13 @@
       >Din osäkerhetsradie</v-card-title
     >
     <v-card-text v-if="isNewMarker" class="mb-0 pb-0">
-      <v-chip-group active-class="grey darken-1 white--text">
-        <v-chip
-          active-class
-          inactive
-          v-for="tag in tags"
-          :key="tag.label"
-          @click="addUncertaintyValue(tag.value)"
-          >{{ tag.label }}</v-chip
-        >
-      </v-chip-group>
+      <v-chip
+        class="mr-2"
+        v-for="tag in tags"
+        :key="tag.label"
+        @click="addUncertaintyValue(tag.value)"
+        >{{ tag.label }}</v-chip
+      >
       <v-container class="mb-0 pb-0">
         <v-row class="mt-0 pt-0">
           <v-col cols="9" class="mt-0 pt-0 pl-1">
