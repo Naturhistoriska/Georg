@@ -10,7 +10,7 @@ const state = {
   detialViewId: '',
   selectedMarkerId: '',
   newMarker: {},
-  uncertainty: 0,
+  uncertainty: -1,
 }
 const getters = {
   detailView: state => state.isDetailView,

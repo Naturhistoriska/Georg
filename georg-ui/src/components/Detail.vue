@@ -96,6 +96,7 @@
               suffix="meter"
               type="number"
               v-model="accuracy"
+              min="0"
             ></v-text-field>
           </v-list-item-subtitle>
           <v-list-item-subtitle>
@@ -143,7 +144,7 @@ export default {
       this.dataFromSource = "Who's On First (WOF)"
       this.source = "Who's On First"
     }
-    if (this.uncertainty > 0) {
+    if (this.uncertainty >= 0) {
       this.accuracy = this.uncertainty
       this.uncertintyChangedByChip = true
     }
