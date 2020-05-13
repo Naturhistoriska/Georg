@@ -111,7 +111,9 @@ export default {
       this.setMouseLeaveResultId('')
     },
     unhove() {
-      this.setMouseLeaveResultId(this.result.properties.id)
+      if (this.result.properties.id !== 'newMarker') {
+        this.setMouseLeaveResultId(this.result.properties.id)
+      }
       this.setHovedResultId('')
     },
     onclick() {
@@ -121,9 +123,10 @@ export default {
       this.setDidSearch(false)
     },
     onSelected() {
-      this.setHovedResultId(this.result.properties.id)
       this.setMouseLeaveResultId('')
-      this.setSelectedResultId(this.result.properties.id)
+      if (this.result.properties.id !== 'newMarker') {
+        this.setSelectedResultId(this.result.properties.id)
+      }
       this.setDetailView(false)
     },
   },
