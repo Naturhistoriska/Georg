@@ -1,9 +1,21 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
+  <v-container fluid>
+    <v-row>
+      <v-col class="col-lg-6 col-md-12 pl-md-10 pr-md-12">
+        <h1>Om Georg</h1>
+        <p class="title font-weight-light text-darken-3">
+          Verktyg för koordinatsättning som utvecklas vid Naturhistoriska
+          riksmuseet. Mer information kommer snart.
+        </p>
 
-    <h2>version: {{ version }}</h2>
-  </div>
+        <p>Version: {{ version }}</p>
+        <p>
+          Projektet finns på
+          <a href="https://github.com/Naturhistoriska/Georg">Github</a>
+        </p>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script>
 export default {
