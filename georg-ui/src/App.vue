@@ -1,8 +1,13 @@
 <template>
   <v-app>
     <v-app-bar app color="blue darken-2" dark dense>
-      <v-toolbar-title class="title">Georg</v-toolbar-title>
+      <v-toolbar-title class="title">
+        <router-link class="white--text routerLink" to="/">Georg</router-link>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-toolbar-title class="title">
+        <router-link class="white--text routerLink" to="/about">Om</router-link>
+      </v-toolbar-title>
     </v-app-bar>
 
     <v-content>
@@ -31,5 +36,9 @@ export default {
 
 #body {
   background: transparent;
+}
+
+.routerLink {
+  text-decoration: none;
 }
 </style>
