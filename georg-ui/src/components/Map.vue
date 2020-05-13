@@ -84,15 +84,20 @@ export default {
     return {
       bounds: {},
       center: [59.0, 15.0],
+      circle: {},
+      circleOptions: {
+        color: 'red',
+        fillColor: '#ff9999',
+        fillOpacity: 0.3,
+      },
+      enableAddMapMarkers: false,
       mapOptions: {
         zoomControl: true,
         zoomControlPosition: 'topright',
       },
       markers: [],
-      enableAddMapMarkers: false,
-      circle: {},
-      zoom: 0,
       rezoom: true,
+      zoom: 0,
     }
   },
   mounted() {
@@ -181,7 +186,6 @@ export default {
       'setSelectedMarkerId',
       'setNewMarkers',
       'setResults',
-      'setDidSearch',
       'setUncertainty',
     ]),
     addActiveMarker() {
@@ -356,29 +360,17 @@ export default {
     onMapClick(event) {
       if (this.enableAddMapMarkers) {
         const latlng = event.latlng
-
-        const lat = fixer.digits(latlng.lat)
-        const lng = fixer.digits(latlng.lng)
-        let result = {
+        const result = {
           isNew: true,
           properties: {
             id: 'newMarker',
             name: 'Din plats',
           },
           geometry: {
-            coordinates: [lng, lat],
+            coordinates: [fixer.digits(latlng.lng), fixer.digits(latlng.lat)],
           },
         }
-
-        let removeFirstResult = false
-        this.results.forEach(result => {
-          if (result.properties.id == 'newMarker') {
-            removeFirstResult = true
-          }
-        })
-        if (removeFirstResult) {
-          this.results.splice(0, 1)
-        }
+        this.removeOldCustomMarker()
 
         this.results.unshift(result)
         this.setResults(this.results)
@@ -387,6 +379,15 @@ export default {
       }
 
       // this.$emit("addMarker", event.latlng);
+    },
+    removeOldCustomMarker() {
+      if (this.results.length > 0) {
+        const firstResult = this.results[0]
+        console.log
+        if (firstResult.properties.id == 'newMarker') {
+          this.results.splice(0, 1)
+        }
+      }
     },
     getMapBounds() {
       if (this.rezoom) {
@@ -398,18 +399,15 @@ export default {
     addUncertainty() {
       this.$refs.myMap.mapObject.removeLayer(this.circle)
 
-      let circleOptions = {
-        color: 'red',
-        fillColor: '#ff9999',
-        fillOpacity: 0.3,
+      if (this.uncertainty) {
+        this.circle = new L.Circle(
+          [this.center[0], this.center[1]],
+          parseInt(this.uncertainty),
+          this.circleOptions
+        ).addTo(this.$refs.myMap.mapObject)
+        this.bounds = this.circle.getBounds()
+        this.getMapBounds()
       }
-      this.circle = new L.Circle(
-        [this.center[0], this.center[1]],
-        parseInt(this.uncertainty),
-        circleOptions
-      ).addTo(this.$refs.myMap.mapObject)
-      this.bounds = this.circle.getBounds()
-      this.getMapBounds()
     },
   },
 }
