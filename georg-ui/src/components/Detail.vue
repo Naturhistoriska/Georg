@@ -88,17 +88,20 @@
 
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-subtitle>
-            <v-text-field
-              append-outer-icon="mdi-alert-circle-outline"
-              hide-details
-              single-line
-              suffix="meter"
-              type="number"
-              v-model="accuracy"
-              min="0"
-            ></v-text-field>
-          </v-list-item-subtitle>
+          <v-container class="mb-0 pb-0">
+            <v-row class="mt-0 pt-0">
+              <v-col cols="9" class="mt-0 mb-0 pt-0 pb-0 pl-1">
+                <v-text-field
+                  hide-details
+                  single-line
+                  suffix="meter"
+                  type="number"
+                  color="red darken-2"
+                  v-model="accuracy"
+                ></v-text-field>
+              </v-col>
+            </v-row>
+          </v-container>
           <v-list-item-subtitle>
             <v-btn
               @click="setUncertaintyValue"
