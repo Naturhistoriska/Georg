@@ -26,7 +26,10 @@
           <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-divider :inset="!isNewMarker"></v-divider>
+      <v-divider
+        v-bind:class="{ 'mx-4': isNewMarker }"
+        :inset="!isNewMarker"
+      ></v-divider>
     </v-list>
     <v-list v-if="!isNewMarker">
       <v-list-item>
