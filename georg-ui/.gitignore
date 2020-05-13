@@ -25,3 +25,5 @@ yarn-error.log*
 cert/*
 
 data/*
+
+src/components/Map2.vue
