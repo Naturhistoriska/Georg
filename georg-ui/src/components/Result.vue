@@ -8,7 +8,10 @@
   >
     <template v-if="!isNewMarker">
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title>{{ result.properties.name }}</v-list-item-title>
+        <v-list-item-title
+          v-bind:class="{ 'blue--text text--darken-2': isActive }"
+          >{{ result.properties.name }}</v-list-item-title
+        >
         <v-list-item-subtitle id="resultContent" class="text--primary">
           {{ result.properties.region }}
           {{ result.properties.country }}
@@ -81,9 +84,7 @@ export default {
       return converter.latlon(this.result.geometry.coordinates[0], 'lon')
     },
     resultColor: function() {
-      return this.selectedResultId == this.result.properties.id
-        ? 'selected'
-        : 'unSelected'
+      return this.isActive ? 'selected' : 'unSelected'
     },
     source: function() {
       return this.result.properties.source === 'GBIF'
