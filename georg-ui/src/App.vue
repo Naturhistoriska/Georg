@@ -34,6 +34,11 @@ export default {
   color: #2c3e50;
 }*/
 
+h1 {
+  font-weight: 300;
+  font-size: 3em;
+}
+
 #body {
   background: transparent;
 }
