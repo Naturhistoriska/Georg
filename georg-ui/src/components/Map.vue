@@ -295,7 +295,7 @@ export default {
     },
 
     onMapClick(event) {
-      if (this.enableAddMapMarkers) {
+      if (this.enableAddMapMarkers && !this.detailView) {
         const latlng = event.latlng
         const result = {
           isNew: true,
