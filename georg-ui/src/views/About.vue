@@ -11,7 +11,7 @@
         <p>Version: {{ version }}</p>
         <p>
           Projektet finns på
-          <a href="https://github.com/Naturhistoriska/Georg">Github</a>
+          <a href="https://github.com/Naturhistoriska/Georg">Github</a>.
         </p>
       </v-col>
     </v-row>
