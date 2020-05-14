@@ -204,7 +204,6 @@ export default {
       this.fitMapBounds()
     },
     buildDetailMarker() {
-      console.log('build detail marker')
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
 
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
@@ -280,7 +279,6 @@ export default {
     },
 
     addUncertainty() {
-      console.log('add uncertainty')
       this.$refs.myMap.mapObject.removeLayer(this.circle)
 
       if (this.uncertainty) {
@@ -334,7 +332,6 @@ export default {
     },
 
     fitMapBounds() {
-      console.log('rezoom ...' + this.rezoom)
       if (this.rezoom) {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
         this.zoom = this.$refs.myMap.mapObject.getZoom()
