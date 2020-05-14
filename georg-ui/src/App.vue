@@ -6,10 +6,12 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-title class="title">
-        <router-link class="white--text routerLink" to="/about">Om</router-link>
+        <v-tabs color="white" right background-color="blue darken-2" optional>
+          <v-tab key="about" to="/about">Om</v-tab>
+        </v-tabs>
       </v-toolbar-title>
     </v-app-bar>
-
+    
     <v-content>
       <router-view />
     </v-content>
