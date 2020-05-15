@@ -10,11 +10,16 @@
       </strong>
       enligt {{ source }}
     </v-card-subtitle>
-    <v-card-subtitle v-else-if="!isNewMarker" class="mb-n1 mt-3">
-      <v-alert dense text type="warning" size="small" class="alertText"
+    <v-card-text v-else-if="!isNewMarker">
+      <v-alert
+        dense
+        text
+        type="warning"
+        size="small"
+        class="alertText mb-n3 mt-0"
         >Saknar geodetiskt datum, WGS84 har antagits.</v-alert
       >
-    </v-card-subtitle>
+    </v-card-text>
 
     <v-list>
       <v-list-item>
@@ -74,6 +79,7 @@
         </v-btn>
       </v-list-item>
     </v-list>
+
     <v-card-title v-if="isNewMarker" class="grey--text text--darken-2"
       >Din osäkerhetsradie</v-card-title
     >
