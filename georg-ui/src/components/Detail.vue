@@ -10,7 +10,7 @@
       </strong>
       enligt {{ source }}
     </v-card-subtitle>
-    <v-card-subtitle v-else class="mb-n1 mt-3">
+    <v-card-subtitle v-else-if="!isNewMarker" class="mb-n1 mt-3">
       <v-alert dense text type="warning" size="small" class="alertText"
         >Saknar geodetiskt datum, WGS84 har antagits.</v-alert
       >
