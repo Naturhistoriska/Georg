@@ -24,7 +24,7 @@ import se.nrm.georg.service.logic.GeoCoding;
 @SwaggerDefinition(
   info = @Info(
                 title = "George api",
-                version = "1.0.0"
+                version = "0.2.0"
         ),
   tags = {
           @Tag(name = "georg", description = "Georeference tool")

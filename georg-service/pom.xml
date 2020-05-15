@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  
+
   <modelVersion>4.0.0</modelVersion>
-  
+
   <parent>
     <artifactId>georg</artifactId>
     <groupId>se.nrm.georg</groupId>
-    <version>0.1</version>
+    <version>0.2</version>
   </parent>
 
   <groupId>se.nrm.georg</groupId>
-  <artifactId>georg-service</artifactId> 
+  <artifactId>georg-service</artifactId>
   <packaging>war</packaging>
 
   <name>${project.artifactId}</name>
@@ -21,37 +21,37 @@
     <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-    
+
   <dependencies>
     <dependency>
       <groupId>io.thorntail</groupId>
       <artifactId>swagger</artifactId>
       <version>2.6.0.Final</version>
     </dependency>
-    
+
     <dependency>
       <groupId>io.thorntail</groupId>
       <artifactId>swagger-webapp</artifactId>
       <version>2.6.0.Final</version>
-    </dependency> 
-    
+    </dependency>
+
     <dependency>
       <groupId>io.thorntail</groupId>
       <artifactId>jaxrs</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>io.thorntail</groupId>
       <artifactId>cdi</artifactId>
-    </dependency> 
-         
+    </dependency>
+
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
       <artifactId>resteasy-client</artifactId>
       <version>4.4.2.Final</version>
       <scope>test</scope>
-    </dependency> 
-    
+    </dependency>
+
     <dependency>
       <groupId>javax</groupId>
       <artifactId>javaee-web-api</artifactId>
