@@ -102,9 +102,11 @@ public class GeoCodingTest {
     System.out.println("getGeoCode");
 
     String address = "stockholm"; 
+    String source = "GBIF";
+    String layer = "myLayer";
  
     instance.init();
-    String result = instance.getGeoCode(address); 
+    String result = instance.getGeoCode(address, source, layer); 
     assertEquals(jsonString, result); 
     
     verify(mockProps, times(1)).getPeliasPath();  
