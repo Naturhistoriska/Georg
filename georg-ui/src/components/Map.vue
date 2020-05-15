@@ -177,6 +177,9 @@ export default {
     ]),
 
     buildMarkers() {
+      this.$refs.myMap.mapObject.createPane('redMarker')
+      this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
+
       this.$refs.myMap.mapObject.removeLayer(this.circle)
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
       this.bounds = L.latLngBounds()
@@ -185,6 +188,7 @@ export default {
       this.results.forEach(result => {
         const lat = result.geometry.coordinates[1]
         const lon = result.geometry.coordinates[0]
+        this.bounds.extend([lat, lon])
 
         let icon
         if (result.properties.id === 'newMarker') {
@@ -195,16 +199,23 @@ export default {
           icon = MAP_ICONS.greyIcon
         }
 
-        this.bounds.extend([lat, lon])
-        const theMarker = L.marker([lat, lon], {
-          icon,
-        })
+        let theMarker
+        if (result.properties.id === 'newMarker') {
+          theMarker = L.marker([lat, lon], {
+            pane: 'redMarker',
+            icon,
+          })
+        } else {
+          theMarker = L.marker([lat, lon], {
+            icon,
+          })
+        }
+
         theMarker.addTo(this.layerGroup)
       })
       this.fitMapBounds()
     },
     buildDetailMarker() {
-      console.log('build detail marker')
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
 
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
@@ -236,8 +247,11 @@ export default {
     highlightMarker() {
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
 
+      this.$refs.myMap.mapObject.createPane('redMarker')
+      this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
+
       this.$refs.myMap.mapObject.createPane('topMarker')
-      this.$refs.myMap.mapObject.getPane('topMarker').style.zIndex = 999
+      this.$refs.myMap.mapObject.getPane('topMarker').style.zIndex = 888
 
       this.$refs.myMap.mapObject.createPane('lowerMarker')
       this.$refs.myMap.mapObject.getPane('lowerMarker').style.zIndex = 666
@@ -270,6 +284,11 @@ export default {
             pane: 'lowerMarker',
             icon,
           })
+        } else if (result.properties.id === 'newMarker') {
+          theMarker = L.marker([lat, lon], {
+            pane: 'redMarker',
+            icon,
+          })
         } else {
           theMarker = L.marker([lat, lon], {
             icon,
@@ -280,7 +299,6 @@ export default {
     },
 
     addUncertainty() {
-      console.log('add uncertainty')
       this.$refs.myMap.mapObject.removeLayer(this.circle)
 
       if (this.uncertainty) {
@@ -295,7 +313,7 @@ export default {
     },
 
     onMapClick(event) {
-      if (this.enableAddMapMarkers) {
+      if (this.enableAddMapMarkers && !this.detailView) {
         const latlng = event.latlng
         const result = {
           isNew: true,
@@ -334,7 +352,6 @@ export default {
     },
 
     fitMapBounds() {
-      console.log('rezoom ...' + this.rezoom)
       if (this.rezoom) {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
         this.zoom = this.$refs.myMap.mapObject.getZoom()

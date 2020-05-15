@@ -24,7 +24,7 @@ import se.nrm.georg.service.logic.GeoCoding;
 @SwaggerDefinition(
   info = @Info(
                 title = "George api",
-                version = "1.0.0"
+                version = "0.2.0"
         ),
   tags = {
           @Tag(name = "georg", description = "Georeference tool")
@@ -43,10 +43,11 @@ public class GeorgAPI {
           response = String.class
   )
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getGeoCode(@QueryParam("address") String address) {
-    log.info("getGeoCode: {}, {}", address, geoCoding);
+  public Response getGeoCode(@QueryParam("address") String address, 
+          @QueryParam("source") String source, @QueryParam("layer") String layer) {
+    log.info("getGeoCode: {}, {}", address, source);
 
-    return Response.ok(geoCoding.getGeoCode(address)).build();
+    return Response.ok(geoCoding.getGeoCode(address, source, layer)).build();
   }
 
   @GET

@@ -37,18 +37,17 @@ public class GeoCoding implements Serializable {
     peliasPath = props.getPeliasPath();   
   }
   
-  public String getGeoCode(String address) {
-    log.info("getGeoCoding: address = {}", address);  
+  public String getGeoCode(String address, String source, String layer) { 
     
     client = ClientBuilder.newClient(); 
-    target = client.target(Util.getInstance().buildGeoCodePath(peliasPath, address));
+    String peliaUrl = Util.getInstance().buildGeoCodePath(peliasPath, address, source, layer); 
+    target = client.target(peliaUrl);
     Response response = target.request(MediaType.APPLICATION_JSON).get();
     String jsonString = response.readEntity(String.class);  
     return jsonString;
   }
   
-  public String getReverseGeoCode(double lat, double lon) { 
-    log.info("getReverseGeoCode : {} -- {}", lat, lon);
+  public String getReverseGeoCode(double lat, double lon) {  
 
     client = ClientBuilder.newClient(); 
     target = client.target(Util.getInstance()

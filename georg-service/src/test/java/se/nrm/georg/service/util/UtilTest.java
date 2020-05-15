@@ -19,7 +19,7 @@ public class UtilTest {
    
   @Before
   public void setUp() {
-    peliasPath = "http://api.se";
+    peliasPath = "http://api.se/";
     instance = Util.getInstance();
   }
   
@@ -46,10 +46,96 @@ public class UtilTest {
     System.out.println("buildGeoCodePath");
      
     String address = "stockholm";  
-    String expResult = "http://api.sesearch?text=stockholm";
-    String result = instance.buildGeoCodePath(peliasPath, address);  
-    assertEquals(expResult, result);
-    
+    String source = "mySource";
+    String layer = "myLayer";
+    String expResult = "http://api.se/search?text=stockholm&sources=mySource&layers=myLayer";
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+     
+    assertEquals(expResult, result); 
+  }
+  
+ /**
+   * Test of buildGeoCodePath method, of class Util.
+   */
+  @Test
+  public void testBuildGeoCodePathWithAddressOnly() {
+    System.out.println("buildGeoCodePath");
+     
+    String address = "stockholm";  
+    String source = null;
+    String layer = "";
+    String expResult = "http://api.se/search?text=stockholm";
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+     
+    assertEquals(expResult, result); 
+  }
+  
+  /**
+   * Test of buildGeoCodePath method, of class Util.
+   */
+  @Test
+  public void testBuildGeoCodePathWithAddressOnly2() {
+    System.out.println("buildGeoCodePath");
+     
+    String address = "stockholm";  
+    String source = "";
+    String layer = null;
+    String expResult = "http://api.se/search?text=stockholm";
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+     
+    assertEquals(expResult, result); 
+  }
+
+  @Test
+  public void testBuildGeoCodePathWithAddressAndSource() {
+    System.out.println("buildGeoCodePath");
+     
+    String address = "stockholm";  
+    String source = "mySource";
+    String layer = null;
+    String expResult = "http://api.se/search?text=stockholm&sources=mySource";
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+     
+    assertEquals(expResult, result); 
+  }
+  
+  @Test
+  public void testBuildGeoCodePathWithAddressAndSource2() {
+    System.out.println("buildGeoCodePath");
+     
+    String address = "stockholm";  
+    String source = "mySource";
+    String layer = "";
+    String expResult = "http://api.se/search?text=stockholm&sources=mySource";
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+     
+    assertEquals(expResult, result); 
+  }
+  
+  @Test
+  public void testBuildGeoCodePathWithAddressAndLayer() {
+    System.out.println("buildGeoCodePath");
+     
+    String address = "stockholm";  
+    String source = null;
+    String layer = "myLayer";
+    String expResult = "http://api.se/search?text=stockholm&layers=myLayer";
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+     
+    assertEquals(expResult, result); 
+  }
+  
+  @Test
+  public void testBuildGeoCodePathWithAddressAndLayer2() {
+    System.out.println("buildGeoCodePath");
+     
+    String address = "stockholm";  
+    String source = "";
+    String layer = "myLayer";
+    String expResult = "http://api.se/search?text=stockholm&layers=myLayer";
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+     
+    assertEquals(expResult, result); 
   }
 
   /**
@@ -61,7 +147,7 @@ public class UtilTest {
  
     double lat = 59.3;
     double lon = 16.9; 
-    String expResult = "http://api.sereverse?point.lon=16.9&point.lat=59.3";
+    String expResult = "http://api.se/reverse?point.lon=16.9&point.lat=59.3";
     String result = instance.buildReverseGeoCodePath(peliasPath, lat, lon); 
     assertEquals(expResult, result); 
   }
