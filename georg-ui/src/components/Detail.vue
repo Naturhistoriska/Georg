@@ -1,13 +1,16 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
-    <v-card-title :class="nameColor">{{
-      selectedResult.properties.name
-    }}</v-card-title>
-    <v-card-subtitle v-if="!isNewMarker">
-      <strong class="text-capitalize">
-        {{ selectedResult.properties.layer }}
-      </strong>
+    <v-card-title :class="nameColor">{{ name }}</v-card-title>
+    <v-card-subtitle v-if="!isNewMarker && !isGbif">
+      <strong class="text-capitalize">{{
+        selectedResult.properties.layer
+      }}</strong>
       enligt {{ source }}
+    </v-card-subtitle>
+    <v-card-subtitle v-else class="mb-n1 mt-3">
+      <v-alert dense text type="warning" size="small" class="alertText"
+        >Saknar geodetiskt datum, WGS84 har antagits.</v-alert
+      >
     </v-card-subtitle>
 
     <v-list>
@@ -61,6 +64,7 @@
           <v-list-item-title>Data från {{ dataFromSource }}</v-list-item-title>
         </v-list-item-content>
         <v-btn
+          v-if="!isGbif"
           icon
           href="https://whosonfirst.org/docs/licenses/"
           target="_blank"
@@ -131,9 +135,9 @@ export default {
     }
   },
   mounted() {
-    if (this.selectedResult.properties.source === 'GBIF') {
-      this.source = this.selectedResult.properties.source
-      this.dataFromSource = this.selectedResult.properties.source
+    if (this.selectedResult.properties.source === 'gbif') {
+      this.dataFromSource = this.selectedResult.properties.source.toUpperCase()
+      this.source = this.dataFromSource
     } else {
       this.dataFromSource = "Who's On First (WOF)"
       this.source = "Who's On First"
@@ -186,6 +190,14 @@ export default {
         ? 'red darken-2'
         : 'blue darken-2'
     },
+    isGbif: function() {
+      return this.selectedResult.properties.source === 'gbif'
+    },
+    name: function() {
+      return this.isGbif
+        ? this.selectedResult.properties.addendum.georg.locationDisplayLabel
+        : this.selectedResult.properties.name
+    },
   },
   methods: {
     ...mapMutations(['setUncertainty']),
@@ -204,5 +216,8 @@ export default {
 <style scoped>
 #v-card-detail {
   z-index: 2;
+}
+.alertText {
+  font-size: 14px;
 }
 </style>
