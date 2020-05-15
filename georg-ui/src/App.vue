@@ -11,7 +11,7 @@
         </v-tabs>
       </v-toolbar-title>
     </v-app-bar>
-    
+
     <v-content>
       <router-view />
     </v-content>
