@@ -37,9 +37,7 @@
         v-bind:class="{ 'mx-4': isNewMarker }"
         :inset="!isNewMarker"
       ></v-divider>
-    </v-list>
-    <v-list v-if="!isNewMarker">
-      <v-list-item>
+      <v-list-item v-if="!isNewMarker">
         <v-list-item-icon>
           <v-icon color="blue darken-2">mdi-file-tree</v-icon>
         </v-list-item-icon>
@@ -58,8 +56,8 @@
           </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-divider inset></v-divider>
-      <v-list-item>
+      <v-divider v-if="!isNewMarker" inset></v-divider>
+      <v-list-item v-if="!isNewMarker">
         <v-list-item-icon>
           <v-icon color="blue darken-2">mdi-database-import</v-icon>
         </v-list-item-icon>
