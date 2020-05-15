@@ -1,19 +1,22 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
     <v-card-title :class="nameColor">{{ name }}</v-card-title>
-    <v-card-subtitle v-if="!isNewMarker && isGbif">{{
-      selectedResult.properties.name
-    }}</v-card-subtitle>
+    <v-card-subtitle v-if="!isNewMarker && isGbif">{{ selectedResult.properties.name }}</v-card-subtitle>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
       <strong class="text-capitalize">
-        {{ selectedResult.properties.layer }}
+        {{
+        selectedResult.properties.layer
+        }}
       </strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-text v-else-if="!isNewMarker">
-      <v-alert dense text type="warning" class="alertText mb-n3 mt-0"
-        >Saknar geodetiskt datum, WGS84 har antagits.</v-alert
-      >
+      <v-alert
+        dense
+        text
+        type="warning"
+        class="alertText mb-n3 mt-0"
+      >Saknar geodetiskt datum, WGS84 har antagits.</v-alert>
     </v-card-text>
 
     <v-list>
@@ -33,10 +36,7 @@
           <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-divider
-        v-bind:class="{ 'mx-4': isNewMarker }"
-        :inset="!isNewMarker"
-      ></v-divider>
+      <v-divider v-bind:class="{ 'mx-4': isNewMarker }" :inset="!isNewMarker"></v-divider>
       <v-list-item v-if="!isNewMarker">
         <v-list-item-icon>
           <v-icon color="blue darken-2">mdi-file-tree</v-icon>
@@ -64,28 +64,20 @@
         <v-list-item-content>
           <v-list-item-title>Data från {{ dataFromSource }}</v-list-item-title>
         </v-list-item-content>
-        <v-btn
-          v-if="!isGbif"
-          icon
-          href="https://whosonfirst.org/docs/licenses/"
-          target="_blank"
-        >
+        <v-btn v-if="!isGbif" icon href="https://whosonfirst.org/docs/licenses/" target="_blank">
           <v-icon>mdi-open-in-new</v-icon>
         </v-btn>
       </v-list-item>
     </v-list>
 
-    <v-card-title v-if="isNewMarker" class="grey--text text--darken-2"
-      >Din osäkerhetsradie</v-card-title
-    >
+    <v-card-title v-if="isNewMarker" class="grey--text text--darken-2">Din osäkerhetsradie</v-card-title>
     <v-card-text v-if="isNewMarker">
       <v-chip
         class="mr-4 mt-2"
         v-for="tag in tags"
         :key="tag.label"
         @click="addUncertaintyValue(tag.value)"
-        >{{ tag.label }}</v-chip
-      >
+      >{{ tag.label }}</v-chip>
       <v-container class="mb-0 pb-0">
         <v-row>
           <v-col cols="5" class="mt-0 pt-0 pl-1">
@@ -109,8 +101,7 @@
         color="red darken-2"
         text
         :disabled="disableSetUncertaintyBtn"
-        >Sätt osäkerhet</v-btn
-      >
+      >Sätt osäkerhet</v-btn>
     </v-card-actions>
   </v-card>
 </template>
