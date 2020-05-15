@@ -1,10 +1,13 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
     <v-card-title :class="nameColor">{{ name }}</v-card-title>
+    <v-card-subtitle v-if="!isNewMarker && isGbif">{{
+      selectedResult.properties.name
+    }}</v-card-subtitle>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
-      <strong class="text-capitalize">{{
-        selectedResult.properties.layer
-      }}</strong>
+      <strong class="text-capitalize">
+        {{ selectedResult.properties.layer }}
+      </strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-subtitle v-else class="mb-n1 mt-3">
