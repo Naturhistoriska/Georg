@@ -10,13 +10,17 @@
       <v-list-item-content @click.prevent="onclick()">
         <v-list-item-title
           v-bind:class="{ 'blue--text text--darken-2': isActive }"
-          >{{ result.properties.name }}</v-list-item-title
+          >{{ name }}</v-list-item-title
         >
         <v-list-item-subtitle id="resultContent" class="text--primary">
+          {{ result.properties.county }}
           {{ result.properties.region }}
           {{ result.properties.country }}
         </v-list-item-subtitle>
-        <v-list-item-subtitle>
+        <v-list-item-subtitle v-if="isGbif">
+          <span class="text-capitalize">{{ result.properties.name }}</span>
+        </v-list-item-subtitle>
+        <v-list-item-subtitle v-else>
           <span class="text-capitalize">{{ result.properties.layer }}</span>
           enligt {{ source }}.
         </v-list-item-subtitle>
@@ -87,9 +91,15 @@ export default {
       return this.isActive ? 'selected' : 'unSelected'
     },
     source: function() {
-      return this.result.properties.source === 'GBIF'
-        ? this.result.properties.source
-        : "Who's On First"
+      return this.isGbif ? this.result.properties.source : "Who's On First"
+    },
+    isGbif: function() {
+      return this.result.properties.source === 'gbif'
+    },
+    name: function() {
+      return this.isGbif
+        ? this.result.properties.addendum.georg.locationDisplayLabel
+        : this.result.properties.name
     },
   },
 

@@ -1,13 +1,18 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
-    <v-card-title :class="nameColor">{{
-      selectedResult.properties.name
-    }}</v-card-title>
-    <v-card-subtitle v-if="!isNewMarker">
-      <strong class="text-capitalize">
-        {{ selectedResult.properties.layer }}
-      </strong>
+    <v-card-title :class="nameColor">{{ name }}</v-card-title>
+    <v-card-subtitle v-if="!isNewMarker && !isGbif">
+      <strong class="text-capitalize">{{ selectedResult.properties.layer }}</strong>
       enligt {{ source }}
+    </v-card-subtitle>
+    <v-card-subtitle v-else class="mb-n1 mt-3">
+      <v-alert
+        dense
+        text
+        type="warning"
+        size="small"
+        class="alertText"
+      >Saknar geodetiskt datum, WGS84 har antagits.</v-alert>
     </v-card-subtitle>
 
     <v-list>
@@ -27,10 +32,7 @@
           <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
-      <v-divider
-        v-bind:class="{ 'mx-4': isNewMarker }"
-        :inset="!isNewMarker"
-      ></v-divider>
+      <v-divider v-bind:class="{ 'mx-4': isNewMarker }" :inset="!isNewMarker"></v-divider>
     </v-list>
     <v-list v-if="!isNewMarker">
       <v-list-item>
@@ -60,26 +62,19 @@
         <v-list-item-content>
           <v-list-item-title>Data från {{ dataFromSource }}</v-list-item-title>
         </v-list-item-content>
-        <v-btn
-          icon
-          href="https://whosonfirst.org/docs/licenses/"
-          target="_blank"
-        >
+        <v-btn v-if="!isGbif" icon href="https://whosonfirst.org/docs/licenses/" target="_blank">
           <v-icon>mdi-open-in-new</v-icon>
         </v-btn>
       </v-list-item>
     </v-list>
-    <v-card-title v-if="isNewMarker" class="grey--text text--darken-2"
-      >Din osäkerhetsradie</v-card-title
-    >
+    <v-card-title v-if="isNewMarker" class="grey--text text--darken-2">Din osäkerhetsradie</v-card-title>
     <v-card-text v-if="isNewMarker">
       <v-chip
         class="mr-4 mt-2"
         v-for="tag in tags"
         :key="tag.label"
         @click="addUncertaintyValue(tag.value)"
-        >{{ tag.label }}</v-chip
-      >
+      >{{ tag.label }}</v-chip>
       <v-container class="mb-0 pb-0">
         <v-row>
           <v-col cols="5" class="mt-0 pt-0 pl-1">
@@ -103,8 +98,7 @@
         color="red darken-2"
         text
         :disabled="disableSetUncertaintyBtn"
-        >Sätt osäkerhet</v-btn
-      >
+      >Sätt osäkerhet</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -131,9 +125,9 @@ export default {
     }
   },
   mounted() {
-    if (this.selectedResult.properties.source === 'GBIF') {
-      this.source = this.selectedResult.properties.source
-      this.dataFromSource = this.selectedResult.properties.source
+    if (this.selectedResult.properties.source === 'gbif') {
+      this.dataFromSource = this.selectedResult.properties.source.toUpperCase()
+      this.source = this.dataFromSource
     } else {
       this.dataFromSource = "Who's On First (WOF)"
       this.source = "Who's On First"
@@ -186,6 +180,14 @@ export default {
         ? 'red darken-2'
         : 'blue darken-2'
     },
+    isGbif: function() {
+      return this.selectedResult.properties.source === 'gbif'
+    },
+    name: function() {
+      return this.isGbif
+        ? this.selectedResult.properties.addendum.georg.locationDisplayLabel
+        : this.selectedResult.properties.name
+    },
   },
   methods: {
     ...mapMutations(['setUncertainty']),
@@ -204,5 +206,8 @@ export default {
 <style scoped>
 #v-card-detail {
   z-index: 2;
+}
+.alertText {
+  font-size: 14px;
 }
 </style>
