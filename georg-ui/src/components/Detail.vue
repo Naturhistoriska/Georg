@@ -227,4 +227,8 @@ export default {
 .alertText {
   font-size: 14px;
 }
+
+#v-card-detail .v-card__title {
+  word-break: break-word;
+}
 </style>
