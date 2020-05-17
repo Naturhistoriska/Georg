@@ -1,6 +1,5 @@
 <template>
   <v-list-item
-    three-line
     @mouseover="onhove"
     @mouseleave="unhove"
     :class="resultColor"
@@ -26,12 +25,10 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
-        <v-btn icon id="iconBtn" v-if="!isActive">
-          <v-icon color="grey lighten-1">mdi-map-marker</v-icon>
-        </v-btn>
-        <v-btn icon v-else>
-          <v-icon color="primary">mdi-map-marker</v-icon>
-        </v-btn>
+        <v-icon v-if="!isActive" color="grey lighten-1">mdi-map-marker</v-icon>
+        <v-icon v-else color="primary">mdi-map-marker</v-icon>
+        <v-list-item-action-text v-if="isGbif">GBIF</v-list-item-action-text>
+        <v-list-item-action-text v-else>WOF</v-list-item-action-text>
       </v-list-item-action>
     </template>
     <template v-else>
