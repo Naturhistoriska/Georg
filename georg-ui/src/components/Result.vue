@@ -25,7 +25,7 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
-        <v-icon v-if="!isActive" color="grey lighten-1">mdi-map-marker</v-icon>
+        <v-icon v-if="!isActive" color="grey lighten-1" class="selectableIcon">mdi-map-marker</v-icon>
         <v-icon v-else color="primary">mdi-map-marker</v-icon>
         <v-list-item-action-text v-if="isGbif">GBIF</v-list-item-action-text>
         <v-list-item-action-text v-else>WOF</v-list-item-action-text>
@@ -149,19 +149,8 @@ export default {
   background: transparent;
 }
 
-/* .unSelected {
-  background: #f4f4f4;
-} */
-/*
-.result-item {
-  padding: 0px;
-  width: 25em;
-}
-.result-item:hover {
-  background: #c7d0ff;
+.unSelected:hover .selectableIcon {
+  color: #1976d2 !important;
 }
 
-
-
-*/
 </style>
