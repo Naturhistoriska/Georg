@@ -218,6 +218,7 @@ export default {
         theMarker.addTo(this.layerGroup)
       })
       this.fitMapBounds()
+      this.highlightMarker()
     },
     buildDetailMarker() {
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
