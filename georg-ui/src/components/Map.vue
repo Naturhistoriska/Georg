@@ -11,6 +11,7 @@
       :style="mapHeight"
       @click="onMapClick"
       :zoom="zoom"
+      :noBlockingAnimations="true"
     >
       <l-tile-layer
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
