@@ -182,6 +182,7 @@ export default {
 
       this.$refs.myMap.mapObject.removeLayer(this.circle)
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
+
       this.bounds = L.latLngBounds()
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
 
@@ -213,7 +214,9 @@ export default {
 
         theMarker.addTo(this.layerGroup)
       })
-      this.fitMapBounds()
+      if (this.results != null && this.results.length > 0) {
+        this.fitMapBounds()
+      }
     },
     buildDetailMarker() {
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
