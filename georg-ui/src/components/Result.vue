@@ -4,6 +4,7 @@
     @mouseleave="unhove"
     :class="resultColor"
     :key="result.properties.id"
+    :id="result.properties.id"
   >
     <template v-if="!isNewMarker">
       <v-list-item-content @click.prevent="onclick()">
