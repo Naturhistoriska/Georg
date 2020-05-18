@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="map"
-    v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }"
-  >
+  <div id="map" v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }">
     <l-map
       :center="center"
       :options="mapOptions"
@@ -19,11 +16,7 @@
       ></l-tile-layer>
     </l-map>
 
-    <div
-      id="icondiv"
-      class="leaflet-bottom leaflet-right"
-      style="padding-bottom: 80px;"
-    >
+    <div id="icondiv" class="leaflet-bottom leaflet-right" style="padding-bottom: 80px;">
       <v-btn
         class="leaflet-control"
         fab
@@ -186,6 +179,7 @@ export default {
 
       this.$refs.myMap.mapObject.removeLayer(this.circle)
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
+
       this.bounds = L.latLngBounds()
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
 
@@ -217,8 +211,11 @@ export default {
 
         theMarker.addTo(this.layerGroup)
       })
-      this.fitMapBounds()
-      this.highlightMarker()
+
+      if (this.results != null && this.results.length > 0) {
+        this.fitMapBounds()
+        this.highlightMarker()
+      }
     },
     buildDetailMarker() {
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
