@@ -24,10 +24,13 @@
         id="backResultListLink"
         text
         @click.prevent="onclick()"
-      >{{ linkText }}</v-btn>
+        >{{ linkText }}</v-btn
+      >
     </v-card-actions>
     <v-card-actions v-if="!detailView">
-      <div id="message" class="pt-2 grey--text text--darken-3 body-2">{{ message }}</div>
+      <div id="message" class="pt-2 grey--text text--darken-3 body-2">
+        {{ message }}
+      </div>
     </v-card-actions>
   </div>
 </template>
