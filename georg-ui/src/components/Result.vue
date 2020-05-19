@@ -4,7 +4,6 @@
     @mouseleave="unhove"
     :class="resultColor"
     :key="result.properties.id"
-    :id="result.properties.id"
   >
     <template v-if="!isNewMarker">
       <v-list-item-content @click.prevent="onclick()">
@@ -26,17 +25,21 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
-        <v-icon v-if="!isActive" color="grey lighten-1">mdi-map-marker</v-icon>
-        <v-icon v-else color="primary">mdi-map-marker</v-icon>
+        <v-icon v-if="!isActive" color="grey lighten-1" id="inActiveMarkerIcon"
+          >mdi-map-marker</v-icon
+        >
+        <v-icon v-else color="primary" id="activeMarkerIcon"
+          >mdi-map-marker</v-icon
+        >
         <v-list-item-action-text v-if="isGbif">GBIF</v-list-item-action-text>
         <v-list-item-action-text v-else>WOF</v-list-item-action-text>
       </v-list-item-action>
     </template>
     <template v-else>
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title class="red--text darken-2">{{
-          result.properties.name
-        }}</v-list-item-title>
+        <v-list-item-title class="red--text darken-2">
+          {{ result.properties.name }}
+        </v-list-item-title>
         <v-list-item-subtitle id="resultContent" class="text--primary">
           {{ latDms }}
           {{ lngDms }}
