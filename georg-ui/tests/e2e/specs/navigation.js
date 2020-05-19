@@ -15,6 +15,6 @@ describe('Navigation between pages', () => {
 
   it('Return home page', () => {
     cy.get('#home').click()
-    cy.url().should('eq', 'http://localhost:8080/')
+    cy.url().should('eq', 'http://localhost:8081/')
   })
 })
