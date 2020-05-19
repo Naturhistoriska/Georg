@@ -24,13 +24,10 @@
         id="backResultListLink"
         text
         @click.prevent="onclick()"
-        >{{ linkText }}</v-btn
-      >
+      >{{ linkText }}</v-btn>
     </v-card-actions>
     <v-card-actions v-if="!detailView">
-      <div id="message" class="pt-2 grey--text text--darken-3 body-2">
-        {{ message }}
-      </div>
+      <div id="message" class="pt-2 grey--text text--darken-3 body-2">{{ message }}</div>
     </v-card-actions>
   </div>
 </template>
@@ -79,7 +76,7 @@ export default {
       service
         .fetchAddressResults(this.address)
         .then(response => {
-          this.results = response.features
+          this.filtedResults(response.features)
           this.loading = false
           this.setResults(this.results)
           this.setDidSearch(true)
@@ -91,6 +88,11 @@ export default {
               : 'Sökningen gav inga träffar'
         })
         .catch(function() {})
+    },
+    filtedResults(results) {
+      this.results = results.filter(function(result) {
+        return result.properties.country != null
+      })
     },
   },
 }
