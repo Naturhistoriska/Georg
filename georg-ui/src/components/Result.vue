@@ -8,7 +8,10 @@
   >
     <template v-if="!isNewMarker">
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title v-bind:class="{ 'blue--text text--darken-2': isActive }">{{ name }}</v-list-item-title>
+        <v-list-item-title
+          v-bind:class="{ 'blue--text text--darken-2': isActive }"
+          >{{ name }}</v-list-item-title
+        >
         <v-list-item-subtitle id="resultContent" class="text--primary">
           {{ result.properties.county }}
           {{ result.properties.region }}
@@ -23,8 +26,12 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
-        <v-icon v-if="!isActive" color="grey lighten-1" id="inActiveMarkerIcon">mdi-map-marker</v-icon>
-        <v-icon v-else color="primary" id="activeMarkerIcon">mdi-map-marker</v-icon>
+        <v-icon v-if="!isActive" color="grey lighten-1" id="inActiveMarkerIcon"
+          >mdi-map-marker</v-icon
+        >
+        <v-icon v-else color="primary" id="activeMarkerIcon"
+          >mdi-map-marker</v-icon
+        >
         <v-list-item-action-text v-if="isGbif">GBIF</v-list-item-action-text>
         <v-list-item-action-text v-else>WOF</v-list-item-action-text>
       </v-list-item-action>
@@ -32,9 +39,7 @@
     <template v-else>
       <v-list-item-content @click.prevent="onclick()">
         <v-list-item-title class="red--text darken-2">
-          {{
-          result.properties.name
-          }}
+          {{ result.properties.name }}
         </v-list-item-title>
         <v-list-item-subtitle id="resultContent" class="text--primary">
           {{ latDms }}

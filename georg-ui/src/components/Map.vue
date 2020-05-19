@@ -1,5 +1,8 @@
 <template>
-  <div id="map" v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }">
+  <div
+    id="map"
+    v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }"
+  >
     <l-map
       :center="center"
       :options="mapOptions"
@@ -16,7 +19,11 @@
       ></l-tile-layer>
     </l-map>
 
-    <div id="icondiv" class="leaflet-bottom leaflet-right" style="padding-bottom: 80px;">
+    <div
+      id="icondiv"
+      class="leaflet-bottom leaflet-right"
+      style="padding-bottom: 80px;"
+    >
       <v-btn
         class="leaflet-control"
         fab
@@ -26,7 +33,9 @@
         :style="iconCursor"
         :disabled="detailView"
       >
-        <v-icon :color="iconColor" id="newMarkerIcon">mdi-map-marker-plus</v-icon>
+        <v-icon :color="iconColor" id="newMarkerIcon"
+          >mdi-map-marker-plus</v-icon
+        >
       </v-btn>
     </div>
   </div>
