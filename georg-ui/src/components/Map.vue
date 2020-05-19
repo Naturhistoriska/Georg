@@ -95,7 +95,7 @@ export default {
         zoomControl: true,
         zoomControlPosition: 'topright',
       },
-      markers: [],
+      // markers: [],
       rezoom: true,
       zoom: 0,
     }
@@ -150,7 +150,9 @@ export default {
     },
     selectedResultId() {
       this.$nextTick(() => {
-        this.highlightMarker()
+        if (!this.detailView) {
+          this.highlightMarker()
+        }
       })
     },
     center: function() {
@@ -225,7 +227,7 @@ export default {
 
       if (this.results != null && this.results.length > 0) {
         this.fitMapBounds()
-        this.highlightMarker()
+        // this.highlightMarker()
       }
     },
     buildDetailMarker() {
