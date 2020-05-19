@@ -98,6 +98,7 @@
               v-model="accuracy"
               label="Radie ?"
               min="0"
+              max="10000000"
             ></v-text-field>
           </v-col>
         </v-row>

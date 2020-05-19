@@ -1,5 +1,8 @@
 <template>
-  <div id="map">
+  <div
+    id="map"
+    v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }"
+  >
     <l-map
       :center="center"
       :options="mapOptions"
@@ -8,6 +11,7 @@
       :style="mapHeight"
       @click="onMapClick"
       :zoom="zoom"
+      :noBlockingAnimations="true"
     >
       <l-tile-layer
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
@@ -214,6 +218,7 @@ export default {
         theMarker.addTo(this.layerGroup)
       })
       this.fitMapBounds()
+      this.highlightMarker()
     },
     buildDetailMarker() {
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
@@ -379,5 +384,10 @@ export default {
 }
 #iconbtn {
   margin-right: 8px;
+}
+.addMarkerCursor .leaflet-container {
+  cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAgCAMAAAAhSXi5AAAA5FBMVEX///+3HBy3HBy3HBy3HBy3HBzvU1DrUE3oTEm+IyK3HBzkSUa8ISHhRUPYR0XbRUPdQkC7ICC3HBzaPjzUQkG9IiK8ISHAJSXQPjzTNza9IiG+IyPNPDy9IiHPNDPERETHPDzKOjq7ICC8ISG9IiLGOjnMMC+7IB+7ICDGNDTILSy6Hx+7IB/CMjLEKSjCMDDFKim/MjK5Hh65Hh69IiG5Hh65Hh66Hx69IiLBJiW6Hx+9IiK/Kyq/LS23HBy7JSW7Jia7JyfJUlLNYmLScXHbjY3fm5vkqqrouLjtxsbx1NT///9idWUoAAAATHRSTlMADhspN0VKS01OUlJbW2VlZWhudXt8iJOYmJmepaissLKys7a6vb3AwsjLzM7P0dPT1NXW1tfY2NjY2dnZ2dvb29vb29vb29vb29vbAcCeVQAAATBJREFUGBltwYsiwlAABuD/bPlPtY3ZhOMSSskwbDTXUK7t/d/HOYtq8X34ZdeDYMlCiWgkV5FSF/2ei5laEnkshPdHNn64mc8pldoouJnDOWFqQbMSjyXNNrTtLhfc1AExqNKQm8cHKyyEh0A9puE8jT4/9s4lNTkQ2FA0Om+5NlyjEVfQ8qg5L7kxfqTRDNDyqHnDvDCgoQK0PGrOZW6MH2k0A2woGg/vuTZaoxFXUI9oOM+vX5/DM0ljYMG6ZqG6s99ZljT8EwC9kAu66wDcmGWybwEQqcMS1YbR6HKevKvAEKnHOeoQE42YM9V+BRPiNORUtI1fS3eSP7xEYGo34oS8X8WMSHwWmm3Mq2WSmp9YKNm6IFnNaigTPUXebmGRnfrdHv6qZYmFf7g2pr4BVsYlcwwas0QAAAAASUVORK5CYII=')
+      11 32,
+    auto;
 }
 </style>
