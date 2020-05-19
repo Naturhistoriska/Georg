@@ -26,7 +26,7 @@
         :style="iconCursor"
         :disabled="detailView"
       >
-        <v-icon :color="iconColor">mdi-map-marker-plus</v-icon>
+        <v-icon :color="iconColor" id="newMarkerIcon">mdi-map-marker-plus</v-icon>
       </v-btn>
     </div>
   </div>
