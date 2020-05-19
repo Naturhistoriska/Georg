@@ -92,7 +92,7 @@ export default {
         })
         .catch(function() {})
     },
-    filtedResults(results) {
+    filteredResults(results) {
       this.results = results.filter(function(result) {
         return result.properties.country != null
       })
