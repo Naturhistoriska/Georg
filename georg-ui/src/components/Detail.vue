@@ -103,6 +103,9 @@
               max="10000000"
             ></v-text-field>
           </v-col>
+          <v-col cols="7">
+            <v-subheader :class="msgClass">(min: 0, max: 10000000)</v-subheader>
+          </v-col>
         </v-row>
       </v-container>
     </v-card-text>
@@ -137,6 +140,7 @@ export default {
       ],
       uncertintyChangedByChip: false,
       accuracy: null,
+      msgClass: 'grey--text',
     }
   },
   mounted() {
@@ -155,8 +159,10 @@ export default {
   watch: {
     accuracy: function() {
       this.$nextTick(() => {
+        this.checkUncertaintyValue()
         if (!this.uncertintyChangedByChip) {
           this.disableSetUncertaintyBtn = false
+          this.msgClass = 'red--text darken-2'
         }
         this.uncertintyChangedByChip = false
       })
@@ -209,11 +215,19 @@ export default {
     setUncertaintyValue() {
       this.setUncertainty(this.accuracy)
       this.disableSetUncertaintyBtn = true
+      this.msgClass = 'grey--text'
     },
     addUncertaintyValue(value) {
       this.accuracy = value
       this.setUncertaintyValue()
       this.uncertintyChangedByChip = true
+    },
+    checkUncertaintyValue() {
+      if (this.accuracy > 10000000) {
+        this.accuracy = 10000000
+      } else if (this.accuracy < 0) {
+        this.accuracy = 0
+      }
     },
   },
 }
