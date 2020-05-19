@@ -8,7 +8,7 @@ module.exports = {
       enabled: true,
       context: '/api',
       options: {
-        target: 'https://georg.nrm.se',
+        target: 'https://georg-test.nrm.se',
         changeOrigin: true,
       },
     },
