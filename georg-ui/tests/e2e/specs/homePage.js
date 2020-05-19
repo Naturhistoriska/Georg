@@ -5,7 +5,6 @@ describe('Home page', () => {
 
   it('Visits the app root url', () => {
     cy.contains('Georg').should('be.visible')
-    cy.contains('Om').should('be.visible')
   })
 
   it('Auto focus to search text field', () => {

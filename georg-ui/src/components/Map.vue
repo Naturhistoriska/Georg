@@ -26,9 +26,7 @@
         :style="iconCursor"
         :disabled="detailView"
       >
-        <v-icon id="newMarkerIcon" :color="iconColor"
-          >mdi-map-marker-plus</v-icon
-        >
+        <v-icon :color="iconColor">mdi-map-marker-plus</v-icon>
       </v-btn>
     </div>
   </div>
@@ -95,9 +93,11 @@ export default {
   },
   mounted() {
     this.bounds = initialBound
+
     this.$nextTick(() => {
       this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
       this.$refs.myMap.mapObject.invalidateSize()
+      this.buildMarkers()
     })
   },
   computed: {
@@ -176,9 +176,6 @@ export default {
     ]),
 
     buildMarkers() {
-      this.$refs.myMap.mapObject.createPane('redMarker')
-      this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
-
       this.$refs.myMap.mapObject.removeLayer(this.circle)
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
 
@@ -201,7 +198,10 @@ export default {
 
         let theMarker
         if (result.properties.id === 'newMarker') {
+          this.$refs.myMap.mapObject.createPane('redMarker')
+          this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
           theMarker = L.marker([lat, lon], {
+            id: 'newMarker',
             pane: 'redMarker',
             icon,
           })
@@ -251,9 +251,6 @@ export default {
     highlightMarker() {
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
 
-      this.$refs.myMap.mapObject.createPane('redMarker')
-      this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
-
       this.$refs.myMap.mapObject.createPane('topMarker')
       this.$refs.myMap.mapObject.getPane('topMarker').style.zIndex = 888
 
@@ -289,7 +286,10 @@ export default {
             icon,
           })
         } else if (result.properties.id === 'newMarker') {
+          this.$refs.myMap.mapObject.createPane('redMarker')
+          this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
           theMarker = L.marker([lat, lon], {
+            id: 'newMarker',
             pane: 'redMarker',
             icon,
           })

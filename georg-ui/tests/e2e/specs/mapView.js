@@ -26,5 +26,10 @@ describe('Map view', () => {
     cy.get('#iconbtn').click()
     cy.get('#map').click()
     cy.get('#newMarker').should('be.visible')
+
+    cy.get('#resultList')
+      .children()
+      .filter('div')
+      .should('have.length', 1)
   })
 })
