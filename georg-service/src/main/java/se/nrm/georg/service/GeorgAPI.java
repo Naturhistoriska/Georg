@@ -43,11 +43,11 @@ public class GeorgAPI {
           response = String.class
   )
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getGeoCode(@QueryParam("address") String address, 
-          @QueryParam("source") String source, @QueryParam("layer") String layer) {
+  public Response getGeoCode(@QueryParam("address") String address, @QueryParam("source") String source, 
+          @QueryParam("layer") String layer, @QueryParam("layer") int size) {
     log.info("getGeoCode: {}, {}", address, source);
 
-    return Response.ok(geoCoding.getGeoCode(address, source, layer)).build();
+    return Response.ok(geoCoding.getGeoCode(address, source, layer, size)).build();
   }
 
   @GET

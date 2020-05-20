@@ -9,6 +9,7 @@ public class Util {
   private final String searchGeoCode = "search?text=";
   private final String sourceQry = "&sources=";
   private final String layerQry = "&layers=";
+  private final String sizeQry = "&size=";
   private final String reverseGeoCode = "reverse?";
   private final String pointLat = "point.lat=";
   private final String pointLon = "point.lon=";
@@ -33,7 +34,7 @@ public class Util {
     sb.append(address);  
   }
   
-  public String buildGeoCodePath(String peliasPath, String address, String source, String layer) {
+  public String buildGeoCodePath(String peliasPath, String address, String source, String layer, int size) {
     buildGeoCodePath(peliasPath, address); 
     if(source != null && source.trim().length() > 0) { 
       sb.append(sourceQry);
@@ -42,6 +43,10 @@ public class Util {
     if(layer != null && layer.trim().length() > 0) {
       sb.append(layerQry);
       sb.append(layer);
+    }
+    if(size > 0) {
+      sb.append(sizeQry);
+      sb.append(size);
     }
     
     return sb.toString().trim();

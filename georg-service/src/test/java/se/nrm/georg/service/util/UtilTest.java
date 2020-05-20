@@ -48,8 +48,8 @@ public class UtilTest {
     String address = "stockholm";  
     String source = "mySource";
     String layer = "myLayer";
-    String expResult = "http://api.se/search?text=stockholm&sources=mySource&layers=myLayer";
-    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+    String expResult = "http://api.se/search?text=stockholm&sources=mySource&layers=myLayer&size=5";
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer, 5);  
      
     assertEquals(expResult, result); 
   }
@@ -65,7 +65,7 @@ public class UtilTest {
     String source = null;
     String layer = "";
     String expResult = "http://api.se/search?text=stockholm";
-    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer, 0);  
      
     assertEquals(expResult, result); 
   }
@@ -81,7 +81,7 @@ public class UtilTest {
     String source = "";
     String layer = null;
     String expResult = "http://api.se/search?text=stockholm";
-    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer, 0);  
      
     assertEquals(expResult, result); 
   }
@@ -94,7 +94,7 @@ public class UtilTest {
     String source = "mySource";
     String layer = null;
     String expResult = "http://api.se/search?text=stockholm&sources=mySource";
-    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer, 0);  
      
     assertEquals(expResult, result); 
   }
@@ -107,7 +107,7 @@ public class UtilTest {
     String source = "mySource";
     String layer = "";
     String expResult = "http://api.se/search?text=stockholm&sources=mySource";
-    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer, 0);  
      
     assertEquals(expResult, result); 
   }
@@ -120,7 +120,7 @@ public class UtilTest {
     String source = null;
     String layer = "myLayer";
     String expResult = "http://api.se/search?text=stockholm&layers=myLayer";
-    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer, 0);  
      
     assertEquals(expResult, result); 
   }
@@ -133,7 +133,7 @@ public class UtilTest {
     String source = "";
     String layer = "myLayer";
     String expResult = "http://api.se/search?text=stockholm&layers=myLayer";
-    String result = instance.buildGeoCodePath(peliasPath, address, source, layer);  
+    String result = instance.buildGeoCodePath(peliasPath, address, source, layer, 0);  
      
     assertEquals(expResult, result); 
   }
