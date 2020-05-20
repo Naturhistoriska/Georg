@@ -106,7 +106,7 @@ public class GeoCodingTest {
     String layer = "myLayer";
  
     instance.init();
-    String result = instance.getGeoCode(address, source, layer); 
+    String result = instance.getGeoCode(address, source, layer, 5); 
     assertEquals(jsonString, result); 
     
     verify(mockProps, times(1)).getPeliasPath();  

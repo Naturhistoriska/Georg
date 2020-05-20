@@ -79,7 +79,9 @@ export default {
       service
         .fetchAddressResults(this.address)
         .then(response => {
-          this.results = response.features
+          this.results = response.features.filter(function(result) {
+            return result.properties.country != null
+          })
           this.loading = false
           this.setResults(this.results)
           this.setDidSearch(true)
