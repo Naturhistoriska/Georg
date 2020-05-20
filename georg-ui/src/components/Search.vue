@@ -79,7 +79,9 @@ export default {
       service
         .fetchAddressResults(this.address)
         .then(response => {
-          this.filtedResults(response.features)
+          this.results = response.features.filter(function(result) {
+            return result.properties.country != null
+          })
           this.loading = false
           this.setResults(this.results)
           this.setDidSearch(true)
@@ -91,11 +93,6 @@ export default {
               : 'Sökningen gav inga träffar'
         })
         .catch(function() {})
-    },
-    filteredResults(results) {
-      this.results = results.filter(function(result) {
-        return result.properties.country != null
-      })
     },
   },
 }
