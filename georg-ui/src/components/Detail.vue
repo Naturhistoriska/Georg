@@ -95,6 +95,35 @@
         >
           <v-icon>mdi-open-in-new</v-icon>
         </v-btn>
+        <v-btn v-else icon @click="openOrCloseGbifData">
+          <v-icon>{{ btnIcon }}</v-icon>
+        </v-btn>
+      </v-list-item>
+      <v-list-item v-if="displayGbifData">
+        <v-list-item-icon>
+          <v-icon color="blue darken-2"></v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>{{ occurrenceDataset }}</v-list-item-title>
+          <v-list-item-subtitle>{{
+            gbifOccurrenceDataset
+          }}</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-btn icon :href="dataSetUrl" target="_blank" id="wofLink">
+          <v-icon>mdi-open-in-new</v-icon>
+        </v-btn>
+      </v-list-item>
+      <v-list-item v-if="displayGbifData">
+        <v-list-item-icon>
+          <v-icon color="blue darken-2"></v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>{{ occurrenceData }}</v-list-item-title>
+          <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
+        </v-list-item-content>
+        <!-- <v-btn icon :href="dataSetUrl" target="_blank" id="wofLink">
+          <v-icon>mdi-open-in-new</v-icon>
+        </v-btn> -->
       </v-list-item>
     </v-list>
 
@@ -162,9 +191,18 @@ export default {
   name: 'Detail',
   data() {
     return {
+      accuracy: null,
+      btnIcon: 'mdi-chevron-down',
       dataFromSource: '',
+      dataSetUrl: 'https://www.gbif.org/dataset/',
       disableSetUncertaintyBtn: true,
+      displayGbifData: false,
       dividerInset: true,
+      msgClass: 'grey--text',
+      occurrenceDataset: '',
+      occurrenceData: '',
+      gbifOccurrenceDataset: 'GBIF Occurrence dataset',
+      gbifNhrsDatasetKey: '9940af5a-3271-4e6a-ad71-ced986b9a9a5',
       source: '',
       tags: [
         { label: '100 m', value: 100 },
@@ -173,14 +211,18 @@ export default {
         { label: '100 km', value: 100000 },
       ],
       uncertintyChangedByChip: false,
-      accuracy: null,
-      msgClass: 'grey--text',
     }
   },
   mounted() {
     if (this.selectedResult.properties.source === 'gbif') {
       this.dataFromSource = this.selectedResult.properties.source.toUpperCase()
       this.source = this.dataFromSource
+      this.occurrenceData = this.selectedResult.properties.addendum.gbif.occurrenceID
+      this.occurrenceDataset = this.selectedResult.properties.layer.toUpperCase()
+      this.dataSetUrl =
+        this.selectedResult.properties.layer === 'nrm:nhrs'
+          ? `https://www.gbif.org/dataset/${this.gbifNhrsDatasetKey}`
+          : ''
     } else {
       this.dataFromSource = "Who's On First (WOF)"
       this.source = "Who's On First"
@@ -289,6 +331,13 @@ export default {
       } else if (this.accuracy < 0) {
         this.accuracy = 0
       }
+    },
+    openOrCloseGbifData() {
+      event.preventDefault()
+      this.displayGbifData = !this.displayGbifData
+      this.btnIcon = this.displayGbifData
+        ? 'mdi-chevron-up'
+        : 'mdi-chevron-down'
     },
     trancatedValue: function(value) {
       return value > 0 ? Math.floor(value) : Math.ceil(value)
