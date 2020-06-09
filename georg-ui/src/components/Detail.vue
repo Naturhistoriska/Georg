@@ -288,13 +288,13 @@ export default {
     sweref99: function() {
       let result = proj4(wgs84, sweref99, [22.390137, 57.712951])
       return (
-        this.trancatedValue(result[1]) + ' ' + this.trancatedValue(result[0])
+        this.truncatedValue(result[1]) + ' ' + this.truncatedValue(result[0])
       )
     },
     rt90: function() {
       let result = proj4(wgs84, rt90, [22.390137, 57.712951])
       return (
-        this.trancatedValue(result[1]) + ' ' + this.trancatedValue(result[0])
+        this.truncatedValue(result[1]) + ' ' + this.truncatedValue(result[0])
       )
     },
     isNewMarker: function() {
@@ -345,7 +345,7 @@ export default {
         ? 'mdi-chevron-up'
         : 'mdi-chevron-down'
     },
-    trancatedValue: function(value) {
+    truncatedValue: function(value) {
       return value > 0 ? Math.floor(value) : Math.ceil(value)
     },
   },
