@@ -30,6 +30,13 @@
       <v-list-item>
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
+          <v-list-item-title>{{ latLonDdm }}</v-list-item-title>
+          <v-list-item-subtitle>WGS84 DDM</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-action></v-list-item-action>
+        <v-list-item-content>
           <v-list-item-title>{{ latLon }}</v-list-item-title>
           <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
         </v-list-item-content>
@@ -207,13 +214,28 @@ export default {
     latLonDms: function() {
       let latDms = converter.latlon(
         this.selectedResult.geometry.coordinates[1],
-        'lat'
+        'lat',
+        false
       )
       let lonDms = converter.latlon(
         this.selectedResult.geometry.coordinates[0],
-        'lon'
+        'lon',
+        false
       )
       return latDms + ' ' + lonDms
+    },
+    latLonDdm: function() {
+      let latDdm = converter.latlon(
+        this.selectedResult.geometry.coordinates[1],
+        'lat',
+        true
+      )
+      let lonDdm = converter.latlon(
+        this.selectedResult.geometry.coordinates[0],
+        'lon',
+        true
+      )
+      return latDdm + ' ' + lonDdm
     },
     sweref99: function() {
       let result = proj4(wgs84, sweref99, [22.390137, 57.712951])
