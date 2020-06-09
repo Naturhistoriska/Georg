@@ -34,6 +34,20 @@
           <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
+      <v-list-item>
+        <v-list-item-action></v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>{{ rt90 }}</v-list-item-title>
+          <v-list-item-subtitle>RT90</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-action></v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>{{ sweref99 }}</v-list-item-title>
+          <v-list-item-subtitle>SWEREF99</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
       <v-divider
         v-bind:class="{ 'mx-4': isNewMarker }"
         :inset="!isNewMarker"
@@ -123,7 +137,20 @@
 
 <script>
 import * as converter from '../assets/js/latlonConverter.js'
+import proj4 from 'proj4'
 import { mapGetters, mapMutations } from 'vuex'
+
+// RT90  -- 3021
+// SWEREF99 -- 3006
+// https://epsg.io/
+// https://www.spatialreference.org/ref/epsg/3021/
+const wgs84 =
+  '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
+const rt90 =
+  '+title=RT90 +proj=tmerc +lat_0=0 +lon_0=15.80827777777778 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +units=m +no_defs'
+const sweref99 =
+  '+title=SWEREF99 TM +proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+
 export default {
   name: 'Detail',
   data() {
@@ -188,6 +215,18 @@ export default {
       )
       return latDms + ' ' + lonDms
     },
+    sweref99: function() {
+      let result = proj4(wgs84, sweref99, [22.390137, 57.712951])
+      return (
+        this.trancatedValue(result[1]) + ' ' + this.trancatedValue(result[0])
+      )
+    },
+    rt90: function() {
+      let result = proj4(wgs84, rt90, [22.390137, 57.712951])
+      return (
+        this.trancatedValue(result[1]) + ' ' + this.trancatedValue(result[0])
+      )
+    },
     isNewMarker: function() {
       return this.selectedResult.properties.id === 'newMarker'
     },
@@ -228,6 +267,9 @@ export default {
       } else if (this.accuracy < 0) {
         this.accuracy = 0
       }
+    },
+    trancatedValue: function(value) {
+      return value > 0 ? Math.floor(value) : Math.ceil(value)
     },
   },
 }
