@@ -103,10 +103,14 @@ export default {
   mounted() {
     this.bounds = initialBound
 
+    if (this.detailView) {
+      this.buildDetailMarker()
+    }
+
     this.$nextTick(() => {
       this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
       this.$refs.myMap.mapObject.invalidateSize()
-      this.buildMarkers()
+      // this.buildMarkers()
     })
   },
   computed: {
