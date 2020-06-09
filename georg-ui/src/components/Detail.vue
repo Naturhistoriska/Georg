@@ -109,7 +109,13 @@
             gbifOccurrenceDataset
           }}</v-list-item-subtitle>
         </v-list-item-content>
-        <v-btn icon :href="dataSetUrl" target="_blank" id="wofLink">
+        <v-btn
+          icon
+          :href="dataSetUrl"
+          target="_blank"
+          id="wofLink"
+          v-if="dataSetUrl != ''"
+        >
           <v-icon>mdi-open-in-new</v-icon>
         </v-btn>
       </v-list-item>
