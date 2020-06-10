@@ -27,9 +27,12 @@ public class Main {
     // SWEREF99 -- 3006
     
     // https://epsg.io/
-    // https://www.spatialreference.org/ref/epsg/3021/
-    
-    
+    // https://www.spatialreference.org/ref/epsg/3021/ 
+    // https://www.lantmateriet.se/sv/Sjalvservice/koordinattransformation/
+
+
+
+
     
 //    CRSFactory factory = new CRSFactory(); 
 //    CoordinateReferenceSystem srcCrs = factory.createFromName("EPSG:4326");
