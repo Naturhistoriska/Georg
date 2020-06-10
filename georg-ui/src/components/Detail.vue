@@ -182,10 +182,6 @@ import * as converter from '../assets/js/latlonConverter.js'
 import proj4 from 'proj4'
 import { mapGetters, mapMutations } from 'vuex'
 
-// RT90  -- 3021
-// SWEREF99 -- 3006
-// https://epsg.io/
-// https://www.spatialreference.org/ref/epsg/3021/
 const wgs84 =
   '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
 const rt90 =
