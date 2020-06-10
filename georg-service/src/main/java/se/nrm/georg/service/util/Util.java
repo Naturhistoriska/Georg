@@ -14,6 +14,8 @@ public class Util {
   private final String pointLat = "point.lat=";
   private final String pointLon = "point.lon=";
   private final String and = "&";
+  private final String autoComplete = "autocomplete?text=";
+  private final String sizeKey = "size=";
   private StringBuilder sb; 
   
   private static Util instance = null;
@@ -25,6 +27,16 @@ public class Util {
       }
     }
     return instance;
+  }
+  
+  public String bunildAutoCompleteSearchPath(String peliasPath, String text, int size) {
+    sb = new StringBuilder();
+    sb.append(peliasPath);
+    sb.append(autoComplete);
+    sb.append(text);
+    sb.append(sizeKey); 
+    sb.append(size == 0 ? 10 : size);
+    return sb.toString().trim();
   }
   
   public void buildGeoCodePath(String peliasPath, String address) { 
@@ -62,5 +74,5 @@ public class Util {
     sb.append(pointLat);
     sb.append(lat);
     return sb.toString().trim();
-  }
+  } 
 }
