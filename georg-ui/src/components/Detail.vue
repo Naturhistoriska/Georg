@@ -30,8 +30,29 @@
       <v-list-item>
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
+          <v-list-item-title>{{ latLonDdm }}</v-list-item-title>
+          <v-list-item-subtitle>WGS84 DDM</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-action></v-list-item-action>
+        <v-list-item-content>
           <v-list-item-title>{{ latLon }}</v-list-item-title>
           <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-action></v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>{{ rt90 }}</v-list-item-title>
+          <v-list-item-subtitle>RT90</v-list-item-subtitle>
+        </v-list-item-content>
+      </v-list-item>
+      <v-list-item>
+        <v-list-item-action></v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title>{{ sweref99 }}</v-list-item-title>
+          <v-list-item-subtitle>SWEREF99</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-divider
@@ -74,6 +95,41 @@
         >
           <v-icon>mdi-open-in-new</v-icon>
         </v-btn>
+        <v-btn v-else icon @click="openOrCloseGbifData">
+          <v-icon>{{ btnIcon }}</v-icon>
+        </v-btn>
+      </v-list-item>
+      <v-list-item v-if="displayGbifData">
+        <v-list-item-icon>
+          <v-icon color="blue darken-2"></v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>{{ occurrenceDataset }}</v-list-item-title>
+          <v-list-item-subtitle>{{
+            gbifOccurrenceDataset
+          }}</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-btn
+          icon
+          :href="dataSetUrl"
+          target="_blank"
+          id="wofLink"
+          v-if="dataSetUrl != ''"
+        >
+          <v-icon>mdi-open-in-new</v-icon>
+        </v-btn>
+      </v-list-item>
+      <v-list-item v-if="displayGbifData">
+        <v-list-item-icon>
+          <v-icon color="blue darken-2"></v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>{{ occurrenceData }}</v-list-item-title>
+          <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
+        </v-list-item-content>
+        <!-- <v-btn icon :href="dataSetUrl" target="_blank" id="wofLink">
+          <v-icon>mdi-open-in-new</v-icon>
+        </v-btn> -->
       </v-list-item>
     </v-list>
 
@@ -123,14 +179,36 @@
 
 <script>
 import * as converter from '../assets/js/latlonConverter.js'
+import proj4 from 'proj4'
 import { mapGetters, mapMutations } from 'vuex'
+
+// RT90  -- 3021
+// SWEREF99 -- 3006
+// https://epsg.io/
+// https://www.spatialreference.org/ref/epsg/3021/
+const wgs84 =
+  '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
+const rt90 =
+  '+title=RT90 +proj=tmerc +lat_0=0 +lon_0=15.80827777777778 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +units=m +no_defs'
+const sweref99 =
+  '+title=SWEREF99 TM +proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+
 export default {
   name: 'Detail',
   data() {
     return {
+      accuracy: null,
+      btnIcon: 'mdi-chevron-down',
       dataFromSource: '',
+      dataSetUrl: 'https://www.gbif.org/dataset/',
       disableSetUncertaintyBtn: true,
+      displayGbifData: false,
       dividerInset: true,
+      msgClass: 'grey--text',
+      occurrenceDataset: '',
+      occurrenceData: '',
+      gbifOccurrenceDataset: 'GBIF Occurrence dataset',
+      gbifNhrsDatasetKey: '9940af5a-3271-4e6a-ad71-ced986b9a9a5',
       source: '',
       tags: [
         { label: '100 m', value: 100 },
@@ -139,14 +217,18 @@ export default {
         { label: '100 km', value: 100000 },
       ],
       uncertintyChangedByChip: false,
-      accuracy: null,
-      msgClass: 'grey--text',
     }
   },
   mounted() {
     if (this.selectedResult.properties.source === 'gbif') {
       this.dataFromSource = this.selectedResult.properties.source.toUpperCase()
       this.source = this.dataFromSource
+      this.occurrenceData = this.selectedResult.properties.addendum.gbif.occurrenceID
+      this.occurrenceDataset = this.selectedResult.properties.layer.toUpperCase()
+      this.dataSetUrl =
+        this.selectedResult.properties.layer === 'nrm:nhrs'
+          ? `https://www.gbif.org/dataset/${this.gbifNhrsDatasetKey}`
+          : ''
     } else {
       this.dataFromSource = "Who's On First (WOF)"
       this.source = "Who's On First"
@@ -180,13 +262,40 @@ export default {
     latLonDms: function() {
       let latDms = converter.latlon(
         this.selectedResult.geometry.coordinates[1],
-        'lat'
+        'lat',
+        false
       )
       let lonDms = converter.latlon(
         this.selectedResult.geometry.coordinates[0],
-        'lon'
+        'lon',
+        false
       )
       return latDms + ' ' + lonDms
+    },
+    latLonDdm: function() {
+      let latDdm = converter.latlon(
+        this.selectedResult.geometry.coordinates[1],
+        'lat',
+        true
+      )
+      let lonDdm = converter.latlon(
+        this.selectedResult.geometry.coordinates[0],
+        'lon',
+        true
+      )
+      return latDdm + ' ' + lonDdm
+    },
+    sweref99: function() {
+      let result = proj4(wgs84, sweref99, [22.390137, 57.712951])
+      return (
+        this.truncatedValue(result[1]) + ' ' + this.truncatedValue(result[0])
+      )
+    },
+    rt90: function() {
+      let result = proj4(wgs84, rt90, [22.390137, 57.712951])
+      return (
+        this.truncatedValue(result[1]) + ' ' + this.truncatedValue(result[0])
+      )
     },
     isNewMarker: function() {
       return this.selectedResult.properties.id === 'newMarker'
@@ -228,6 +337,16 @@ export default {
       } else if (this.accuracy < 0) {
         this.accuracy = 0
       }
+    },
+    openOrCloseGbifData() {
+      event.preventDefault()
+      this.displayGbifData = !this.displayGbifData
+      this.btnIcon = this.displayGbifData
+        ? 'mdi-chevron-up'
+        : 'mdi-chevron-down'
+    },
+    truncatedValue: function(value) {
+      return value > 0 ? Math.floor(value) : Math.ceil(value)
     },
   },
 }

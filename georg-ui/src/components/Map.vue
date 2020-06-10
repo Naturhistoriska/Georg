@@ -95,7 +95,6 @@ export default {
         zoomControl: true,
         zoomControlPosition: 'topright',
       },
-      // markers: [],
       rezoom: true,
       zoom: 0,
     }
@@ -103,11 +102,31 @@ export default {
   mounted() {
     this.bounds = initialBound
 
+    if (this.detailView) {
+      this.buildDetailMarker()
+    }
+
     this.$nextTick(() => {
       this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
       this.$refs.myMap.mapObject.invalidateSize()
-      this.buildMarkers()
+      // this.buildMarkers()
     })
+
+    L.control
+      .scale({
+        position: 'bottomleft',
+        maxWidth: 100,
+        metric: true,
+        imperial: false,
+      })
+      .addTo(this.$refs.myMap.mapObject)
+
+    this.$refs.myMap.mapObject.invalidateSize()
+    // x=-128.455, y=51.61, ratio=FALSE, relwidth=0.2
+    // L.control
+    //   .scale({ position: 'bottomleft' })
+    //   .addTo(this.$refs.myMap.mapObject)
+    // this.$refs.myMap.mapObject.invalidateSize()
   },
   computed: {
     ...mapGetters([
@@ -400,4 +419,8 @@ export default {
       11 32,
     auto;
 }
+
+/* .leaflet-left .leaflet-control-scale {
+  left: 200;
+} */
 </style>

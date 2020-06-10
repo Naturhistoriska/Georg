@@ -46,9 +46,10 @@ public class GeoCoding implements Serializable {
      
     Response response = target.request(MediaType.APPLICATION_JSON).get();
     String jsonString = response.readEntity(String.class);   
+    
     return jsonString;
   }
-  
+   
   public String getReverseGeoCode(double lat, double lon) {  
 
     client = ClientBuilder.newClient(); 
