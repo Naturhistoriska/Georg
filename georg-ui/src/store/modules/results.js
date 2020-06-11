@@ -2,8 +2,8 @@ const state = {
   displayMessage: false,
   isDetailView: false,
   didSearch: false,
-  hovedResultId: '',
-  unhovedResultId: '',
+  hoveredResultId: '',
+  unhoveredResultId: '',
   results: [],
   selectedResult: {},
   selectedResultId: '',
@@ -16,8 +16,8 @@ const getters = {
   detailView: state => state.isDetailView,
   didSearch: state => state.didSearch,
   displayMessage: state => state.didSearch,
-  hovedResultId: state => state.hovedResultId,
-  unhovedResultId: state => state.unhovedResultId,
+  hoveredResultId: state => state.hoveredResultId,
+  unhoveredResultId: state => state.unhoveredResultId,
   selectedResult: state => state.selectedResult,
   results: state => state.results,
   selectedResultId: state => state.selectedResultId,
@@ -30,8 +30,9 @@ const getters = {
 const actions = {}
 const mutations = {
   setDidSearch: (state, payload) => (state.didSearch = payload),
-  setHovedResultId: (state, payload) => (state.hovedResultId = payload),
-  setMouseLeaveResultId: (state, payload) => (state.unhovedResultId = payload),
+  setHovedResultId: (state, payload) => (state.hoveredResultId = payload),
+  setMouseLeaveResultId: (state, payload) =>
+    (state.unhoveredResultId = payload),
   setResults: (state, payload) => (state.results = payload),
   setSelectedResult: (state, payload) => (state.selectedResult = payload),
   setSelectedResultId: (state, payload) => (state.selectedResultId = payload),

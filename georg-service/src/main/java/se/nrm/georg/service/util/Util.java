@@ -16,6 +16,7 @@ public class Util {
   private final String and = "&";
   private final String autoComplete = "autocomplete?text=";
   private final String sizeKey = "size=";
+  private final String wildCard = "*";
   private StringBuilder sb; 
   
   private static Util instance = null;
@@ -43,7 +44,8 @@ public class Util {
     sb = new StringBuilder();
     sb.append(peliasPath);
     sb.append(searchGeoCode);
-    sb.append(address);  
+    sb.append(address); 
+    sb.append(wildCard);
   }
   
   public String buildGeoCodePath(String peliasPath, String address, String source, String layer, int size) {

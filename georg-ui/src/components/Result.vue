@@ -9,10 +9,10 @@
     <template v-if="!isNewMarker">
       <v-list-item-content @click.prevent="onclick()">
         <v-list-item-title
-          v-bind:class="{ 'blue--text text--darken-2': isActive }"
+          v-bind:class="{ 'blue--text text--darken-2': isActive || isHovered }"
           >{{ name }}</v-list-item-title
         >
-        <v-list-item-subtitle id="resultContent" class="text--primary">
+        <v-list-item-subtitle class="text--primary">
           {{ result.properties.county }}
           {{ result.properties.region }}
           {{ result.properties.country }}
@@ -26,7 +26,10 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
-        <v-icon v-if="!isActive" color="grey lighten-1" id="inActiveMarkerIcon"
+        <v-icon
+          v-if="!isActive && !isHovered"
+          color="grey lighten-1"
+          id="inActiveMarkerIcon"
           >mdi-map-marker</v-icon
         >
         <v-icon v-else color="primary" id="activeMarkerIcon"
@@ -70,9 +73,12 @@ export default {
 
   computed: {
     // a computed getter
-    ...mapGetters(['selectedResultId']),
+    ...mapGetters(['hoveredResultId', 'selectedResultId']),
     isActive: function() {
       return this.result.properties.id === this.selectedResultId
+    },
+    isHovered: function() {
+      return this.result.properties.id === this.hoveredResultId
     },
     isNewMarker: function() {
       return this.result.properties.id === 'newMarker'
