@@ -133,8 +133,8 @@ export default {
       'detailView',
       'didSearch',
       'results',
-      'hovedResultId',
-      'unhovedResultId',
+      'hoveredResultId',
+      'unhoveredResultId',
       'selectedResult',
       'selectedResultId',
       'uncertainty',
@@ -162,7 +162,7 @@ export default {
         }
       })
     },
-    hovedResultId() {
+    hoveredResultId() {
       this.$nextTick(() => {
         this.highlightMarker()
       })
@@ -297,7 +297,7 @@ export default {
           icon = MAP_ICONS.redIcon
         } else if (
           result.properties.id === this.selectedResultId ||
-          result.properties.id === this.hovedResultId
+          result.properties.id === this.hoveredResultId
         ) {
           icon = MAP_ICONS.blueIcon
         } else {
@@ -305,7 +305,7 @@ export default {
         }
 
         let theMarker
-        if (result.properties.id === this.hovedResultId) {
+        if (result.properties.id === this.hoveredResultId) {
           theMarker = L.marker([lat, lon], {
             pane: 'topMarker',
             icon,

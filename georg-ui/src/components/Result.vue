@@ -73,12 +73,12 @@ export default {
 
   computed: {
     // a computed getter
-    ...mapGetters(['hovedResultId', 'selectedResultId']),
+    ...mapGetters(['hoveredResultId', 'selectedResultId']),
     isActive: function() {
       return this.result.properties.id === this.selectedResultId
     },
     isHovered: function() {
-      return this.result.properties.id === this.hovedResultId
+      return this.result.properties.id === this.hoveredResultId
     },
     isNewMarker: function() {
       return this.result.properties.id === 'newMarker'
