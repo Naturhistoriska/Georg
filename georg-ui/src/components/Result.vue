@@ -12,7 +12,7 @@
           v-bind:class="{ 'blue--text text--darken-2': isActive || isHovered }"
           >{{ name }}</v-list-item-title
         >
-        <v-list-item-subtitle id="resultContent" class="text--primary">
+        <v-list-item-subtitle class="text--primary">
           {{ result.properties.county }}
           {{ result.properties.region }}
           {{ result.properties.country }}
