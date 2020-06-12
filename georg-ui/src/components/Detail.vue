@@ -2,13 +2,13 @@
   <v-card class="mt-2" width="400" id="v-card-detail">
     <v-card-title :class="nameColor">{{ name }}</v-card-title>
 
-    <v-card-subtitle v-if="!isNewMarker && isGbif">
-      {{ selectedResult.properties.name }}
-    </v-card-subtitle>
+    <v-card-subtitle v-if="!isNewMarker && isGbif">{{
+      selectedResult.properties.name
+    }}</v-card-subtitle>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
-      <strong class="text-capitalize">{{
-        selectedResult.properties.layer
-      }}</strong>
+      <strong class="text-capitalize">
+        {{ selectedResult.properties.layer }}
+      </strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-text v-else-if="!isNewMarker">
@@ -105,9 +105,9 @@
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>{{ occurrenceDataset }}</v-list-item-title>
-          <v-list-item-subtitle>{{
-            gbifOccurrenceDataset
-          }}</v-list-item-subtitle>
+          <v-list-item-subtitle>
+            {{ gbifOccurrenceDataset }}
+          </v-list-item-subtitle>
         </v-list-item-content>
         <v-btn
           icon
@@ -129,7 +129,7 @@
         </v-list-item-content>
         <!-- <v-btn icon :href="dataSetUrl" target="_blank" id="wofLink">
           <v-icon>mdi-open-in-new</v-icon>
-        </v-btn> -->
+        </v-btn>-->
       </v-list-item>
     </v-list>
 
