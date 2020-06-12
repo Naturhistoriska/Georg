@@ -111,7 +111,7 @@
         </v-list-item-content>
         <v-btn
           icon
-          :href="dataSetUrl"
+          :href="datasetUrl"
           target="_blank"
           id="wofLink"
           v-if="dataSetUrl != ''"
@@ -189,6 +189,11 @@ const rt90 =
 const sweref99 =
   '+title=SWEREF99 TM +proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
 
+const nhrsNrmKey = process.env.VUE_APP_NHRS_NRM_KEY
+const sFboKey = process.env.VUE_APP_S_FBO_KEY
+const upplasaBotanyKey = process.env.VUE_APP_UPPSALA_BOTANY_KEY
+const gbifDatasetUrl = process.env.VUE_APP_GBIF_DATASET
+
 export default {
   name: 'Detail',
   data() {
@@ -196,7 +201,8 @@ export default {
       accuracy: null,
       btnIcon: 'mdi-chevron-down',
       dataFromSource: '',
-      dataSetUrl: 'https://www.gbif.org/dataset/',
+      datesetKey: '',
+      datasetUrl: '',
       disableSetUncertaintyBtn: true,
       displayGbifData: false,
       dividerInset: true,
@@ -204,7 +210,6 @@ export default {
       occurrenceDataset: '',
       occurrenceData: '',
       gbifOccurrenceDataset: 'GBIF Occurrence dataset',
-      gbifNhrsDatasetKey: '9940af5a-3271-4e6a-ad71-ced986b9a9a5',
       source: '',
       tags: [
         { label: '100 m', value: 100 },
@@ -221,10 +226,12 @@ export default {
       this.source = this.dataFromSource
       this.occurrenceData = this.selectedResult.properties.addendum.gbif.occurrenceID
       this.occurrenceDataset = this.selectedResult.properties.layer.toUpperCase()
-      this.dataSetUrl =
+      this.datasetUrl =
         this.selectedResult.properties.layer === 'nhrs-nrm'
-          ? `https://www.gbif.org/dataset/${this.gbifNhrsDatasetKey}`
-          : ''
+          ? `${gbifDatasetUrl}${nhrsNrmKey}`
+          : this.selectedResult.properties.layer === 's-fbo'
+          ? `${gbifDatasetUrl}${sFboKey}`
+          : `${gbifDatasetUrl}${upplasaBotanyKey}`
     } else {
       this.dataFromSource = "Who's On First (WOF)"
       this.source = "Who's On First"
