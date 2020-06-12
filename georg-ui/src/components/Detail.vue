@@ -222,7 +222,7 @@ export default {
       this.occurrenceData = this.selectedResult.properties.addendum.gbif.occurrenceID
       this.occurrenceDataset = this.selectedResult.properties.layer.toUpperCase()
       this.dataSetUrl =
-        this.selectedResult.properties.layer === 'nrm:nhrs'
+        this.selectedResult.properties.layer === 'nhrs-nrm'
           ? `https://www.gbif.org/dataset/${this.gbifNhrsDatasetKey}`
           : ''
     } else {
