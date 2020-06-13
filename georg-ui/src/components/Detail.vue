@@ -104,18 +104,12 @@
           <v-icon color="blue darken-2"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{ occurrenceDataset }}</v-list-item-title>
-          <v-list-item-subtitle>
-            {{ gbifOccurrenceDataset }}
-          </v-list-item-subtitle>
+          <v-list-item-title>{{
+            this.selectedResult.properties.layer.toUpperCase()
+          }}</v-list-item-title>
+          <v-list-item-subtitle>GBIF Occurrence dataset</v-list-item-subtitle>
         </v-list-item-content>
-        <v-btn
-          icon
-          :href="datasetUrl"
-          target="_blank"
-          id="wofLink"
-          v-if="dataSetUrl != ''"
-        >
+        <v-btn icon :href="datasetUrl" target="_blank" id="gbifDataSetLink">
           <v-icon>mdi-open-in-new</v-icon>
         </v-btn>
       </v-list-item>
@@ -124,12 +118,19 @@
           <v-icon color="blue darken-2"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{ occurrenceData }}</v-list-item-title>
+          <v-list-item-title>{{
+            this.selectedResult.properties.addendum.gbif.occurrenceID
+          }}</v-list-item-title>
           <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
         </v-list-item-content>
-        <!-- <v-btn icon :href="dataSetUrl" target="_blank" id="wofLink">
+        <v-btn
+          icon
+          :href="occurrenceUrl"
+          target="_blank"
+          id="gbifOccurrenceLink"
+        >
           <v-icon>mdi-open-in-new</v-icon>
-        </v-btn>-->
+        </v-btn>
       </v-list-item>
     </v-list>
 
@@ -181,6 +182,9 @@
 import * as converter from '../assets/js/latlonConverter.js'
 import proj4 from 'proj4'
 import { mapGetters, mapMutations } from 'vuex'
+import Service from '../Service'
+
+const service = new Service()
 
 const wgs84 =
   '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
@@ -193,6 +197,7 @@ const nhrsNrmKey = process.env.VUE_APP_NHRS_NRM_KEY
 const sFboKey = process.env.VUE_APP_S_FBO_KEY
 const upplasaBotanyKey = process.env.VUE_APP_UPPSALA_BOTANY_KEY
 const gbifDatasetUrl = process.env.VUE_APP_GBIF_DATASET
+const gbifApi = process.env.VUE_APP_GBIF_API
 
 export default {
   name: 'Detail',
@@ -200,17 +205,11 @@ export default {
     return {
       accuracy: null,
       btnIcon: 'mdi-chevron-down',
-      dataFromSource: '',
-      datesetKey: '',
-      datasetUrl: '',
       disableSetUncertaintyBtn: true,
       displayGbifData: false,
       dividerInset: true,
       msgClass: 'grey--text',
-      occurrenceDataset: '',
-      occurrenceData: '',
-      gbifOccurrenceDataset: 'GBIF Occurrence dataset',
-      source: '',
+      occurrenceUrl: '',
       tags: [
         { label: '100 m', value: 100 },
         { label: '1 km', value: 1000 },
@@ -221,21 +220,6 @@ export default {
     }
   },
   mounted() {
-    if (this.selectedResult.properties.source === 'gbif') {
-      this.dataFromSource = this.selectedResult.properties.source.toUpperCase()
-      this.source = this.dataFromSource
-      this.occurrenceData = this.selectedResult.properties.addendum.gbif.occurrenceID
-      this.occurrenceDataset = this.selectedResult.properties.layer.toUpperCase()
-      this.datasetUrl =
-        this.selectedResult.properties.layer === 'nhrs-nrm'
-          ? `${gbifDatasetUrl}${nhrsNrmKey}`
-          : this.selectedResult.properties.layer === 's-fbo'
-          ? `${gbifDatasetUrl}${sFboKey}`
-          : `${gbifDatasetUrl}${upplasaBotanyKey}`
-    } else {
-      this.dataFromSource = "Who's On First (WOF)"
-      this.source = "Who's On First"
-    }
     if (this.uncertainty >= 0) {
       this.accuracy = this.uncertainty
       this.uncertintyChangedByChip = true
@@ -321,6 +305,24 @@ export default {
         ? this.selectedResult.properties.addendum.georg.locationDisplayLabel
         : this.selectedResult.properties.name
     },
+    datasetUrl: function() {
+      let layer = this.selectedResult.properties.layer
+      return layer === 'nhrs-nrm'
+        ? `${gbifDatasetUrl}${nhrsNrmKey}`
+        : layer === 's-fbo'
+        ? `${gbifDatasetUrl}${sFboKey}`
+        : `${gbifDatasetUrl}${upplasaBotanyKey}`
+    },
+    source: function() {
+      const dataSource = this.selectedResult.properties.source
+      return dataSource === 'gbif' ? this.dataFromSource : "Who's On First"
+    },
+    dataFromSource: function() {
+      const dataSource = this.selectedResult.properties.source
+      return dataSource === 'gbif'
+        ? dataSource.toUpperCase()
+        : "Who's On First (WOF)"
+    },
   },
   methods: {
     ...mapMutations(['setUncertainty']),
@@ -347,9 +349,24 @@ export default {
       this.btnIcon = this.displayGbifData
         ? 'mdi-chevron-up'
         : 'mdi-chevron-down'
+
+      if (this.displayGbifData && this.occurrenceUrl === '') {
+        this.getOccurrenceKey()
+      }
     },
     truncatedValue: function(value) {
       return value > 0 ? Math.floor(value) : Math.ceil(value)
+    },
+    getOccurrenceKey() {
+      const dataset = this.selectedResult.properties.layer
+      const occurrenceId = this.selectedResult.properties.addendum.gbif
+        .occurrenceID
+      service
+        .fetchOccurrenceKey(dataset, occurrenceId)
+        .then(response => {
+          this.occurrenceUrl = `${gbifApi}${response}`
+        })
+        .catch(function() {})
     },
   },
 }
