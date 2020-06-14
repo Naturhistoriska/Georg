@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const baseUrl = process.env.VUE_APP_GEORG_API
+const gbifUrl = process.env.VUE_APP_GBIF_OCCURRENCE
 
 export default class Service {
   async fetchAddressResults(address) {
@@ -11,7 +12,7 @@ export default class Service {
   }
 
   async fetchOccurrenceKey(dataset, occurrenceId) {
-    const url = `${baseUrl}occurancekey?dataset=${dataset}&occurrenceid=${occurrenceId}`
+    const url = `${gbifUrl}search?datesetKey=${dataset}&occurrenceID=${occurrenceId}`
     const response = await axios.get(url)
     return response.data
   }

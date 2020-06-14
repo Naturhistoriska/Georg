@@ -2,13 +2,13 @@
   <v-card class="mt-2" width="400" id="v-card-detail">
     <v-card-title :class="nameColor">{{ name }}</v-card-title>
 
-    <v-card-subtitle v-if="!isNewMarker && isGbif">{{
-      selectedResult.properties.name
-    }}</v-card-subtitle>
+    <v-card-subtitle v-if="!isNewMarker && isGbif">
+      {{ selectedResult.properties.name }}
+    </v-card-subtitle>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
-      <strong class="text-capitalize">
-        {{ selectedResult.properties.layer }}
-      </strong>
+      <strong class="text-capitalize">{{
+        selectedResult.properties.layer
+      }}</strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-text v-else-if="!isNewMarker">
@@ -104,9 +104,9 @@
           <v-icon color="blue darken-2"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{
-            this.selectedResult.properties.layer.toUpperCase()
-          }}</v-list-item-title>
+          <v-list-item-title>
+            {{ this.selectedResult.properties.layer.toUpperCase() }}
+          </v-list-item-title>
           <v-list-item-subtitle>GBIF Occurrence dataset</v-list-item-subtitle>
         </v-list-item-content>
         <v-btn icon :href="datasetUrl" target="_blank" id="gbifDataSetLink">
@@ -118,9 +118,9 @@
           <v-icon color="blue darken-2"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{
-            this.selectedResult.properties.addendum.gbif.occurrenceID
-          }}</v-list-item-title>
+          <v-list-item-title>
+            {{ this.selectedResult.properties.addendum.gbif.occurrenceID }}
+          </v-list-item-title>
           <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
         </v-list-item-content>
         <v-btn
@@ -364,7 +364,7 @@ export default {
       service
         .fetchOccurrenceKey(dataset, occurrenceId)
         .then(response => {
-          this.occurrenceUrl = `${gbifApi}${response}`
+          this.occurrenceUrl = `${gbifApi}${response.results[0].key}`
         })
         .catch(function() {})
     },
