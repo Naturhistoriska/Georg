@@ -12,8 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import lombok.extern.slf4j.Slf4j;
-import se.nrm.georg.service.logic.GeoCoding;
+import lombok.extern.slf4j.Slf4j; 
 import se.nrm.georg.service.logic.GeorgLogic;
 
 /**
@@ -33,40 +32,40 @@ import se.nrm.georg.service.logic.GeorgLogic;
 @Produces(MediaType.APPLICATION_JSON)
 @Slf4j
 public class GeorgAPI {
-
-  @Inject
-  private GeoCoding geoCoding;
+ 
   @Inject
   private GeorgLogic logic;
 
   @GET
   @Path("/geoCoding")
   @ApiOperation(value = "Get geocoding",
-          notes = "Returns status",
+          notes = "Return search results in json", 
           response = String.class
   )
   @Produces(MediaType.APPLICATION_JSON)
-  public Response getGeoCode(@QueryParam("address") String address, @QueryParam("source") String source, 
-          @QueryParam("layer") String layer, @QueryParam("size") int size) {
+  public Response getGeoCode(@QueryParam("address") String address,  
+          @QueryParam("source") String source,  @QueryParam("layer") String layer, 
+          @QueryParam("size") int size) {
     log.info("getGeoCode: {}, {}", address, source);
 
-    return Response.ok(geoCoding.getGeoCode(address, source, layer, size)).build();
+    return Response.ok(logic.searchAddress(address, source, layer, size)).build();
   }
   
   
   @GET
-  @Path("/autocomplete")
-  @ApiOperation(value = "Get geocoding",
-          notes = "Returns status",
+  @Path("/search")
+  @ApiOperation(value = "Search",
+          notes = "Return search results in json",
           response = String.class
   )
   @Produces(MediaType.APPLICATION_JSON)
-  public Response autocomplete(@QueryParam("text") String text, @QueryParam("size") int size) {
-    log.info("autocomplete: {}, {}", text, size);
+  public Response search(@QueryParam("text") String text, @QueryParam("sources") String sources, 
+          @QueryParam("layers") String layers, @QueryParam("size") int size) {
+    log.info("search: {}, {}", text, size);
 
-    return Response.ok(logic.runAutocompleteSearch(text, size)).build();
-  }
-
+    return Response.ok(logic.runAutocompleteSearch(text, sources, layers, size)).build();
+  } 
+   
   @GET
   @Path("/reverse")
   @ApiOperation(value = "Get reverse geocoding",
@@ -78,6 +77,6 @@ public class GeorgAPI {
           @QueryParam("lng") double lon) {
     log.info("getReverseGeoCode: {}, {}", lat, lon);
 
-    return Response.ok(geoCoding.getReverseGeoCode(lat, lon)).build();
+    return Response.ok(logic.reverseSearch(lat, lon)).build();
   }
 }

@@ -12,8 +12,7 @@ import org.junit.runners.Suite;
  * @author idali
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({se.nrm.georg.service.logic.InitialPropertiesTest.class,
-  se.nrm.georg.service.logic.GeoCodingTest.class})
+@Suite.SuiteClasses({se.nrm.georg.service.logic.InitialPropertiesTest.class})
 public class LogicSuite {
 
   @BeforeClass
