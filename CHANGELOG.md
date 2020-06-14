@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## 0.4.0 - yyyy-mm-dd
+## version - yyyy-mm-dd
 
 ### Added
 
@@ -14,12 +14,31 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
+## 0.4.0 - not released yet
+
+### Added
+
+- Search results from two additional GBIF datasets: (1) the botany collection of the Museum of Evolution in Uppsala and (2) the entomological collection at the Swedish Museum of Natural History.
+- Scale bar on map.
+- Simple coordinate transformations.
+– Code for processing GBIF data, wich is kept in a separate repository: https://github.com/naturhistoriska/georg-data
+
+
+### Changed
+
+- Updated information on the about page ("Om Georg").
+– Improved search.
+
+
+### Fixed
+
+
 ## 0.3.0 - unknown
 
 ### Added
 
-- Ability to add uncertainty radius for a custom location.
-- Search results from two GBIF datasets. The first two GBIF datasets used by Georg represents the vascular plant collection and the entomological collection at the Swedish Museum of Natural History.
+- Ability to add uncertainty radius for a custom location ("Din plats").
+- Search results from one GBIF dataset. The first GBIF datasets used by Georg represents the vascular plant collection at the Swedish Museum of Natural History.
 - Version number is visible on the about page ("Om Georg")
 
 
