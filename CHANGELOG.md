@@ -5,13 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased] - yyyy-mm-dd
+## 0.4.0 - yyyy-mm-dd
 
 ### Added
 
 ### Changed
 
 ### Fixed
+
+
+## 0.3.0 - unknown
+
+### Added
+
+- Ability to add uncertainty radius for a custom location.
+- Search results from two GBIF datasets. The first two GBIF datasets used by Georg represents the vascular plant collection and the entomological collection at the Swedish Museum of Natural History.
+- Version number is visible on the about page ("Om Georg")
+
+
+### Fixed
+
+- Coordinates in decimal degrees will be consistently displayed with 6 decimals.
 
 
 ## 0.2.0 - 2020-04-24
