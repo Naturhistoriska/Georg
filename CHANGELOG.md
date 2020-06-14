@@ -18,16 +18,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Search results from two additional GBIF datasets: (1) the botany collection of the Museum of Evolution in Uppsala and (2) the entomological collection at the Swedish Museum of Natural History.
-- Scale bar on map.
-- Simple coordinate transformations.
-– Code for processing GBIF data, wich is kept in a separate repository: https://github.com/naturhistoriska/georg-data
+* Search results from two additional GBIF datasets: (1) the botany collection of the Museum of Evolution in Uppsala and (2) the entomological collection at the Swedish Museum of Natural History.
+* Scale bar on map.
+* Simple coordinate transformations.
+* Code for processing GBIF data, wich is kept in a separate repository: https://github.com/naturhistoriska/georg-data
 
 
 ### Changed
 
-- Updated information on the about page ("Om Georg").
-– Improved search.
+* Updated information on the about page ("Om Georg"). 
+* Improved search.
 
 
 ### Fixed
@@ -37,24 +37,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Ability to add uncertainty radius for a custom location ("Din plats").
-- Search results from one GBIF dataset. The first GBIF datasets used by Georg represents the vascular plant collection at the Swedish Museum of Natural History.
-- Version number is visible on the about page ("Om Georg")
+* Ability to add uncertainty radius for a custom location ("Din plats").
+* Search results from one GBIF dataset. The first GBIF datasets used by Georg represents the vascular plant collection at the Swedish Museum of Natural History.
+* Version number is visible on the about page ("Om Georg")
 
 
 ### Fixed
 
-- Coordinates in decimal degrees will be consistently displayed with 6 decimals.
+* Coordinates in decimal degrees will be consistently displayed with 6 decimals.
 
 
 ## 0.2.0 - 2020-04-24
 
 ### Added
 
-- Ability to view all records in the result list on the map.
-- Ability to add a custom location on the map and view the coordinates for that location.
-- Active record is highlighted on the map (when hovering over the result list or when clicking on a marker icon in the list)
-- A detail view of an individual record in the result list.
+* Ability to view all records in the result list on the map.
+* Ability to add a custom location on the map and view the coordinates for that location.
+* Active record is highlighted on the map (when hovering over the result list or when clicking on a marker icon in the list)
+* A detail view of an individual record in the result list.
 
 
 ## 0.1.0 - 2020-03-31
@@ -63,8 +63,8 @@ Initial release.
 
 ### Added
 
-- Search field for searching on place names.
-- Search results from Pelias based on Who's On First data for Sweden.
-- Maps displayed using the Leaflet library.
-- Result list for displaying up to 10 records with administrative divistion and coordinates.
-- Ability to see one selected record from the result list on the map.
+* Search field for searching on place names.
+* Search results from Pelias based on Who's On First data for Sweden.
+* Maps displayed using the Leaflet library.
+* Result list for displaying up to 10 records with administrative divistion and coordinates.
+* Ability to see one selected record from the result list on the map.
