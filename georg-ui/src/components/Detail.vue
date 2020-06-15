@@ -273,13 +273,19 @@ export default {
       return latDdm + ' ' + lonDdm
     },
     sweref99: function() {
-      let result = proj4(wgs84, sweref99, [22.390137, 57.712951])
+      let result = proj4(wgs84, sweref99, [
+        this.selectedResult.geometry.coordinates[0],
+        this.selectedResult.geometry.coordinates[1],
+      ])
       return (
         this.truncatedValue(result[1]) + ' ' + this.truncatedValue(result[0])
       )
     },
     rt90: function() {
-      let result = proj4(wgs84, rt90, [22.390137, 57.712951])
+      let result = proj4(wgs84, rt90, [
+        this.selectedResult.geometry.coordinates[0],
+        this.selectedResult.geometry.coordinates[1],
+      ])
       return (
         this.truncatedValue(result[1]) + ' ' + this.truncatedValue(result[0])
       )
