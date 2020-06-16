@@ -35,8 +35,7 @@
         <v-icon v-else color="primary" id="activeMarkerIcon"
           >mdi-map-marker</v-icon
         >
-        <v-list-item-action-text v-if="isGbif">GBIF</v-list-item-action-text>
-        <v-list-item-action-text v-else>WOF</v-list-item-action-text>
+        <v-list-item-action-text>{{ sourceAlias }}</v-list-item-action-text>
       </v-list-item-action>
     </template>
     <template v-else>
@@ -99,7 +98,16 @@ export default {
       return this.isActive ? 'selected' : 'unSelected'
     },
     source: function() {
-      return this.isGbif ? this.result.properties.source : "Who's On First"
+      return this.result.properties.source === 'whosonfirst'
+        ? "Who's On First"
+        : 'Virtuella herbariet'
+    },
+    sourceAlias: function() {
+      return this.result.properties.source === 'whosonfirst'
+        ? 'WOF'
+        : this.result.properties.source === 'gbif'
+        ? 'GBIF'
+        : 'SVH'
     },
     isGbif: function() {
       return this.result.properties.source === 'gbif'

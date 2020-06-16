@@ -2,13 +2,13 @@
   <v-card class="mt-2" width="400" id="v-card-detail">
     <v-card-title :class="nameColor">{{ name }}</v-card-title>
 
-    <v-card-subtitle v-if="!isNewMarker && isGbif">
-      {{ selectedResult.properties.name }}
-    </v-card-subtitle>
+    <v-card-subtitle v-if="!isNewMarker && isGbif">{{
+      selectedResult.properties.name
+    }}</v-card-subtitle>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
-      <strong class="text-capitalize">{{
-        selectedResult.properties.layer
-      }}</strong>
+      <strong class="text-capitalize">
+        {{ selectedResult.properties.layer }}
+      </strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-text v-else-if="!isNewMarker">
@@ -89,7 +89,7 @@
         <v-btn
           v-if="!isGbif"
           icon
-          href="https://whosonfirst.org/docs/licenses/"
+          :href="datasourcelink"
           target="_blank"
           id="wofLink"
         >
@@ -116,9 +116,9 @@
           <v-icon color="blue darken-2"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>
-            {{ this.selectedResult.properties.addendum.gbif.occurrenceID }}
-          </v-list-item-title>
+          <v-list-item-title>{{
+            this.selectedResult.properties.addendum.gbif.occurrenceID
+          }}</v-list-item-title>
           <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
         </v-list-item-content>
         <v-btn
@@ -309,18 +309,25 @@ export default {
         : this.selectedResult.properties.name
     },
     datasetUrl: function() {
-      // const key = this.datasetKey()
       return `${gbifDatasetUrl}${this.datasetKey()}`
     },
     source: function() {
-      const dataSource = this.selectedResult.properties.source
-      return dataSource === 'gbif' ? this.dataFromSource : "Who's On First"
+      return this.selectedResult.properties.source === 'whosonfirst'
+        ? "Who's On First"
+        : 'Virtuella Herbariet'
     },
     dataFromSource: function() {
       const dataSource = this.selectedResult.properties.source
       return dataSource === 'gbif'
         ? dataSource.toUpperCase()
-        : "Who's On First (WOF)"
+        : dataSource === 'whosonfirst'
+        ? "Who's On First (WOF)"
+        : 'Virtuella Herbariet (SVH)'
+    },
+    datasourcelink: function() {
+      return this.selectedResult.properties.source === 'whosonfirst'
+        ? 'https://whosonfirst.org/docs/licenses/'
+        : 'https://github.com/mossnisse/Virtuella-Herbariet'
     },
   },
   methods: {
