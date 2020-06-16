@@ -2,13 +2,13 @@
   <v-card class="mt-2" width="400" id="v-card-detail">
     <v-card-title :class="nameColor">{{ name }}</v-card-title>
 
-    <v-card-subtitle v-if="!isNewMarker && isGbif">{{
-      selectedResult.properties.name
-    }}</v-card-subtitle>
+    <v-card-subtitle v-if="!isNewMarker && isGbif">
+      {{ selectedResult.properties.name }}
+    </v-card-subtitle>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
-      <strong class="text-capitalize">
-        {{ selectedResult.properties.layer }}
-      </strong>
+      <strong class="text-capitalize">{{
+        selectedResult.properties.layer
+      }}</strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-text v-else-if="!isNewMarker">
@@ -52,7 +52,7 @@
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>{{ sweref99 }}</v-list-item-title>
-          <v-list-item-subtitle>SWEREF99 MT (nord, öst)</v-list-item-subtitle>
+          <v-list-item-subtitle>SWEREF99 TM (nord, öst)</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-divider
@@ -116,9 +116,9 @@
           <v-icon color="blue darken-2"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{
-            this.selectedResult.properties.addendum.gbif.occurrenceID
-          }}</v-list-item-title>
+          <v-list-item-title>
+            {{ this.selectedResult.properties.addendum.gbif.occurrenceID }}
+          </v-list-item-title>
           <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
         </v-list-item-content>
         <v-btn
