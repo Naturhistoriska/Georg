@@ -9,7 +9,10 @@
     <v-list-item-group id="resultList">
       <template v-for="(result, index) in results">
         <Result v-bind:result="result" :key="result.properties.id" />
-        <v-divider v-if="index + 1 < results.length" :key="index"></v-divider>
+        <v-divider
+          v-if="index + 1 < results.length"
+          :key="'devider-' + index"
+        ></v-divider>
       </template>
     </v-list-item-group>
   </v-list>
@@ -33,7 +36,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['results', 'detailView', 'newMarker']),
+    ...mapGetters(['results']),
   },
 
   methods: {},
