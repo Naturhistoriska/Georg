@@ -2,13 +2,13 @@
   <v-card class="mt-2" width="400" id="v-card-detail">
     <v-card-title :class="nameColor">{{ name }}</v-card-title>
 
-    <v-card-subtitle v-if="!isNewMarker && isGbif">{{
-      selectedResult.properties.name
-    }}</v-card-subtitle>
+    <v-card-subtitle v-if="!isNewMarker && isGbif">
+      {{ selectedResult.properties.name }}
+    </v-card-subtitle>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
-      <strong class="text-capitalize">
-        {{ selectedResult.properties.layer }}
-      </strong>
+      <strong class="text-capitalize">{{
+        selectedResult.properties.layer
+      }}</strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-text v-else-if="!isNewMarker">
@@ -38,21 +38,21 @@
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>{{ latLon }}</v-list-item-title>
-          <v-list-item-subtitle>WGS84 DD</v-list-item-subtitle>
+          <v-list-item-subtitle>WGS84 DD (lat, lon)</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>{{ rt90 }}</v-list-item-title>
-          <v-list-item-subtitle>RT90</v-list-item-subtitle>
+          <v-list-item-subtitle>RT90 (nord, öst)</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-list-item>
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>{{ sweref99 }}</v-list-item-title>
-          <v-list-item-subtitle>SWEREF99</v-list-item-subtitle>
+          <v-list-item-subtitle>SWEREF99 MT (nord, öst)</v-list-item-subtitle>
         </v-list-item-content>
       </v-list-item>
       <v-divider
@@ -104,9 +104,7 @@
           <v-icon color="blue darken-2"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{
-            this.selectedResult.properties.layer.toUpperCase()
-          }}</v-list-item-title>
+          <v-list-item-title>{{ datasetTitle }}</v-list-item-title>
           <v-list-item-subtitle>GBIF Occurrence dataset</v-list-item-subtitle>
         </v-list-item-content>
         <v-btn icon :href="datasetUrl" target="_blank" id="gbifDataSetLink">
@@ -118,9 +116,9 @@
           <v-icon color="blue darken-2"></v-icon>
         </v-list-item-icon>
         <v-list-item-content>
-          <v-list-item-title>{{
-            this.selectedResult.properties.addendum.gbif.occurrenceID
-          }}</v-list-item-title>
+          <v-list-item-title>
+            {{ this.selectedResult.properties.addendum.gbif.occurrenceID }}
+          </v-list-item-title>
           <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
         </v-list-item-content>
         <v-btn
@@ -196,8 +194,9 @@ const sweref99 =
 const nhrsNrmKey = process.env.VUE_APP_NHRS_NRM_KEY
 const sFboKey = process.env.VUE_APP_S_FBO_KEY
 const upplasaBotanyKey = process.env.VUE_APP_UPPSALA_BOTANY_KEY
+
 const gbifDatasetUrl = process.env.VUE_APP_GBIF_DATASET
-const gbifApi = process.env.VUE_APP_GBIF_API
+const gbifOccurrenceUrl = process.env.VUE_APP_GBIF_OCCURRENCE
 
 export default {
   name: 'Detail',
@@ -205,6 +204,7 @@ export default {
     return {
       accuracy: null,
       btnIcon: 'mdi-chevron-down',
+      datasetTitle: '',
       disableSetUncertaintyBtn: true,
       displayGbifData: false,
       dividerInset: true,
@@ -312,12 +312,8 @@ export default {
         : this.selectedResult.properties.name
     },
     datasetUrl: function() {
-      let layer = this.selectedResult.properties.layer
-      return layer === 'nhrs-nrm'
-        ? `${gbifDatasetUrl}${nhrsNrmKey}`
-        : layer === 's-fbo'
-        ? `${gbifDatasetUrl}${sFboKey}`
-        : `${gbifDatasetUrl}${upplasaBotanyKey}`
+      // const key = this.datasetKey()
+      return `${gbifDatasetUrl}${this.datasetKey()}`
     },
     source: function() {
       const dataSource = this.selectedResult.properties.source
@@ -358,6 +354,7 @@ export default {
 
       if (this.displayGbifData && this.occurrenceUrl === '') {
         this.getOccurrenceKey()
+        this.getDatasetTitle()
       }
     },
     truncatedValue: function(value) {
@@ -370,9 +367,25 @@ export default {
       service
         .fetchOccurrenceKey(dataset, occurrenceId)
         .then(response => {
-          this.occurrenceUrl = `${gbifApi}${response.results[0].key}`
+          this.occurrenceUrl = `${gbifOccurrenceUrl}${response.results[0].key}`
         })
         .catch(function() {})
+    },
+    getDatasetTitle() {
+      service
+        .fetchDatasetTitle(this.datasetKey())
+        .then(response => {
+          this.datasetTitle = response.title
+        })
+        .catch(function() {})
+    },
+    datasetKey: function() {
+      const layer = this.selectedResult.properties.layer
+      return layer === 'nhrs-nrm'
+        ? nhrsNrmKey
+        : layer === 's-fbo'
+        ? sFboKey
+        : upplasaBotanyKey
     },
   },
 }
