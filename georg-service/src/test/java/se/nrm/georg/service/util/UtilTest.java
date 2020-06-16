@@ -47,7 +47,7 @@ public class UtilTest {
      
     String address = "stockholm";  
     String source = "mySource";
-    String layer = "myLayer";
+    String layer = "myLayer"; 
     String expResult = "http://api.se/search?text=stockholm*&sources=mySource&layers=myLayer&size=5";
     String result = instance.buildGeoCodePath(peliasPath, address, source, layer, 5);  
      
@@ -104,6 +104,7 @@ public class UtilTest {
     System.out.println("buildGeoCodePath");
      
     String address = "stockholm";  
+    String categories = "";
     String source = "mySource";
     String layer = "";
     String expResult = "http://api.se/search?text=stockholm*&sources=mySource";
