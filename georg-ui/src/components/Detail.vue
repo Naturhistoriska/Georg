@@ -277,18 +277,15 @@ export default {
         Number(this.selectedResult.geometry.coordinates[0]),
         Number(this.selectedResult.geometry.coordinates[1]),
       ])
-      return (
-        this.truncatedValue(result[1]) + ' ' + this.truncatedValue(result[0])
-      )
+      return Math.round(result[1]) + ', ' + Math.round(result[0])
     },
     rt90: function() {
       let result = proj4(wgs84, rt90, [
         Number(this.selectedResult.geometry.coordinates[0]),
         Number(this.selectedResult.geometry.coordinates[1]),
       ])
-      return (
-        this.truncatedValue(result[1]) + ' ' + this.truncatedValue(result[0])
-      )
+
+      return Math.round(result[1]) + ', ' + Math.round(result[0])
     },
     isNewMarker: function() {
       return this.selectedResult.properties.id === 'newMarker'
@@ -356,9 +353,6 @@ export default {
         this.getOccurrenceKey()
         this.getDatasetTitle()
       }
-    },
-    truncatedValue: function(value) {
-      return value > 0 ? Math.floor(value) : Math.ceil(value)
     },
     getOccurrenceKey() {
       const dataset = this.selectedResult.properties.layer
