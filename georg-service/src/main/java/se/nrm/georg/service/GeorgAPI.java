@@ -21,9 +21,9 @@ import se.nrm.georg.service.logic.GeorgLogic;
  */
 @Path("/")
 @Api(tags = {"georg"})
-@SwaggerDefinition(
+@SwaggerDefinition(   
   info = @Info(
-                title = "George api",
+                title = "Georg API",
                 version = "0.2.0"
         ),
   tags = {
