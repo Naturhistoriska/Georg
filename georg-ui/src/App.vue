@@ -1,8 +1,17 @@
 <template>
   <v-app>
     <v-app-bar app color="blue darken-2" dark dense>
-      <v-toolbar-title class="title">Georg</v-toolbar-title>
+      <v-toolbar-title class="title">
+        <router-link id="home" class="white--text routerLink" to="/"
+          >Georg</router-link
+        >
+      </v-toolbar-title>
       <v-spacer></v-spacer>
+      <v-toolbar-title class="title">
+        <v-tabs color="white" right background-color="blue darken-2" optional>
+          <v-tab id="aboutLink" key="about" to="/about">Om</v-tab>
+        </v-tabs>
+      </v-toolbar-title>
     </v-app-bar>
 
     <v-content>
@@ -13,12 +22,12 @@
 
 <script>
 export default {
-  name: "App",
+  name: 'App',
 
   data: () => ({
     //
-  })
-};
+  }),
+}
 </script>
 
 <style lang="scss">
@@ -29,7 +38,16 @@ export default {
   color: #2c3e50;
 }*/
 
+h1 {
+  font-weight: 300;
+  font-size: 3em;
+}
+
 #body {
   background: transparent;
+}
+
+.routerLink {
+  text-decoration: none;
 }
 </style>

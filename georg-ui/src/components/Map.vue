@@ -1,32 +1,22 @@
 <template>
-  <div id="map">
+  <div
+    id="map"
+    v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }"
+  >
     <l-map
       :center="center"
       :options="mapOptions"
       ref="myMap"
-      @ready="getMapBounds"
+      @ready="fitMapBounds"
       :style="mapHeight"
       @click="onMapClick"
       :zoom="zoom"
+      :noBlockingAnimations="true"
     >
       <l-tile-layer
         url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
         attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
       ></l-tile-layer>
-      <l-marker
-        id="markerList"
-        v-for="marker in markers"
-        :key="marker.id"
-        :visible="marker.visible"
-        :lat-lng="marker.position"
-        :icon="marker.icon"
-        @click="onMarkerClick(marker.id)"
-      ></l-marker>
-      <l-circle
-        :lat-lng="circle.center"
-        :radius="circle.radius"
-        :color="circle.color"
-      />
     </l-map>
 
     <div
@@ -40,355 +30,374 @@
         x-small
         id="iconbtn"
         @click="enableAddMarker"
-        style="cursor: pointer;"
+        :style="iconCursor"
         :disabled="detailView"
       >
-        <v-icon :color="iconColor">mdi-map-marker</v-icon>
+        <v-icon :color="iconColor" id="newMarkerIcon"
+          >mdi-map-marker-plus</v-icon
+        >
       </v-btn>
     </div>
   </div>
 </template>
 
 <script>
-import L from "leaflet";
-import { LMap, LTileLayer, LCircle } from "vue2-leaflet";
-import { mapGetters, mapMutations } from "vuex";
+import L from 'leaflet'
+import { LMap, LTileLayer } from 'vue2-leaflet'
+import { mapGetters, mapMutations } from 'vuex'
+
+import * as fixer from '../assets/js/decimalPlacesFixer.js'
 
 const MAP_ICONS = {
   blueIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/blue-dot.png",
-    iconSize: [30, 30] // size of the icon
+    iconUrl: 'selected-marker.png',
+    iconSize: [22, 32], // size of the icon
+    iconAnchor: [11, 32],
   }),
   redIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/red-dot.png",
-    iconSize: [30, 30] // size of the icon
+    iconUrl: 'added-marker.png',
+    iconSize: [22, 32], // size of the icon
+    iconAnchor: [11, 32],
   }),
-  yellowIcon: L.icon({
-    iconUrl: "http://maps.google.com/mapfiles/ms/micons/yellow-dot.png",
-    iconSize: [30, 30]
-  })
-};
+  greyIcon: L.icon({
+    iconUrl: 'default-marker.png',
+    iconSize: [22, 32],
+    iconAnchor: [11, 32],
+  }),
+}
 
-const southWest = new L.LatLng(55.1961173, 12.8018162);
-const northEast = new L.LatLng(68.346545, 23.2360731);
+const southWest = new L.LatLng(55.1961173, 12.8018162)
+const northEast = new L.LatLng(68.346545, 23.2360731)
+const initialBound = new L.LatLngBounds(southWest, northEast)
 
 export default {
-  name: "Map",
+  name: 'Map',
   components: {
     LMap,
     LTileLayer,
-    LCircle
   },
-  props: ["mapHeight", "latlon"],
+  props: ['mapHeight', 'latlon'],
   data() {
     return {
+      activeMarker: {},
       bounds: {},
       center: [59.0, 15.0],
+      circle: {},
+      circleOptions: {
+        color: 'red',
+        fillColor: '#ff9999',
+        fillOpacity: 0.3,
+      },
+      enableAddMapMarkers: false,
+      hovedMarker: {},
+      layerGroup: {},
       mapOptions: {
         zoomControl: true,
-        zoomControlPosition: "topright"
+        zoomControlPosition: 'topright',
       },
-      markers: [],
-      enableAddMapMarkers: false,
-      circle: {},
-      zoom: 0
-    };
+      rezoom: true,
+      zoom: 0,
+    }
   },
   mounted() {
-    this.bounds = new L.LatLngBounds(southWest, northEast);
+    this.bounds = initialBound
+
+    if (this.detailView) {
+      this.buildDetailMarker()
+    }
+
     this.$nextTick(() => {
-      this.$refs.myMap.mapObject.zoomControl.setPosition("bottomright");
-      this.$refs.myMap.mapObject.invalidateSize();
-    });
+      this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
+      this.$refs.myMap.mapObject.invalidateSize()
+      // this.buildMarkers()
+    })
+
+    L.control
+      .scale({
+        position: 'bottomleft',
+        maxWidth: 100,
+        metric: true,
+        imperial: false,
+      })
+      .addTo(this.$refs.myMap.mapObject)
+
+    this.$refs.myMap.mapObject.invalidateSize()
+    // x=-128.455, y=51.61, ratio=FALSE, relwidth=0.2
+    // L.control
+    //   .scale({ position: 'bottomleft' })
+    //   .addTo(this.$refs.myMap.mapObject)
+    // this.$refs.myMap.mapObject.invalidateSize()
   },
   computed: {
     ...mapGetters([
-      "detailView",
-      "didSearch",
-      "results",
-      "hovedResultId",
-      "unhovedResultId",
-      "selectedResult",
-      "selectedResultId"
+      'detailView',
+      'didSearch',
+      'results',
+      'hoveredResultId',
+      'unhoveredResultId',
+      'selectedResult',
+      'selectedResultId',
+      'uncertainty',
     ]),
 
     iconColor: function() {
-      return this.enableAddMapMarkers ? "green" : "primary";
-    }
+      return this.enableAddMapMarkers ? 'red darken-2' : 'primary'
+    },
+    iconCursor: function() {
+      return this.detailView ? '' : 'cursor: pointer;'
+    },
   },
   watch: {
+    results: function() {
+      this.$nextTick(() => {
+        this.buildMarkers()
+      })
+    },
     detailView: function() {
       this.$nextTick(() => {
-        this.createMarks();
-        if (!this.detailView) {
-          this.getMapBounds();
+        if (this.detailView) {
+          this.buildDetailMarker()
+        } else {
+          this.buildMarkers()
         }
-      });
+      })
+    },
+    hoveredResultId() {
+      this.$nextTick(() => {
+        this.highlightMarker()
+      })
+    },
+    selectedResultId() {
+      this.$nextTick(() => {
+        if (!this.detailView) {
+          this.highlightMarker()
+        }
+      })
     },
     center: function() {
       this.$nextTick(() => {
         this.$refs.myMap.mapObject.flyTo(
           [this.center[0], this.center[1]],
           this.zoom
-        );
-      });
-    },
-    results: function() {
-      this.$nextTick(() => {
-        this.createMarks();
-        this.getMapBounds();
-        // this.addActiveMarker();
-      });
-    },
-    hovedResultId() {
-      this.$nextTick(() => {
-        this.selectedMark();
-      });
-    },
-    unhovedResultId() {
-      this.$nextTick(() => {
-        this.unselectedMark();
-      });
-    },
-    selectedResultId() {
-      this.$nextTick(() => {
-        this.removeOldSelectedMarker();
-      });
+        )
+      })
     },
     didSearch() {
       this.$nextTick(() => {
         if (!this.detailView && !this.didSearch) {
-          this.enableAddMapMarkers = false;
+          this.enableAddMapMarkers = false
         }
-      });
-    }
+      })
+    },
+    uncertainty() {
+      this.$nextTick(() => {
+        if (this.uncertainty >= 0) {
+          this.addUncertainty()
+        }
+      })
+    },
   },
   methods: {
     ...mapMutations([
-      "setSelectedMarkerId",
-      "setNewMarkers",
-      "setResults",
-      "setDidSearch"
+      'setSelectedMarkerId',
+      'setNewMarkers',
+      'setResults',
+      'setUncertainty',
     ]),
-    addActiveMarker() {
-      this.$refs.myMap.mapObject.createPane("locationMarker");
-      this.$refs.myMap.mapObject.getPane("locationMarker").style.zIndex = 999;
-      let topMarker = L.marker([59.203241, 18.341203], {
-        pane: "locationMarker"
-      });
-      topMarker.addTo(this.$refs.myMap.mapObject);
-      topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
+
+    buildMarkers() {
+      this.$refs.myMap.mapObject.removeLayer(this.circle)
+      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
+
+      this.bounds = L.latLngBounds()
+      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
+
+      this.results.forEach(result => {
+        const lat = result.geometry.coordinates[1]
+        const lon = result.geometry.coordinates[0]
+        this.bounds.extend([lat, lon])
+
+        let icon
+        if (result.properties.id === 'newMarker') {
+          icon = MAP_ICONS.redIcon
+        } else if (result.properties.id === this.selectedResultId) {
+          icon = MAP_ICONS.blueIcon
+        } else {
+          icon = MAP_ICONS.greyIcon
+        }
+
+        let theMarker
+        if (result.properties.id === 'newMarker') {
+          this.$refs.myMap.mapObject.createPane('redMarker')
+          this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
+          theMarker = L.marker([lat, lon], {
+            id: 'newMarker',
+            pane: 'redMarker',
+            icon,
+          })
+        } else {
+          theMarker = L.marker([lat, lon], {
+            icon,
+          })
+        }
+
+        theMarker.addTo(this.layerGroup)
+      })
+
+      if (this.results != null && this.results.length > 0) {
+        this.fitMapBounds()
+        // this.highlightMarker()
+      }
     },
-    // createMarkers() {
-    //   if (this.detailView) {
-    //     const lat = this.selectedResult.geometry.coordinates[1];
-    //     const lon = this.selectedResult.geometry.coordinates[0];
-    //     this.center = [lat, lon];
+    buildDetailMarker() {
+      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
 
-    //     let detailMarker = L.marker([lat, lon]);
-    //     detailMarker.addTo(this.$refs.myMap.mapObject);
-    //     // detailMarker.valueOf()._icon.style.filter = "hue-rotate(1E90FF)";
-    //     detailMarker.valueOf()._icon.style.filter = "hue-rotate(2.62rad)";
-    //     this.zoom = 18;
-    //     this.markers.push(detailMarker);
-    //   } else {
-    //     let north = 90;
-    //     let south = -90;
-    //     let west = -180;
-    //     let east = 180;
+      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
 
-    //     this.results.forEach(result => {
-    //       const lat = result.geometry.coordinates[1];
-    //       const lon = result.geometry.coordinates[0];
-    //       north = north > lat ? lat : north;
-    //       south = south > lat ? south : lat;
-    //       west = west > lon ? west : lon;
-    //       east = east > lon ? lon : east;
+      const lat = this.selectedResult.geometry.coordinates[1]
+      const lon = this.selectedResult.geometry.coordinates[0]
+      this.center = [lat, lon]
 
-    //       let southWest = new L.LatLng(south + 1, west + 1);
-    //       let northEast = new L.LatLng(north - 1, east - 1);
-    //       this.bounds = new L.LatLngBounds(southWest, northEast);
+      const theIcon =
+        this.selectedResult.properties.id === 'newMarker'
+          ? MAP_ICONS.redIcon
+          : MAP_ICONS.blueIcon
 
-    //       this.$refs.myMap.mapObject.createPane("top");
-    //       this.$refs.myMap.mapObject.getPane("top").style.zIndex = 999;
-    //       // let topMarker = L.marker([59.203241, 18.341203], {
-    //       //   pane: "top"
-    //       // });
-    //       // topMarker.addTo(this.$refs.myMap.mapObject);
-    //       // topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
-    //       let marker;
-    //       let icon;
-    //       if (result.properties.id === "newMarker") {
-    //         marker = L.marker([lat, lon]);
-    //         marker.addTo(this.$refs.myMap.mapObject);
-    //         marker.valueOf()._icon.style.filter = "hue-rotate(2.62rad)";
-    //       } else if (result.properties.id === this.selectedResultId) {
-    //         icon = MAP_ICONS.yellowIcon;
-    //         marker = {
-    //           id: result.properties.id,
-    //           position: [lat, lon],
-    //           accuracy: 100,
-    //           visible: true,
-    //           icon: icon,
-    //           pane: "top"
-    //         };
-    //       } else {
-    //         icon = MAP_ICONS.blueIcon;
-    //         marker = {
-    //           id: result.properties.id,
-    //           position: [lat, lon],
-    //           accuracy: 100,
-    //           visible: true,
-    //           icon: icon
-    //         };
-    //       }
+      const theMarker = L.marker([lat, lon], {
+        icon: theIcon,
+      })
+      theMarker.addTo(this.layerGroup)
 
-    //       // array.push(marker);
-    //     });
-    //   }
-    // },
-    createMarks() {
-      const array = [];
-      if (this.detailView) {
-        const lat = this.selectedResult.geometry.coordinates[1];
-        const lon = this.selectedResult.geometry.coordinates[0];
-
-        // var greenIcon = L.icon({
-        //   iconUrl: "red-marker.png",
-        //   iconSize: [20, 30] // size of the icon
-        //   // iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-        // });
-        this.center = [lat, lon];
-        let marker = {
-          id: this.selectedResult.properties.id,
-          position: [lat, lon],
-          visible: true,
-          icon: MAP_ICONS.yellowIcon
-        };
-        array.push(marker);
-        this.zoom = 18;
+      if (
+        this.selectedResult.properties.id === 'newMarker' &&
+        this.uncertainty > 0
+      ) {
+        this.addUncertainty()
       } else {
-        let north = 90;
-        let south = -90;
-        let west = -180;
-        let east = 180;
-
-        this.results.forEach(result => {
-          const lat = result.geometry.coordinates[1];
-          const lon = result.geometry.coordinates[0];
-          north = north > lat ? lat : north;
-          south = south > lat ? south : lat;
-          west = west > lon ? west : lon;
-          east = east > lon ? lon : east;
-
-          let southWest = new L.LatLng(south + 1, west + 1);
-          let northEast = new L.LatLng(north - 1, east - 1);
-          this.bounds = new L.LatLngBounds(southWest, northEast);
-
-          // let topMarker = L.marker([59.203241, 18.341203], {
-          //   pane: "top"
-          // });
-          // topMarker.addTo(this.$refs.myMap.mapObject);
-          // topMarker.valueOf()._icon.style.filter = "hue-rotate(180deg)";
-
-          let icon;
-          if (result.properties.id === "newMarker") {
-            icon = MAP_ICONS.redIcon;
-          } else if (result.properties.id === this.selectedResultId) {
-            icon = MAP_ICONS.yellowIcon;
-          } else {
-            icon = MAP_ICONS.blueIcon;
-          }
-          let marker = {
-            id: result.properties.id,
-            position: [lat, lon],
-            visible: true,
-            icon: icon
-          };
-          array.push(marker);
-        });
+        this.zoom = 18
       }
-      this.markers = array;
     },
-    selectedMark() {
-      const id = this.hovedResultId;
-      this.markers.forEach(marker => {
-        if (marker.id === id) {
-          marker.icon = MAP_ICONS.yellowIcon;
+
+    highlightMarker() {
+      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
+
+      this.$refs.myMap.mapObject.createPane('topMarker')
+      this.$refs.myMap.mapObject.getPane('topMarker').style.zIndex = 888
+
+      this.$refs.myMap.mapObject.createPane('lowerMarker')
+      this.$refs.myMap.mapObject.getPane('lowerMarker').style.zIndex = 666
+
+      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
+      this.results.forEach(result => {
+        const lat = result.geometry.coordinates[1]
+        const lon = result.geometry.coordinates[0]
+
+        let icon
+        if (result.properties.id === 'newMarker') {
+          icon = MAP_ICONS.redIcon
+        } else if (
+          result.properties.id === this.selectedResultId ||
+          result.properties.id === this.hoveredResultId
+        ) {
+          icon = MAP_ICONS.blueIcon
+        } else {
+          icon = MAP_ICONS.greyIcon
         }
-      });
-    },
-    unselectedMark() {
-      const id = this.unhovedResultId;
-      if (id != this.selectedResultId) {
-        this.markers.forEach(marker => {
-          if (marker.id != "newMarker") {
-            if (marker.id == id) {
-              marker.icon = MAP_ICONS.blueIcon;
-            }
-          }
-        });
-      }
-    },
-    removeOldSelectedMarker() {
-      this.markers.forEach(marker => {
-        if (marker.id != this.selectedResultId && marker.id != "newMarker") {
-          marker.icon = MAP_ICONS.blueIcon;
+
+        let theMarker
+        if (result.properties.id === this.hoveredResultId) {
+          theMarker = L.marker([lat, lon], {
+            pane: 'topMarker',
+            icon,
+          })
+        } else if (result.properties.id === this.selectedResultId) {
+          theMarker = L.marker([lat, lon], {
+            pane: 'lowerMarker',
+            icon,
+          })
+        } else if (result.properties.id === 'newMarker') {
+          this.$refs.myMap.mapObject.createPane('redMarker')
+          this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
+          theMarker = L.marker([lat, lon], {
+            id: 'newMarker',
+            pane: 'redMarker',
+            icon,
+          })
+        } else {
+          theMarker = L.marker([lat, lon], {
+            icon,
+          })
         }
-      });
+        theMarker.addTo(this.layerGroup)
+      })
     },
-    enableAddMarker() {
-      if (!this.detailView) {
-        this.enableAddMapMarkers = !this.enableAddMapMarkers;
+
+    addUncertainty() {
+      this.$refs.myMap.mapObject.removeLayer(this.circle)
+
+      if (this.uncertainty) {
+        this.circle = new L.Circle(
+          [this.center[0], this.center[1]],
+          parseInt(this.uncertainty),
+          this.circleOptions
+        ).addTo(this.$refs.myMap.mapObject)
+        this.bounds = this.circle.getBounds()
+        this.fitMapBounds()
       }
     },
 
-    onMarkerClick(id) {
-      // console.log("id..." + id);
-      this.setSelectedMarkerId(id);
-    },
     onMapClick(event) {
-      if (this.enableAddMapMarkers) {
-        const latlng = event.latlng;
-        let result = {
+      if (this.enableAddMapMarkers && !this.detailView) {
+        const latlng = event.latlng
+        const result = {
           isNew: true,
           properties: {
-            id: "newMarker"
+            id: 'newMarker',
+            name: 'Din plats',
           },
           geometry: {
-            coordinates: [latlng.lng, latlng.lat]
+            coordinates: [fixer.digits(latlng.lng), fixer.digits(latlng.lat)],
           },
-          name: "Din plats"
-        };
-
-        let removeFirstResult = false;
-        this.results.forEach(result => {
-          if (result.properties.id == "newMarker") {
-            removeFirstResult = true;
-          }
-        });
-        if (removeFirstResult) {
-          this.results.splice(0, 1);
         }
+        this.removeOldCustomMarker()
 
-        this.results.unshift(result);
-        this.setResults(this.results);
-        // this.setDidSearch(true);
-        // let accuracy = {
-        //   center: [latlng.lat, latlng.lng],
-        //   radius: 100,
-        //   color: "green"
-        // };
-        // this.circle = accuracy;
+        this.results.unshift(result)
+        this.setResults(this.results)
+        this.rezoom = false
+        this.setUncertainty(-1)
       }
 
       // this.$emit("addMarker", event.latlng);
     },
-    getMapBounds() {
-      this.$refs.myMap.mapObject.fitBounds(this.bounds);
-    }
-  }
-};
+
+    removeOldCustomMarker() {
+      if (this.results.length > 0) {
+        const firstResult = this.results[0]
+        if (firstResult.properties.id == 'newMarker') {
+          this.results.splice(0, 1)
+        }
+      }
+    },
+
+    enableAddMarker() {
+      if (!this.detailView) {
+        this.enableAddMapMarkers = !this.enableAddMapMarkers
+      }
+    },
+
+    fitMapBounds() {
+      if (this.rezoom) {
+        this.$refs.myMap.mapObject.fitBounds(this.bounds)
+        this.zoom = this.$refs.myMap.mapObject.getZoom()
+      }
+      this.rezoom = true
+    },
+
+    onMarkerClick(id) {
+      this.setSelectedMarkerId(id)
+    },
+  },
+}
 </script>
 
 <style scoped>
@@ -402,4 +411,16 @@ export default {
   position: absolute;
   right: 56px;
 }
+#iconbtn {
+  margin-right: 8px;
+}
+.addMarkerCursor .leaflet-container {
+  cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAgCAMAAAAhSXi5AAAA5FBMVEX///+3HBy3HBy3HBy3HBy3HBzvU1DrUE3oTEm+IyK3HBzkSUa8ISHhRUPYR0XbRUPdQkC7ICC3HBzaPjzUQkG9IiK8ISHAJSXQPjzTNza9IiG+IyPNPDy9IiHPNDPERETHPDzKOjq7ICC8ISG9IiLGOjnMMC+7IB+7ICDGNDTILSy6Hx+7IB/CMjLEKSjCMDDFKim/MjK5Hh65Hh69IiG5Hh65Hh66Hx69IiLBJiW6Hx+9IiK/Kyq/LS23HBy7JSW7Jia7JyfJUlLNYmLScXHbjY3fm5vkqqrouLjtxsbx1NT///9idWUoAAAATHRSTlMADhspN0VKS01OUlJbW2VlZWhudXt8iJOYmJmepaissLKys7a6vb3AwsjLzM7P0dPT1NXW1tfY2NjY2dnZ2dvb29vb29vb29vb29vbAcCeVQAAATBJREFUGBltwYsiwlAABuD/bPlPtY3ZhOMSSskwbDTXUK7t/d/HOYtq8X34ZdeDYMlCiWgkV5FSF/2ei5laEnkshPdHNn64mc8pldoouJnDOWFqQbMSjyXNNrTtLhfc1AExqNKQm8cHKyyEh0A9puE8jT4/9s4lNTkQ2FA0Om+5NlyjEVfQ8qg5L7kxfqTRDNDyqHnDvDCgoQK0PGrOZW6MH2k0A2woGg/vuTZaoxFXUI9oOM+vX5/DM0ljYMG6ZqG6s99ZljT8EwC9kAu66wDcmGWybwEQqcMS1YbR6HKevKvAEKnHOeoQE42YM9V+BRPiNORUtI1fS3eSP7xEYGo34oS8X8WMSHwWmm3Mq2WSmp9YKNm6IFnNaigTPUXebmGRnfrdHv6qZYmFf7g2pr4BVsYlcwwas0QAAAAASUVORK5CYII=')
+      11 31,
+    auto;
+}
+
+/* .leaflet-left .leaflet-control-scale {
+  left: 200;
+} */
 </style>

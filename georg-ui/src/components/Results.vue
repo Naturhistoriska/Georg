@@ -6,38 +6,41 @@
     class="overflow-y-auto"
     :style="height"
   >
-    <v-list-item-group id="resultList" active-class="blue--text text--darken-2">
+    <v-list-item-group id="resultList">
       <template v-for="(result, index) in results">
         <Result v-bind:result="result" :key="result.properties.id" />
-        <v-divider v-if="index + 1 < results.length" :key="index"></v-divider>
+        <v-divider
+          v-if="index + 1 < results.length"
+          :key="'devider-' + index"
+        ></v-divider>
       </template>
     </v-list-item-group>
   </v-list>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import Result from "./Result";
+import { mapGetters } from 'vuex'
+import Result from './Result'
 
 export default {
-  name: "Results",
+  name: 'Results',
   components: {
-    Result
+    Result,
   },
 
-  props: ["onScroll", "height"],
+  props: ['onScroll', 'height'],
   data() {
     return {
-      result: {}
-    };
+      result: {},
+    }
   },
 
   computed: {
-    ...mapGetters(["results", "detailView", "newMarker"])
+    ...mapGetters(['results']),
   },
 
-  methods: {}
-};
+  methods: {},
+}
 </script>
 <style scoped>
 ::-webkit-scrollbar {

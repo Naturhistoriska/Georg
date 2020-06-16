@@ -16,14 +16,15 @@ public class InitialProperties implements Serializable {
 
   private final static String CONFIG_INITIALLISING_ERROR = "Property not initialized";
   
-  private String peliasPath;
+  private String peliasPath; 
   
   public InitialProperties() {
   }
   
   @Inject
   public InitialProperties(@ConfigurationValue("swarm.pelias.path") String peliasPath) { 
-    this.peliasPath = peliasPath; 
+    this.peliasPath = peliasPath;  
+    
     log.info("test injection : {} ", peliasPath);
   }
   
@@ -32,5 +33,5 @@ public class InitialProperties implements Serializable {
       throw new RuntimeException(CONFIG_INITIALLISING_ERROR);
     }
     return peliasPath;
-  }  
+  }   
 }

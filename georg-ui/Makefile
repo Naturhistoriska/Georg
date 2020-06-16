@@ -3,10 +3,10 @@
 all: build
 
 build:
-	docker build -t georgnrm/georg-ui:v0.1 .
+	docker build -t georgnrm/georg-ui:v0.3 .
 
 
 # docker login
 release:
-	docker push georgnrm/georg-ui:v0.1
+	docker push georgnrm/georg-ui:v0.3
 

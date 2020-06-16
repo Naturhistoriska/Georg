@@ -5,6 +5,7 @@ matrix:
       jdk:
         - openjdk8
       install: true
+      dist: trusty
       script: "mvn cobertura:cobertura"
       after_success:
         # - codecov

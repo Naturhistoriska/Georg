@@ -1,4 +1,5 @@
 package se.nrm.georg.service.util;
+ 
 
 /**
  *
@@ -6,12 +7,23 @@ package se.nrm.georg.service.util;
  */
 public class Util {
    
-  private final String searchGeoCode = "search?text=";
+  private final String search = "search?";
+  private final String autoComplete = "autocomplete?"; 
+  private final String textQuery = "text="; 
+  private final String sourceQry = "&sources=";
+  private final String layerQry = "&layers=";
+  private final String sizeQry = "&size=";
   private final String reverseGeoCode = "reverse?";
   private final String pointLat = "point.lat=";
   private final String pointLon = "point.lon=";
   private final String and = "&";
-  private StringBuilder sb;
+//  private final String source = "&sources=gbif,wof";
+  
+  
+//  /v1/search?categories=food&text=Didi
+  
+  private final String wildCard = "*";
+  private StringBuilder sb; 
   
   private static Util instance = null;
   
@@ -24,12 +36,25 @@ public class Util {
     return instance;
   }
   
-  public String buildGeoCodePath(String peliasPath, String address) { 
+  public String buildGbifDatasetUrl(String gbifUrl, String datasetKey, String occurranceId) {
     sb = new StringBuilder();
-    sb.append(peliasPath);
-    sb.append(searchGeoCode);
-    sb.append(address); 
+    sb.append(gbifUrl);
+    sb.append("search?datesetKey=");
+    sb.append(datasetKey);
+    sb.append("&occurrenceID=");
+    sb.append(occurranceId);
     return sb.toString().trim();
+  }
+  
+  public String bunildAutoCompleteSearchPath(String peliasPath, String text,
+          String sources, String layers, int size) {
+    
+    return buildSearchUrl(peliasPath, autoComplete, text, sources, layers, size);  
+  } 
+ 
+  public String buildGeoCodePath(String peliasPath, String address, 
+          String sources, String layers, int size) {
+    return buildSearchUrl(peliasPath, search, address, sources, layers, size);   
   }
   
   public String buildReverseGeoCodePath(String peliasPath, double lat, double lon) { 
@@ -42,5 +67,29 @@ public class Util {
     sb.append(pointLat);
     sb.append(lat);
     return sb.toString().trim();
-  }
+  } 
+  
+  private String buildSearchUrl(String peliasPath, String searchType, 
+          String text, String sources, String layers, int size) {
+    sb = new StringBuilder();
+    sb.append(peliasPath);
+    sb.append(searchType); 
+    sb.append(textQuery);
+    sb.append(text);  
+    sb.append(searchType.equals(search) ? wildCard : "");
+    
+    if(sources != null && sources.trim().length() > 0) { 
+      sb.append(sourceQry);
+      sb.append(sources);
+    } 
+    if(layers != null && layers.trim().length() > 0) {
+      sb.append(layerQry);
+      sb.append(layers);
+    }
+    if(size > 0) {
+      sb.append(sizeQry);
+      sb.append(size);
+    }
+    return sb.toString().trim();
+  } 
 }
