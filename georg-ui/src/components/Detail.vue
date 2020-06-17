@@ -17,44 +17,49 @@
       >
     </v-card-text>
 
-    <v-list>
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ latLonDms }}</v-list-item-title>
-          <v-list-item-subtitle>WGS84 DMS</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-action></v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>{{ latLonDdm }}</v-list-item-title>
-          <v-list-item-subtitle>WGS84 DDM</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-action></v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>{{ latLon }}</v-list-item-title>
-          <v-list-item-subtitle>WGS84 DD (lat, lon)</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-action></v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>{{ rt90 }}</v-list-item-title>
-          <v-list-item-subtitle>RT90 (nord, öst)</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
-      <v-list-item>
-        <v-list-item-action></v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>{{ sweref99 }}</v-list-item-title>
-          <v-list-item-subtitle>SWEREF99 TM (nord, öst)</v-list-item-subtitle>
-        </v-list-item-content>
-      </v-list-item>
+    <v-list flat>
+      <v-list-item-group>
+        <v-list-item inactive @click="openOrCloseTransformedCoordinates">
+          <v-list-item-icon>
+            <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ latLonDms }}</v-list-item-title>
+            <v-list-item-subtitle>WGS84 DMS</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-icon class="pt-0 mt-0">{{ iconToggleCoordinates }}</v-icon>
+          </v-list-item-action>
+        </v-list-item>
+        <v-list-item inactive v-if="displayTransformedCoordinates">
+          <v-list-item-action></v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ latLonDdm }}</v-list-item-title>
+            <v-list-item-subtitle>WGS84 DDM</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item inactive v-if="displayTransformedCoordinates">
+          <v-list-item-action></v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ latLon }}</v-list-item-title>
+            <v-list-item-subtitle>WGS84 DD (lat, lon)</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item inactive v-if="displayTransformedCoordinates">
+          <v-list-item-action></v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ rt90 }}</v-list-item-title>
+            <v-list-item-subtitle>RT90 (nord, öst)</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item inactive v-if="displayTransformedCoordinates">
+          <v-list-item-action></v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>{{ sweref99 }}</v-list-item-title>
+            <v-list-item-subtitle>SWEREF99 TM (nord, öst)</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list-item-group>
       <v-divider
         v-bind:class="{ 'mx-4': isNewMarker }"
         :inset="!isNewMarker"
@@ -82,7 +87,9 @@
       <v-list-item-group>
         <v-list-item
           v-if="!isNewMarker"
-          v-on="isGbif ? { click: openOrCloseGbifData } : {click: openWofLink}"
+          v-on="
+            isGbif ? { click: openOrCloseGbifData } : { click: openWofLink }
+          "
         >
           <v-list-item-icon>
             <v-icon color="blue darken-2">mdi-database-import</v-icon>
@@ -102,7 +109,7 @@
             <v-icon>mdi-open-in-new</v-icon>
           </v-btn>
           <v-btn v-else icon>
-            <v-icon>{{ btnIcon }}</v-icon>
+            <v-icon>{{ iconToggleGbifData }}</v-icon>
           </v-btn>
         </v-list-item>
 
@@ -118,8 +125,11 @@
             <v-icon>mdi-open-in-new</v-icon>
           </v-btn>
         </v-list-item>
-        <v-list-item v-if="displayGbifData" :href="occurrenceUrl"
-            target="_blank">
+        <v-list-item
+          v-if="displayGbifData"
+          :href="occurrenceUrl"
+          target="_blank"
+        >
           <v-list-item-icon>
             <v-icon color="blue darken-2"></v-icon>
           </v-list-item-icon>
@@ -212,7 +222,8 @@ export default {
   data() {
     return {
       accuracy: null,
-      btnIcon: 'mdi-chevron-down',
+      iconToggleGbifData: 'mdi-chevron-down',
+      iconToggleCoordinates: 'mdi-chevron-down',
       datasetTitle: '',
       disableSetUncertaintyBtn: true,
       displayGbifData: false,
@@ -361,7 +372,7 @@ export default {
     openOrCloseGbifData() {
       event.preventDefault()
       this.displayGbifData = !this.displayGbifData
-      this.btnIcon = this.displayGbifData
+      this.iconToggleGbifData = this.displayGbifData
         ? 'mdi-chevron-up'
         : 'mdi-chevron-down'
 
@@ -369,6 +380,13 @@ export default {
         this.getOccurrenceKey()
         this.getDatasetTitle()
       }
+    },
+    openOrCloseTransformedCoordinates() {
+      event.preventDefault()
+      this.displayTransformedCoordinates = !this.displayTransformedCoordinates
+      this.iconToggleCoordinates = this.displayTransformedCoordinates
+        ? 'mdi-chevron-up'
+        : 'mdi-chevron-down'
     },
     openWofLink() {
       event.preventDefault()
