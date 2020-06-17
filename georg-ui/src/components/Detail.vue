@@ -79,57 +79,65 @@
         </v-list-item-content>
       </v-list-item>
       <v-divider v-if="!isNewMarker" inset></v-divider>
-      <v-list-item v-if="!isNewMarker">
-        <v-list-item-icon>
-          <v-icon color="blue darken-2">mdi-database-import</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>Data från {{ dataFromSource }}</v-list-item-title>
-        </v-list-item-content>
-        <v-btn
-          v-if="!isGbif"
-          icon
-          :href="datasourcelink"
-          target="_blank"
-          id="wofLink"
+      <v-list-item-group>
+        <v-list-item
+          v-if="!isNewMarker"
+          v-on="isGbif ? { click: openOrCloseGbifData } : null"
         >
-          <v-icon>mdi-open-in-new</v-icon>
-        </v-btn>
-        <v-btn v-else icon @click="openOrCloseGbifData">
-          <v-icon>{{ btnIcon }}</v-icon>
-        </v-btn>
-      </v-list-item>
-      <v-list-item v-if="displayGbifData">
-        <v-list-item-icon>
-          <v-icon color="blue darken-2"></v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ datasetTitle }}</v-list-item-title>
-          <v-list-item-subtitle>GBIF Occurrence dataset</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-btn icon :href="datasetUrl" target="_blank" id="gbifDataSetLink">
-          <v-icon>mdi-open-in-new</v-icon>
-        </v-btn>
-      </v-list-item>
-      <v-list-item v-if="displayGbifData">
-        <v-list-item-icon>
-          <v-icon color="blue darken-2"></v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ this.selectedResult.properties.addendum.gbif.occurrenceID }}
-          </v-list-item-title>
-          <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-btn
-          icon
-          :href="occurrenceUrl"
-          target="_blank"
-          id="gbifOccurrenceLink"
-        >
-          <v-icon>mdi-open-in-new</v-icon>
-        </v-btn>
-      </v-list-item>
+          <v-list-item-icon>
+            <v-icon color="blue darken-2">mdi-database-import</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title
+              >Data från {{ dataFromSource }}</v-list-item-title
+            >
+          </v-list-item-content>
+          <v-btn
+            v-if="!isGbif"
+            icon
+            :href="datasourcelink"
+            target="_blank"
+            id="wofLink"
+          >
+            <v-icon>mdi-open-in-new</v-icon>
+          </v-btn>
+          <v-btn v-else icon>
+            <v-icon>{{ btnIcon }}</v-icon>
+          </v-btn>
+        </v-list-item>
+
+        <v-list-item v-if="displayGbifData">
+          <v-list-item-icon>
+            <v-icon color="blue darken-2"></v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>{{ datasetTitle }}</v-list-item-title>
+            <v-list-item-subtitle>GBIF Occurrence dataset</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-btn icon :href="datasetUrl" target="_blank" id="gbifDataSetLink">
+            <v-icon>mdi-open-in-new</v-icon>
+          </v-btn>
+        </v-list-item>
+        <v-list-item v-if="displayGbifData">
+          <v-list-item-icon>
+            <v-icon color="blue darken-2"></v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{ this.selectedResult.properties.addendum.gbif.occurrenceID }}
+            </v-list-item-title>
+            <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-btn
+            icon
+            :href="occurrenceUrl"
+            target="_blank"
+            id="gbifOccurrenceLink"
+          >
+            <v-icon>mdi-open-in-new</v-icon>
+          </v-btn>
+        </v-list-item>
+      </v-list-item-group>
     </v-list>
 
     <v-card-title v-if="isNewMarker" class="grey--text text--darken-2"
