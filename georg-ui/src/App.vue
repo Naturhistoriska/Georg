@@ -42,7 +42,10 @@ h1 {
   font-weight: 300;
   font-size: 3em;
 }
-
+h4 {
+  font-weight: 500;
+  font-size: 1em;
+}
 #body {
   background: transparent;
 }
