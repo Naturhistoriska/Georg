@@ -23,7 +23,7 @@ import se.nrm.georg.service.logic.GeorgLogic;
 @Api(tags = {"georg"})
 @SwaggerDefinition(   
   info = @Info(
-                title = "Georg api",
+                title = "Georg API",
                 version = "0.2.0"
         ),
   tags = {
