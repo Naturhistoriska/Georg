@@ -14,23 +14,28 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 
-## 0.4.0 - not released yet
+## 0.4.0 - 2020-06-18
 
 ### Added
 
-* Search results from two additional GBIF datasets: (1) the botany collection of the Museum of Evolution in Uppsala and (2) the entomological collection at the Swedish Museum of Natural History.
-* Scale bar on map.
-* Simple coordinate transformations.
-* Code for processing GBIF data, wich is kept in a separate repository: https://github.com/naturhistoriska/georg-data
+* Search results from three additional datasets:
+  - the botany collection of the Museum of Evolution in Uppsala (obtained from GBIF)
+  - the entomological collection at the Swedish Museum of Natural History (obtained from GBIF)
+  - a dataset from Swedish Virtual Herbarium with "socknar"
+* Scale bar visible on map.
+* Search result location coordinates displayed in different formats:
+  - Degrees, minutes, seconds (WGS84 DMS)
+  - Degrees, decimal minutes (WGS84 DDM)
+  - Decimal degrees (WGS84 DD)
+  - RT90
+  – SWEREF99 TM
+* Code for preprocessing data, wich is kept in a separate repository: https://github.com/naturhistoriska/georg-data
 
 
 ### Changed
 
 * Updated information on the about page ("Om Georg"). 
 * Improved search.
-
-
-### Fixed
 
 
 ## 0.3.0 - unknown
