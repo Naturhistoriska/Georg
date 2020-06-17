@@ -88,7 +88,7 @@
         <v-list-item
           v-if="!isNewMarker"
           v-on="
-            isGbif ? { click: openOrCloseGbifData } : { click: openWofLink }
+            isGbif ? { click: openOrCloseGbifData } : { click: openDataSourceLink }
           "
         >
           <v-list-item-icon>
@@ -388,9 +388,9 @@ export default {
         ? 'mdi-chevron-up'
         : 'mdi-chevron-down'
     },
-    openWofLink() {
+    openDataSourceLink() {
       event.preventDefault()
-      window.open('https://whosonfirst.org/docs/licenses/')
+      window.open(this.datasourcelink)
     },
     getOccurrenceKey() {
       const dataset = this.selectedResult.properties.layer
