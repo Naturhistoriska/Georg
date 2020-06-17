@@ -2,7 +2,7 @@ const visit = () => cy.visit('/')
 const fetchResults = () =>
   cy
     .focused()
-    .type('tyre')
+    .type('lur')
     .type('{enter}')
 
 describe('Results view', () => {
@@ -13,10 +13,10 @@ describe('Results view', () => {
     cy.get('#resultList')
       .children()
       .filter('div')
-      .should('have.length', 10)
+      .should('have.length', 8)
     cy.get('.leaflet-marker-pane')
       .children()
-      .should('have.length', 10)
+      .should('have.length', 8)
   })
 
   it('Hover result', () => {
@@ -43,9 +43,6 @@ describe('Results view', () => {
       .filter('div')
       .first()
       .click()
-    cy.get('.leaflet-marker-pane')
-      .children()
-      .should('have.length', 1)
 
     cy.get('#v-card-detail').should('be.visible')
   })

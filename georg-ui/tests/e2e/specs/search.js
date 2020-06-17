@@ -5,21 +5,21 @@ describe('Search results', () => {
 
   it('Search address', () => {
     cy.focused()
-      .type('tyre')
+      .type('lur')
       .type('{enter}')
 
     cy.get('#message').should('be.visible')
 
-    cy.contains('10 träffar').should('be.visible')
+    cy.contains('8 träffar').should('be.visible')
 
     cy.get('#resultList')
       .children()
       .filter('div')
-      .should('have.length', 10)
+      .should('have.length', 8)
 
     cy.get('.leaflet-marker-pane')
       .children()
-      .should('have.length', 10)
+      .should('have.length', 8)
   })
 
   it('Search with no result', () => {
