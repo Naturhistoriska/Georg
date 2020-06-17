@@ -82,7 +82,7 @@
       <v-list-item-group>
         <v-list-item
           v-if="!isNewMarker"
-          v-on="isGbif ? { click: openOrCloseGbifData } : null"
+          v-on="isGbif ? { click: openOrCloseGbifData } : {click: openWofLink}"
         >
           <v-list-item-icon>
             <v-icon color="blue darken-2">mdi-database-import</v-icon>
@@ -106,7 +106,7 @@
           </v-btn>
         </v-list-item>
 
-        <v-list-item v-if="displayGbifData">
+        <v-list-item v-if="displayGbifData" :href="datasetUrl" target="_blank">
           <v-list-item-icon>
             <v-icon color="blue darken-2"></v-icon>
           </v-list-item-icon>
@@ -118,7 +118,8 @@
             <v-icon>mdi-open-in-new</v-icon>
           </v-btn>
         </v-list-item>
-        <v-list-item v-if="displayGbifData">
+        <v-list-item v-if="displayGbifData" :href="occurrenceUrl"
+            target="_blank">
           <v-list-item-icon>
             <v-icon color="blue darken-2"></v-icon>
           </v-list-item-icon>
@@ -368,6 +369,10 @@ export default {
         this.getOccurrenceKey()
         this.getDatasetTitle()
       }
+    },
+    openWofLink() {
+      event.preventDefault()
+      window.open('https://whosonfirst.org/docs/licenses/')
     },
     getOccurrenceKey() {
       const dataset = this.selectedResult.properties.layer
