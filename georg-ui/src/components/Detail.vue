@@ -88,7 +88,9 @@
         <v-list-item
           v-if="!isNewMarker"
           v-on="
-            isGbif ? { click: openOrCloseGbifData } : { click: openDataSourceLink }
+            isGbif
+              ? { click: openOrCloseGbifData }
+              : { click: openDataSourceLink }
           "
         >
           <v-list-item-icon>
@@ -134,9 +136,9 @@
             <v-icon color="blue darken-2"></v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>
-              {{ this.selectedResult.properties.addendum.gbif.occurrenceID }}
-            </v-list-item-title>
+            <v-list-item-title>{{
+              this.selectedResult.properties.addendum.gbif.occurrenceID
+            }}</v-list-item-title>
             <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
           </v-list-item-content>
           <v-btn

@@ -7,7 +7,7 @@
 
   <groupId>se.nrm.georg</groupId>
   <artifactId>georg</artifactId>
-  <version>0.2</version>
+  <version>0.3</version>
   <packaging>pom</packaging>
   <name>${project.artifactId}</name>
 

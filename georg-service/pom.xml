@@ -8,7 +8,7 @@
   <parent>
     <artifactId>georg</artifactId>
     <groupId>se.nrm.georg</groupId>
-    <version>0.2</version>
+    <version>0.3</version>
   </parent>
 
   <groupId>se.nrm.georg</groupId>
