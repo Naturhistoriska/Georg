@@ -54,7 +54,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['detailView', 'displayMessage']),
+    ...mapGetters(['detailView']),
   },
 
   methods: {
@@ -99,9 +99,6 @@ export default {
 </script>
 
 <style scoped>
-.fixedPosition {
-  position: fixed !important;
-}
 #backResultListLink {
   margin-left: -10px;
 }
