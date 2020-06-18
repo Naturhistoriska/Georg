@@ -1,7 +1,7 @@
 <template>
   <v-list-item
-    @mouseover="onhove"
-    @mouseleave="unhove"
+    @mouseover="onhover"
+    @mouseleave="unhover"
     :class="resultColor"
     :key="result.properties.id"
     :id="result.properties.id"
@@ -130,13 +130,13 @@ export default {
       'setDidSearch',
     ]),
 
-    onhove() {
+    onhover() {
       if (this.result.properties.id !== 'newMarker') {
         this.setHovedResultId(this.result.properties.id)
       }
       this.setMouseLeaveResultId('')
     },
-    unhove() {
+    unhover() {
       if (this.result.properties.id !== 'newMarker') {
         this.setMouseLeaveResultId(this.result.properties.id)
       }
