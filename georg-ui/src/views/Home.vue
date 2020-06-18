@@ -14,7 +14,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-// import L from 'leaflet'
+
 import Search from '../components/Search'
 import Map from '../components/Map'
 import Results from '../components/Results'
@@ -31,7 +31,6 @@ export default {
 
   data() {
     return {
-      // bounds: {},
       mapHeight: 'height: 1500px',
       resultsHeight: 'height: 1400px',
     }
@@ -74,11 +73,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  bottom: 0;
   z-index: 0;
-}
-.resultsRow {
-  width: 600px;
-  margin-top: 9em !important;
-  margin-left: 1em;
 }
 </style>
