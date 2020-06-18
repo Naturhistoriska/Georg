@@ -27,7 +27,7 @@
         >{{ linkText }}</v-btn
       >
     </v-card-actions>
-    <v-card-actions v-if="!detailView">
+    <v-card-actions v-else>
       <div id="message" class="pt-2 grey--text text--darken-3 body-2">
         {{ message }}
       </div>
