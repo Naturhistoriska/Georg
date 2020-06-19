@@ -25,6 +25,8 @@ const getters = {
   selectedMarkerId: state => state.selectedMarkerId,
   newMarker: state => state.newMarker,
   uncertainty: state => state.uncertainty,
+  isNewMarker: state => state.selectedResult.properties.id === 'newMarker',
+  isGbif: state => state.selectedResult.properties.source === 'gbif',
 }
 
 const actions = {}

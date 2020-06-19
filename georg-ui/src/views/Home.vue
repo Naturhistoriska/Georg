@@ -5,7 +5,7 @@
       <v-divider v-if="!detailView && results.length > 0"></v-divider>
       <Results v-if="!detailView" v-bind:height="resultsHeight" />
     </v-card>
-    <Detail v-if="detailView" />
+    <DetailView v-if="detailView" />
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
     </div>
@@ -18,14 +18,14 @@ import { mapGetters } from 'vuex'
 import Search from '../components/Search'
 import Map from '../components/Map'
 import Results from '../components/Results'
-import Detail from '../components/Detail'
+import DetailView from '../components/DetailView'
 
 export default {
   name: 'Home',
   components: {
     Map,
     Results,
-    Detail,
+    DetailView,
     Search,
   },
 
