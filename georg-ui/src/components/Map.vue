@@ -213,6 +213,7 @@ export default {
     ]),
 
     resetLayerGroup() {
+      this.$refs.myMap.mapObject.removeLayer(this.circle)
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
     },
@@ -252,6 +253,24 @@ export default {
       })
     },
 
+    buildMarkers() {
+      this.resetLayerGroup()
+
+      this.bounds = L.latLngBounds()
+      this.results.forEach(result => {
+        this.bounds.extend([
+          result.geometry.coordinates[1],
+          result.geometry.coordinates[0],
+        ])
+
+        this.marker(result).addTo(this.layerGroup)
+      })
+
+      if (this.results != null && this.results.length > 0) {
+        this.fitMapBounds()
+      }
+    },
+
     marker: function(result) {
       const icon = this.icon(result)
 
@@ -277,49 +296,6 @@ export default {
         return L.marker([lat, lon], {
           icon,
         })
-      }
-    },
-
-    buildMarkers() {
-      this.$refs.myMap.mapObject.removeLayer(this.circle)
-      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
-
-      this.bounds = L.latLngBounds()
-      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
-
-      this.results.forEach(result => {
-        const lat = result.geometry.coordinates[1]
-        const lon = result.geometry.coordinates[0]
-        this.bounds.extend([lat, lon])
-
-        let icon
-        if (result.properties.id === 'newMarker') {
-          icon = MAP_ICONS.redIcon
-        } else if (result.properties.id === this.selectedResultId) {
-          icon = MAP_ICONS.blueIcon
-        } else {
-          icon = MAP_ICONS.greyIcon
-        }
-
-        let theMarker
-        if (result.properties.id === 'newMarker') {
-          theMarker = L.marker([lat, lon], {
-            id: 'newMarker',
-            pane: 'redMarker',
-            icon,
-          })
-        } else {
-          theMarker = L.marker([lat, lon], {
-            icon,
-          })
-        }
-
-        theMarker.addTo(this.layerGroup)
-      })
-
-      if (this.results != null && this.results.length > 0) {
-        this.fitMapBounds()
-        // this.highlightMarker()
       }
     },
 
