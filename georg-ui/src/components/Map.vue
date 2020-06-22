@@ -169,16 +169,16 @@ export default {
     },
     hoveredResultId() {
       this.$nextTick(() => {
-        // if (!this.detailView) {
-        this.highlightMarker()
-        // }
+        if (!this.detailView) {
+          this.highlightMarker()
+        }
       })
     },
     selectedResultId() {
       this.$nextTick(() => {
-        // if (!this.detailView) {
-        this.highlightMarker()
-        // }
+        if (!this.detailView) {
+          this.highlightMarker()
+        }
       })
     },
     center: function() {
@@ -199,7 +199,8 @@ export default {
     accuracy() {
       this.$nextTick(() => {
         if (this.accuracy >= 0) {
-          this.addUncertainty(this.accuracy)
+          this.addUncertainty(this.selectedResult)
+          // this.addUncertainty(this.accuracy)
         }
       })
     },
@@ -234,7 +235,10 @@ export default {
     },
 
     buildDetailMarker() {
-      this.resetLayerGroup()
+      // this.resetLayerGroup()
+      this.$refs.myMap.mapObject.removeLayer(this.circle)
+      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
+      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
 
       const lat = this.selectedResult.geometry.coordinates[1]
       const lon = this.selectedResult.geometry.coordinates[0]
@@ -243,13 +247,17 @@ export default {
         icon: this.icon(this.selectedResult),
       })
       theMarker.addTo(this.layerGroup)
-      this.addUncertainty(this.uncertainty())
+      this.addUncertainty(this.selectedResult)
     },
 
     highlightMarker() {
       this.resetLayerGroup()
       this.results.forEach(result => {
         this.marker(result).addTo(this.layerGroup)
+
+        if (this.isHoveredOrSelected(result)) {
+          this.addUncertainty(result)
+        }
       })
     },
 
@@ -299,25 +307,29 @@ export default {
       }
     },
 
-    addUncertainty(uncertity) {
+    addUncertainty(result) {
       this.$refs.myMap.mapObject.removeLayer(this.circle)
+      const uncertity = this.uncertainty(result)
       if (uncertity > 0) {
         this.circle = new L.Circle(
-          [this.center[0], this.center[1]],
+          [result.geometry.coordinates[1], result.geometry.coordinates[0]],
           parseInt(uncertity),
           this.circleOptions
         ).addTo(this.$refs.myMap.mapObject)
-        this.bounds = this.circle.getBounds()
-        this.fitMapBounds()
+        if (this.detailView) {
+          this.bounds = this.circle.getBounds()
+          this.fitMapBounds()
+        }
       } else {
-        this.zoom = 18
+        if (this.detailView) {
+          this.zoom = 18
+        }
       }
     },
 
-    uncertainty: function() {
-      return this.selectedResult.source !== 'whosonfirst'
-        ? this.selectedResult.properties.addendum.georg
-            .coordinateUncertaintyInMeters
+    uncertainty: function(result) {
+      return result.properties.source !== 'whosonfirst'
+        ? result.properties.addendum.georg.coordinateUncertaintyInMeters
         : null
     },
 
