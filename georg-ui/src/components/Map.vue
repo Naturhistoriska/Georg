@@ -102,6 +102,15 @@ export default {
   mounted() {
     this.bounds = initialBound
 
+    this.$refs.myMap.mapObject.createPane('topMarker')
+    this.$refs.myMap.mapObject.getPane('topMarker').style.zIndex = 888
+
+    this.$refs.myMap.mapObject.createPane('lowerMarker')
+    this.$refs.myMap.mapObject.getPane('lowerMarker').style.zIndex = 666
+
+    this.$refs.myMap.mapObject.createPane('redMarker')
+    this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
+
     if (this.detailView) {
       this.buildDetailMarker()
     }
@@ -228,8 +237,6 @@ export default {
 
         let theMarker
         if (result.properties.id === 'newMarker') {
-          this.$refs.myMap.mapObject.createPane('redMarker')
-          this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
           theMarker = L.marker([lat, lon], {
             id: 'newMarker',
             pane: 'redMarker',
@@ -281,12 +288,6 @@ export default {
     highlightMarker() {
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
 
-      this.$refs.myMap.mapObject.createPane('topMarker')
-      this.$refs.myMap.mapObject.getPane('topMarker').style.zIndex = 888
-
-      this.$refs.myMap.mapObject.createPane('lowerMarker')
-      this.$refs.myMap.mapObject.getPane('lowerMarker').style.zIndex = 666
-
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
       this.results.forEach(result => {
         const lat = result.geometry.coordinates[1]
@@ -316,8 +317,6 @@ export default {
             icon,
           })
         } else if (result.properties.id === 'newMarker') {
-          this.$refs.myMap.mapObject.createPane('redMarker')
-          this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
           theMarker = L.marker([lat, lon], {
             id: 'newMarker',
             pane: 'redMarker',
