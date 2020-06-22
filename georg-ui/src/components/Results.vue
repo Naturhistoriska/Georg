@@ -2,7 +2,6 @@
   <v-list
     v-if="results.length"
     id="scroll-target"
-    v-scroll:#st="onScroll"
     class="overflow-y-auto"
     :style="height"
   >
@@ -28,7 +27,7 @@ export default {
     Result,
   },
 
-  props: ['onScroll', 'height'],
+  props: ['height'],
   data() {
     return {
       result: {},
