@@ -1,35 +1,37 @@
 const state = {
   accuracy: -1,
+  detialViewId: '',
+  didSearch: false,
   displayMessage: false,
   isDetailView: false,
-  didSearch: false,
   hoveredResultId: '',
-  unhoveredResultId: '',
+  newMarker: {},
   results: [],
   selectedResult: {},
   selectedResultId: '',
-  detialViewId: '',
   selectedMarkerId: '',
-  newMarker: {},
+  unhoveredResultId: '',
 }
 const getters = {
   accuracy: state => state.accuracy,
   detailView: state => state.isDetailView,
-  didSearch: state => state.didSearch,
+  detialViewId: state => state.detialViewId,
   displayMessage: state => state.didSearch,
+  didSearch: state => state.didSearch,
   hoveredResultId: state => state.hoveredResultId,
+  isNewMarker: state => state.selectedResult.properties.id === 'newMarker',
+  isGbif: state => state.selectedResult.properties.source === 'gbif',
+  isWOF: state => state.selectedResult.properties.source === 'whosonfirst',
+  newMarker: state => state.newMarker,
   unhoveredResultId: state => state.unhoveredResultId,
   selectedResult: state => state.selectedResult,
   results: state => state.results,
   selectedResultId: state => state.selectedResultId,
-  detialViewId: state => state.detialViewId,
   selectedMarkerId: state => state.selectedMarkerId,
-  newMarker: state => state.newMarker,
-  isNewMarker: state => state.selectedResult.properties.id === 'newMarker',
-  isGbif: state => state.selectedResult.properties.source === 'gbif',
 }
 
 const actions = {}
+
 const mutations = {
   setAccuracy: (state, payload) => (state.accuracy = payload),
   setDidSearch: (state, payload) => (state.didSearch = payload),
