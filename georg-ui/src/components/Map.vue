@@ -79,7 +79,7 @@ export default {
   props: ['mapHeight', 'latlon'],
   data() {
     return {
-      activeMarker: {},
+      // activeMarker: {},
       bounds: {},
       center: [59.0, 15.0],
       circle: {},
@@ -89,7 +89,7 @@ export default {
         fillOpacity: 0.3,
       },
       enableAddMapMarkers: false,
-      hovedMarker: {},
+      // hovedMarker: {},
       layerGroup: {},
       mapOptions: {
         zoomControl: true,
@@ -131,11 +131,6 @@ export default {
       .addTo(this.$refs.myMap.mapObject)
 
     this.$refs.myMap.mapObject.invalidateSize()
-    // x=-128.455, y=51.61, ratio=FALSE, relwidth=0.2
-    // L.control
-    //   .scale({ position: 'bottomleft' })
-    //   .addTo(this.$refs.myMap.mapObject)
-    // this.$refs.myMap.mapObject.invalidateSize()
   },
   computed: {
     ...mapGetters([
@@ -144,7 +139,7 @@ export default {
       'didSearch',
       'results',
       'hoveredResultId',
-      'unhoveredResultId',
+      // 'unhoveredResultId',
       'selectedResult',
       'selectedResultId',
       // 'uncertainty',
@@ -174,14 +169,16 @@ export default {
     },
     hoveredResultId() {
       this.$nextTick(() => {
+        // if (!this.detailView) {
         this.highlightMarker()
+        // }
       })
     },
     selectedResultId() {
       this.$nextTick(() => {
-        if (!this.detailView) {
-          this.highlightMarker()
-        }
+        // if (!this.detailView) {
+        this.highlightMarker()
+        // }
       })
     },
     center: function() {
@@ -210,7 +207,7 @@ export default {
   methods: {
     ...mapMutations([
       'setSelectedMarkerId',
-      'setNewMarkers',
+      // 'setNewMarkers',
       'setResults',
       'setAccuracy',
     ]),
@@ -220,10 +217,19 @@ export default {
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
     },
 
-    icon: function() {
-      return this.selectedResult.properties.id === 'newMarker'
+    isHoveredOrSelected: function(result) {
+      return (
+        result.properties.id === this.selectedResultId ||
+        result.properties.id === this.hoveredResultId
+      )
+    },
+
+    icon: function(result) {
+      return result.properties.id === 'newMarker'
         ? MAP_ICONS.redIcon
-        : MAP_ICONS.blueIcon
+        : this.isHoveredOrSelected(result)
+        ? MAP_ICONS.blueIcon
+        : MAP_ICONS.greyIcon
     },
 
     buildDetailMarker() {
@@ -233,10 +239,45 @@ export default {
       const lon = this.selectedResult.geometry.coordinates[0]
       this.center = [lat, lon]
       const theMarker = L.marker([lat, lon], {
-        icon: this.icon(),
+        icon: this.icon(this.selectedResult),
       })
       theMarker.addTo(this.layerGroup)
       this.addUncertainty(this.uncertainty())
+    },
+
+    highlightMarker() {
+      this.resetLayerGroup()
+      this.results.forEach(result => {
+        this.marker(result).addTo(this.layerGroup)
+      })
+    },
+
+    marker: function(result) {
+      const icon = this.icon(result)
+
+      const lat = result.geometry.coordinates[1]
+      const lon = result.geometry.coordinates[0]
+      if (result.properties.id === this.hoveredResultId) {
+        return L.marker([lat, lon], {
+          pane: 'topMarker',
+          icon,
+        })
+      } else if (result.properties.id === this.selectedResultId) {
+        return L.marker([lat, lon], {
+          pane: 'lowerMarker',
+          icon,
+        })
+      } else if (result.properties.id === 'newMarker') {
+        return L.marker([lat, lon], {
+          id: 'newMarker',
+          pane: 'redMarker',
+          icon,
+        })
+      } else {
+        return L.marker([lat, lon], {
+          icon,
+        })
+      }
     },
 
     buildMarkers() {
@@ -280,52 +321,6 @@ export default {
         this.fitMapBounds()
         // this.highlightMarker()
       }
-    },
-
-    highlightMarker() {
-      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
-
-      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
-      this.results.forEach(result => {
-        const lat = result.geometry.coordinates[1]
-        const lon = result.geometry.coordinates[0]
-
-        let icon
-        if (result.properties.id === 'newMarker') {
-          icon = MAP_ICONS.redIcon
-        } else if (
-          result.properties.id === this.selectedResultId ||
-          result.properties.id === this.hoveredResultId
-        ) {
-          icon = MAP_ICONS.blueIcon
-        } else {
-          icon = MAP_ICONS.greyIcon
-        }
-
-        let theMarker
-        if (result.properties.id === this.hoveredResultId) {
-          theMarker = L.marker([lat, lon], {
-            pane: 'topMarker',
-            icon,
-          })
-        } else if (result.properties.id === this.selectedResultId) {
-          theMarker = L.marker([lat, lon], {
-            pane: 'lowerMarker',
-            icon,
-          })
-        } else if (result.properties.id === 'newMarker') {
-          theMarker = L.marker([lat, lon], {
-            id: 'newMarker',
-            pane: 'redMarker',
-            icon,
-          })
-        } else {
-          theMarker = L.marker([lat, lon], {
-            icon,
-          })
-        }
-        theMarker.addTo(this.layerGroup)
-      })
     },
 
     addUncertainty(uncertity) {
