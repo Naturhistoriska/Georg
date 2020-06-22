@@ -8,7 +8,7 @@
         class="mr-4 mt-2"
         v-for="tag in tags"
         :key="tag.label"
-        @click="addUncertaintyValue(tag.value)"
+        @click="addAccuracyValue(tag.value)"
         >{{ tag.label }}</v-chip
       >
       <v-container class="mb-0 pb-0">
@@ -20,7 +20,7 @@
               suffix="meter"
               type="number"
               color="red darken-2"
-              v-model="accuracy"
+              v-model="accuracyValue"
               label="Radie ?"
               min="0"
               max="10000000"
@@ -49,7 +49,7 @@ export default {
   name: 'Uncertainty',
   data() {
     return {
-      accuracy: null,
+      accuracyValue: null,
       disableSetUncertaintyBtn: true,
       msgClass: 'grey--text',
       tags: [
@@ -62,13 +62,13 @@ export default {
     }
   },
   mounted() {
-    if (this.uncertainty >= 0) {
-      this.accuracy = this.uncertainty
+    if (this.accuracy >= 0) {
+      this.accuracyValue = this.accuracy
       this.uncertintyChangedByChip = true
     }
   },
   watch: {
-    accuracy: function() {
+    accuracyValue: function() {
       this.$nextTick(() => {
         this.checkUncertaintyValue()
         if (!this.uncertintyChangedByChip) {
@@ -80,27 +80,28 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['uncertainty']),
+    ...mapGetters(['accuracy', 'selectedResult']),
   },
   methods: {
-    ...mapMutations(['setUncertainty']),
+    ...mapMutations(['setAccuracy']),
     setUncertaintyValue() {
-      this.setUncertainty(this.accuracy)
+      this.selectedResult.properties.addendum.georg.coordinateUncertaintyInMeters = this.accuracyValue
+      this.setAccuracy(this.accuracyValue)
       this.disableSetUncertaintyBtn = true
       this.msgClass = 'grey--text'
     },
-    addUncertaintyValue(value) {
-      this.accuracy = value
+    addAccuracyValue(value) {
+      this.accuracyValue = value
       this.setUncertaintyValue()
       this.uncertintyChangedByChip = true
     },
     checkUncertaintyValue() {
-      this.accuracy =
-        this.accuracy > 10000000
+      this.accuracyValue =
+        this.accuracyValue > 10000000
           ? 10000000
-          : this.accuracy < 0
+          : this.accuracyValue < 0
           ? 0
-          : this.accuracy
+          : this.accuracyValue
     },
   },
 }

@@ -139,6 +139,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'accuracy',
       'detailView',
       'didSearch',
       'results',
@@ -146,7 +147,7 @@ export default {
       'unhoveredResultId',
       'selectedResult',
       'selectedResultId',
-      'uncertainty',
+      // 'uncertainty',
     ]),
 
     iconColor: function() {
@@ -198,10 +199,10 @@ export default {
         }
       })
     },
-    uncertainty() {
+    accuracy() {
       this.$nextTick(() => {
-        if (this.uncertainty >= 0) {
-          this.addUncertainty()
+        if (this.accuracy >= 0) {
+          this.addUncertainty(this.accuracy)
         }
       })
     },
@@ -211,7 +212,7 @@ export default {
       'setSelectedMarkerId',
       'setNewMarkers',
       'setResults',
-      'setUncertainty',
+      'setAccuracy',
     ]),
 
     resetLayerGroup() {
@@ -327,18 +328,26 @@ export default {
       })
     },
 
-    addUncertainty() {
+    addUncertainty(uncertity) {
       this.$refs.myMap.mapObject.removeLayer(this.circle)
-
-      if (this.uncertainty) {
+      if (uncertity > 0) {
         this.circle = new L.Circle(
           [this.center[0], this.center[1]],
-          parseInt(this.uncertainty),
+          parseInt(uncertity),
           this.circleOptions
         ).addTo(this.$refs.myMap.mapObject)
         this.bounds = this.circle.getBounds()
         this.fitMapBounds()
+      } else {
+        this.zoom = 18
       }
+    },
+
+    uncertainty: function() {
+      return this.selectedResult.source !== 'whosonfirst'
+        ? this.selectedResult.properties.addendum.georg
+            .coordinateUncertaintyInMeters
+        : null
     },
 
     onMapClick(event) {
@@ -349,6 +358,11 @@ export default {
           properties: {
             id: 'newMarker',
             name: 'Din plats',
+            addendum: {
+              georg: {
+                coordinateUncertaintyInMeters: null,
+              },
+            },
           },
           geometry: {
             coordinates: [fixer.digits(latlng.lng), fixer.digits(latlng.lat)],
@@ -359,7 +373,7 @@ export default {
         this.results.unshift(result)
         this.setResults(this.results)
         this.rezoom = false
-        this.setUncertainty(-1)
+        this.setAccuracy(-1)
       }
 
       // this.$emit("addMarker", event.latlng);
