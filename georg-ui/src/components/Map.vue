@@ -214,6 +214,30 @@ export default {
       'setUncertainty',
     ]),
 
+    resetLayerGroup() {
+      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
+      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
+    },
+
+    icon: function() {
+      return this.selectedResult.properties.id === 'newMarker'
+        ? MAP_ICONS.redIcon
+        : MAP_ICONS.blueIcon
+    },
+
+    buildDetailMarker() {
+      this.resetLayerGroup()
+
+      const lat = this.selectedResult.geometry.coordinates[1]
+      const lon = this.selectedResult.geometry.coordinates[0]
+      this.center = [lat, lon]
+      const theMarker = L.marker([lat, lon], {
+        icon: this.icon(),
+      })
+      theMarker.addTo(this.layerGroup)
+      this.addUncertainty(this.uncertainty())
+    },
+
     buildMarkers() {
       this.$refs.myMap.mapObject.removeLayer(this.circle)
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
@@ -254,34 +278,6 @@ export default {
       if (this.results != null && this.results.length > 0) {
         this.fitMapBounds()
         // this.highlightMarker()
-      }
-    },
-    buildDetailMarker() {
-      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
-
-      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
-
-      const lat = this.selectedResult.geometry.coordinates[1]
-      const lon = this.selectedResult.geometry.coordinates[0]
-      this.center = [lat, lon]
-
-      const theIcon =
-        this.selectedResult.properties.id === 'newMarker'
-          ? MAP_ICONS.redIcon
-          : MAP_ICONS.blueIcon
-
-      const theMarker = L.marker([lat, lon], {
-        icon: theIcon,
-      })
-      theMarker.addTo(this.layerGroup)
-
-      if (
-        this.selectedResult.properties.id === 'newMarker' &&
-        this.uncertainty > 0
-      ) {
-        this.addUncertainty()
-      } else {
-        this.zoom = 18
       }
     },
 
