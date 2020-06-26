@@ -7,7 +7,12 @@
   >
     <v-list-item-group id="resultList">
       <template v-for="(result, index) in results">
-        <Result v-bind:result="result" :key="result.properties.id" />
+        <NewMarker
+          v-bind:result="result"
+          :key="result.properties.id"
+          v-if="result.properties.id === 'newMarker'"
+        />
+        <Result v-bind:result="result" :key="result.properties.id" v-else />
         <v-divider
           v-if="index + 1 < results.length"
           :key="'devider-' + index"
@@ -19,11 +24,13 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import NewMarker from './NewMarker'
 import Result from './Result'
 
 export default {
   name: 'Results',
   components: {
+    NewMarker,
     Result,
   },
 

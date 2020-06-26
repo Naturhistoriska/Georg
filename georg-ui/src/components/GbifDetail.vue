@@ -1,11 +1,9 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
-    <v-card-title class="'headline blue--text text--darken-2'">{{
-      selectedResult.properties.addendum.georg.locationDisplayLabel
-    }}</v-card-title>
-    <v-card-subtitle>
-      {{ selectedResult.properties.name }}
-    </v-card-subtitle>
+    <v-card-title class="'headline blue--text text--darken-2'">
+      {{ selectedResult.properties.addendum.georg.locationDisplayLabel }}
+    </v-card-title>
+    <v-card-subtitle>{{ selectedResult.properties.name }}</v-card-subtitle>
     <v-card-text>
       <v-alert dense text type="warning" class="alertText mb-n3 mt-0"
         >Saknar geodetiskt datum, WGS84 har antagits.</v-alert
@@ -18,25 +16,7 @@
         v-bind:isNewMarker="false"
       />
       <v-divider inset></v-divider>
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="blue darken-2">mdi-file-tree</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ selectedResult.properties.county }}
-            <span class="text--secondary">county</span>
-          </v-list-item-title>
-          <v-list-item-title>
-            {{ selectedResult.properties.region }}
-            <span class="text--secondary">region</span>
-          </v-list-item-title>
-          <v-list-item-title>
-            {{ selectedResult.properties.country }}
-            <span class="text--secondary">country</span>
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <GeographTree />
       <v-divider inset></v-divider>
       <v-list-item-group>
         <v-list-item @click="openOrCloseGbifData()">
@@ -44,12 +24,10 @@
             <v-icon color="blue darken-2">mdi-database-import</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title
-              >Data från
-              {{
-                selectedResult.properties.source.toUpperCase()
-              }}</v-list-item-title
-            >
+            <v-list-item-title>
+              Data från
+              {{ selectedResult.properties.source.toUpperCase() }}
+            </v-list-item-title>
           </v-list-item-content>
           <v-btn icon>
             <v-icon>{{ iconToggleGbifData }}</v-icon>
@@ -77,9 +55,9 @@
             <v-icon color="blue darken-2"></v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{
-              selectedResult.properties.addendum.gbif.occurrenceID
-            }}</v-list-item-title>
+            <v-list-item-title>
+              {{ selectedResult.properties.addendum.gbif.occurrenceID }}
+            </v-list-item-title>
             <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
           </v-list-item-content>
           <v-btn
@@ -99,6 +77,7 @@
 import { mapGetters } from 'vuex'
 import Service from '../Service'
 import Coordinates from './Coordinates'
+import GeographTree from './GeographTree'
 
 const service = new Service()
 const nhrsNrmKey = process.env.VUE_APP_NHRS_NRM_KEY
@@ -112,6 +91,7 @@ export default {
   name: 'GbifDetail',
   components: {
     Coordinates,
+    GeographTree,
   },
   data() {
     return {

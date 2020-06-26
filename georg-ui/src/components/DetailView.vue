@@ -1,23 +1,20 @@
 <template>
   <GbifDetail v-if="isGbif" />
-  <NewMarkerDetail v-else-if="isNewMarker" />
   <Detail v-else />
 </template>
 <script>
 import { mapGetters } from 'vuex'
 import Detail from './Detail'
 import GbifDetail from './GbifDetail'
-import NewMarkerDetail from './NewMarkerDetail'
 
 export default {
   name: 'DetailView',
   components: {
     Detail,
     GbifDetail,
-    NewMarkerDetail,
   },
   computed: {
-    ...mapGetters(['isGbif', 'isNewMarker']),
+    ...mapGetters(['isGbif']),
   },
 }
 </script>

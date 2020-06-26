@@ -85,7 +85,7 @@ export default {
   methods: {
     ...mapMutations(['setAccuracy']),
     setUncertaintyValue() {
-      this.selectedResult.properties.addendum.georg.coordinateUncertaintyInMeters = this.accuracyValue
+      this.selectedResult.properties.coordinateUncertaintyInMeters = this.accuracyValue
       this.setAccuracy(this.accuracyValue)
       this.disableSetUncertaintyBtn = true
       this.msgClass = 'grey--text'

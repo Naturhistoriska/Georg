@@ -45,6 +45,8 @@
 import L from 'leaflet'
 import { LMap, LTileLayer } from 'vue2-leaflet'
 import { mapGetters, mapMutations } from 'vuex'
+import Service from '../Service'
+const service = new Service()
 
 import * as fixer from '../assets/js/decimalPlacesFixer.js'
 
@@ -82,14 +84,16 @@ export default {
       // activeMarker: {},
       bounds: {},
       center: [59.0, 15.0],
-      circle: {},
+      circles: [],
       circleOptions: {
         color: 'red',
         fillColor: '#ff9999',
         fillOpacity: 0.3,
+        pane: 'lowerMarker',
       },
       enableAddMapMarkers: false,
       // hovedMarker: {},
+      isLoaded: false,
       layerGroup: {},
       mapOptions: {
         zoomControl: true,
@@ -139,10 +143,8 @@ export default {
       'didSearch',
       'results',
       'hoveredResultId',
-      // 'unhoveredResultId',
       'selectedResult',
       'selectedResultId',
-      // 'uncertainty',
     ]),
 
     iconColor: function() {
@@ -206,56 +208,53 @@ export default {
     },
   },
   methods: {
-    ...mapMutations([
-      'setSelectedMarkerId',
-      // 'setNewMarkers',
-      'setResults',
-      'setAccuracy',
-    ]),
+    ...mapMutations(['setAccuracy', 'setResults', 'setSelectedMarkerId']),
 
+    removeUncertainties() {
+      this.circles.forEach(circle => {
+        this.$refs.myMap.mapObject.removeLayer(circle)
+      })
+    },
     resetLayerGroup() {
-      this.$refs.myMap.mapObject.removeLayer(this.circle)
+      this.removeUncertainties()
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
     },
 
-    isHoveredOrSelected: function(result) {
+    isHoveredOrSelected: function(id) {
       return (
-        result.properties.id === this.selectedResultId ||
-        result.properties.id === this.hoveredResultId
+        id === this.selectedResultId ||
+        id === this.hoveredResultId ||
+        id === 'newMarker'
       )
     },
 
-    icon: function(result) {
-      return result.properties.id === 'newMarker'
+    icon: function(id) {
+      return id === 'newMarker'
         ? MAP_ICONS.redIcon
-        : this.isHoveredOrSelected(result)
+        : this.isHoveredOrSelected(id)
         ? MAP_ICONS.blueIcon
         : MAP_ICONS.greyIcon
     },
 
     buildDetailMarker() {
-      // this.resetLayerGroup()
-      this.$refs.myMap.mapObject.removeLayer(this.circle)
-      this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
-      this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
-
+      this.resetLayerGroup()
       const lat = this.selectedResult.geometry.coordinates[1]
       const lon = this.selectedResult.geometry.coordinates[0]
       this.center = [lat, lon]
       const theMarker = L.marker([lat, lon], {
-        icon: this.icon(this.selectedResult),
+        icon: this.icon(this.selectedResult.properties.id),
       })
       theMarker.addTo(this.layerGroup)
       this.addUncertainty(this.selectedResult)
     },
 
     highlightMarker() {
+      // this.$refs.myMap.mapObject.removeLayer(this.circle)
       this.resetLayerGroup()
       this.results.forEach(result => {
         this.marker(result).addTo(this.layerGroup)
-
-        if (this.isHoveredOrSelected(result)) {
+        if (this.isHoveredOrSelected(result.properties.id)) {
           this.addUncertainty(result)
         }
       })
@@ -273,14 +272,14 @@ export default {
 
         this.marker(result).addTo(this.layerGroup)
       })
-
+      this.highlightMarker()
       if (this.results != null && this.results.length > 0) {
         this.fitMapBounds()
       }
     },
 
     marker: function(result) {
-      const icon = this.icon(result)
+      const icon = this.icon(result.properties.id)
 
       const lat = result.geometry.coordinates[1]
       const lon = result.geometry.coordinates[0]
@@ -308,18 +307,18 @@ export default {
     },
 
     addUncertainty(result) {
-      this.$refs.myMap.mapObject.removeLayer(this.circle)
       const uncertity = this.uncertainty(result)
       if (uncertity > 0) {
-        this.circle = new L.Circle(
+        const circle = new L.Circle(
           [result.geometry.coordinates[1], result.geometry.coordinates[0]],
           parseInt(uncertity),
           this.circleOptions
         ).addTo(this.$refs.myMap.mapObject)
         if (this.detailView) {
-          this.bounds = this.circle.getBounds()
+          this.bounds = circle.getBounds()
           this.fitMapBounds()
         }
+        this.circles.push(circle)
       } else {
         if (this.detailView) {
           this.zoom = 18
@@ -328,38 +327,57 @@ export default {
     },
 
     uncertainty: function(result) {
-      return result.properties.source !== 'whosonfirst'
+      return result.properties.id === 'newMarker'
+        ? result.properties.coordinateUncertaintyInMeters
+        : result.properties.source !== 'whosonfirst'
         ? result.properties.addendum.georg.coordinateUncertaintyInMeters
         : null
+    },
+
+    reverseResult(lat, lng) {
+      this.isLoaded = true
+
+      return service
+        .reverseGeoCodingResults(lat, lng)
+        .then(response => {
+          this.isLoaded = false
+          this.addNewMarkerResult(response.features[0], lat, lng)
+        })
+        .catch(function() {})
     },
 
     onMapClick(event) {
       if (this.enableAddMapMarkers && !this.detailView) {
         const latlng = event.latlng
-        const result = {
-          isNew: true,
-          properties: {
-            id: 'newMarker',
-            name: 'Din plats',
-            addendum: {
-              georg: {
-                coordinateUncertaintyInMeters: null,
-              },
-            },
-          },
-          geometry: {
-            coordinates: [fixer.digits(latlng.lng), fixer.digits(latlng.lat)],
-          },
-        }
-        this.removeOldCustomMarker()
-
-        this.results.unshift(result)
-        this.setResults(this.results)
+        this.reverseResult(latlng.lat, latlng.lng)
         this.rezoom = false
         this.setAccuracy(-1)
       }
 
       // this.$emit("addMarker", event.latlng);
+    },
+    addNewMarkerResult(result, lat, lng) {
+      this.removeOldCustomMarker()
+
+      if (result && result.properties.country !== undefined) {
+        result.properties.id = 'newMarker'
+        result.properties.name = 'Din plats'
+        result.properties.isNew = false
+        result.geometry.coordinates = [fixer.digits(lng), fixer.digits(lat)]
+      } else {
+        result = {
+          properties: {
+            id: 'newMarker',
+            name: 'Din plats',
+            isNew: true,
+          },
+          geometry: {
+            coordinates: [fixer.digits(lng), fixer.digits(lat)],
+          },
+        }
+      }
+      this.results.unshift(result)
+      this.setResults(this.results)
     },
 
     removeOldCustomMarker() {

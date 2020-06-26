@@ -1,56 +1,32 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
-    <v-card-title class="headline blue--text text--darken-2'">{{
+    <v-card-title v-bind:class="titleClass">{{ title }}</v-card-title>
+    <v-card-subtitle v-if="isGbif">{{
       selectedResult.properties.name
-    }}</v-card-title>
-    <v-card-subtitle>
+    }}</v-card-subtitle>
+    <v-card-subtitle v-else-if="!isDinPlats">
       <strong class="text-capitalize">{{
         selectedResult.properties.layer
       }}</strong>
       enligt {{ source }}
     </v-card-subtitle>
+    <v-card-text v-if="isGbif">
+      <v-alert dense text type="warning" class="alertText mb-n3 mt-0"
+        >Saknar geodetiskt datum, WGS84 har antagits.</v-alert
+      >
+    </v-card-text>
     <v-list flat>
       <Coordinates
         v-bind:lat="selectedResult.geometry.coordinates[1]"
         v-bind:lon="selectedResult.geometry.coordinates[0]"
-        v-bind:isNewMarker="false"
+        v-bind:isNewMarker="isNewMarker"
       />
       <v-divider inset></v-divider>
-      <v-list-item>
-        <v-list-item-icon>
-          <v-icon color="blue darken-2">mdi-file-tree</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ selectedResult.properties.county }}
-            <span class="text--secondary">county</span>
-          </v-list-item-title>
-          <v-list-item-title>
-            {{ selectedResult.properties.region }}
-            <span class="text--secondary">region</span>
-          </v-list-item-title>
-          <v-list-item-title>
-            {{ selectedResult.properties.country }}
-            <span class="text--secondary">country</span>
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+      <GeographicTree v-if="!undefinedMarker" />
       <v-divider inset></v-divider>
-      <v-list-item-group>
-        <v-list-item @click.prevent="openExternalLink">
-          <v-list-item-icon>
-            <v-icon color="blue darken-2">mdi-database-import</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title
-              >Data från {{ dataFromSource }}</v-list-item-title
-            >
-          </v-list-item-content>
-          <v-btn icon :href="externallink" target="_blank" id="externalLink">
-            <v-icon>mdi-open-in-new</v-icon>
-          </v-btn>
-        </v-list-item>
-      </v-list-item-group>
+      <Uncertainty v-if="isNewMarker" />
+      <GbifDataSourceLinks v-else-if="isGbif" />
+      <DataSourceLinks v-else />
     </v-list>
   </v-card>
 </template>
@@ -58,47 +34,56 @@
 <script>
 import { mapGetters } from 'vuex'
 import Coordinates from './Coordinates'
+import DataSourceLinks from './DataSourceLinks'
+import GbifDataSourceLinks from './GbifDataSourceLinks'
+import GeographicTree from './GeographicTree'
+import Uncertainty from './Uncertainty'
 
 export default {
   name: 'Detail',
   components: {
     Coordinates,
+    DataSourceLinks,
+    GbifDataSourceLinks,
+    GeographicTree,
+    Uncertainty,
   },
 
   data() {
-    return {
-      datasetTitle: '',
-    }
+    return {}
   },
 
   computed: {
-    ...mapGetters(['selectedResult']),
+    ...mapGetters(['isGbif', 'isNewMarker', 'selectedResult']),
+    title: function() {
+      return this.isGbif
+        ? this.selectedResult.properties.addendum.georg.locationDisplayLabel
+        : this.selectedResult.properties.name
+    },
+    titleClass: function() {
+      return this.isNewMarker
+        ? 'red--text darken-2'
+        : 'headline blue--text text--darken-2'
+    },
 
     source: function() {
       return this.selectedResult.properties.source === 'whosonfirst'
         ? "Who's On First"
         : 'Virtuella Herbariet'
     },
-    dataFromSource: function() {
-      return this.selectedResult.properties.source === 'whosonfirst'
-        ? "Who's On First (WOF)"
-        : 'Virtuella Herbariet (SVH)'
+
+    isDinPlats: function() {
+      return this.selectedResult.properties.name === 'Din plats'
     },
-    externallink: function() {
-      return this.selectedResult.properties.source === 'whosonfirst'
-        ? 'https://whosonfirst.org/docs/licenses/'
-        : 'https://github.com/mossnisse/Virtuella-Herbariet'
-    },
-  },
-  methods: {
-    openExternalLink() {
-      window.open(this.externallink)
+
+    undefinedMarker: function() {
+      return this.selectedResult.properties.isNew
     },
   },
 }
 </script>
 <style scoped>
-/* #v-card-detail {
+#v-card-detail {
   z-index: 2;
 }
 .alertText {
@@ -107,5 +92,5 @@ export default {
 
 #v-card-detail .v-card__title {
   word-break: break-word;
-} */
+}
 </style>
