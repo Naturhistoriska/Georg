@@ -1,7 +1,7 @@
 <template>
   <div id="container" class="container container--fluid">
     <v-card id="navi">
-      <Search />
+      <AutocompleteSearch />
       <v-divider v-if="!detailView && results.length > 0"></v-divider>
       <Results v-if="!detailView" v-bind:height="resultsHeight" />
     </v-card>
@@ -15,7 +15,8 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import Search from '../components/Search'
+import AutocompleteSearch from '../components/AutocompleteSearch'
+// import Search from '../components/Search'
 import Map from '../components/Map'
 import Results from '../components/Results'
 import Detail from '../components/Detail'
@@ -23,10 +24,11 @@ import Detail from '../components/Detail'
 export default {
   name: 'Home',
   components: {
+    AutocompleteSearch,
     Map,
     Results,
     Detail,
-    Search,
+    // Search,
   },
 
   data() {
