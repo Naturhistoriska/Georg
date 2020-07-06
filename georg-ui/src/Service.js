@@ -11,6 +11,12 @@ export default class Service {
     return response.data
   }
 
+  async autoCompleteSearch(value) {
+    const url = `${baseUrl}search?text=${value}`
+    const response = await axios.get(url)
+    return response.data
+  }
+
   async reverseGeoCodingResults(lat, lng) {
     const url = `${baseUrl}reverse?lat=${lat}&lng=${lng}`
     // const url = `${baseUrl}search?text=${address}`
