@@ -89,7 +89,7 @@ export default {
         color: 'red',
         fillColor: '#ff9999',
         fillOpacity: 0.3,
-        pane: 'lowerMarker',
+        pane: 'circleMarker',
       },
       enableAddMapMarkers: false,
       // hovedMarker: {},
@@ -114,6 +114,9 @@ export default {
 
     this.$refs.myMap.mapObject.createPane('redMarker')
     this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
+
+    this.$refs.myMap.mapObject.createPane('circleMarker')
+    this.$refs.myMap.mapObject.getPane('circleMarker').style.zIndex = 555
 
     if (this.detailView) {
       this.buildDetailMarker()
