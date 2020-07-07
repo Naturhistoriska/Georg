@@ -5,6 +5,7 @@ import router from './router'
 import store from './store'
 
 import vuetify from './plugins/vuetify'
+import Clipboard from 'v-clipboard'
 
 import 'vuetify/dist/vuetify.css'
 
@@ -23,7 +24,7 @@ Vue.component('l-marker', LMarker)
 
 Vue.config.productionTip = false
 
-Vue.use(vuetify, {
+Vue.use(Clipboard, vuetify, {
   theme: {
     primary: '#FF6E40',
     secondary: '#FF9E80',

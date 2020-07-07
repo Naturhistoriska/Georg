@@ -8,6 +8,7 @@
     <Detail v-if="detailView" />
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
+      <JsonResult v-if="displayJsonData" />
     </div>
   </div>
 </template>
@@ -16,25 +17,26 @@
 import { mapGetters } from 'vuex'
 
 import AutocompleteSearch from '../components/AutocompleteSearch'
-// import Search from '../components/Search'
+import Detail from '../components/Detail'
+import JsonResult from '../components/JsonResult'
 import Map from '../components/Map'
 import Results from '../components/Results'
-import Detail from '../components/Detail'
 
 export default {
   name: 'Home',
   components: {
     AutocompleteSearch,
+    Detail,
+    JsonResult,
     Map,
     Results,
-    Detail,
-    // Search,
   },
 
   data() {
     return {
       mapHeight: 'height: 1500px',
       resultsHeight: 'height: 1400px',
+      tile: false,
     }
   },
   created() {
@@ -45,7 +47,7 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   computed: {
-    ...mapGetters(['results', 'detailView']),
+    ...mapGetters(['results', 'detailView', 'displayJsonData']),
   },
   methods: {
     handleResize() {

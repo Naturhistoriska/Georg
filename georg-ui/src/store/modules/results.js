@@ -1,5 +1,6 @@
 const state = {
   accuracy: -1,
+  displayJsonData: false,
   isDetailView: false,
   hoveredResultId: '',
   message: '',
@@ -14,6 +15,7 @@ const state = {
 const getters = {
   accuracy: state => state.accuracy,
   detailView: state => state.isDetailView,
+  displayJsonData: state => state.displayJsonData,
   hoveredResultId: state => state.hoveredResultId,
   isNewMarker: state => state.selectedResult.properties.id === 'newMarker',
   isGbif: state => state.selectedResult.properties.source === 'gbif',
@@ -32,6 +34,7 @@ const actions = {}
 const mutations = {
   setAccuracy: (state, payload) => (state.accuracy = payload),
   setDetailView: (state, payload) => (state.isDetailView = payload),
+  setDisplayJsonData: (state, payload) => (state.displayJsonData = payload),
   setHovedResultId: (state, payload) => (state.hoveredResultId = payload),
   setMessage: (state, payload) => (state.message = payload),
   setNewMarkers: (state, payload) => (state.newMarker = payload),

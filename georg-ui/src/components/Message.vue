@@ -29,15 +29,16 @@ export default {
   computed: {
     ...mapGetters(['detailView', 'message']),
   },
-  watch: {
-    message: function() {
-      console.log('message : ', this.message)
-    },
-  },
+  // watch: {
+  //   message: function() {
+  //     console.log('message : ', this.message)
+  //   },
+  // },
   methods: {
-    ...mapMutations(['setDetailView']),
+    ...mapMutations(['setDetailView', 'setDisplayJsonData']),
     onclick() {
       this.setDetailView(false)
+      this.setDisplayJsonData(false)
     },
   },
 }

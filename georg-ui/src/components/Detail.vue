@@ -1,6 +1,19 @@
 <template>
   <v-card class="mt-2" width="400" id="v-card-detail">
-    <v-card-title v-bind:class="titleClass">{{ title }}</v-card-title>
+    <v-card-title v-bind:class="titleClass" class="ma-0 pa-0 pl-4 pr-2">
+      <v-list-item class="ma-0 pa-0">
+        <v-list-item-content>{{ title }}</v-list-item-content>
+        <v-list-item-icon>
+          <v-btn
+            icon
+            v-clipboard="jsonString"
+            @click.prevent="openOrCloseJsonView"
+          >
+            <v-icon small>mdi-content-copy</v-icon>
+          </v-btn>
+        </v-list-item-icon>
+      </v-list-item>
+    </v-card-title>
     <v-card-subtitle v-if="isGbif">{{
       selectedResult.properties.name
     }}</v-card-subtitle>
@@ -32,7 +45,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import Coordinates from './Coordinates'
 import DataSourceLinks from './DataSourceLinks'
 import GbifDataSourceLinks from './GbifDataSourceLinks'
@@ -50,11 +63,18 @@ export default {
   },
 
   data() {
-    return {}
+    return {
+      // jsonString: 'test',
+    }
   },
 
   computed: {
-    ...mapGetters(['isGbif', 'isNewMarker', 'selectedResult']),
+    ...mapGetters([
+      'displayJsonData',
+      'isGbif',
+      'isNewMarker',
+      'selectedResult',
+    ]),
     title: function() {
       return this.isGbif
         ? this.selectedResult.properties.addendum.georg.locationDisplayLabel
@@ -78,6 +98,17 @@ export default {
 
     undefinedMarker: function() {
       return this.selectedResult.properties.isNew
+    },
+
+    jsonString: function() {
+      return JSON.stringify(this.selectedResult, null, 2)
+    },
+  },
+
+  methods: {
+    ...mapMutations(['setDisplayJsonData']),
+    openOrCloseJsonView() {
+      this.setDisplayJsonData(!this.displayJsonData)
     },
   },
 }
