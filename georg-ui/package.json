@@ -21,6 +21,7 @@
     "leaflet-defaulticon-compatibility": "^0.1.1",
     "material-design-icons-iconfont": "^5.0.1",
     "proj4": "^2.6.2",
+    "v-clipboard": "^2.2.3",
     "vue": "^2.6.11",
     "vue-axios": "^2.1.5",
     "vue-axios-cors": "^1.0.1",
