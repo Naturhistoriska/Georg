@@ -58,15 +58,9 @@ export default {
   },
 
   methods: {
-    ...mapMutations([
-      'setResults',
-      'setDidSearch',
-      'setDetailView',
-      'setSelectedResultId',
-    ]),
+    ...mapMutations(['setResults', 'setDetailView', 'setSelectedResultId']),
     clearSearch() {
       this.setResults([])
-      this.setDidSearch(false)
       this.setDetailView(false)
       this.setSelectedResultId('')
       this.message = ''
@@ -84,7 +78,6 @@ export default {
           })
           this.loading = false
           this.setResults(this.results)
-          this.setDidSearch(true)
           this.setDetailView(false)
           this.setSelectedResultId('')
           this.message =

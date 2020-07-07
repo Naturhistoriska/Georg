@@ -143,7 +143,6 @@ export default {
     ...mapGetters([
       'accuracy',
       'detailView',
-      'didSearch',
       'results',
       'hoveredResultId',
       'selectedResult',
@@ -194,18 +193,10 @@ export default {
         )
       })
     },
-    didSearch() {
-      this.$nextTick(() => {
-        if (!this.detailView && !this.didSearch) {
-          this.enableAddMapMarkers = false
-        }
-      })
-    },
     accuracy() {
       this.$nextTick(() => {
         if (this.accuracy >= 0) {
           this.addUncertainty(this.selectedResult)
-          // this.addUncertainty(this.accuracy)
         }
       })
     },
@@ -253,7 +244,6 @@ export default {
     },
 
     highlightMarker() {
-      // this.$refs.myMap.mapObject.removeLayer(this.circle)
       this.resetLayerGroup()
       this.results.forEach(result => {
         this.marker(result).addTo(this.layerGroup)

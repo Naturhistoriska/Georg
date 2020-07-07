@@ -8,9 +8,9 @@
   >
     <template>
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title v-bind:class="nameColor">
-          {{ name }}
-        </v-list-item-title>
+        <v-list-item-title v-bind:class="nameColor">{{
+          name
+        }}</v-list-item-title>
         <v-list-item-subtitle
           id="resultContent"
           class="text--primary"
@@ -38,9 +38,9 @@
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
         <v-icon v-bind:color="markerIconColor">mdi-map-marker</v-icon>
-        <v-list-item-action-text v-if="!isDinPlats">
-          {{ sourceAlias }}
-        </v-list-item-action-text>
+        <v-list-item-action-text v-if="!isDinPlats">{{
+          sourceAlias
+        }}</v-list-item-action-text>
       </v-list-item-action>
     </template>
   </v-list-item>
@@ -129,7 +129,6 @@ export default {
       'setHovedResultId',
       'setSelectedResultId',
       'setSelectedResult',
-      'setDidSearch',
     ]),
 
     onhover() {
@@ -142,7 +141,6 @@ export default {
       this.setSelectedResultId(this.result.properties.id)
       this.setDetailView(true)
       this.setSelectedResult(this.result)
-      this.setDidSearch(false)
     },
     onSelected() {
       this.setSelectedResultId(this.result.properties.id)

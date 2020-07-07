@@ -1,9 +1,9 @@
 <template>
   <v-list-item>
     <v-list-item-content @click.prevent="onclick()" v-if="undefinedMarker">
-      <v-list-item-title class="red--text darken-2">{{
-        result.properties.name
-      }}</v-list-item-title>
+      <v-list-item-title class="red--text darken-2">
+        {{ result.properties.name }}
+      </v-list-item-title>
       <v-list-item-subtitle id="resultContent" class="text--primary">
         {{ latDms }}
         {{ lngDms }}
@@ -14,9 +14,9 @@
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-content @click.prevent="onclick()" v-else>
-      <v-list-item-title class="red--text darken-2">{{
-        result.properties.name
-      }}</v-list-item-title>
+      <v-list-item-title class="red--text darken-2">
+        {{ result.properties.name }}
+      </v-list-item-title>
       <v-list-item-subtitle class="text--primary">
         {{ result.properties.county }}
         {{ result.properties.region }}
@@ -59,13 +59,10 @@ export default {
       'setDetailView',
       'setSelectedResultId',
       'setSelectedResult',
-      'setDidSearch',
     ]),
     onclick() {
-      // this.setSelectedResultId(this.result.properties.id)
       this.setDetailView(true)
       this.setSelectedResult(this.result)
-      this.setDidSearch(false)
     },
   },
 }
