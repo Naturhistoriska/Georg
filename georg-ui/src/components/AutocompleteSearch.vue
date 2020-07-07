@@ -13,53 +13,28 @@
         hide-no-data
         hide-selected
         item-text="name"
-        item-value="API"
         placeholder="Sök plats"
         prepend-inner-icon="search"
         return-object
       ></v-autocomplete>
     </v-card-text>
-    <v-card-actions v-if="detailView">
-      <v-btn
-        small
-        color="grey darken-2"
-        id="backResultListLink"
-        text
-        @click.prevent="onclick()"
-        >{{ linkText }}</v-btn
-      >
-    </v-card-actions>
-    <v-card-actions v-else>
-      <div id="message" class="pt-2 grey--text text--darken-3 body-2">
-        {{ message }}
-      </div>
-    </v-card-actions>
-    <!-- <v-expand-transition>
-      <v-list v-if="model" class="red lighten-3">
-        <v-list-item v-for="(field, i) in fields" :key="i">
-          <v-list-item-content>
-            <v-list-item-title v-text="field.value"></v-list-item-title>
-            <v-list-item-subtitle v-text="field.key"></v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-list>
-    </v-expand-transition>-->
+    <Message />
   </div>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import Message from '../components/Message'
 import Service from '../Service'
 const service = new Service()
 
 export default {
   name: 'AutocompleteSearch',
-
+  components: {
+    Message,
+  },
   data: () => ({
-    descriptionLimit: 60,
     entries: [],
     isLoading: false,
-    linkText: '< TILLBAKA TILL TRÄFFLISTAN',
-    message: '',
     model: null,
     search: null,
   }),
@@ -86,9 +61,9 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'setResults',
-      'setDidSearch',
       'setDetailView',
+      'setMessage',
+      'setResults',
       'setSelectedResultId',
     ]),
     searchAddress({ name }) {
@@ -100,13 +75,13 @@ export default {
             return result.properties.country != null
           })
           this.setResults(this.results)
-          this.setDidSearch(true)
           this.setDetailView(false)
           this.setSelectedResultId('')
-          this.message =
+          const message =
             this.results.length > 0
               ? this.results.length + ' träffar'
               : 'Sökningen gav inga träffar'
+          this.setMessage(message)
         })
         .catch(function() {})
         .finally(() => (this.isLoading = false))
@@ -126,13 +101,9 @@ export default {
     },
     clearSearch() {
       this.setResults([])
-      this.setDidSearch(false)
       this.setDetailView(false)
       this.setSelectedResultId('')
-      this.message = ''
-    },
-    onclick() {
-      this.setDetailView(false)
+      this.setMessage('')
     },
     isEmpty: function(value) {
       return (
