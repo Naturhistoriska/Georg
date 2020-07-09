@@ -4,19 +4,26 @@
     v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }"
   >
     <l-map
-      :center="center"
-      :options="mapOptions"
       ref="myMap"
-      @ready="fitMapBounds"
-      :style="mapHeight"
-      @click="onMapClick"
-      :zoom="zoom"
+      :center="center"
       :noBlockingAnimations="true"
+      :style="mapHeight"
+      :zoom="zoom"
+      :maxZoom="maxZoom"
+      @click="onMapClick"
+      @ready="fitMapBounds"
+      @baselayerchange="layerChange"
     >
+      <l-control-layers position="topright"></l-control-layers>
       <l-tile-layer
-        url="https://{s}.tile.osm.org/{z}/{x}/{y}.png"
-        attribution="&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
-      ></l-tile-layer>
+        v-for="tileProvider in tileProviders"
+        :key="tileProvider.name"
+        :name="tileProvider.name"
+        :visible="tileProvider.visible"
+        :url="tileProvider.url"
+        :attribution="tileProvider.attribution"
+        layer-type="base"
+      />
     </l-map>
 
     <div
@@ -43,12 +50,27 @@
 
 <script>
 import L from 'leaflet'
-import { LMap, LTileLayer } from 'vue2-leaflet'
+import { LMap, LTileLayer, LControlLayers } from 'vue2-leaflet'
 import { mapGetters, mapMutations } from 'vuex'
+// import 'proj4leaflet'
+
+import * as fixer from '../assets/js/decimalPlacesFixer.js'
+
 import Service from '../Service'
 const service = new Service()
 
-import * as fixer from '../assets/js/decimalPlacesFixer.js'
+const lantmaterietKey = process.env.VUE_APP_LANTMATERIET_TOKEN
+
+const baseUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+const lantmaterietUrl = `https://api.lantmateriet.se/open/topowebb-ccby/v1/wmts/token/${lantmaterietKey}/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.1.0&LAYER=topowebb&STYLE=default&TILEMATRIXSET=3857&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image.png`
+const lantmaterietNedtonadUrl = `https://api.lantmateriet.se/open/topowebb-ccby/v1/wmts/token/${lantmaterietKey}/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.1.0&LAYER=topowebb_nedtonad&STYLE=default&TILEMATRIXSET=3857&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image.png`
+const ksoLantmaterietUrl = 'https://kso.etjanster.lantmateriet.se/'
+// const lantmaterietUrl = 'https://minkarta.lantmateriet.se/'
+
+const openStreetMapAttribution =
+  '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+const lantmaterietMapAttribution =
+  '&copy; <a target="_blank" href="http://www.lantmateriet.se/en/">Lantmäteriet</a>, CCB. '
 
 const MAP_ICONS = {
   blueIcon: L.icon({
@@ -77,13 +99,42 @@ export default {
   components: {
     LMap,
     LTileLayer,
+    LControlLayers,
   },
-  props: ['mapHeight', 'latlon'],
+  props: ['mapHeight'],
   data() {
     return {
-      // activeMarker: {},
-      bounds: {},
+      url: baseUrl,
       center: [59.0, 15.0],
+      rezoom: true,
+      tileProviders: [
+        {
+          name: 'OpenStreetMap',
+          visible: true,
+          attribution: openStreetMapAttribution,
+          url: baseUrl,
+        },
+        {
+          name: 'Socknar',
+          visible: false,
+          url: lantmaterietUrl,
+          attribution: lantmaterietMapAttribution,
+        },
+        {
+          name: 'Socknar Nedtonad',
+          visible: false,
+          url: lantmaterietNedtonadUrl,
+          attribution: lantmaterietMapAttribution,
+        },
+        {
+          name: 'Socknar kso',
+          visible: false,
+          url: ksoLantmaterietUrl,
+          attribution: lantmaterietMapAttribution,
+        },
+      ],
+      activeLayer: 'OpenStreetMap',
+      bounds: {},
       circles: [],
       circleOptions: {
         color: 'red',
@@ -92,14 +143,9 @@ export default {
         pane: 'circleMarker',
       },
       enableAddMapMarkers: false,
-      // hovedMarker: {},
       isLoaded: false,
       layerGroup: {},
-      mapOptions: {
-        zoomControl: true,
-        zoomControlPosition: 'topright',
-      },
-      rezoom: true,
+      maxZoom: 18,
       zoom: 0,
     }
   },
@@ -195,6 +241,7 @@ export default {
     },
     accuracy() {
       this.$nextTick(() => {
+        this.removeUncertainties()
         if (this.accuracy >= 0) {
           this.addUncertainty(this.selectedResult)
         }
@@ -315,6 +362,7 @@ export default {
       } else {
         if (this.detailView) {
           this.zoom = 18
+          this.fixZoom()
         }
       }
     },
@@ -388,10 +436,25 @@ export default {
       }
     },
 
+    layerChange(e) {
+      this.activeLayer = e.name
+      this.fixZoom()
+    },
+
+    fixZoom() {
+      if (this.activeLayer !== 'OpenStreetMap') {
+        this.zoom = this.zoom > 15 ? 15 : this.zoom
+        if (this.detailView && !this.selectedResult.socken) {
+          this.maxZoom = 15
+        }
+      }
+    },
+
     fitMapBounds() {
       if (this.rezoom) {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
         this.zoom = this.$refs.myMap.mapObject.getZoom()
+        this.fixZoom()
       }
       this.rezoom = true
     },
