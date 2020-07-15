@@ -22,7 +22,8 @@ public class GeorgLogicTest {
   
   private GeorgLogic instance;
   private String resultString;
-   
+  private String countryCode; 
+  
   @Mock
   private InitialProperties mockProps; 
   @Mock
@@ -37,6 +38,7 @@ public class GeorgLogicTest {
   public void setUp() {
     peliasPath = "http://api.nrm.se";
     resultString = "test result";
+    countryCode = "SWE";
     
     when(mockProps.getPeliasPath()).thenReturn(peliasPath);
     when(service.getResults(any(String.class))).thenReturn(resultString);
@@ -84,10 +86,10 @@ public class GeorgLogicTest {
     String address = "stockholm"; 
     String source = "GBIF";
     String layer = "myLayer";
- 
+  
     int size = 0;
     
-    String result = instance.searchAddress(address, source, layer, size);
+    String result = instance.searchAddress(address, source, layer, countryCode, size);
     assertEquals(resultString, result);  
      
     verify(service, times(1)).getResults(any(String.class)); 
@@ -118,7 +120,7 @@ public class GeorgLogicTest {
     String sources = "gbif";
     String layers = "mylayer";
     int size = 25;  
-    String result = instance.runAutocompleteSearch(text, sources, layers, size);
+    String result = instance.runAutocompleteSearch(text, sources, layers, countryCode, size);
     assertEquals(resultString, result); 
     
     verify(service, times(1)).getResults(any(String.class)); 
