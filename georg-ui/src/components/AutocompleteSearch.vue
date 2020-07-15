@@ -7,6 +7,8 @@
         :loading="isLoading"
         :search-input.sync="search"
         @click:clear="clearSearch"
+        @keyup.enter="searchAddress"
+        @click:prepend-inner="searchAddress"
         autofocus
         auto-select-first
         clearable
@@ -67,9 +69,10 @@ export default {
       'setSelectedResultId',
     ]),
     searchAddress({ name }) {
+      const searchText = name === undefined ? this.search : name
       this.isLoading = true
       service
-        .fetchAddressResults(name)
+        .fetchAddressResults(searchText)
         .then(response => {
           this.results = response.features.filter(function(result) {
             return result.properties.country != null
