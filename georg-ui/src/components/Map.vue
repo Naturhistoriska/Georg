@@ -64,8 +64,8 @@ const lantmaterietKey = process.env.VUE_APP_LANTMATERIET_TOKEN
 const baseUrl = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
 const lantmaterietUrl = `https://api.lantmateriet.se/open/topowebb-ccby/v1/wmts/token/${lantmaterietKey}/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.1.0&LAYER=topowebb&STYLE=default&TILEMATRIXSET=3857&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image.png`
 const lantmaterietNedtonadUrl = `https://api.lantmateriet.se/open/topowebb-ccby/v1/wmts/token/${lantmaterietKey}/?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.1.0&LAYER=topowebb_nedtonad&STYLE=default&TILEMATRIXSET=3857&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image.png`
-const ksoLantmaterietUrl = 'https://kso.etjanster.lantmateriet.se/'
-// const lantmaterietUrl = 'https://minkarta.lantmateriet.se/'
+// const ksoLantmaterietUrl = 'https://kso.etjanster.lantmateriet.se/'
+// const minLantmaterietUrl = 'https://minkarta.lantmateriet.se/'
 
 const openStreetMapAttribution =
   '&copy; <a target="_blank" href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -115,21 +115,15 @@ export default {
           url: baseUrl,
         },
         {
-          name: 'Socknar',
+          name: 'Lantmateriet',
           visible: false,
           url: lantmaterietUrl,
           attribution: lantmaterietMapAttribution,
         },
         {
-          name: 'Socknar Nedtonad',
+          name: 'Lantmateriet Nedtonad',
           visible: false,
           url: lantmaterietNedtonadUrl,
-          attribution: lantmaterietMapAttribution,
-        },
-        {
-          name: 'Socknar kso',
-          visible: false,
-          url: ksoLantmaterietUrl,
           attribution: lantmaterietMapAttribution,
         },
       ],
