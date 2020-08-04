@@ -64,6 +64,7 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
+      'setDisplayJsonData',
       'setMessage',
       'setResults',
       'setSelectedResultId',
@@ -107,6 +108,7 @@ export default {
       this.setDetailView(false)
       this.setSelectedResultId('')
       this.setMessage('')
+      this.setDisplayJsonData(false)
     },
     isEmpty: function(value) {
       return (
