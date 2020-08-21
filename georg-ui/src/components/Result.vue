@@ -37,7 +37,7 @@
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
-        <v-icon v-bind:color="markerIconColor">mdi-map-marker</v-icon>
+        <v-icon v-bind:color="markerIconColor">{{ markerIcon }}</v-icon>
         <v-list-item-action-text v-if="!isDinPlats">{{
           sourceAlias
         }}</v-list-item-action-text>
@@ -98,6 +98,16 @@ export default {
         : this.isActive || this.isHovered
         ? 'primary'
         : 'grey lighten-1'
+    },
+    markerIcon: function() {
+      const source = this.result.properties.source
+      if (source === 'whosonfirst') {
+        return 'mdi-map-marker'
+      }
+
+      const uncertainty = this.result.properties.addendum.georg
+        .coordinateUncertaintyInMeters
+      return uncertainty ? 'mdi-map-marker-radius' : 'mdi-map-marker'
     },
     nameColor: function() {
       return this.isNewMarker
