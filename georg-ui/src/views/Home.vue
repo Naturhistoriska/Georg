@@ -51,6 +51,7 @@ export default {
   },
   computed: {
     ...mapGetters(['results', 'detailView', 'displayJsonData']),
+      'isAddressSearch',
   },
   methods: {
     handleResize() {

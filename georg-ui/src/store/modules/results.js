@@ -10,7 +10,6 @@ const state = {
   selectedResult: {},
   selectedResultId: '',
   selectedMarkerId: '',
-  unhoveredResultId: '',
   searchOption: 'address',
   searchCountry: 'SWE',
 }
