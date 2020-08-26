@@ -26,11 +26,7 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ item.name }}</v-list-item-title>
-            <v-list-item-subtitle class="text-uppercase">
-              {{
-              item.abbr
-              }}
-            </v-list-item-subtitle>
+            <v-list-item-subtitle class="text-uppercase">{{ item.abbr }}</v-list-item-subtitle>
           </v-list-item-content>
         </template>
       </v-autocomplete>
@@ -126,7 +122,7 @@ export default {
       const searchText = name === undefined ? this.search : name
       this.isLoading = true
       service
-        .fetchAddressResults(searchText)
+        .fetchAddressResults(searchText, this.searchCountry)
         .then(response => {
           this.results = response.features.filter(
             r => r.properties.country != null

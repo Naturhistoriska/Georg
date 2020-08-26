@@ -4,8 +4,8 @@ const baseUrl = process.env.VUE_APP_GEORG_API
 const gbifApi = process.env.VUE_APP_GBIF_API
 
 export default class Service {
-  async fetchAddressResults(address) {
-    const url = `${baseUrl}geoCoding?address=${address}`
+  async fetchAddressResults(address, countryCode) {
+    const url = `${baseUrl}geoCoding?address=${address}&countryCode=${countryCode}`
     // const url = `${baseUrl}search?text=${address}`
     const response = await axios.get(url)
     return response.data
