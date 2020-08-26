@@ -2,6 +2,15 @@
   <div class="ma-0 pa-0">
     <v-card-text class="ma-0 pa-0">
       <v-autocomplete
+        append-icon="search"
+        autofocus
+        class="ma-0 pa-0"
+        clearable
+        hide-no-data
+        hide-selected
+        item-text="name"
+        item-value="id"
+        placeholder="Sök plats"
         v-model="model"
         :disabled="isUpdating"
         :items="items"
@@ -10,14 +19,6 @@
         @click:clear="clearSearch"
         @keyup.enter="searchAddress"
         @click:append="searchAddress"
-        autofocus
-        item-text="name"
-        item-value="id"
-        clearable
-        hide-no-data
-        hide-selected
-        placeholder="Sök plats"
-        append-icon="search"
       >
         <template v-slot:item="{ item }">
           <v-list-item-avatar>
@@ -26,7 +27,9 @@
           <v-list-item-content>
             <v-list-item-title>{{ item.name }}</v-list-item-title>
             <v-list-item-subtitle class="text-uppercase">
-              {{ item.abbr }}
+              {{
+              item.abbr
+              }}
             </v-list-item-subtitle>
           </v-list-item-content>
         </template>
@@ -55,7 +58,8 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['detailView']),
+    // ...mapGetters(['detailView']),
+    ...mapGetters(['searchCountry']),
     items() {
       let elements = []
       this.entries.map(entry => {
@@ -78,10 +82,6 @@ export default {
         elements.push(element)
       })
       return elements
-      // return this.entries.map(entry => {
-      //   const name = entry.properties.name
-      //   return Object.assign({}, entry, { name })
-      // })
     },
   },
 
@@ -131,9 +131,6 @@ export default {
           this.results = response.features.filter(
             r => r.properties.country != null
           )
-          // this.results = response.features.filter(function(result) {
-          //   return result.properties.country != null
-          // })
           this.setResults(this.results)
           this.setDetailView(false)
           this.setSelectedResultId('')
@@ -153,7 +150,7 @@ export default {
       if (!this.isEmpty(value) && value.length >= 3) {
         this.isLoading = true
         service
-          .autoCompleteSearch(value)
+          .autoCompleteSearch(value, this.searchCountry)
           .then(response => {
             const { features } = response
             this.entries = features

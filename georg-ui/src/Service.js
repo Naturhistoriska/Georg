@@ -11,8 +11,8 @@ export default class Service {
     return response.data
   }
 
-  async autoCompleteSearch(value) {
-    const url = `${baseUrl}search?text=${value}`
+  async autoCompleteSearch(value, countryCode) {
+    const url = `${baseUrl}search?text=${value}&countryCode=${countryCode}`
     const response = await axios.get(url)
     return response.data
   }
