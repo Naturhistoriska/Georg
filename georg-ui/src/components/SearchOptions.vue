@@ -30,13 +30,8 @@ export default {
   data: () => ({
     coordinates: null,
     dropdown_countries: [
-      { text: 'i Danmark', value: 'DNk' },
-      { text: 'i Finland', value: 'FIN' },
-      { text: 'i Island', value: 'ISL' },
-      { text: 'i Norge', value: 'NOR' },
+      { text: 'i Norden', value: '' },
       { text: 'i Sevrige', value: 'SWE' },
-      // { text: 'i Faroe Islands', value: 'NOR' },
-      // { text: 'i Greenland', value: 'SWE' },
     ],
     select: 'i Sevrige',
   }),
