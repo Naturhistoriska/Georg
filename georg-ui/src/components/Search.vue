@@ -27,7 +27,7 @@
         >{{ linkText }}</v-btn
       >
     </v-card-actions>
-    <v-card-actions v-if="!detailView">
+    <v-card-actions v-else>
       <div id="message" class="pt-2 grey--text text--darken-3 body-2">
         {{ message }}
       </div>
@@ -54,19 +54,13 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['detailView', 'displayMessage']),
+    ...mapGetters(['detailView']),
   },
 
   methods: {
-    ...mapMutations([
-      'setResults',
-      'setDidSearch',
-      'setDetailView',
-      'setSelectedResultId',
-    ]),
+    ...mapMutations(['setResults', 'setDetailView', 'setSelectedResultId']),
     clearSearch() {
       this.setResults([])
-      this.setDidSearch(false)
       this.setDetailView(false)
       this.setSelectedResultId('')
       this.message = ''
@@ -84,7 +78,6 @@ export default {
           })
           this.loading = false
           this.setResults(this.results)
-          this.setDidSearch(true)
           this.setDetailView(false)
           this.setSelectedResultId('')
           this.message =
@@ -99,9 +92,6 @@ export default {
 </script>
 
 <style scoped>
-.fixedPosition {
-  position: fixed !important;
-}
 #backResultListLink {
   margin-left: -10px;
 }

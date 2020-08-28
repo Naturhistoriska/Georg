@@ -14,9 +14,9 @@
       </v-toolbar-title>
     </v-app-bar>
 
-    <v-content>
+    <v-main>
       <router-view />
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -42,7 +42,10 @@ h1 {
   font-weight: 300;
   font-size: 3em;
 }
-
+h4 {
+  font-weight: 500;
+  font-size: 1em;
+}
 #body {
   background: transparent;
 }

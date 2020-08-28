@@ -35,11 +35,12 @@ public class GeorgLogic implements Serializable {
     peliasPath = props.getPeliasPath();    
   }
   
-  public String searchAddress(String address, String source, String layer, int size) {
+  public String searchAddress(String address, String source, String layer, 
+          String countryCode, int size) {
     log.info("searchAddress");
     
     String peliasUrl = Util.getInstance()
-            .buildGeoCodePath(peliasPath, address, source, layer, size);  
+            .buildGeoCodePath(peliasPath, address, source, layer, countryCode, size);  
     return service.getResults(peliasUrl);
   }
   
@@ -50,10 +51,11 @@ public class GeorgLogic implements Serializable {
     return service.getResults(peliasUrl);  
   }
     
-  public String runAutocompleteSearch(String text, String sources, String layers, int size) {
+  public String runAutocompleteSearch(String text, String sources, String layers,
+          String countryCode, int size) {
     log.info("runAutocompleteSearch");
     String searchUrl = Util.getInstance()
-            .bunildAutoCompleteSearchPath(peliasPath, text, sources, layers, size);  
+            .bunildAutoCompleteSearchPath(peliasPath, text, sources, layers, countryCode, size);  
      
     return service.getResults(searchUrl); 
   } 

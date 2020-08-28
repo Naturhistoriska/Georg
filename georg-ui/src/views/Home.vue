@@ -1,39 +1,47 @@
 <template>
   <div id="container" class="container container--fluid">
     <v-card id="navi">
-      <Search />
+      <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
+      <AutocompleteSearch v-if="isAddressSearch" />
+      <SearchCoordinates v-else />
       <v-divider v-if="!detailView && results.length > 0"></v-divider>
       <Results v-if="!detailView" v-bind:height="resultsHeight" />
     </v-card>
     <Detail v-if="detailView" />
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
+      <JsonResult v-if="displayJsonData" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-// import L from 'leaflet'
-import Search from '../components/Search'
+import AutocompleteSearch from '../components/AutocompleteSearch'
+import Detail from '../components/Detail'
+import JsonResult from '../components/JsonResult'
 import Map from '../components/Map'
 import Results from '../components/Results'
-import Detail from '../components/Detail'
+import SearchOptions from '../components/SearchOptions'
+import SearchCoordinates from '../components/SearchCoordinates'
 
 export default {
   name: 'Home',
   components: {
+    AutocompleteSearch,
+    SearchOptions,
+    Detail,
+    JsonResult,
     Map,
     Results,
-    Detail,
-    Search,
+    SearchCoordinates,
   },
 
   data() {
     return {
-      // bounds: {},
       mapHeight: 'height: 1500px',
       resultsHeight: 'height: 1400px',
+      tile: false,
     }
   },
   created() {
@@ -44,7 +52,12 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   computed: {
-    ...mapGetters(['results', 'detailView']),
+    ...mapGetters([
+      'detailView',
+      'displayJsonData',
+      'isAddressSearch',
+      'results',
+    ]),
   },
   methods: {
     handleResize() {
@@ -74,11 +87,7 @@ export default {
   position: absolute;
   top: 0;
   left: 0;
+  bottom: 0;
   z-index: 0;
-}
-.resultsRow {
-  width: 600px;
-  margin-top: 9em !important;
-  margin-left: 1em;
 }
 </style>

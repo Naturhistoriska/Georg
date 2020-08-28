@@ -16,13 +16,10 @@ public class Util {
   private final String reverseGeoCode = "reverse?";
   private final String pointLat = "point.lat=";
   private final String pointLon = "point.lon=";
-  private final String and = "&";
-//  private final String source = "&sources=gbif,wof";
-  
-  
-//  /v1/search?categories=food&text=Didi
-  
+  private final String and = "&"; 
+  private final String emptyString = "";
   private final String wildCard = "*";
+  private final String countryQuery = "&boundary.country=";
   private StringBuilder sb; 
   
   private static Util instance = null;
@@ -36,25 +33,25 @@ public class Util {
     return instance;
   }
   
-  public String buildGbifDatasetUrl(String gbifUrl, String datasetKey, String occurranceId) {
-    sb = new StringBuilder();
-    sb.append(gbifUrl);
-    sb.append("search?datesetKey=");
-    sb.append(datasetKey);
-    sb.append("&occurrenceID=");
-    sb.append(occurranceId);
-    return sb.toString().trim();
-  }
+//  public String buildGbifDatasetUrl(String gbifUrl, String datasetKey, String occurranceId) {
+//    sb = new StringBuilder();
+//    sb.append(gbifUrl);
+//    sb.append("search?datesetKey=");
+//    sb.append(datasetKey);
+//    sb.append("&occurrenceID=");
+//    sb.append(occurranceId);
+//    return sb.toString().trim();
+//  }
   
   public String bunildAutoCompleteSearchPath(String peliasPath, String text,
-          String sources, String layers, int size) {
+          String sources, String layers, String countryCode, int size) {
     
-    return buildSearchUrl(peliasPath, autoComplete, text, sources, layers, size);  
+    return buildSearchUrl(peliasPath, autoComplete, text, sources, layers, countryCode, size);  
   } 
  
   public String buildGeoCodePath(String peliasPath, String address, 
-          String sources, String layers, int size) {
-    return buildSearchUrl(peliasPath, search, address, sources, layers, size);   
+          String sources, String layers, String countryCode, int size) {
+    return buildSearchUrl(peliasPath, search, address, sources, layers, countryCode, size);   
   }
   
   public String buildReverseGeoCodePath(String peliasPath, double lat, double lon) { 
@@ -69,14 +66,16 @@ public class Util {
     return sb.toString().trim();
   } 
   
-  private String buildSearchUrl(String peliasPath, String searchType, 
-          String text, String sources, String layers, int size) {
+  private String buildSearchUrl(String peliasPath, String searchType, String text, 
+          String sources, String layers, String countryCode, int size) {
     sb = new StringBuilder();
     sb.append(peliasPath);
     sb.append(searchType); 
     sb.append(textQuery);
     sb.append(text);  
-    sb.append(searchType.equals(search) ? wildCard : "");
+    sb.append(searchType.equals(search) ? wildCard : emptyString);
+    sb.append(countryQuery);
+    sb.append(countryCode);
     
     if(sources != null && sources.trim().length() > 0) { 
       sb.append(sourceQry);

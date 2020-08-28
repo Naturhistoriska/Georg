@@ -2,7 +2,7 @@ const visit = () => cy.visit('/')
 const fetchResults = () =>
   cy
     .focused()
-    .type('tyre')
+    .type('lur')
     .type('{enter}')
 const detailView = () =>
   cy
@@ -26,13 +26,13 @@ describe('Results view', () => {
   })
 
   it('link to wof', () => {
-    cy.get('#wofLink')
+    cy.get('#externalLink')
       .should('be.visible')
       .should('have.attr', 'href')
       .and('eq', 'https://whosonfirst.org/docs/licenses/')
   })
 
   it('Open wof licenses', () => {
-    cy.get('#wofLink').click()
+    cy.get('#externalLink').click()
   })
 })
