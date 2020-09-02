@@ -5,8 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
-import javax.inject.Inject;
-import javax.ws.rs.DefaultValue;
+import javax.inject.Inject; 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -51,8 +50,7 @@ public class GeorgAPI {
     log.info("getGeoCode: {}, {}", address, source);
 
     return Response.ok(logic.searchAddress(address, source, layer, countryCode, size)).build();
-  }
-  
+  } 
   
   @GET
   @Path("/search")
@@ -83,5 +81,18 @@ public class GeorgAPI {
     log.info("getReverseGeoCode: {}, {}", lat, lon);
 
     return Response.ok(logic.reverseSearch(lat, lon)).build();
+  }
+  
+  @GET
+  @Path("/coordinates")
+  @ApiOperation(value = "Search coordinates in different formate",
+          notes = "Returns status",
+          response = String.class
+  )
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response searchCoordinates(@QueryParam("coordinates") String coordinates) {
+    log.info("searchCoordinates: {}", coordinates);
+
+    return Response.ok(logic.coordinatesSearch(coordinates)).build();
   }
 }
