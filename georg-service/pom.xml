@@ -52,13 +52,26 @@
       <scope>test</scope>
     </dependency>
     
+    <!-- https://mvnrepository.com/artifact/org.json/json -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20200518</version>
+    </dependency>
     
-<!--     https://mvnrepository.com/artifact/org.locationtech.proj4j/proj4j 
+    <!-- https://mvnrepository.com/artifact/org.locationtech.proj4j/proj4j -->    
     <dependency>
       <groupId>org.locationtech.proj4j</groupId>
       <artifactId>proj4j</artifactId>
       <version>1.1.1</version>
-    </dependency>-->
+    </dependency>
+    
+    <dependency>
+      <groupId>com.peertopark.java</groupId>
+      <artifactId>geocalc</artifactId>
+      <version>1.1.0</version>
+    </dependency>
+
 
     <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
     <dependency>
