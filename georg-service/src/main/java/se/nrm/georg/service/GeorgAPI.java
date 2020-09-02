@@ -46,7 +46,7 @@ public class GeorgAPI {
   @Produces(MediaType.APPLICATION_JSON)
   public Response getGeoCode(@QueryParam("address") String address,   
           @QueryParam("source") String source, @QueryParam("layer") String layer, 
-          @DefaultValue("SWE") @QueryParam("countryCode") String countryCode, 
+          @QueryParam("countryCode") String countryCode, 
           @QueryParam("size") int size) {
     log.info("getGeoCode: {}, {}", address, source);
 
@@ -64,7 +64,7 @@ public class GeorgAPI {
   public Response search(@QueryParam("text") String text, 
           @QueryParam("sources") String sources, 
           @QueryParam("layers") String layers,
-          @DefaultValue("SWE") @QueryParam("countryCode") String countryCode, 
+          @QueryParam("countryCode") String countryCode, 
           @QueryParam("size") int size) {
     log.info("search: {}, {}", text, countryCode);
 
