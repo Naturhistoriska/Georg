@@ -25,9 +25,10 @@ public class GeorgLogic implements Serializable {
     
   }
   
-  public GeorgLogic(InitialProperties props, ExternalServices service) {
+  public GeorgLogic(InitialProperties props, ExternalServices service, CoordinatesJson coordinates) {
     this.props = props; 
     this.service = service;
+    this.coordinates = coordinates;
   }
   
   @PostConstruct 
@@ -41,7 +42,9 @@ public class GeorgLogic implements Serializable {
     
     String peliasUrl = Util.getInstance()
             .buildGeoCodePath(peliasPath, address, source, layer, countryCode, size);  
-    return service.getResults(peliasUrl);
+     
+    String results = service.getResults(peliasUrl); 
+    return coordinates.addCoordinatesTransformation(results); 
   }
   
   public String reverseSearch(double lat, double lon) {
@@ -56,7 +59,8 @@ public class GeorgLogic implements Serializable {
     log.info("runAutocompleteSearch");
     String searchUrl = Util.getInstance()
             .bunildAutoCompleteSearchPath(peliasPath, text, sources, layers, countryCode, size);  
-     
-    return service.getResults(searchUrl); 
+    String results = service.getResults(searchUrl); 
+    return coordinates.addCoordinatesTransformation(results); 
+  } 
   } 
 }
