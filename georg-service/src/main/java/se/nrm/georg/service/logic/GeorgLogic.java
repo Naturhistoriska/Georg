@@ -26,11 +26,13 @@ public class GeorgLogic implements Serializable {
   private CoordinatesJson coordinates; 
   
   private String peliasPath;  
-  private final String secondSign = "\"";
+//  private final String secondSign = "\"";
+  private final String comma = ",";
   private final String degreeSign = "°";
   private final String minuteSign = "'";
   
   private final String emptySpace = " "; 
+  private final String emptyString = "";
    
   public GeorgLogic() {
     
@@ -78,20 +80,21 @@ public class GeorgLogic implements Serializable {
     double lat = 0;
     double lng = 0;
     
+    coordinates = coordinates.replace(comma, emptySpace);
     if(CoordinatesHelper.getInstance().isDD(coordinates)) {
       String[] coors = coordinates.split(emptySpace);
-      lat = Double.valueOf(coors[0]);
-      lng = Double.valueOf(coors[1]);
+      lat = Double.valueOf(coors[0]); 
+      lng = coors.length == 2 ? Double.valueOf(coors[1]) : Double.valueOf(coors[2]);
     } else {
       String strLat = CoordinatesHelper.getInstance().getLatString(coordinates.toLowerCase());
       String strLng = CoordinatesHelper.getInstance().getlngString(coordinates.toLowerCase());
        
       if (CoordinatesHelper.getInstance().isDMS(coordinates)) {
-        lat = convertDMSToDD(strLat);
-        lng = convertDMSToDD(strLng);
+        lat = convertDMSToDD(strLat, coordinates.toLowerCase().contains("s"));
+        lng = convertDMSToDD(strLng, coordinates.toLowerCase().contains("w"));
       } else if (CoordinatesHelper.getInstance().isDDM(coordinates)) {
-        lat = convertDDMToDD(strLat);
-        lng = convertDDMToDD(strLng); 
+        lat = convertDDMToDD(strLat, coordinates.toLowerCase().contains("s"));
+        lng = convertDDMToDD(strLng, coordinates.toLowerCase().contains("w")); 
       } 
     } 
     
@@ -101,19 +104,23 @@ public class GeorgLogic implements Serializable {
     return service.getResults(peliasUrl);  
   }
   
-  private double convertDDMToDD(String value) {
+  private double convertDDMToDD(String value, boolean isSouthOrWest) {
     int degrees = CoordinatesHelper.getInstance().getDegrees(value);
     double minutes = getMinutesInDouble(value); 
-    return degrees + minutes / 60;
+    double dd = degrees + minutes / 60;
+    return isSouthOrWest ? (-1) * dd : dd;
   }
   
-  private double convertDMSToDD(String value) {
+  private double convertDMSToDD(String value, boolean isSouthOrWest) {
     int degrees = CoordinatesHelper.getInstance().getDegrees(value);
     int minutes = CoordinatesHelper.getInstance().getMinutes(value);
     int seconds = CoordinatesHelper.getInstance().getSeconds(value);
        
 //    double decimal = ((minutes * 60) + seconds);
 //    return degrees + decimal / 3600;  
+    if(isSouthOrWest) {
+      degrees = degrees * (-1);
+    }
 
     DMSCoordinate dmsCoord = new DMSCoordinate(degrees, minutes, seconds);
     return dmsCoord.getDecimalDegrees();
