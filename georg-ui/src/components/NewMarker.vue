@@ -22,6 +22,10 @@
         {{ result.properties.region }}
         {{ result.properties.country }}
       </v-list-item-subtitle>
+      <v-list-item-subtitle class="text--primary">
+        {{ latDms }}
+        {{ lngDms }}
+      </v-list-item-subtitle>
     </v-list-item-content>
 
     <v-list-item-action>
