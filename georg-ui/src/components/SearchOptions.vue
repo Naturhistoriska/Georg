@@ -31,7 +31,7 @@ export default {
     coordinates: null,
     dropdown_countries: [
       { text: 'i Norden', value: '' },
-      { text: 'i Sevrige', value: 'SWE' },
+      { text: 'i Sverige', value: 'SWE' },
     ],
     select: 'i Sevrige',
   }),
