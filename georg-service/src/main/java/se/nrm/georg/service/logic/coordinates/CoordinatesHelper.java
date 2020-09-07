@@ -42,8 +42,9 @@ public class CoordinatesHelper {
   
   public String buildDMS(double value, boolean isLat) { 
     
-    int degree = getDegree(value);
-    double dbMinutes = getMinutes(value, degree);
+    double absValue = Math.abs(value);
+    int degree = getDegree(absValue);
+    double dbMinutes = getMinutes(absValue, degree);
     int minutes = (int) dbMinutes; 
     double dbSecond = getSeconds(dbMinutes); 
     int second = (int) Math.round(dbSecond);  
@@ -55,8 +56,9 @@ public class CoordinatesHelper {
   
   public String buildDDM(double value, boolean isLat) {
 
-    int degree = CoordinatesHelper.getInstance().getDegree(value);
-    double minutes = CoordinatesHelper.getInstance().getMinutes(value, degree);
+    double absValue = Math.abs(value);
+    int degree =  getDegree(absValue);
+    double minutes = getMinutes(absValue, degree);
     BigDecimal bd = new BigDecimal(minutes).setScale(6, RoundingMode.HALF_UP);
     
     return buildCoordinatesString(String.valueOf(degree), 
