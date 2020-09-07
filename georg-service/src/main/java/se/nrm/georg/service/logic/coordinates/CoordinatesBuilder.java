@@ -30,17 +30,25 @@ public class CoordinatesBuilder {
   private CoordinateReferenceSystem srcCrs;
   private CoordinateReferenceSystem dstCrs;
   
-  public String buildRT90(BigDecimal lat, BigDecimal lng) { 
-    transform(rt90, lat.doubleValue(), lng.doubleValue());
-    return String.join(comma, String.valueOf(Math.round(dstCoord.y)), 
-            String.valueOf(Math.round(dstCoord.x)));  
+  public ProjCoordinate buildRT90(BigDecimal lat, BigDecimal lng) { 
+    return transform(rt90, lat.doubleValue(), lng.doubleValue());  
   }
   
-  public String buildSWEREF99(BigDecimal lat, BigDecimal lng) { 
-    transform(sweref99, lat.doubleValue(), lng.doubleValue());
-    return String.join(comma, String.valueOf(Math.round(dstCoord.y)), 
-            String.valueOf(Math.round(dstCoord.x)));  
+  public ProjCoordinate buildSWEREF99(BigDecimal lat, BigDecimal lng) {
+    return transform(sweref99, lat.doubleValue(), lng.doubleValue());
   }
+  
+  //  public String buildRT90(BigDecimal lat, BigDecimal lng) { 
+//    transform(rt90, lat.doubleValue(), lng.doubleValue());
+//    return String.join(comma, String.valueOf(Math.round(dstCoord.y)), 
+//            String.valueOf(Math.round(dstCoord.x)));  
+//  }
+  
+//  public String buildSWEREF99(BigDecimal lat, BigDecimal lng) { 
+//    transform(sweref99, lat.doubleValue(), lng.doubleValue());
+//    return String.join(comma, String.valueOf(Math.round(dstCoord.y)), 
+//            String.valueOf(Math.round(dstCoord.x)));  
+//  }
    
   private ProjCoordinate transform(String to, double lat, double lng) {
     srcCoord = new ProjCoordinate(lng, lat); 
@@ -57,16 +65,16 @@ public class CoordinatesBuilder {
     return String.join(emptySpace, String.valueOf(lat), String.valueOf(lng));
   }
 
-  public String buildDMS(BigDecimal lat, BigDecimal lng) {
-
-    String dmsLat = CoordinatesHelper.getInstance().buildDMS(lat.doubleValue(), true); 
-    String dmsLng = CoordinatesHelper.getInstance().buildDMS(lng.doubleValue(), false);
-    return String.join(emptySpace, dmsLat, dmsLng);
-  }
+//  public String buildDMS(BigDecimal lat, BigDecimal lng) {
+//
+//    String dmsLat = CoordinatesHelper.getInstance().buildDMS(lat.doubleValue(), true); 
+//    String dmsLng = CoordinatesHelper.getInstance().buildDMS(lng.doubleValue(), false);
+//    return String.join(emptySpace, dmsLat, dmsLng);
+//  }
   
-  public String buildDDM(BigDecimal lat, BigDecimal lng) {
-    String ddmLat = CoordinatesHelper.getInstance().buildDDM(lat.doubleValue(), true);
-    String ddmLng = CoordinatesHelper.getInstance().buildDDM(lng.doubleValue(), false);
-    return String.join(emptySpace, ddmLat, ddmLng);
-  } 
+//  public String buildDDM(BigDecimal lat, BigDecimal lng) {
+//    String ddmLat = CoordinatesHelper.getInstance().buildDDM(lat.doubleValue(), true);
+//    String ddmLng = CoordinatesHelper.getInstance().buildDDM(lng.doubleValue(), false);
+//    return String.join(emptySpace, ddmLat, ddmLng);
+//  } 
 }
