@@ -6,7 +6,6 @@ const gbifApi = process.env.VUE_APP_GBIF_API
 export default class Service {
   async fetchAddressResults(address, countryCode) {
     const url = `${baseUrl}geoCoding?address=${address}&countryCode=${countryCode}`
-    // const url = `${baseUrl}search?text=${address}`
     const response = await axios.get(url)
     return response.data
   }
@@ -19,7 +18,12 @@ export default class Service {
 
   async reverseGeoCodingResults(lat, lng) {
     const url = `${baseUrl}reverse?lat=${lat}&lng=${lng}`
-    // const url = `${baseUrl}search?text=${address}`
+    const response = await axios.get(url)
+    return response.data
+  }
+
+  async coordinatesSearch(coordinates) {
+    const url = `${baseUrl}coordinates?coordinates=${coordinates}`
     const response = await axios.get(url)
     return response.data
   }
