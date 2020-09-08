@@ -1,9 +1,11 @@
 package se.nrm.georg.service.util;
 
 import org.junit.After; 
+import org.junit.AfterClass;
 import org.junit.Before; 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  *
@@ -17,7 +19,7 @@ public class UtilTest {
     
   public UtilTest() {
   }
-   
+ 
   @Before
   public void setUp() {
     peliasPath = "http://api.se/";
@@ -105,8 +107,7 @@ public class UtilTest {
   public void testBuildGeoCodePathWithAddressAndSource2() {
     System.out.println("buildGeoCodePath");
      
-    String address = "stockholm";  
-    String categories = "";
+    String address = "stockholm";   
     String source = "mySource";
     String layer = "";
     String expResult = "http://api.se/search?text=stockholm*&boundary.country=SWE&sources=mySource";
@@ -154,5 +155,20 @@ public class UtilTest {
     String result = instance.buildReverseGeoCodePath(peliasPath, lat, lon); 
     assertEquals(expResult, result); 
   }
-  
+
+  /**
+   * Test of bunildAutoCompleteSearchPath method, of class Util.
+   */
+  @Test
+  public void testBunildAutoCompleteSearchPath() {
+    System.out.println("bunildAutoCompleteSearchPath");
+ 
+    String text = "bromma";
+    String sources = "";
+    String layers = "";  
+    
+    String expResult = "http://api.se/autocomplete?text=bromma&boundary.country=SWE";
+    String result = instance.bunildAutoCompleteSearchPath(peliasPath, text, sources, layers, countryCode, 0); 
+    assertEquals(expResult, result); 
+  }
 }
