@@ -1,9 +1,9 @@
 <template>
   <v-list-item>
     <v-list-item-content @click.prevent="onclick()" v-if="undefinedMarker">
-      <v-list-item-title class="red--text darken-2">{{
-        result.properties.name
-      }}</v-list-item-title>
+      <v-list-item-title class="red--text darken-2">
+        {{ result.properties.name }}
+      </v-list-item-title>
       <v-list-item-subtitle id="resultContent" class="text--primary">
         {{ latDms }}
         {{ lngDms }}
@@ -14,9 +14,9 @@
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-content @click.prevent="onclick()" v-else>
-      <v-list-item-title class="red--text darken-2">{{
-        result.properties.name
-      }}</v-list-item-title>
+      <v-list-item-title class="red--text darken-2">
+        {{ result.properties.name }}
+      </v-list-item-title>
       <v-list-item-subtitle class="text--primary">
         {{ result.properties.county }}
         {{ result.properties.region }}
@@ -45,13 +45,18 @@ export default {
     lat: function() {
       return this.result.geometry.coordinates[1]
     },
+
     lng: function() {
       return this.result.geometry.coordinates[0]
     },
+
     latDms: function() {
+      // return this.result.properties.coordinates.dms[0]
       return converter.latlon(this.result.geometry.coordinates[1], 'lat')
     },
+
     lngDms: function() {
+      // return this.result.properties.coordinates.dms[1]
       return converter.latlon(this.result.geometry.coordinates[0], 'lon')
     },
     makerIcon: function() {
