@@ -33,6 +33,14 @@ public class CoordinatesJson {
   private final String rt90Key = "rt90";
   private final String sweref99Key = "sweref99";
    
+  public CoordinatesJson() {
+    
+  }
+ 
+  public CoordinatesJson(JsonParser parser, CoordinatesBuilder builder) {
+    this.parser = parser;
+    this.builder = builder;
+  }
   
   public String addCoordinatesTransformation(String jsonString) {
     log.info("addCoordinatesTransformation");
