@@ -1,0 +1,16 @@
+codecov:
+  branch: master
+
+coverage:
+  status:
+    patch: false
+
+  range:
+    40..90 # First number represents red, and second represents green
+    # (default is 70..100)
+
+# Ignoring Paths
+# --------------
+# which folders/files to ignore
+ignore:
+  - georg-service/src/main/java/se/nrm/georg/service/logic/Main.java
