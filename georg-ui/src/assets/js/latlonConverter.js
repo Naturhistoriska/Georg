@@ -1,6 +1,7 @@
 function truncate(n) {
-  return n > 0 ? Math.floor(n) : Math.ceil(n)
+  // return n > 0 ? Math.floor(n) : Math.ceil(n)
   // return Math.round(n)
+  return Math.trunc(n)
 }
 
 function digits(dd) {
@@ -22,9 +23,10 @@ export function latlon(dd, longOrLat, isDDM) {
   const degrees = truncate(absDD)
   // const minutes = truncate((absDD - degrees) * 60)
   const minutes = (absDD - degrees) * 60
-  const seconds = ((absDD - degrees - minutes / 60) * Math.pow(60, 0)).toFixed(
-    0
-  )
+  const seconds = ((minutes - truncate(minutes)) * 60).toFixed(0)
+  // const seconds = ((absDD - degrees - minutes / 60) * Math.pow(60, 0)).toFixed(
+  //   0
+  // )
   return isDDM
     ? `${degrees}°${digits(minutes)}' ${hemisphere}`
     : `${degrees}°${truncate(minutes)}'${seconds}" ${hemisphere}`
