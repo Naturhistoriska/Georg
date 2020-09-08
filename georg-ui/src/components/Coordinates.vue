@@ -2,7 +2,7 @@
   <v-list-item-group>
     <v-list-item>
       <v-list-item-icon>
-        <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
+        <v-icon :color="makeIconColor">mdi-crosshairs-gps</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>{{ latLonDms }}</v-list-item-title>

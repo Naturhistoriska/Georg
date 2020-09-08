@@ -58,6 +58,18 @@
     </v-card-text>
     <v-divider></v-divider>
     <v-list flat>
+      <v-list-item v-if="!isDinPlats">
+        <v-list-item-icon>
+          <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content v-if="isGbif">
+          {{ selectedResult.properties.name }}
+        </v-list-item-content>
+        <v-list-item-content v-else>
+          {{ title }}
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider inset v-if="!isDinPlats"></v-divider>
       <Coordinates
         v-bind:lat="selectedResult.geometry.coordinates[1]"
         v-bind:lon="selectedResult.geometry.coordinates[0]"
@@ -145,6 +157,9 @@ export default {
 
     jsonString: function() {
       return JSON.stringify(this.selectedResult, null, 2)
+    },
+    makeIconColor: function() {
+      return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
     },
   },
 
