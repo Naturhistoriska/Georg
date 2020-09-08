@@ -43,7 +43,7 @@ public class UtilTest {
   /**
    * Test of buildGeoCodePath method, of class Util.
    */
-  @Test
+//  @Test
   public void testBuildGeoCodePath() {
     System.out.println("buildGeoCodePath");
      
@@ -59,7 +59,7 @@ public class UtilTest {
  /**
    * Test of buildGeoCodePath method, of class Util.
    */
-  @Test
+//  @Test
   public void testBuildGeoCodePathWithAddressOnly() {
     System.out.println("buildGeoCodePath");
      
@@ -75,7 +75,7 @@ public class UtilTest {
   /**
    * Test of buildGeoCodePath method, of class Util.
    */
-  @Test
+//  @Test
   public void testBuildGeoCodePathWithAddressOnly2() {
     System.out.println("buildGeoCodePath");
      
@@ -88,7 +88,7 @@ public class UtilTest {
     assertEquals(expResult, result); 
   }
 
-  @Test
+//  @Test
   public void testBuildGeoCodePathWithAddressAndSource() {
     System.out.println("buildGeoCodePath");
      
@@ -101,7 +101,7 @@ public class UtilTest {
     assertEquals(expResult, result); 
   }
   
-  @Test
+//  @Test
   public void testBuildGeoCodePathWithAddressAndSource2() {
     System.out.println("buildGeoCodePath");
      
@@ -115,7 +115,7 @@ public class UtilTest {
     assertEquals(expResult, result); 
   }
   
-  @Test
+//  @Test
   public void testBuildGeoCodePathWithAddressAndLayer() {
     System.out.println("buildGeoCodePath");
      
@@ -128,7 +128,7 @@ public class UtilTest {
     assertEquals(expResult, result); 
   }
   
-  @Test
+//  @Test
   public void testBuildGeoCodePathWithAddressAndLayer2() {
     System.out.println("buildGeoCodePath");
      

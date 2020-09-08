@@ -328,6 +328,31 @@ export default {
           icon,
         })
       } else if (result.properties.id === 'newMarker') {
+        // const marker = L.marker([lat, lon], {
+        //   id: 'newMarker',
+        //   draggable: 'true',
+        //   pane: 'redMarker',
+        //   icon,
+        // })
+        // marker.on('dragend', function(event) {
+        //   const marker = event.target
+        //   const position = marker.getLatLng()
+        //   const pop = `${position.lat}` + ' ' + `${position.lng}`
+
+        //   var popup = L.popup({
+        //     offset: [0, -30],
+        //   }).setContent(pop)
+        //   marker
+        //     .setLatLng(position, {
+        //       id: 'newMarker',
+        //       title: 'Transamerica Pyramid',
+        //       draggable: 'true',
+        //     })
+        //     .bindPopup(popup)
+        //     .openPopup()
+        //   // .update()
+        // })
+        // return marker
         return L.marker([lat, lon], {
           id: 'newMarker',
           pane: 'redMarker',

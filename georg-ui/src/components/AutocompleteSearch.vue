@@ -26,7 +26,9 @@
           </v-list-item-avatar>
           <v-list-item-content>
             <v-list-item-title>{{ item.name }}</v-list-item-title>
-            <v-list-item-subtitle class="text-uppercase">{{ item.abbr }}</v-list-item-subtitle>
+            <v-list-item-subtitle class="text-uppercase">
+              {{ item.abbr }}
+            </v-list-item-subtitle>
           </v-list-item-content>
         </template>
       </v-autocomplete>
@@ -51,6 +53,7 @@ export default {
     isUpdating: false,
     model: null,
     search: null,
+    results: [],
   }),
 
   computed: {
@@ -103,13 +106,18 @@ export default {
       'setMessage',
       'setResults',
       'setSelectedResultId',
+      'setSelectedResult',
     ]),
+
     filterResult(id) {
       this.isLoading = true
       this.results = this.entries.filter(e => e.properties.id === id)
       this.setResults(this.results)
-      this.setDetailView(false)
-      this.setSelectedResultId('')
+      this.setDetailView(true)
+      // this.setSelectedResultId('')
+
+      this.setSelectedResultId(id)
+      this.setSelectedResult(this.results[0])
       const message =
         this.results.length > 0
           ? this.results.length + ' träffar'
@@ -118,29 +126,37 @@ export default {
       this.isLoading = false
       this.entries = []
     },
-    searchAddress({ name }) {
-      const searchText = name === undefined ? this.search : name
-      this.isLoading = true
-      service
-        .fetchAddressResults(searchText, this.searchCountry)
-        .then(response => {
-          this.results = response.features.filter(
-            r => r.properties.country != null
-          )
-          this.setResults(this.results)
-          this.setDetailView(false)
-          this.setSelectedResultId('')
-          const message =
-            this.results.length > 0
-              ? this.results.length + ' träffar'
-              : 'Sökningen gav inga träffar'
-          this.setMessage(message)
-        })
-        .catch(function() {})
-        .finally(() => {
-          this.isLoading = false
-          this.entries = []
-        })
+    searchAddress() {
+      if (!this.model) {
+        this.isLoading = true
+        service
+          .fetchAddressResults(this.search, this.searchCountry)
+          .then(response => {
+            this.results = response.features.filter(
+              r => r.properties.country != null
+            )
+            this.setResults(this.results)
+            const isSimpleResult = this.results.length === 1
+            const selectedResult = isSimpleResult ? this.results[0] : {}
+            const selectedResultId = isSimpleResult
+              ? this.results[0].properties.id
+              : ''
+
+            this.setDetailView(isSimpleResult ? true : false)
+            this.setSelectedResultId(selectedResultId)
+            this.setSelectedResult(selectedResult)
+            const message =
+              this.results.length > 0
+                ? this.results.length + ' träffar'
+                : 'Sökningen gav inga träffar'
+            this.setMessage(message)
+          })
+          .catch(function() {})
+          .finally(() => {
+            this.isLoading = false
+            this.entries = []
+          })
+      }
     },
     autoCompleteSearch(value) {
       if (!this.isEmpty(value) && value.length >= 3) {

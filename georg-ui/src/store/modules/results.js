@@ -12,6 +12,7 @@ const state = {
   selectedMarkerId: '',
   searchOption: 'address',
   searchCountry: 'SWE',
+  // unhoveredResultId: '',
 }
 
 const getters = {
@@ -25,7 +26,7 @@ const getters = {
   isWOF: state => state.selectedResult.properties.source === 'whosonfirst',
   message: state => state.message,
   newMarker: state => state.newMarker,
-  unhoveredResultId: state => state.unhoveredResultId,
+  // unhoveredResultId: state => state.unhoveredResultId,
   selectedResult: state => state.selectedResult,
   results: state => state.results,
   selectedResultId: state => state.selectedResultId,

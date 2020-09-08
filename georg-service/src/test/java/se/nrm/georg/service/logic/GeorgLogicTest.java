@@ -11,6 +11,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
+import se.nrm.georg.service.logic.json.CoordinatesJson;
 import se.nrm.georg.service.logic.services.ExternalServices;
 
 /**
@@ -28,6 +29,8 @@ public class GeorgLogicTest {
   private InitialProperties mockProps; 
   @Mock
   private ExternalServices service; 
+  @Mock
+  private CoordinatesJson coordinates; 
   
   private String peliasPath; 
   
@@ -42,7 +45,8 @@ public class GeorgLogicTest {
     
     when(mockProps.getPeliasPath()).thenReturn(peliasPath);
     when(service.getResults(any(String.class))).thenReturn(resultString);
-    instance = new GeorgLogic(mockProps, service);
+    when(coordinates.addCoordinatesTransformation(any(String.class))).thenReturn(resultString);
+    instance = new GeorgLogic(mockProps, service, coordinates);
   }
   
   @After

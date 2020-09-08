@@ -77,12 +77,11 @@ export default {
       return latDdm + ' ' + lonDdm
     },
     sweref99: function() {
-      let result = proj4(wgs84, sweref99, [Number(this.lon), Number(this.lon)])
+      let result = proj4(wgs84, sweref99, [Number(this.lon), Number(this.lat)])
       return Math.round(result[1]) + ', ' + Math.round(result[0])
     },
     rt90: function() {
       let result = proj4(wgs84, rt90, [Number(this.lon), Number(this.lat)])
-
       return Math.round(result[1]) + ', ' + Math.round(result[0])
     },
     iconToggleCoordinates: function() {
