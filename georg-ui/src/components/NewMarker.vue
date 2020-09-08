@@ -22,10 +22,14 @@
         {{ result.properties.region }}
         {{ result.properties.country }}
       </v-list-item-subtitle>
+      <v-list-item-subtitle class="text--primary">
+        {{ latDms }}
+        {{ lngDms }}
+      </v-list-item-subtitle>
     </v-list-item-content>
 
     <v-list-item-action>
-      <v-icon color="red darken-2">mdi-map-marker</v-icon>
+      <v-icon color="red darken-2">{{ makerIcon }}</v-icon>
     </v-list-item-action>
   </v-list-item>
 </template>
@@ -41,15 +45,28 @@ export default {
     lat: function() {
       return this.result.geometry.coordinates[1]
     },
+
     lng: function() {
       return this.result.geometry.coordinates[0]
     },
+
     latDms: function() {
+      // return this.result.properties.coordinates.dms[0]
       return converter.latlon(this.result.geometry.coordinates[1], 'lat')
     },
+
     lngDms: function() {
+      // return this.result.properties.coordinates.dms[1]
       return converter.latlon(this.result.geometry.coordinates[0], 'lon')
     },
+    makerIcon: function() {
+      const uncertainty = this.result.properties.coordinateUncertaintyInMeters
+
+      return uncertainty && uncertainty > 0
+        ? 'mdi-map-marker-radius'
+        : 'mdi-map-marker'
+    },
+
     undefinedMarker: function() {
       return this.result.properties.isNew
     },

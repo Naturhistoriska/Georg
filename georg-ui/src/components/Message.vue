@@ -24,15 +24,17 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Message',
   data: () => ({
-    linkText: '< TILLBAKA TILL TRÄFFLISTAN',
+    // linkText: '< TILLBAKA TILL TRÄFFLISTAN',
   }),
   computed: {
-    ...mapGetters(['detailView', 'message']),
+    ...mapGetters(['detailView', 'message', 'results']),
+    linkText: function() {
+      return this.results.length === 1
+        ? 'TILL TRÄFFLISTAN'
+        : '< TILLBAKA TILL TRÄFFLISTAN'
+    },
   },
   // watch: {
-  //   message: function() {
-  //     console.log('message : ', this.message)
-  //   },
   // },
   methods: {
     ...mapMutations(['setDetailView', 'setDisplayJsonData']),

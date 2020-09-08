@@ -4,11 +4,11 @@
       <v-icon v-bind:color="treeIconColor">mdi-file-tree</v-icon>
     </v-list-item-icon>
     <v-list-item-content>
-      <v-list-item-title>
+      <v-list-item-title v-if="selectedResult.properties.county">
         {{ selectedResult.properties.county }}
         <span class="text--secondary">county</span>
       </v-list-item-title>
-      <v-list-item-title>
+      <v-list-item-title v-if="selectedResult.properties.region">
         {{ selectedResult.properties.region }}
         <span class="text--secondary">region</span>
       </v-list-item-title>

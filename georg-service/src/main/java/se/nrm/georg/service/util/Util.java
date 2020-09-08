@@ -1,10 +1,13 @@
 package se.nrm.georg.service.util;
  
+import lombok.extern.slf4j.Slf4j;
+
 
 /**
  *
  * @author idali
  */
+@Slf4j
 public class Util {
    
   private final String search = "search?";
@@ -12,6 +15,7 @@ public class Util {
   private final String textQuery = "text="; 
   private final String sourceQry = "&sources=";
   private final String layerQry = "&layers=";
+  private final String coarseLayer = "&layers=coarse";
   private final String sizeQry = "&size=";
   private final String reverseGeoCode = "reverse?";
   private final String pointLat = "point.lat=";
@@ -19,8 +23,8 @@ public class Util {
   private final String and = "&"; 
   private final String emptyString = "";
   private final String wildCard = "*";
-  private final String countryQuery = "&boundary.country=";
-  private StringBuilder sb; 
+  private final String countryQuery = "&boundary.country="; 
+  private final String boundaryCircle = "&boundary.circle.radius=1000"; 
   
   private static Util instance = null;
   
@@ -32,17 +36,7 @@ public class Util {
     }
     return instance;
   }
-  
-//  public String buildGbifDatasetUrl(String gbifUrl, String datasetKey, String occurranceId) {
-//    sb = new StringBuilder();
-//    sb.append(gbifUrl);
-//    sb.append("search?datesetKey=");
-//    sb.append(datasetKey);
-//    sb.append("&occurrenceID=");
-//    sb.append(occurranceId);
-//    return sb.toString().trim();
-//  }
-  
+   
   public String bunildAutoCompleteSearchPath(String peliasPath, String text,
           String sources, String layers, String countryCode, int size) {
     
@@ -55,7 +49,7 @@ public class Util {
   }
   
   public String buildReverseGeoCodePath(String peliasPath, double lat, double lon) { 
-    sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder();
     sb.append(peliasPath);
     sb.append(reverseGeoCode);
     sb.append(pointLon);
@@ -63,20 +57,27 @@ public class Util {
     sb.append(and);
     sb.append(pointLat);
     sb.append(lat);
+//    sb.append(coarseLayer);
+    sb.append(boundaryCircle);
+    sb.append(coarseLayer);
     return sb.toString().trim();
   } 
   
   private String buildSearchUrl(String peliasPath, String searchType, String text, 
           String sources, String layers, String countryCode, int size) {
-    sb = new StringBuilder();
+    log.info("searchType : {}", searchType); 
+    
+    StringBuilder sb = new StringBuilder();
     sb.append(peliasPath);
     sb.append(searchType); 
     sb.append(textQuery);
     sb.append(text);  
     sb.append(searchType.equals(search) ? wildCard : emptyString);
-    sb.append(countryQuery);
-    sb.append(countryCode);
-    
+    if(countryCode != null && countryCode.trim().length() > 0) {
+      sb.append(countryQuery);
+      sb.append(countryCode);
+    }
+ 
     if(sources != null && sources.trim().length() > 0) { 
       sb.append(sourceQry);
       sb.append(sources);

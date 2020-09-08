@@ -1,7 +1,9 @@
 <template>
   <div id="container" class="container container--fluid">
     <v-card id="navi">
-      <AutocompleteSearch />
+      <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
+      <AutocompleteSearch v-if="isAddressSearch" />
+      <SearchCoordinates v-else />
       <v-divider v-if="!detailView && results.length > 0"></v-divider>
       <Results v-if="!detailView" v-bind:height="resultsHeight" />
     </v-card>
@@ -15,21 +17,24 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
 import AutocompleteSearch from '../components/AutocompleteSearch'
 import Detail from '../components/Detail'
 import JsonResult from '../components/JsonResult'
 import Map from '../components/Map'
 import Results from '../components/Results'
+import SearchOptions from '../components/SearchOptions'
+import SearchCoordinates from '../components/SearchCoordinates'
 
 export default {
   name: 'Home',
   components: {
     AutocompleteSearch,
+    SearchOptions,
     Detail,
     JsonResult,
     Map,
     Results,
+    SearchCoordinates,
   },
 
   data() {
@@ -47,7 +52,12 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   computed: {
-    ...mapGetters(['results', 'detailView', 'displayJsonData']),
+    ...mapGetters([
+      'detailView',
+      'displayJsonData',
+      'isAddressSearch',
+      'results',
+    ]),
   },
   methods: {
     handleResize() {

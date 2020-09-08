@@ -14,13 +14,13 @@
         </v-list-item-icon>
       </v-list-item>
     </v-card-title>
-    <v-card-subtitle v-if="isGbif">{{
-      selectedResult.properties.name
-    }}</v-card-subtitle>
+    <v-card-subtitle v-if="isGbif">
+      {{ selectedResult.properties.name }}
+    </v-card-subtitle>
     <v-card-subtitle v-else-if="!isDinPlats">
-      <strong class="text-capitalize">{{
-        selectedResult.properties.layer
-      }}</strong>
+      <strong class="text-capitalize">
+        {{ selectedResult.properties.layer }}
+      </strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-text v-if="isGbif">
@@ -30,6 +30,7 @@
     </v-card-text>
     <v-list flat>
       <Coordinates
+        v-bind:coordinates="selectedResult.properties.coordinates"
         v-bind:lat="selectedResult.geometry.coordinates[1]"
         v-bind:lon="selectedResult.geometry.coordinates[0]"
         v-bind:isNewMarker="isNewMarker"

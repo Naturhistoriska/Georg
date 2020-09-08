@@ -4,5 +4,5 @@ swarm:
   port:
     offset: 100
   pelias:
-    path: http://localhost:4000/v1/
-
+    # path: http://localhost:4000/v1/
+    path: https://georg-test.nrm.se/api/

@@ -56,7 +56,7 @@ const sweref99 =
 export default {
   name: 'Coordinates',
 
-  props: ['isNewMarker', 'lat', 'lon'],
+  props: ['coordinates', 'isNewMarker', 'lat', 'lon'],
   data() {
     return {
       displayTransformedCoordinates: false,
@@ -64,25 +64,43 @@ export default {
   },
   computed: {
     latLon: function() {
+      if (this.coordinates) {
+        return this.coordinates.dd[0] + ' ' + this.coordinates.dd[1]
+      }
       return this.lat + ' ' + this.lon
     },
     latLonDms: function() {
+      if (this.coordinates) {
+        return this.coordinates.dms[0] + ' ' + this.coordinates.dms[1]
+      }
+
       let latDms = converter.latlon(this.lat, 'lat', false)
       let lonDms = converter.latlon(this.lon, 'lon', false)
       return latDms + ' ' + lonDms
     },
     latLonDdm: function() {
+      if (this.coordinates) {
+        return this.coordinates.ddm[0] + ' ' + this.coordinates.ddm[1]
+      }
+
       let latDdm = converter.latlon(this.lat, 'lat', true)
       let lonDdm = converter.latlon(this.lon, 'lon', true)
       return latDdm + ' ' + lonDdm
     },
     sweref99: function() {
-      let result = proj4(wgs84, sweref99, [Number(this.lon), Number(this.lon)])
+      if (this.coordinates) {
+        return this.coordinates.sweref99[0] + ' ' + this.coordinates.sweref99[1]
+      }
+
+      let result = proj4(wgs84, sweref99, [Number(this.lon), Number(this.lat)])
       return Math.round(result[1]) + ', ' + Math.round(result[0])
     },
     rt90: function() {
-      let result = proj4(wgs84, rt90, [Number(this.lon), Number(this.lat)])
+      if (this.coordinates) {
+        return this.coordinates.rt90[0] + ' ' + this.coordinates.rt90[1]
+      }
 
+      let result = proj4(wgs84, rt90, [Number(this.lon), Number(this.lat)])
       return Math.round(result[1]) + ', ' + Math.round(result[0])
     },
     iconToggleCoordinates: function() {
