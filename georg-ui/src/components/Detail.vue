@@ -4,11 +4,7 @@
       <v-list-item class="ma-0 pa-0">
         <v-list-item-content>{{ title }}</v-list-item-content>
         <v-list-item-icon>
-          <v-btn
-            icon
-            v-clipboard="jsonString"
-            @click.prevent="openOrCloseJsonView"
-          >
+          <v-btn icon v-clipboard="jsonString" @click.stop="dialog = true">
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>
         </v-list-item-icon>
@@ -41,6 +37,7 @@
       <GbifDataSourceLinks v-else-if="isGbif" />
       <DataSourceLinks v-else />
     </v-list>
+    <v-dialog v-model="dialog" max-width="550"> <JsonResult /></v-dialog>
   </v-card>
 </template>
 
@@ -51,6 +48,7 @@ import DataSourceLinks from './DataSourceLinks'
 import GbifDataSourceLinks from './GbifDataSourceLinks'
 import GeographicTree from './GeographicTree'
 import Uncertainty from './Uncertainty'
+import JsonResult from '../components/JsonResult'
 
 export default {
   name: 'Detail',
@@ -60,11 +58,13 @@ export default {
     GbifDataSourceLinks,
     GeographicTree,
     Uncertainty,
+    JsonResult,
   },
 
   data() {
     return {
       // jsonString: 'test',
+      dialog: false,
     }
   },
 

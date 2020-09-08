@@ -10,7 +10,6 @@
     <Detail v-if="detailView" />
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
-      <JsonResult v-if="displayJsonData" />
     </div>
   </div>
 </template>
@@ -19,7 +18,6 @@
 import { mapGetters } from 'vuex'
 import AutocompleteSearch from '../components/AutocompleteSearch'
 import Detail from '../components/Detail'
-import JsonResult from '../components/JsonResult'
 import Map from '../components/Map'
 import Results from '../components/Results'
 import SearchOptions from '../components/SearchOptions'
@@ -31,7 +29,6 @@ export default {
     AutocompleteSearch,
     SearchOptions,
     Detail,
-    JsonResult,
     Map,
     Results,
     SearchCoordinates,
