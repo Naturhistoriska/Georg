@@ -1,4 +1,50 @@
 <template>
+  <v-list-item-group>
+    <v-list-item>
+      <v-list-item-icon>
+        <v-icon color="red darken-2">mdi-map-marker-radius</v-icon>
+      </v-list-item-icon>
+      <v-list-item-title>Osäkerhetsradie</v-list-item-title>
+    </v-list-item>
+    <v-card class="ml-16" id="v-card-uncertainty" flat>
+      <v-chip-group>
+        <v-chip
+          class="mr-3 ml-1 mt-1 mb-0"
+          v-for="tag in tags"
+          :key="tag.label"
+          @click="addAccuracyValue(tag.value)"
+          >{{ tag.label }}</v-chip
+        >
+      </v-chip-group>
+      <v-container class="mt-0 pt-1 mb-0 pb-0">
+        <v-row>
+          <v-col cols="5" class="mt-0 pt-0 pl-1">
+            <v-text-field
+              hide-details
+              single-line
+              suffix="meter"
+              type="number"
+              color="red darken-2"
+              v-model="accuracyValue"
+              label="Radie ?"
+              min="0"
+              max="10000000"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="7" class="mt-1 pb-0">
+            <v-btn
+              @click="setUncertaintyValue"
+              color="red darken-2"
+              text
+              :disabled="disableSetUncertaintyBtn"
+              >Sätt osäkerhet</v-btn
+            >
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-card>
+  </v-list-item-group>
+  <!--
   <v-card class="mt-2" width="400" id="v-card-uncertainty" flat>
     <v-card-title class="grey--text text--darken-2"
       >Din osäkerhetsradie</v-card-title
@@ -41,7 +87,7 @@
         >Sätt osäkerhet</v-btn
       >
     </v-card-actions>
-  </v-card>
+  </v-card>-->
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'

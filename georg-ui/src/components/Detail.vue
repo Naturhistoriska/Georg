@@ -3,7 +3,7 @@
     <v-card-title class="pl-4 pr-2 ">
       {{ title }}
     </v-card-title>
-    <v-card-subtitle v-if="!isDinPlats && !isGbif">
+    <v-card-subtitle v-if="!isNewMarker && !isGbif">
       <strong class="text-capitalize">{{
         selectedResult.properties.layer
       }}</strong>
@@ -12,7 +12,7 @@
     <v-card-subtitle v-else-if="isGbif">
       Plats från en {{ selectedResult.properties.source.toUpperCase() }}-källa
     </v-card-subtitle>
-    <v-card-subtitle v-else-if="isDinPlats">
+    <v-card-subtitle v-else-if="isNewMarker">
       {{ latDms }}
       {{ lngDms }}
     </v-card-subtitle>
@@ -84,13 +84,13 @@
       <v-divider inset></v-divider>
       <Uncertainty v-if="isNewMarker" />
       <GbifDataSourceLinks v-else-if="isGbif" />
+      <DataSourceLinks v-else />
       <v-list-item v-if="isGbif">
         <v-list-item-action></v-list-item-action>
         <v-alert dense text type="warning" class="alertText"
           >Källan saknar geodetiskt datum. <br />WGS84 har antagits.</v-alert
         ></v-list-item
       >
-      <DataSourceLinks v-else />
     </v-list>
     <v-dialog v-model="dialog" max-width="550"><JsonResult /></v-dialog>
     <v-snackbar v-model="snackbar" centered :timeout="600">
