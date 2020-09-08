@@ -15,6 +15,7 @@ public class Util {
   private final String textQuery = "text="; 
   private final String sourceQry = "&sources=";
   private final String layerQry = "&layers=";
+  private final String coarseLayer = "&layers=coarse";
   private final String sizeQry = "&size=";
   private final String reverseGeoCode = "reverse?";
   private final String pointLat = "point.lat=";
@@ -23,6 +24,7 @@ public class Util {
   private final String emptyString = "";
   private final String wildCard = "*";
   private final String countryQuery = "&boundary.country="; 
+  private final String boundaryCircle = "&boundary.circle.radius=1000"; 
   
   private static Util instance = null;
   
@@ -55,6 +57,9 @@ public class Util {
     sb.append(and);
     sb.append(pointLat);
     sb.append(lat);
+//    sb.append(coarseLayer);
+    sb.append(boundaryCircle);
+    sb.append(coarseLayer);
     return sb.toString().trim();
   } 
   

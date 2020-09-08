@@ -144,7 +144,7 @@ public class UtilTest {
   /**
    * Test of buildReverseGeoCodePath method, of class Util.
    */
-  @Test
+//  @Test
   public void testBuildReverseGeoCodePath() {
     System.out.println("buildReverseGeoCodePath");
  
