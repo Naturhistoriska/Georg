@@ -1,6 +1,6 @@
 <template>
   <v-list-item-group>
-    <v-list-item inactive @click="openOrCloseTransformedCoordinates">
+    <v-list-item>
       <v-list-item-icon>
         <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
       </v-list-item-icon>
@@ -8,32 +8,34 @@
         <v-list-item-title>{{ latLonDms }}</v-list-item-title>
         <v-list-item-subtitle>WGS84 DMS</v-list-item-subtitle>
       </v-list-item-content>
-      <v-list-item-action>
-        <v-icon class="pt-0 mt-0">{{ iconToggleCoordinates }}</v-icon>
-      </v-list-item-action>
+      <v-list-item-action> </v-list-item-action>
     </v-list-item>
     <v-list-item inactive v-if="displayTransformedCoordinates">
-      <v-list-item-action></v-list-item-action>
+      <v-list-item-icon> </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>{{ latLonDdm }}</v-list-item-title>
         <v-list-item-subtitle>WGS84 DDM</v-list-item-subtitle>
       </v-list-item-content>
-    </v-list-item>
-    <v-list-item inactive v-if="displayTransformedCoordinates">
       <v-list-item-action></v-list-item-action>
+    </v-list-item>
+    <v-list-item>
+      <v-list-item-icon> </v-list-item-icon>
+
       <v-list-item-content>
         <v-list-item-title>{{ latLon }}</v-list-item-title>
         <v-list-item-subtitle>WGS84 DD (lat, lon)</v-list-item-subtitle>
       </v-list-item-content>
-    </v-list-item>
-    <v-list-item inactive v-if="displayTransformedCoordinates">
       <v-list-item-action></v-list-item-action>
+    </v-list-item>
+    <v-list-item>
+      <v-list-item-icon></v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>{{ rt90 }}</v-list-item-title>
         <v-list-item-subtitle>RT90 (nord, öst)</v-list-item-subtitle>
       </v-list-item-content>
+      <v-list-item-action></v-list-item-action>
     </v-list-item>
-    <v-list-item inactive v-if="displayTransformedCoordinates">
+    <v-list-item>
       <v-list-item-action></v-list-item-action>
       <v-list-item-content>
         <v-list-item-title>{{ sweref99 }}</v-list-item-title>
@@ -58,9 +60,7 @@ export default {
 
   props: ['isNewMarker', 'lat', 'lon'],
   data() {
-    return {
-      displayTransformedCoordinates: false,
-    }
+    return {}
   },
   computed: {
     latLon: function() {
