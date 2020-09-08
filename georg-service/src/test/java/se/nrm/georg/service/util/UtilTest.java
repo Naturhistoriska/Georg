@@ -43,7 +43,7 @@ public class UtilTest {
   /**
    * Test of buildGeoCodePath method, of class Util.
    */
-//  @Test
+  @Test
   public void testBuildGeoCodePath() {
     System.out.println("buildGeoCodePath");
      
@@ -59,7 +59,7 @@ public class UtilTest {
  /**
    * Test of buildGeoCodePath method, of class Util.
    */
-//  @Test
+  @Test
   public void testBuildGeoCodePathWithAddressOnly() {
     System.out.println("buildGeoCodePath");
      
@@ -75,7 +75,7 @@ public class UtilTest {
   /**
    * Test of buildGeoCodePath method, of class Util.
    */
-//  @Test
+  @Test
   public void testBuildGeoCodePathWithAddressOnly2() {
     System.out.println("buildGeoCodePath");
      
@@ -88,7 +88,7 @@ public class UtilTest {
     assertEquals(expResult, result); 
   }
 
-//  @Test
+  @Test
   public void testBuildGeoCodePathWithAddressAndSource() {
     System.out.println("buildGeoCodePath");
      
@@ -101,7 +101,7 @@ public class UtilTest {
     assertEquals(expResult, result); 
   }
   
-//  @Test
+  @Test
   public void testBuildGeoCodePathWithAddressAndSource2() {
     System.out.println("buildGeoCodePath");
      
@@ -115,7 +115,7 @@ public class UtilTest {
     assertEquals(expResult, result); 
   }
   
-//  @Test
+  @Test
   public void testBuildGeoCodePathWithAddressAndLayer() {
     System.out.println("buildGeoCodePath");
      
@@ -128,7 +128,7 @@ public class UtilTest {
     assertEquals(expResult, result); 
   }
   
-//  @Test
+  @Test
   public void testBuildGeoCodePathWithAddressAndLayer2() {
     System.out.println("buildGeoCodePath");
      
@@ -144,13 +144,13 @@ public class UtilTest {
   /**
    * Test of buildReverseGeoCodePath method, of class Util.
    */
-//  @Test
+  @Test
   public void testBuildReverseGeoCodePath() {
     System.out.println("buildReverseGeoCodePath");
  
     double lat = 59.3;
     double lon = 16.9; 
-    String expResult = "http://api.se/reverse?point.lon=16.9&point.lat=59.3";
+    String expResult = "http://api.se/reverse?point.lon=16.9&point.lat=59.3&boundary.circle.radius=1000&layers=coarse";
     String result = instance.buildReverseGeoCodePath(peliasPath, lat, lon); 
     assertEquals(expResult, result); 
   }
