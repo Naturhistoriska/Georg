@@ -3,14 +3,18 @@
     <v-card-title class="pl-4 pr-2 ">
       {{ title }}
     </v-card-title>
-    <v-card-subtitle v-if="isGbif">{{
-      selectedResult.properties.name
-    }}</v-card-subtitle>
-    <v-card-subtitle v-else-if="!isDinPlats">
+    <v-card-subtitle v-if="!isDinPlats && !isGbif">
       <strong class="text-capitalize">{{
         selectedResult.properties.layer
       }}</strong>
       enligt {{ source }}
+    </v-card-subtitle>
+    <v-card-subtitle v-else-if="isGbif">
+      Plats från en {{ selectedResult.properties.source.toUpperCase() }}-källa
+    </v-card-subtitle>
+    <v-card-subtitle v-else-if="isDinPlats">
+      {{ latDms }}
+      {{ lngDms }}
     </v-card-subtitle>
     <v-divider></v-divider>
     <v-card-text class="pb-3 pt-3">
@@ -71,7 +75,7 @@
       </v-list-item>
       <v-divider inset v-if="!isDinPlats"></v-divider>
       <GeographicTree v-if="!undefinedMarker" />
-      <v-divider inset></v-divider>
+      <v-divider inset v-if="!undefinedMarker"></v-divider>
       <Coordinates
         v-bind:lat="selectedResult.geometry.coordinates[1]"
         v-bind:lon="selectedResult.geometry.coordinates[0]"
@@ -103,6 +107,7 @@ import GbifDataSourceLinks from './GbifDataSourceLinks'
 import GeographicTree from './GeographicTree'
 import Uncertainty from './Uncertainty'
 import JsonResult from '../components/JsonResult'
+import * as converter from '../assets/js/latlonConverter.js'
 
 export default {
   name: 'Detail',
@@ -160,6 +165,20 @@ export default {
     },
     makeIconColor: function() {
       return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
+    },
+    latDms: function() {
+      return converter.latlon(
+        this.selectedResult.geometry.coordinates[1],
+        'lat',
+        false
+      )
+    },
+    lngDms: function() {
+      return converter.latlon(
+        this.selectedResult.geometry.coordinates[0],
+        'lon',
+        false
+      )
     },
   },
 
