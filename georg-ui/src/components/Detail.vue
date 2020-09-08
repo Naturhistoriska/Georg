@@ -70,13 +70,13 @@
         </v-list-item-content>
       </v-list-item>
       <v-divider inset v-if="!isDinPlats"></v-divider>
+      <GeographicTree v-if="!undefinedMarker" />
+      <v-divider inset></v-divider>
       <Coordinates
         v-bind:lat="selectedResult.geometry.coordinates[1]"
         v-bind:lon="selectedResult.geometry.coordinates[0]"
         v-bind:isNewMarker="isNewMarker"
       />
-      <v-divider inset></v-divider>
-      <GeographicTree v-if="!undefinedMarker" />
       <v-divider inset></v-divider>
       <Uncertainty v-if="isNewMarker" />
       <GbifDataSourceLinks v-else-if="isGbif" />
