@@ -8,22 +8,10 @@
   >
     <template>
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title v-bind:class="nameColor">{{
-          name
-        }}</v-list-item-title>
-        <v-list-item-subtitle
-          id="resultContent"
-          class="text--primary"
-          v-if="isDinPlats"
-        >
-          {{ latDms }}
-          {{ lngDms }}
-        </v-list-item-subtitle>
-        <v-list-item-subtitle v-if="isDinPlats">
-          {{ lat }}
-          {{ lng }}
-        </v-list-item-subtitle>
-        <v-list-item-subtitle class="text--primary" v-if="!isDinPlats">
+        <v-list-item-title v-bind:class="nameColor">
+          {{ name }}
+        </v-list-item-title>
+        <v-list-item-subtitle class="text--primary">
           {{ result.properties.county }}
           {{ result.properties.region }}
           {{ result.properties.country }}
@@ -31,16 +19,14 @@
         <v-list-item-subtitle v-if="isGbif">
           <span class="text-capitalize">{{ result.properties.name }}</span>
         </v-list-item-subtitle>
-        <v-list-item-subtitle v-else-if="!isDinPlats">
+        <v-list-item-subtitle>
           <span class="text-capitalize">{{ result.properties.layer }}</span>
           enligt {{ source }}.
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
         <v-icon v-bind:color="markerIconColor">{{ markerIcon }}</v-icon>
-        <v-list-item-action-text v-if="!isDinPlats">{{
-          sourceAlias
-        }}</v-list-item-action-text>
+        <v-list-item-action-text>{{ sourceAlias }}</v-list-item-action-text>
       </v-list-item-action>
     </template>
   </v-list-item>
@@ -48,7 +34,6 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import * as converter from '../assets/js/latlonConverter.js'
 export default {
   name: 'Result',
   props: ['result'],
@@ -58,7 +43,6 @@ export default {
   },
 
   computed: {
-    // a computed getter
     ...mapGetters(['hoveredResultId', 'selectedResultId']),
     isActive: function() {
       return this.result.properties.id === this.selectedResultId
@@ -116,20 +100,11 @@ export default {
         ? 'blue--text text--darken-2'
         : ''
     },
-    isDinPlats: function() {
-      return this.result.properties.name === 'Din plats'
-    },
     lat: function() {
       return this.result.geometry.coordinates[1]
     },
     lng: function() {
       return this.result.geometry.coordinates[0]
-    },
-    latDms: function() {
-      return converter.latlon(this.result.geometry.coordinates[1], 'lat', false)
-    },
-    lngDms: function() {
-      return converter.latlon(this.result.geometry.coordinates[0], 'lon', false)
     },
   },
 
