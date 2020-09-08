@@ -74,8 +74,11 @@ export default {
             ? entry.properties.addendum.georg.coordinateUncertaintyInMeters
             : undefined
         const icon = uncertainty ? 'mdi-map-marker-radius' : 'mdi-map-marker'
-        const region = entry.properties.region
-        const name = entry.properties.name + ', ' + region
+        const region =
+          entry.properties.region !== undefined
+            ? ', ' + entry.properties.region
+            : ''
+        const name = entry.properties.name + region
         const id = entry.properties.id
         const element = { name, source, abbr, uncertainty, icon, id }
         elements.push(element)
