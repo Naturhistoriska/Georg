@@ -57,6 +57,7 @@ export default {
       this.setSelectedResultId('')
       this.setMessage('')
       this.setDisplayJsonData(false)
+      this.$router.push('/')
     },
     search() {
       this.isLoading = true
@@ -98,6 +99,7 @@ export default {
         .finally(() => {
           this.isLoading = false
         })
+      this.$router.push(`/search?coordinates=${this.coordinates}`)
     },
   },
 }
