@@ -12,7 +12,6 @@ const state = {
   selectedMarkerId: '',
   searchOption: 'address',
   searchCountry: 'SWE',
-  // unhoveredResultId: '',
 }
 
 const getters = {
