@@ -7,7 +7,7 @@
         hide-details
         append-icon="search"
         autofocus
-        class="ma-0 pa-0"
+        class="mt-0 ml-0 mr-0 mb-3     pa-0"
         clearable
         hide-no-data
         hide-selected

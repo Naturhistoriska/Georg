@@ -12,7 +12,7 @@
     <div
       id="message"
       v-if="!detailView"
-      class="pl-3 grey--text text--darken-3 body-2"
+      class="pl-3 grey--text text--darken-2 body-2"
     >
       {{ message }}
     </div>

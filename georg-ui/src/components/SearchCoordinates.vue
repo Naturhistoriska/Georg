@@ -2,6 +2,7 @@
   <div class="ma-0 pa-0">
     <v-card-text class="ma-0 pa-0">
       <v-text-field
+        class="mb-3"
         single-line
         filled
         dense
