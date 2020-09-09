@@ -1,15 +1,34 @@
 <template>
-  <v-list-item-group>
-    <v-list-item>
-      <v-list-item-icon>
-        <v-icon :color="makeIconColor">mdi-crosshairs-gps</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>{{ latLonDms }}</v-list-item-title>
-        <v-list-item-subtitle>WGS84 DMS</v-list-item-subtitle>
-      </v-list-item-content>
-      <v-list-item-action> </v-list-item-action>
-    </v-list-item>
+  <v-list-item-group active-class="white-bg">
+    <v-hover v-slot:default="{ hover }">
+      <v-list-item
+        :class="{ highlight: expand == true }"
+        v-if="!isDinPlats"
+        @click="snackbar = true"
+        @focus="expand = true"
+        @blur="expand = false"
+      >
+        <v-list-item-icon>
+          <v-icon :color="makeIconColor">mdi-crosshairs-gps</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>{{ latLonDms }}</v-list-item-title>
+          <v-list-item-subtitle>WGS84 DMS</v-list-item-subtitle>
+        </v-list-item-content>
+        <v-list-item-action>
+          <v-btn
+            icon
+            color="transparent"
+            :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
+            @focus="expand = true"
+            @blur="expand = false"
+            @click="snackbar = true"
+          >
+            <v-icon small>mdi-content-copy</v-icon>
+          </v-btn>
+        </v-list-item-action>
+      </v-list-item>
+    </v-hover>
     <v-list-item>
       <v-list-item-icon> </v-list-item-icon>
       <v-list-item-content>
@@ -20,7 +39,6 @@
     </v-list-item>
     <v-list-item>
       <v-list-item-icon> </v-list-item-icon>
-
       <v-list-item-content>
         <v-list-item-title>{{ latLon }}</v-list-item-title>
         <v-list-item-subtitle>WGS84 DD (lat, lon)</v-list-item-subtitle>
@@ -42,6 +60,9 @@
         <v-list-item-subtitle>SWEREF99 TM (nord, öst)</v-list-item-subtitle>
       </v-list-item-content>
     </v-list-item>
+    <v-snackbar centered v-model="snackbar" :timeout="600">
+      Kopierad till Urklipp</v-snackbar
+    >
   </v-list-item-group>
 </template>
 <script>
@@ -60,7 +81,10 @@ export default {
 
   props: ['isNewMarker', 'lat', 'lon'],
   data() {
-    return {}
+    return {
+      expand: false,
+      snackbar: false,
+    }
   },
   computed: {
     latLon: function() {
@@ -94,10 +118,39 @@ export default {
     },
   },
   methods: {
-   /* openOrCloseTransformedCoordinates() {
+    /* openOrCloseTransformedCoordinates() {
       event.preventDefault()
       this.displayTransformedCoordinates = !this.displayTransformedCoordinates
     },*/
   },
 }
 </script>
+<style>
+.geotree.v-list-item--dense {
+  min-height: 40px !important;
+  max-height: 40px !important;
+}
+
+.geotree.v-list-item--dense .v-list-item__title {
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+}
+
+.white-bg:before {
+  opacity: 0 !important;
+}
+
+.highlight::before {
+  background-color: currentColor !important;
+  opacity: 0.06 !important;
+}
+
+.v-application .show-btn-hover.transparent--text {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.v-application .show-btn-hover.transparent--text,
+.v-application .show-btn.transparent--text {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+</style>
