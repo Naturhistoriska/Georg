@@ -1,6 +1,6 @@
 <template>
   <div class="ma-0 pa-0">
-    <v-card-text class="ma-0 pa-0">
+    <v-card-text class="ma-0 pa-0" id="main-search">
       <v-autocomplete
         append-icon="search"
         autofocus
@@ -192,3 +192,9 @@ export default {
   },
 }
 </script>
+
+<style>
+#main-search .v-select.v-select--is-menu-active .v-input__icon--append .v-icon {
+  transform: none !important ;
+}
+</style>
