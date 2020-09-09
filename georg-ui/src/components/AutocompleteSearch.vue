@@ -2,6 +2,9 @@
   <div class="ma-0 pa-0">
     <v-card-text class="ma-0 pa-0" id="main-search">
       <v-autocomplete
+        filled
+        dense
+        hide-details
         append-icon="search"
         autofocus
         class="ma-0 pa-0"
