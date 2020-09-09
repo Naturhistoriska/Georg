@@ -24,7 +24,7 @@
   </v-row>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'SearchOptions',
   data: () => ({
@@ -33,12 +33,23 @@ export default {
       { text: 'i Norden', value: '' },
       { text: 'i Sverige', value: 'SWE' },
     ],
-    select: 'i Sevrige',
+    select: 'i Sverige',
   }),
 
   computed: {
+    ...mapGetters(['searchCountry', 'searchOption']),
     isCountrySelectDisabled: function() {
       return this.coordinates ? true : false
+    },
+  },
+
+  watch: {
+    searchCountry: function() {
+      this.select = this.searchCountry === '' ? 'i Norden' : 'i Svrige'
+    },
+    searchOption: function() {
+      this.coordinates =
+        this.searchOption == 'address' ? null : this.searchOption
     },
   },
 

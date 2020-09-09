@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import AutocompleteSearch from '../components/AutocompleteSearch'
 import Detail from '../components/Detail'
 import JsonResult from '../components/JsonResult'
@@ -24,6 +24,11 @@ import Map from '../components/Map'
 import Results from '../components/Results'
 import SearchOptions from '../components/SearchOptions'
 import SearchCoordinates from '../components/SearchCoordinates'
+import Service from '../Service'
+
+import * as fixer from '../assets/js/decimalPlacesFixer.js'
+
+const service = new Service()
 
 export default {
   name: 'Home',
@@ -47,6 +52,17 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
+
+    const isAddressSearch = this.$route.query.place_name !== undefined
+    const isCoordinatesSearch = this.$route.query.coordinates !== undefined
+    if (isAddressSearch) {
+      this.searchAddress(
+        this.$route.query.place_name,
+        this.$route.query.country
+      )
+    } else if (isCoordinatesSearch) {
+      this.searchCoordinates(this.$route.query.coordinates)
+    }
   },
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
@@ -59,12 +75,110 @@ export default {
       'results',
     ]),
   },
+
+  watch: {
+    $route(to, from) {
+      console.log('from to ? ', from, to)
+    },
+  },
   methods: {
+    ...mapMutations([
+      'setDetailView',
+      'setDisplayJsonData',
+      'setMessage',
+      'setResults',
+      'setSelectedResultId',
+      'setSelectedResult',
+      'setSearchCountry',
+      'setSearchOption',
+    ]),
+
     handleResize() {
       const windowHeight = window.innerHeight - 64
       const boxHeight = windowHeight - 200
       this.mapHeight = 'height: ' + windowHeight + 'px'
       this.resultsHeight = 'max-height: ' + boxHeight + 'px'
+    },
+
+    searchAddress(value, country) {
+      const countryCode =
+        !country ||
+        country.toLowerCase() === 'sweden' ||
+        country.toLowerCase() === 'sverige'
+          ? 'SWE'
+          : ''
+
+      service
+        .fetchAddressResults(value, countryCode)
+        .then(response => {
+          console.log(response)
+          const results = response.features.filter(
+            r => r.properties.country != null
+          )
+          this.setResults(results)
+          const isSimpleResult = results.length === 1
+          const selectedResult = isSimpleResult ? results[0] : {}
+          const selectedResultId = isSimpleResult
+            ? results[0].properties.id
+            : ''
+
+          this.setDetailView(isSimpleResult ? true : false)
+          this.setSelectedResultId(selectedResultId)
+          this.setSelectedResult(selectedResult)
+          const message =
+            results.length > 0
+              ? results.length + ' träffar'
+              : 'Sökningen gav inga träffar'
+          this.setMessage(message)
+        })
+        .catch(function() {
+          console.log('error')
+        })
+        .finally(() => {
+          this.setSearchCountry(countryCode)
+          this.setSearchOption('address')
+        })
+    },
+
+    searchCoordinates(value) {
+      service
+        .coordinatesSearch(value)
+        .then(response => {
+          const lat = response.geocoding.query['point.lat']
+          const lng = response.geocoding.query['point.lon']
+
+          const newResult = {
+            properties: {
+              id: 'newMarker',
+              name: 'Din plats',
+              isNew: true,
+            },
+            geometry: {
+              coordinates: [fixer.digits(lng), fixer.digits(lat)],
+            },
+          }
+
+          const results = response.features
+          if (results.length > 0) {
+            this.setDetailView(false)
+          } else {
+            this.setSelectedResult(newResult)
+            this.setSelectedResultId('newMarker')
+            this.setDetailView(true)
+          }
+          const message =
+            results.length > 0
+              ? results.length + ' träffar'
+              : 'Sökningen gav inga träffar'
+          this.setMessage(message)
+
+          results.unshift(newResult)
+          this.setResults(results)
+        })
+        .catch(function() {})
+        .finally(() => {
+          this.setSearchOption('coordinates')
+        })
     },
   },
 }
