@@ -10,7 +10,6 @@
     <Detail v-if="detailView" />
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
-      <JsonResult v-if="displayJsonData" />
     </div>
   </div>
 </template>
@@ -19,7 +18,6 @@
 import { mapGetters, mapMutations } from 'vuex'
 import AutocompleteSearch from '../components/AutocompleteSearch'
 import Detail from '../components/Detail'
-import JsonResult from '../components/JsonResult'
 import Map from '../components/Map'
 import Results from '../components/Results'
 import SearchOptions from '../components/SearchOptions'
@@ -36,7 +34,6 @@ export default {
     AutocompleteSearch,
     SearchOptions,
     Detail,
-    JsonResult,
     Map,
     Results,
     SearchCoordinates,
@@ -68,23 +65,16 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   computed: {
-    ...mapGetters([
-      'detailView',
-      'displayJsonData',
-      'isAddressSearch',
-      'results',
-    ]),
+    ...mapGetters(['detailView', 'isAddressSearch', 'results']),
   },
 
   watch: {
-    $route(to, from) {
-      console.log('from to ? ', from, to)
-    },
+    // $route(to, from) {
+    // },
   },
   methods: {
     ...mapMutations([
       'setDetailView',
-      'setDisplayJsonData',
       'setMessage',
       'setResults',
       'setSelectedResultId',
@@ -111,7 +101,6 @@ export default {
       service
         .fetchAddressResults(value, countryCode)
         .then(response => {
-          console.log(response)
           const results = response.features.filter(
             r => r.properties.country != null
           )
@@ -131,9 +120,7 @@ export default {
               : 'Sökningen gav inga träffar'
           this.setMessage(message)
         })
-        .catch(function() {
-          console.log('error')
-        })
+        .catch(function() {})
         .finally(() => {
           this.setSearchCountry(countryCode)
           this.setSearchOption('address')
