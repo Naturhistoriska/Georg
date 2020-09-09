@@ -21,15 +21,20 @@
         @click:append="searchAddress"
       >
         <template v-slot:item="{ item }">
-          <v-list-item-avatar>
+          <v-list-item-icon>
             <v-icon color="grey lighten-1">{{ item.icon }}</v-icon>
-          </v-list-item-avatar>
+          </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
-            <v-list-item-subtitle class="text-uppercase">
-              {{ item.abbr }}
-            </v-list-item-subtitle>
+            <v-list-item-title class="font-weight-medium body-2 text-truncate"
+              >{{ item.name }}
+            </v-list-item-title>
           </v-list-item-content>
+          <v-list-item-action
+            ><span
+              class="font-weight-medium text--disabled text-caption text-uppercase"
+              >{{ item.abbr }}</span
+            ></v-list-item-action
+          >
         </template>
       </v-autocomplete>
     </v-card-text>
