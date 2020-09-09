@@ -115,13 +115,13 @@ export default {
           url: baseUrl,
         },
         {
-          name: 'Lantmateriet',
+          name: 'Lantmäteriet topografisk',
           visible: false,
           url: lantmaterietUrl,
           attribution: lantmaterietMapAttribution,
         },
         {
-          name: 'Lantmateriet Nedtonad',
+          name: 'Lantmäteriet topografisk – nedtonad',
           visible: false,
           url: lantmaterietNedtonadUrl,
           attribution: lantmaterietMapAttribution,
