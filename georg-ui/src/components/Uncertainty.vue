@@ -1,17 +1,41 @@
 <template>
-  <v-card class="mt-2" width="400" id="v-card-uncertainty" flat>
-    <v-card-title class="grey--text text--darken-2"
-      >Din osäkerhetsradie</v-card-title
-    >
-    <v-card-text>
-      <v-chip
-        class="mr-4 mt-2"
-        v-for="tag in tags"
-        :key="tag.label"
-        @click="addAccuracyValue(tag.value)"
-        >{{ tag.label }}</v-chip
+  <v-list-item-group active-class="white-bg">
+    <v-hover v-slot:default="{ hover }">
+      <v-list-item
+        :class="{ highlight: expand == true }"
+        @click="snackbar = true"
+        @focus="expand = true"
+        @blur="expand = false"
       >
-      <v-container class="mb-0 pb-0">
+        <v-list-item-icon>
+          <v-icon color="red darken-2">mdi-map-marker-radius</v-icon>
+        </v-list-item-icon>
+        <v-list-item-title>Osäkerhetsradie</v-list-item-title>
+        <v-list-item-action>
+          <v-btn
+            icon
+            color="transparent"
+            :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
+            @focus="expand = true"
+            @blur="expand = false"
+            @click="snackbar = true"
+          >
+            <v-icon small>mdi-content-copy</v-icon>
+          </v-btn>
+        </v-list-item-action>
+      </v-list-item>
+    </v-hover>
+    <v-card class="ml-16" id="v-card-uncertainty" flat>
+      <v-chip-group>
+        <v-chip
+          class="mr-3 ml-1 mt-1 mb-0"
+          v-for="tag in tags"
+          :key="tag.label"
+          @click="addAccuracyValue(tag.value)"
+          >{{ tag.label }}</v-chip
+        >
+      </v-chip-group>
+      <v-container class="mt-0 pt-1 mb-0 pb-0">
         <v-row>
           <v-col cols="5" class="mt-0 pt-0 pl-1">
             <v-text-field
@@ -26,22 +50,23 @@
               max="10000000"
             ></v-text-field>
           </v-col>
-          <v-col cols="7">
-            <v-subheader :class="msgClass">(min: 0, max: 10000000)</v-subheader>
+          <v-col cols="7" class="mt-1 pb-0">
+            <v-btn
+              @click="setUncertaintyValue"
+              color="red darken-2"
+              text
+              :disabled="disableSetUncertaintyBtn"
+              >Sätt osäkerhet</v-btn
+            >
           </v-col>
         </v-row>
       </v-container>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn
-        @click="setUncertaintyValue"
-        color="red darken-2"
-        text
-        :disabled="disableSetUncertaintyBtn"
-        >Sätt osäkerhet</v-btn
-      >
-    </v-card-actions>
-  </v-card>
+    </v-card>
+
+    <v-snackbar centered v-model="snackbar" :timeout="600"
+      >Kopierad till Urklipp</v-snackbar
+    >
+  </v-list-item-group>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
@@ -59,6 +84,8 @@ export default {
         { label: '100 km', value: 100000 },
       ],
       uncertintyChangedByChip: false,
+      expand: false,
+      snackbar: false,
     }
   },
   mounted() {
@@ -106,3 +133,22 @@ export default {
   },
 }
 </script>
+<style>
+.white-bg:before {
+  opacity: 0 !important;
+}
+
+.highlight::before {
+  background-color: currentColor !important;
+  opacity: 0.06 !important;
+}
+
+.v-application .show-btn-hover.transparent--text {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.v-application .show-btn-hover.transparent--text,
+.v-application .show-btn.transparent--text {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+</style>
