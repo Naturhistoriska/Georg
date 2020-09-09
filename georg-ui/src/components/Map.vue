@@ -14,7 +14,7 @@
       @ready="fitMapBounds"
       @baselayerchange="layerChange"
     >
-      <l-control-layers position="topright"></l-control-layers>
+      <l-control-layers position="topright" :collapsed="false"></l-control-layers>
       <l-tile-layer
         v-for="tileProvider in tileProviders"
         :key="tileProvider.name"
