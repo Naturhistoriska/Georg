@@ -91,7 +91,6 @@
               <v-icon small>mdi-content-copy</v-icon>
             </v-btn>
           </v-list-item-action>
-          
         </v-list-item>
       </v-hover>
       <v-divider inset v-if="!isDinPlats"></v-divider>
