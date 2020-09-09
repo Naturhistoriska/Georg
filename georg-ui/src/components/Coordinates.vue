@@ -10,7 +10,7 @@
       </v-list-item-content>
       <v-list-item-action> </v-list-item-action>
     </v-list-item>
-    <v-list-item inactive v-if="displayTransformedCoordinates">
+    <v-list-item>
       <v-list-item-icon> </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>{{ latLonDdm }}</v-list-item-title>
@@ -84,20 +84,20 @@ export default {
       let result = proj4(wgs84, rt90, [Number(this.lon), Number(this.lat)])
       return Math.round(result[1]) + ', ' + Math.round(result[0])
     },
-    iconToggleCoordinates: function() {
+    /*iconToggleCoordinates: function() {
       return this.displayTransformedCoordinates
         ? 'mdi-chevron-up'
         : 'mdi-chevron-down'
-    },
+    },*/
     makeIconColor: function() {
       return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
     },
   },
   methods: {
-    openOrCloseTransformedCoordinates() {
+   /* openOrCloseTransformedCoordinates() {
       event.preventDefault()
       this.displayTransformedCoordinates = !this.displayTransformedCoordinates
-    },
+    },*/
   },
 }
 </script>
