@@ -134,7 +134,8 @@ export default {
       this.entries = []
     },
     searchAddress() {
-      if (!this.model) {
+      // if (!this.model) {
+      if (this.items.length > 1) {
         this.isLoading = true
         service
           .fetchAddressResults(this.search, this.searchCountry)
