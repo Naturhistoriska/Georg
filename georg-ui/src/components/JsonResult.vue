@@ -1,7 +1,10 @@
 <template>
-  <v-sheet :tile="tile" class="mx-auto mt-3" height="auto" width="350px">
-    <pre style="font-size: 9px;">{{ jsonstr | pretty }}</pre>
-  </v-sheet>
+  <v-card>
+    <v-card-title class="headline">JSON</v-card-title>
+    <v-card-text>
+      <pre>{{ jsonstr | pretty }}</pre>
+    </v-card-text>
+  </v-card>
 </template>
 <script>
 import { mapGetters } from 'vuex'
