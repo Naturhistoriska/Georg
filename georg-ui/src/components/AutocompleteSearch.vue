@@ -191,6 +191,7 @@ export default {
       this.setSelectedResultId('')
       this.setMessage('')
       this.setDisplayJsonData(false)
+      this.$router.push('/')
     },
     isEmpty: function(value) {
       return (
