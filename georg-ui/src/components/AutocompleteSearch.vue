@@ -7,7 +7,6 @@
         class="ma-0 pa-0"
         clearable
         hide-no-data
-        hide-selected
         item-text="name"
         item-value="id"
         placeholder="Sök plats"
@@ -127,6 +126,11 @@ export default {
           : 'Sökningen gav inga träffar'
       this.setMessage(message)
       this.isLoading = false
+
+      if (this.$route.fullPath !== `/search?place_name=${this.search}`) {
+        this.$router.push(`/search?place_name=${this.search}`)
+      }
+
       this.entries = []
     },
     searchAddress() {
@@ -159,6 +163,9 @@ export default {
             this.isLoading = false
             this.entries = []
           })
+        if (this.$route.fullPath !== `/search?place_name=${this.search}`) {
+          this.$router.push(`/search?place_name=${this.search}`)
+        }
       }
     },
     autoCompleteSearch(value) {
@@ -170,8 +177,10 @@ export default {
             const { features } = response
             this.entries = features
           })
-          .catch(function() {})
-          .finally(() => (this.isLoading = false))
+          .catch()
+          .finally(() => {
+            this.isLoading = false
+          })
       }
     },
     clearSearch() {
