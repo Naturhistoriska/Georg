@@ -37,7 +37,7 @@
         tabindex="0"
         v-clipboard="jsonString"
         @click.stop="snackbar = true"
-        @keypress="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <!--Copy and snackbar should be fixed properly so that both works for clicking and pressing enter.-->
         <v-snackbar v-model="snackbar" centered :timeout="600">
@@ -61,18 +61,39 @@
       </v-chip>-->
     </v-card-text>
     <v-divider></v-divider>
-    <v-list flat>
-      <v-list-item v-if="!isDinPlats">
-        <v-list-item-icon>
-          <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content v-if="isGbif">
-          {{ selectedResult.properties.name }}
-        </v-list-item-content>
-        <v-list-item-content v-else>
-          {{ title }}
-        </v-list-item-content>
-      </v-list-item>
+    <v-list>
+      <v-hover v-slot:default="{ hover }">
+        <v-list-item
+          :class="{ highlight: expand == true }"
+          v-if="!isDinPlats"
+          @click="snackbar2 = true"
+          @focus="expand = true"
+          @blur="expand = false"
+        >
+          <v-list-item-icon>
+            <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content v-if="isGbif">
+            {{ selectedResult.properties.name }}
+          </v-list-item-content>
+          <v-list-item-content v-else>
+            {{ title }}
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-btn
+              icon
+              color="transparent"             
+              :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
+              @focus="expand = true"
+              @blur="expand = false"
+              @click="snackbar2 = true"
+            >
+              <v-icon small>mdi-content-copy</v-icon>
+            </v-btn>
+          </v-list-item-action>
+          
+        </v-list-item>
+      </v-hover>
       <v-divider inset v-if="!isDinPlats"></v-divider>
       <GeographicTree v-if="!undefinedMarker" />
       <v-divider inset v-if="!undefinedMarker"></v-divider>
@@ -96,6 +117,9 @@
     <v-snackbar v-model="snackbar" centered :timeout="600">
       Platsens JSON har kopierats till Urklipp</v-snackbar
     >
+    <v-snackbar centered v-model="snackbar2" :timeout="600">
+            Kopierad till Urklipp</v-snackbar
+          >
   </v-card>
 </template>
 
@@ -125,6 +149,8 @@ export default {
       // jsonString: 'test',
       dialog: false,
       snackbar: false,
+      snackbar2: false,
+      expand: false,
     }
   },
 
