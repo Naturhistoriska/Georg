@@ -1,33 +1,20 @@
 <template>
   <v-list-item>
-    <v-list-item-content @click.prevent="onclick()" v-if="undefinedMarker">
-      <v-list-item-title class="red--text darken-2">{{
-        result.properties.name
-      }}</v-list-item-title>
-      <v-list-item-subtitle id="resultContent" class="text--primary">
-        {{ latDms }}
-        {{ lngDms }}
-      </v-list-item-subtitle>
-      <v-list-item-subtitle>
-        {{ lat }}
-        {{ lng }}
-      </v-list-item-subtitle>
-    </v-list-item-content>
-    <v-list-item-content @click.prevent="onclick()" v-else>
-      <v-list-item-title class="red--text darken-2">{{
-        result.properties.name
-      }}</v-list-item-title>
-      <v-list-item-subtitle class="text--primary">
+    <v-list-item-content @click.prevent="onclick()">
+      <v-list-item-title class="red--text darken-2">
+        {{ result.properties.name }}
+      </v-list-item-title>
+      <v-list-item-subtitle class="text--primary" v-if="!undefinedMarker">
         {{ result.properties.county }}
         {{ result.properties.region }}
         {{ result.properties.country }}
       </v-list-item-subtitle>
-      <v-list-item-subtitle class="text--primary">
+
+      <v-list-item-subtitle id="resultContent" class="text--primary">
         {{ latDms }}
         {{ lngDms }}
       </v-list-item-subtitle>
     </v-list-item-content>
-
     <v-list-item-action>
       <v-icon color="red darken-2">{{ makerIcon }}</v-icon>
     </v-list-item-action>
