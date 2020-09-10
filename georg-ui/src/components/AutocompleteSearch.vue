@@ -1,10 +1,13 @@
 <template>
   <div class="ma-0 pa-0">
-    <v-card-text class="ma-0 pa-0">
+    <v-card-text class="ma-0 pa-0" id="main-search">
       <v-autocomplete
+        filled
+        dense
+        hide-details
         append-icon="search"
         autofocus
-        class="ma-0 pa-0"
+        class="mt-0 ml-0 mr-0 mb-3 pa-0"
         clearable
         hide-no-data
         item-text="name"
@@ -20,15 +23,17 @@
         @click:append="searchAddress"
       >
         <template v-slot:item="{ item }">
-          <v-list-item-avatar>
+          <v-list-item-icon>
             <v-icon color="grey lighten-1">{{ item.icon }}</v-icon>
-          </v-list-item-avatar>
+          </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
-            <v-list-item-subtitle class="text-uppercase">
-              {{ item.abbr }}
-            </v-list-item-subtitle>
+            <v-list-item-title class="font-weight-medium body-2 text-truncate">{{ item.name }}</v-list-item-title>
           </v-list-item-content>
+          <v-list-item-action>
+            <span
+              class="font-weight-medium text--disabled text-caption text-uppercase"
+            >{{ item.abbr }}</span>
+          </v-list-item-action>
         </template>
       </v-autocomplete>
     </v-card-text>
@@ -104,7 +109,6 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
-      'setDisplayJsonData',
       'setMessage',
       'setResults',
       'setSelectedResultId',
@@ -131,11 +135,11 @@ export default {
         this.$router.push(`/search?place_name=${this.search}`)
       }
 
-      this.entries = []
+      // this.entries = []
     },
     searchAddress() {
       // if (!this.model) {
-      if (this.items.length > 1) {
+      if (this.items.length !== 1) {
         this.isLoading = true
         service
           .fetchAddressResults(this.search, this.searchCountry)
@@ -170,7 +174,8 @@ export default {
       }
     },
     autoCompleteSearch(value) {
-      if (!this.isEmpty(value) && value.length >= 3) {
+      // if (!this.isEmpty(value) && value.length >= 3) {
+      if (!this.isEmpty(value)) {
         this.isLoading = true
         service
           .autoCompleteSearch(value, this.searchCountry)
@@ -189,9 +194,12 @@ export default {
       this.setResults([])
       this.setDetailView(false)
       this.setSelectedResultId('')
+      this.setSelectedResult({})
       this.setMessage('')
-      this.setDisplayJsonData(false)
-      this.$router.push('/')
+      // this.setDisplayJsonData(false)
+      if (this.$route.fullPath !== '/') {
+        this.$router.push('/')
+      }
     },
     isEmpty: function(value) {
       return (
@@ -203,3 +211,8 @@ export default {
   },
 }
 </script>
+<style>
+#main-search .v-select.v-select--is-menu-active .v-input__icon--append .v-icon {
+  transform: none !important ;
+}
+</style>

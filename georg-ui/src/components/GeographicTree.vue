@@ -58,7 +58,10 @@
         </v-list-item-action>
       </v-list-item>
     </v-hover>
-    <v-hover v-slot:default="{ hover }">
+    <v-hover
+      v-slot:default="{ hover }"
+      v-if="selectedResult.properties.country"
+    >
       <v-list-item
         dense
         class="geotree"

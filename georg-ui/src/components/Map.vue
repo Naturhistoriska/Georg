@@ -14,7 +14,10 @@
       @ready="fitMapBounds"
       @baselayerchange="layerChange"
     >
-      <l-control-layers position="topright"></l-control-layers>
+      <l-control-layers
+        position="topright"
+        :collapsed="false"
+      ></l-control-layers>
       <l-tile-layer
         v-for="tileProvider in tileProviders"
         :key="tileProvider.name"
@@ -26,11 +29,7 @@
       />
     </l-map>
 
-    <div
-      id="icondiv"
-      class="leaflet-bottom leaflet-right"
-      style="padding-bottom: 80px;"
-    >
+    <div id="icondiv" class="leaflet-bottom leaflet-right">
       <v-btn
         class="leaflet-control"
         fab
@@ -115,13 +114,13 @@ export default {
           url: baseUrl,
         },
         {
-          name: 'Lantmateriet',
+          name: 'Lantmäteriet topografisk',
           visible: false,
           url: lantmaterietUrl,
           attribution: lantmaterietMapAttribution,
         },
         {
-          name: 'Lantmateriet Nedtonad',
+          name: 'Lantmäteriet topografisk – nedtonad',
           visible: false,
           url: lantmaterietNedtonadUrl,
           attribution: lantmaterietMapAttribution,
@@ -190,7 +189,7 @@ export default {
     ]),
 
     iconColor: function() {
-      return this.enableAddMapMarkers ? 'red darken-2' : 'primary'
+      return this.enableAddMapMarkers ? 'red darken-2' : '#424242'
     },
     iconCursor: function() {
       return this.detailView ? '' : 'cursor: pointer;'
@@ -423,7 +422,7 @@ export default {
         result.properties.id = 'newMarker'
         result.properties.name = 'Din plats'
         result.properties.isNew = false
-        result.geometry.coordinates = [fixer.digits(lng), fixer.digits(lat)]
+        // result.geometry.coordinates = [fixer.digits(lng), fixer.digits(lat)]
       } else {
         result = {
           properties: {
@@ -497,15 +496,44 @@ export default {
   right: 56px;
 }
 #iconbtn {
-  margin-right: 8px;
+  margin-right: 10px;
+  border-radius: 4px;
+  padding: 0;
+  width: 31px !important;
+  height: 32px !important;
+  line-height: 30px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+  font-size: 14px !important;
+  min-width: 31px !important;
+}
+#iconbtn i {
+  font-size: 19px !important;
+}
+#iconbtn:hover {
+  background-color: #ffffff;
+}
+#iconbtn:hover #newMarkerIcon {
+  color: #424242 !important;
+}
+#icondiv {
+  padding-bottom: 90px !important;
 }
 .addMarkerCursor .leaflet-container {
   cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAgCAMAAAAhSXi5AAAA5FBMVEX///+3HBy3HBy3HBy3HBy3HBzvU1DrUE3oTEm+IyK3HBzkSUa8ISHhRUPYR0XbRUPdQkC7ICC3HBzaPjzUQkG9IiK8ISHAJSXQPjzTNza9IiG+IyPNPDy9IiHPNDPERETHPDzKOjq7ICC8ISG9IiLGOjnMMC+7IB+7ICDGNDTILSy6Hx+7IB/CMjLEKSjCMDDFKim/MjK5Hh65Hh69IiG5Hh65Hh66Hx69IiLBJiW6Hx+9IiK/Kyq/LS23HBy7JSW7Jia7JyfJUlLNYmLScXHbjY3fm5vkqqrouLjtxsbx1NT///9idWUoAAAATHRSTlMADhspN0VKS01OUlJbW2VlZWhudXt8iJOYmJmepaissLKys7a6vb3AwsjLzM7P0dPT1NXW1tfY2NjY2dnZ2dvb29vb29vb29vb29vbAcCeVQAAATBJREFUGBltwYsiwlAABuD/bPlPtY3ZhOMSSskwbDTXUK7t/d/HOYtq8X34ZdeDYMlCiWgkV5FSF/2ei5laEnkshPdHNn64mc8pldoouJnDOWFqQbMSjyXNNrTtLhfc1AExqNKQm8cHKyyEh0A9puE8jT4/9s4lNTkQ2FA0Om+5NlyjEVfQ8qg5L7kxfqTRDNDyqHnDvDCgoQK0PGrOZW6MH2k0A2woGg/vuTZaoxFXUI9oOM+vX5/DM0ljYMG6ZqG6s99ZljT8EwC9kAu66wDcmGWybwEQqcMS1YbR6HKevKvAEKnHOeoQE42YM9V+BRPiNORUtI1fS3eSP7xEYGo34oS8X8WMSHwWmm3Mq2WSmp9YKNm6IFnNaigTPUXebmGRnfrdHv6qZYmFf7g2pr4BVsYlcwwas0QAAAAASUVORK5CYII=')
       11 31,
     auto;
 }
-
-/* .leaflet-left .leaflet-control-scale {
-  left: 200;
-} */
+</style>
+<style>
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  width: 31px !important;
+  height: 31px !important;
+  line-height: 26px !important;
+  font-size: 20px !important;
+  color: #424242 !important;
+}
+.leaflet-bar a.leaflet-disabled {
+  color: #bbb !important;
+}
 </style>
