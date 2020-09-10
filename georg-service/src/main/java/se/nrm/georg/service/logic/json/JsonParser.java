@@ -58,4 +58,10 @@ public class JsonParser {
     jsonObject.put(key, jsonArray.join(" ")); 
     return jsonObject;
   } 
+  
+  public JSONObject buildJsonObject(String key, JSONObject value) {
+    JSONObject json = new JSONObject();
+    json.put(key, value);
+    return json;
+  }
 }

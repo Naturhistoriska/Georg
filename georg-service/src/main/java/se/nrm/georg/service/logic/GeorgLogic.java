@@ -58,9 +58,9 @@ public class GeorgLogic implements Serializable {
   }
   
   public String reverseSearch(double lat, double lon) {
-    log.info("reverseSearch");
-    String peliasUrl = Util.getInstance().buildReverseGeoCodePath(peliasPath, lat, lon);
-   
+    log.info("reverseSearch" );
+    String peliasUrl = Util.getInstance().buildReverseGeoCodePath(peliasPath, lat, lon); 
+    
     return coordinates.addCoordinatesTransformation(service.getResults(peliasUrl)); 
   }
     
@@ -72,7 +72,7 @@ public class GeorgLogic implements Serializable {
     return coordinates.addCoordinatesTransformation(service.getResults(searchUrl)); 
   } 
   
-  public String coordinatesSearch(String coordinatesString) {
+  public String coordinatesSearch(String coordinatesString)  throws NumberFormatException {
     double lat = 0;
     double lng = 0;
     
@@ -88,7 +88,7 @@ public class GeorgLogic implements Serializable {
       if (CoordinatesHelper.getInstance().isDMS(coordinatesString)) {
         lat = convertDMSToDD(strLat, coordinatesString.toLowerCase().contains("s"));
         lng = convertDMSToDD(strLng, coordinatesString.toLowerCase().contains("w"));
-      } else if (CoordinatesHelper.getInstance().isDDM(coordinatesString)) {
+      } else if (CoordinatesHelper.getInstance().isDDM(coordinatesString)) { 
         lat = convertDDMToDD(strLat, coordinatesString.toLowerCase().contains("s"));
         lng = convertDDMToDD(strLng, coordinatesString.toLowerCase().contains("w"));  
       } 
@@ -99,16 +99,16 @@ public class GeorgLogic implements Serializable {
 //    String peliasUrl = "https://georg-test.nrm.se/api/reverse?lat=" + lat + "&lng="+ lng;
 //    return service.getResults(peliasUrl);  
      
-    return coordinates.addCoordinatesTransformation(service.getResults(peliasUrl)); 
+    return coordinates.addCoordinatesTransformation(service.getResults(peliasUrl));
   }
-  
-  private double convertDDMToDD(String value, boolean isSouthOrWest) {
-    int degrees = CoordinatesHelper.getInstance().getDegrees(value);
+
+  private double convertDDMToDD(String value, boolean isSouthOrWest) throws NumberFormatException {
+    int degrees = CoordinatesHelper.getInstance().getDegrees(value); 
     double minutes = getMinutesInDouble(value); 
     double dd = degrees + minutes / 60;
     return isSouthOrWest ? (-1) * dd : dd;
   }
-  
+
   private double convertDMSToDD(String value, boolean isSouthOrWest) {
     int degrees = CoordinatesHelper.getInstance().getDegrees(value);
     int minutes = CoordinatesHelper.getInstance().getMinutes(value);
@@ -124,7 +124,7 @@ public class GeorgLogic implements Serializable {
     return dmsCoord.getDecimalDegrees();
   }
    
-  private double getMinutesInDouble(String value) {
-    return Double.valueOf(StringUtils.substringBetween(value, degreeSign, minuteSign).trim());
+  private double getMinutesInDouble(String value) throws NumberFormatException  { 
+    return Double.valueOf(StringUtils.substringBetween(value, degreeSign, minuteSign).trim()); 
   } 
 }
