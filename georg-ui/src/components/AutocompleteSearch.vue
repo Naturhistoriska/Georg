@@ -14,12 +14,13 @@
         item-value="id"
         placeholder="Sök plats"
         v-model="model"
+        :open-on-clear="false"
         :disabled="isUpdating"
         :items="items"
         :loading="isLoading"
         :search-input.sync="search"
         @click:clear="clearSearch"
-        @keyup.enter="searchAddress"
+        @keyup.enter="doSearchAddress"
         @click:append="searchAddress"
       >
         <template v-slot:item="{ item }">
@@ -27,12 +28,16 @@
             <v-icon color="grey lighten-1">{{ item.icon }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
-            <v-list-item-title class="font-weight-medium body-2 text-truncate">{{ item.name }}</v-list-item-title>
+            <v-list-item-title
+              class="font-weight-medium body-2 text-truncate"
+              >{{ item.name }}</v-list-item-title
+            >
           </v-list-item-content>
           <v-list-item-action>
             <span
               class="font-weight-medium text--disabled text-caption text-uppercase"
-            >{{ item.abbr }}</span>
+              >{{ item.abbr }}</span
+            >
           </v-list-item-action>
         </template>
       </v-autocomplete>
@@ -138,39 +143,43 @@ export default {
       // this.entries = []
     },
     searchAddress() {
+      this.isLoading = true
+      service
+        .fetchAddressResults(this.search, this.searchCountry)
+        .then(response => {
+          this.results = response.features.filter(
+            r => r.properties.country != null
+          )
+          this.setResults(this.results)
+          const isSimpleResult = this.results.length === 1
+          const selectedResult = isSimpleResult ? this.results[0] : {}
+          const selectedResultId = isSimpleResult
+            ? this.results[0].properties.id
+            : ''
+
+          this.setDetailView(isSimpleResult ? true : false)
+          this.setSelectedResultId(selectedResultId)
+          this.setSelectedResult(selectedResult)
+          const message =
+            this.results.length > 0
+              ? this.results.length + ' träffar'
+              : 'Sökningen gav inga träffar'
+          this.setMessage(message)
+        })
+        .catch(function() {})
+        .finally(() => {
+          this.isLoading = false
+          this.entries = []
+        })
+
+      if (this.$route.fullPath !== `/search?place_name=${this.search}`) {
+        this.$router.push(`/search?place_name=${this.search}`)
+      }
+    },
+    doSearchAddress() {
       // if (!this.model) {
       if (this.items.length !== 1) {
-        this.isLoading = true
-        service
-          .fetchAddressResults(this.search, this.searchCountry)
-          .then(response => {
-            this.results = response.features.filter(
-              r => r.properties.country != null
-            )
-            this.setResults(this.results)
-            const isSimpleResult = this.results.length === 1
-            const selectedResult = isSimpleResult ? this.results[0] : {}
-            const selectedResultId = isSimpleResult
-              ? this.results[0].properties.id
-              : ''
-
-            this.setDetailView(isSimpleResult ? true : false)
-            this.setSelectedResultId(selectedResultId)
-            this.setSelectedResult(selectedResult)
-            const message =
-              this.results.length > 0
-                ? this.results.length + ' träffar'
-                : 'Sökningen gav inga träffar'
-            this.setMessage(message)
-          })
-          .catch(function() {})
-          .finally(() => {
-            this.isLoading = false
-            this.entries = []
-          })
-        if (this.$route.fullPath !== `/search?place_name=${this.search}`) {
-          this.$router.push(`/search?place_name=${this.search}`)
-        }
+        this.searchAddress()
       }
     },
     autoCompleteSearch(value) {
