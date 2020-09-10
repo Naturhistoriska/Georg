@@ -61,6 +61,10 @@ export default {
     onSwitchChange(value) {
       this.setSearchOption(value ? 'coordinates' : 'address')
       this.setMessage('')
+
+      if (this.$route.fullPath !== '/') {
+        this.$router.push('/')
+      }
     },
   },
 }
