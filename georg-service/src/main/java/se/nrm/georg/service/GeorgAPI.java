@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import lombok.extern.slf4j.Slf4j; 
 import se.nrm.georg.service.logic.GeorgLogic;
+import se.nrm.georg.service.logic.exceptions.ErrorMessageBuilder;
 
 /**
  *
@@ -35,6 +36,9 @@ public class GeorgAPI {
  
   @Inject
   private GeorgLogic logic;
+  @Inject
+  private ErrorMessageBuilder errorBuilder;
+
 
   @GET
   @Path("/geoCoding")
@@ -92,7 +96,13 @@ public class GeorgAPI {
   @Produces(MediaType.APPLICATION_JSON)
   public Response searchCoordinates(@QueryParam("coordinates") String coordinates) {
     log.info("searchCoordinates: {}", coordinates);
-
-    return Response.ok(logic.coordinatesSearch(coordinates)).build();
+    
+    try {
+      return Response.ok(logic.coordinatesSearch(coordinates)).build();
+    } catch(NumberFormatException ex) {
+      log.info(ex.getMessage());
+      return Response.ok(errorBuilder.buildInvalidCoordinatesMessage()).build(); 
+    }
+    
   }
 }
