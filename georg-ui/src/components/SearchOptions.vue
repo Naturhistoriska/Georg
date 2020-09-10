@@ -54,12 +54,13 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setSearchCountry', 'setSearchOption']),
+    ...mapMutations(['setMessage', 'setSearchCountry', 'setSearchOption']),
     onCountryChange({ value }) {
       this.setSearchCountry(value)
     },
     onSwitchChange(value) {
       this.setSearchOption(value ? 'coordinates' : 'address')
+      this.setMessage('')
     },
   },
 }
