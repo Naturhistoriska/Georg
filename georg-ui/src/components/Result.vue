@@ -8,9 +8,7 @@
   >
     <template>
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title v-bind:class="nameColor">
-          {{ name }}
-        </v-list-item-title>
+        <v-list-item-title v-bind:class="nameColor">{{ name }}</v-list-item-title>
         <v-list-item-subtitle class="text--primary">
           {{ result.properties.county }}
           {{ result.properties.region }}
@@ -126,6 +124,8 @@ export default {
       this.setSelectedResultId(this.result.properties.id)
       this.setDetailView(true)
       this.setSelectedResult(this.result)
+      // this.$route.fullPath
+      // this.$router.push(`${this.$route.fullPath}&detailView=true`)
     },
     onSelected() {
       this.setSelectedResultId(this.result.properties.id)
