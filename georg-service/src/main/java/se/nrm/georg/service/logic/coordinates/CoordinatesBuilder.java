@@ -15,7 +15,7 @@ import org.locationtech.proj4j.ProjCoordinate;
 public class CoordinatesBuilder {
 
   private final String emptySpace = " "; 
-  private final String comma = ", ";
+//  private final String comma = ", ";
 
     
   private final String wgs84 = "EPSG:4326";
@@ -30,25 +30,14 @@ public class CoordinatesBuilder {
   private CoordinateReferenceSystem srcCrs;
   private CoordinateReferenceSystem dstCrs;
   
-  public ProjCoordinate buildRT90(BigDecimal lat, BigDecimal lng) { 
-    return transform(rt90, lat.doubleValue(), lng.doubleValue());  
+  public ProjCoordinate buildRT90(double lat, double lng) { 
+    return transform(rt90, lat, lng);  
   }
   
-  public ProjCoordinate buildSWEREF99(BigDecimal lat, BigDecimal lng) {
-    return transform(sweref99, lat.doubleValue(), lng.doubleValue());
+  public ProjCoordinate buildSWEREF99(double lat, double lng) {
+    return transform(sweref99, lat, lng);
   }
-  
-  //  public String buildRT90(BigDecimal lat, BigDecimal lng) { 
-//    transform(rt90, lat.doubleValue(), lng.doubleValue());
-//    return String.join(comma, String.valueOf(Math.round(dstCoord.y)), 
-//            String.valueOf(Math.round(dstCoord.x)));  
-//  }
-  
-//  public String buildSWEREF99(BigDecimal lat, BigDecimal lng) { 
-//    transform(sweref99, lat.doubleValue(), lng.doubleValue());
-//    return String.join(comma, String.valueOf(Math.round(dstCoord.y)), 
-//            String.valueOf(Math.round(dstCoord.x)));  
-//  }
+
    
   private ProjCoordinate transform(String to, double lat, double lng) {
     srcCoord = new ProjCoordinate(lng, lat); 
@@ -64,6 +53,20 @@ public class CoordinatesBuilder {
   public String buildDD(BigDecimal lat, BigDecimal lng) {
     return String.join(emptySpace, String.valueOf(lat), String.valueOf(lng));
   }
+  
+  
+    
+  //  public String buildRT90(BigDecimal lat, BigDecimal lng) { 
+//    transform(rt90, lat.doubleValue(), lng.doubleValue());
+//    return String.join(comma, String.valueOf(Math.round(dstCoord.y)), 
+//            String.valueOf(Math.round(dstCoord.x)));  
+//  }
+  
+//  public String buildSWEREF99(BigDecimal lat, BigDecimal lng) { 
+//    transform(sweref99, lat.doubleValue(), lng.doubleValue());
+//    return String.join(comma, String.valueOf(Math.round(dstCoord.y)), 
+//            String.valueOf(Math.round(dstCoord.x)));  
+//  }
 
 //  public String buildDMS(BigDecimal lat, BigDecimal lng) {
 //

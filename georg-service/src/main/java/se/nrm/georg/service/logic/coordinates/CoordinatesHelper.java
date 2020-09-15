@@ -1,8 +1,11 @@
 package se.nrm.georg.service.logic.coordinates;
 
+import com.peertopark.java.geocalc.DMSCoordinate;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.StringJoiner;
+import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
@@ -14,6 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 public class CoordinatesHelper {
     
   private final String emptyString = ""; 
+  private final String emptySpace = " ";  
   
   private final String degreeSign = "°";
   private final String minuteSign = "'";
@@ -28,6 +32,9 @@ public class CoordinatesHelper {
   private final String s = "s";
   private final String e = "e";
   private final String w = "w";
+  
+  private final DecimalFormat df = new DecimalFormat("00.0");
+  private final DecimalFormat df1 = new DecimalFormat("###.000000"); 
 
   private static CoordinatesHelper instance = null;
 
@@ -47,10 +54,10 @@ public class CoordinatesHelper {
     double dbMinutes = getMinutes(absValue, degree);
     int minutes = (int) dbMinutes; 
     double dbSecond = getSeconds(dbMinutes); 
-    int second = (int) Math.round(dbSecond);  
+//    int second = (int) Math.round(dbSecond);  
     
     return buildCoordinatesString(String.valueOf(degree), 
-            String.valueOf(minutes), String.valueOf(second), 
+            String.valueOf(minutes), df.format(dbSecond), 
             getDirection(value, isLat)); 
   }
   
@@ -59,10 +66,10 @@ public class CoordinatesHelper {
     double absValue = Math.abs(value);
     int degree =  getDegree(absValue);
     double minutes = getMinutes(absValue, degree);
-    BigDecimal bd = new BigDecimal(minutes).setScale(6, RoundingMode.HALF_UP);
+//    BigDecimal bd = new BigDecimal(minutes).setScale(6, RoundingMode.HALF_UP);
     
     return buildCoordinatesString(String.valueOf(degree), 
-            String.valueOf(bd), null, getDirection(value, isLat)); 
+            df1.format(minutes), null, getDirection(value, isLat)); 
   } 
   
   public boolean isDD(String coordinates) {
@@ -100,20 +107,28 @@ public class CoordinatesHelper {
     return null;
   }
   
-  
-  public int getDegrees(String value) {
-    log.info("getDegrees : {}", value);
-    return Integer.parseInt(StringUtils.substringBefore(value, degreeSign).trim()) ;
+  public Double[] getLatAndLng(String coordinates) { 
+    Double lat = 0.0;
+    Double lng = 0.0;
+    if(CoordinatesHelper.getInstance().isDD(coordinates)) {
+      String[] coors = coordinates.split(emptySpace);
+      lat = Double.valueOf(coors[0]); 
+      lng = coors.length == 2 ? Double.valueOf(coors[1]) : Double.valueOf(coors[2]);
+    } else {
+      String strLat = getLatString(coordinates.toLowerCase());
+      String strLng = getlngString(coordinates.toLowerCase());
+      log.info("str lat, lng... {} --- {}", strLat, strLng);
+      if (isDMS(coordinates)) {
+        lat = convertDMSToDD(strLat, coordinates.toLowerCase().contains(s));
+        lng = convertDMSToDD(strLng, coordinates.toLowerCase().contains(w));
+      } else if (CoordinatesHelper.getInstance().isDDM(coordinates)) { 
+        lat = convertDDMToDD(strLat, coordinates.toLowerCase().contains(s));
+        lng = convertDDMToDD(strLng, coordinates.toLowerCase().contains(w));  
+      } 
+    }  
+    return Stream.of(lat, lng).toArray(Double[]::new);   
   }
-     
-  public int getMinutes(String value) {
-    return Integer.parseInt(StringUtils.substringBetween(value, degreeSign, minuteSign).trim());
-  }
-    
-  public int getSeconds(String value) {
-    return Integer.parseInt(StringUtils.substringBetween(value, minuteSign, secondSign).trim());
-  } 
-    
+ 
   private String buildCoordinatesString(String degree, String minutes, String seconds, String direction) {
     StringJoiner joiner = new StringJoiner(emptyString);
     joiner.add(degree);
@@ -127,14 +142,44 @@ public class CoordinatesHelper {
     joiner.add(direction); 
     return joiner.toString();  
   }
+   
+  private int getDegrees(String value) {
+    log.info("getDegrees : {}", value);
+    
+    String strDegree = StringUtils.substringBefore(value, degreeSign);
+    if(strDegree != null) {
+      return Integer.parseInt(strDegree.trim());
+    }
+    return 0;
+  }
  
   private int getDegree(double value) {
     return (int) value;
   }
    
+  private int getMinutes(String value) {
+    String strMinutes = StringUtils.substringBetween(value, degreeSign, minuteSign);
+    if(strMinutes != null) {
+      return Integer.parseInt(strMinutes.trim());
+    }
+    return 0;
+  }
+   
   private double getMinutes(double value, int degree) {
     return (value - degree) * 60;
   }
+   
+  private double getMinutesInDouble(String value) throws NumberFormatException  { 
+    return Double.valueOf(StringUtils.substringBetween(value, degreeSign, minuteSign).trim()); 
+  } 
+  
+  private double getSeconds(String value) {
+    String strSecond =  StringUtils.substringBetween(value, minuteSign, secondSign);
+    if(strSecond != null) {
+      return Double.parseDouble(strSecond.trim());
+    }
+    return 0.0;
+  } 
  
   private double getSeconds(double dbMinutes) {  
     return (dbMinutes - (int)dbMinutes) * 60; 
@@ -143,5 +188,29 @@ public class CoordinatesHelper {
   private String getDirection(double value, boolean isLat) {
     return value < 0 ? isLat ? south : west : isLat ? north : east;
   }
+  
+  
+  private double convertDDMToDD(String value, boolean isSouthOrWest) throws NumberFormatException {
+    int degrees = getDegrees(value); 
+    double minutes = getMinutesInDouble(value); 
+    double dd = degrees + minutes / 60;
+    return isSouthOrWest ? (-1) * dd : dd;
+  }
+
+  private double convertDMSToDD(String value, boolean isSouthOrWest) {
+    int degrees = getDegrees(value);
+    int minutes = getMinutes(value);
+    double seconds = getSeconds(value);
+       
+//    double decimal = ((minutes * 60) + seconds);
+//    return degrees + decimal / 3600;  
+    if(isSouthOrWest) {
+      degrees = degrees * (-1);
+    }
+
+    DMSCoordinate dmsCoord = new DMSCoordinate(degrees, minutes, seconds);
+    return dmsCoord.getDecimalDegrees();
+  }
+
 
 }

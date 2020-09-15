@@ -31,7 +31,7 @@ public class JsonParser {
     jsonObject.put(key, value);  
     return jsonObject;
   }
-  
+   
   public JSONObject buildJsonObject(JSONObject json, String key, double lat, double lng) {
     JSONArray array = new JSONArray();
     array.put(0, lat);
@@ -39,7 +39,7 @@ public class JsonParser {
     json.put(key, array);
     return json;
   }
-  
+   
   public JSONObject buildJsonObject(JSONObject json, String key, String lat, String lng) {
     JSONArray array = new JSONArray();
     array.put(0, lat);
