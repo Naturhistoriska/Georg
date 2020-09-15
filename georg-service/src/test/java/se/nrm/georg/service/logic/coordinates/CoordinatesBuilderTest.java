@@ -34,8 +34,11 @@ public class CoordinatesBuilderTest {
   public void testBuildRT90() {
     System.out.println("buildRT90");
     
-    BigDecimal lat = new BigDecimal(59.33);
-    BigDecimal lng = new BigDecimal(15.33);
+//    BigDecimal lat = new BigDecimal(59.33);
+//    BigDecimal lng = new BigDecimal(15.33);
+    
+    double lat = 59.33;
+    double lng = 15.33;
     
     instance = new CoordinatesBuilder();
     double expResultx = 1472952.091363791;
@@ -53,8 +56,10 @@ public class CoordinatesBuilderTest {
   public void testBuildSWEREF99() {
     System.out.println("buildSWEREF99");
 
-    BigDecimal lat = new BigDecimal(59.33);
-    BigDecimal lng = new BigDecimal(15.33);
+//    BigDecimal lat = new BigDecimal(59.33);
+//    BigDecimal lng = new BigDecimal(15.33);
+    double lat = 59.33;
+    double lng = 15.33;
     instance = new CoordinatesBuilder(); 
     
     double expResultx = 518777.48393226886;

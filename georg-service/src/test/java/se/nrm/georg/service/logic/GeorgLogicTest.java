@@ -107,7 +107,8 @@ public class GeorgLogicTest {
     System.out.println("reverseSearch");
     double lat = 59.6;
     double lon = 18.7;  
-     
+    when(coordinates.addCoordinatesTransformation(any(String.class), 
+            any(double.class), any(double.class), any(boolean.class))).thenReturn(resultString);
     String result = instance.reverseSearch(lat, lon);
     assertEquals(resultString, result); 
      
@@ -136,6 +137,8 @@ public class GeorgLogicTest {
   @Test
   public void testCoordinatesSearchDDWithComma() {
     System.out.println("coordinatesSearch");
+    when(coordinates.addCoordinatesTransformation(any(String.class), 
+            any(double.class), any(double.class), any(boolean.class))).thenReturn(resultString);
     String coordinatesString = "61.67051, 5.32276";  
     String result = instance.coordinatesSearch(coordinatesString);
     System.out.println("result.." + result);
@@ -145,15 +148,19 @@ public class GeorgLogicTest {
   @Test
   public void testCoordinatesSearchDD() {
     System.out.println("coordinatesSearch");
+    
+    when(coordinates.addCoordinatesTransformation(any(String.class), 
+            any(double.class), any(double.class), any(boolean.class))).thenReturn(resultString);
     String coordinatesString = "61.67051 5.32276";  
-    String result = instance.coordinatesSearch(coordinatesString);
-    System.out.println("result.." + result);
+    String result = instance.coordinatesSearch(coordinatesString); 
     assertEquals(resultString, result); 
   }
   
   @Test
   public void testCoordinatesSearchDMS() {
     System.out.println("coordinatesSearch");
+    when(coordinates.addCoordinatesTransformation(any(String.class), 
+            any(double.class), any(double.class), any(boolean.class))).thenReturn(resultString);
     String coordinatesString = "61°40'14\" N 5°19'22\" E";  
     String result = instance.coordinatesSearch(coordinatesString);
     System.out.println("result.." + result);
@@ -163,6 +170,8 @@ public class GeorgLogicTest {
   @Test
   public void testCoordinatesSearchDMSWithComma() {
     System.out.println("coordinatesSearch");
+    when(coordinates.addCoordinatesTransformation(any(String.class), 
+            any(double.class), any(double.class), any(boolean.class))).thenReturn(resultString);
     String coordinatesString = "61°40'14\" N, 5°19'22\" E";  
     String result = instance.coordinatesSearch(coordinatesString);
     System.out.println("result.." + result);
@@ -172,6 +181,8 @@ public class GeorgLogicTest {
   @Test
   public void testCoordinatesSearchDDM() {
     System.out.println("coordinatesSearch");
+    when(coordinates.addCoordinatesTransformation(any(String.class), 
+            any(double.class), any(double.class), any(boolean.class))).thenReturn(resultString);
     String coordinatesString = "61°40.230600' N 5°19.365600' E";  
     String result = instance.coordinatesSearch(coordinatesString);
     System.out.println("result.." + result);
@@ -181,6 +192,8 @@ public class GeorgLogicTest {
   @Test
   public void testCoordinatesSearchDDMWithComma() {
     System.out.println("coordinatesSearch");
+    when(coordinates.addCoordinatesTransformation(any(String.class), 
+            any(double.class), any(double.class), any(boolean.class))).thenReturn(resultString);
     String coordinatesString = "61°40.230600', N 5°19.365600' E";  
     String result = instance.coordinatesSearch(coordinatesString);
     System.out.println("result.." + result);
