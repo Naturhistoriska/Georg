@@ -53,7 +53,7 @@ import { LMap, LTileLayer, LControlLayers } from 'vue2-leaflet'
 import { mapGetters, mapMutations } from 'vuex'
 import proj4 from 'proj4'
 import * as converter from '../assets/js/latlonConverter.js'
-import * as fixer from '../assets/js/decimalPlacesFixer.js'
+// import * as fixer from '../assets/js/decimalPlacesFixer.js'
 
 const wgs84 =
   '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
@@ -400,19 +400,8 @@ export default {
         : null
     },
 
-    reverseResult(lat, lng) {
-      this.isLoaded = true
-
-      return service
-        .reverseGeoCodingResults(lat, lng)
-        .then(response => {
-          this.isLoaded = false
-          this.addNewMarkerResult(response.features[0], lat, lng)
-        })
-        .catch(function() {})
-    },
-
     onMapClick(event) {
+      this.removeOldCustomMarker()
       if (this.enableAddMapMarkers && !this.detailView) {
         const latlng = event.latlng
         this.reverseResult(latlng.lat, latlng.lng)
@@ -422,38 +411,52 @@ export default {
 
       // this.$emit("addMarker", event.latlng);
     },
-    addNewMarkerResult(result, lat, lng) {
-      this.removeOldCustomMarker()
-      if (result && result.properties.country !== undefined) {
-        result.properties.id = 'newMarker'
-        result.properties.name = 'Din plats'
-        result.properties.isNew = false
-        result.geometry.coordinates = [fixer.digits(lng), fixer.digits(lat)]
-      } else {
-        result = {
-          properties: {
-            id: 'newMarker',
-            name: 'Din plats',
-            // isNew: true,
-            coordinates: {
-              dd: [fixer.digits(lat), fixer.digits(lng)],
-              dms: [this.latDms(lat), this.lngDms(lng)],
-              ddm: [this.latDdm(lat), this.lngDdm(lng)],
-              rt90: [this.rt90lat(lat, lng), this.rt90lng(lat, lng)],
-              sweref99: [
-                this.sweref99Lat(lat, lng),
-                this.sweref99Lng(lat, lng),
-              ],
-            },
-          },
-          geometry: {
-            coordinates: [fixer.digits(lng), fixer.digits(lat)],
-          },
-        }
-      }
-      this.results.unshift(result)
-      this.setResults(this.results)
+
+    reverseResult(lat, lng) {
+      this.isLoaded = true
+      return service
+        .reverseGeoCodingResults(lat, lng)
+        .then(response => {
+          this.isLoaded = false
+          // this.addNewMarkerResult(response.features[0])
+          this.results.unshift(response.features[0])
+          this.setResults(this.results)
+        })
+        .catch(function() {})
     },
+
+    // addNewMarkerResult(result) {
+    //   this.removeOldCustomMarker()
+    //   if (result && result.properties.country !== undefined) {
+    //     result.properties.id = 'newMarker'
+    //     result.properties.name = 'Din plats'
+    //     result.properties.isNew = false
+    //     result.geometry.coordinates = [fixer.digits(lng), fixer.digits(lat)]
+    //   } else {
+    //     result = {
+    //       properties: {
+    //         id: 'newMarker',
+    //         name: 'Din plats',
+    //         // isNew: true,
+    //         coordinates: {
+    //           dd: [fixer.digits(lat), fixer.digits(lng)],
+    //           dms: [this.latDms(lat), this.lngDms(lng)],
+    //           ddm: [this.latDdm(lat), this.lngDdm(lng)],
+    //           rt90: [this.rt90lat(lat, lng), this.rt90lng(lat, lng)],
+    //           sweref99: [
+    //             this.sweref99Lat(lat, lng),
+    //             this.sweref99Lng(lat, lng),
+    //           ],
+    //         },
+    //       },
+    //       geometry: {
+    //         coordinates: [fixer.digits(lng), fixer.digits(lat)],
+    //       },
+    //     }
+    //   }
+    //   this.results.unshift(result)
+    //   this.setResults(this.results)
+    // },
 
     latDms: function(lat) {
       // return this.result.properties.coordinates.dms[0]

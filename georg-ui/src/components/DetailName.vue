@@ -2,9 +2,9 @@
   <div>
     <v-card-title class="pl-4 pr-2">{{ title }}</v-card-title>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
-      <strong class="text-capitalize">
-        {{ selectedResult.properties.layer }}
-      </strong>
+      <strong class="text-capitalize">{{
+        selectedResult.properties.layer
+      }}</strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-subtitle v-else-if="isGbif">
@@ -20,7 +20,7 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import * as converter from '../assets/js/latlonConverter.js'
+// import * as converter from '../assets/js/latlonConverter.js'
 export default {
   name: 'DetailName',
   computed: {
@@ -37,21 +37,11 @@ export default {
     },
 
     latDms: function() {
-      // return this.result.properties.coordinates.dms[0]
-      return converter.latlon(
-        this.selectedResult.geometry.coordinates[1],
-        'lat',
-        false
-      )
+      return this.selectedResult.properties.coordinates.dms[0]
     },
 
     lngDms: function() {
-      // return this.result.properties.coordinates.dms[1]
-      return converter.latlon(
-        this.selectedResult.geometry.coordinates[0],
-        'lon',
-        false
-      )
+      return this.selectedResult.properties.coordinates.dms[1]
     },
 
     // titleClass: function() {

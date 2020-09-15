@@ -1,9 +1,9 @@
 <template>
   <v-list-item>
     <v-list-item-content @click.prevent="onclick()">
-      <v-list-item-title class="red--text darken-2">
-        {{ result.properties.name }}
-      </v-list-item-title>
+      <v-list-item-title class="red--text darken-2">{{
+        result.properties.name
+      }}</v-list-item-title>
       <v-list-item-subtitle class="text--primary" v-if="!undefinedMarker">
         {{ result.properties.county }}
         {{ result.properties.region }}
@@ -22,7 +22,7 @@
 </template>
 <script>
 import { mapMutations } from 'vuex'
-import * as converter from '../assets/js/latlonConverter.js'
+// import * as converter from '../assets/js/latlonConverter.js'
 
 export default {
   name: 'NewMarker',
@@ -38,13 +38,13 @@ export default {
     },
 
     latDms: function() {
-      // return this.result.properties.coordinates.dms[0]
-      return converter.latlon(this.result.geometry.coordinates[1], 'lat', false)
+      return this.result.properties.coordinates.dms[0]
+      // return converter.latlon(this.result.geometry.coordinates[1], 'lat', false)
     },
 
     lngDms: function() {
-      // return this.result.properties.coordinates.dms[1]
-      return converter.latlon(this.result.geometry.coordinates[0], 'lon', false)
+      return this.result.properties.coordinates.dms[1]
+      // return converter.latlon(this.result.geometry.coordinates[0], 'lon', false)
     },
     makerIcon: function() {
       const uncertainty = this.result.properties.coordinateUncertaintyInMeters

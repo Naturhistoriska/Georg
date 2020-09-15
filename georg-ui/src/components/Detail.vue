@@ -14,9 +14,9 @@
           <v-list-item-icon>
             <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
           </v-list-item-icon>
-          <v-list-item-content v-if="isGbif">
-            {{ selectedResult.properties.name }}
-          </v-list-item-content>
+          <v-list-item-content v-if="isGbif">{{
+            selectedResult.properties.name
+          }}</v-list-item-content>
           <v-list-item-content v-else>{{ title }}</v-list-item-content>
           <v-list-item-action>
             <v-btn
@@ -73,7 +73,7 @@ import GbifDataSourceLinks from './GbifDataSourceLinks'
 import GeographicTree from './GeographicTree'
 import JsonController from './JsonController'
 import Uncertainty from './Uncertainty'
-import * as converter from '../assets/js/latlonConverter.js'
+// import * as converter from '../assets/js/latlonConverter.js'
 
 export default {
   name: 'Detail',
@@ -126,21 +126,21 @@ export default {
       return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
     },
     latDms: function() {
-      // return this.result.properties.coordinates.dms[0]
-      return converter.latlon(
-        this.selectedResult.geometry.coordinates[1],
-        'lat',
-        false
-      )
+      return this.result.properties.coordinates.dms[0]
+      // return converter.latlon(
+      //   this.selectedResult.geometry.coordinates[1],
+      //   'lat',
+      //   false
+      // )
     },
 
     lngDms: function() {
-      // return this.result.properties.coordinates.dms[1]
-      return converter.latlon(
-        this.selectedResult.geometry.coordinates[0],
-        'lon',
-        false
-      )
+      return this.result.properties.coordinates.dms[1]
+      // return converter.latlon(
+      //   this.selectedResult.geometry.coordinates[0],
+      //   'lon',
+      //   false
+      // )
     },
   },
 

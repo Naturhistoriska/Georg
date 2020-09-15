@@ -2,6 +2,7 @@
   <div class="ma-0 pa-0">
     <v-card-text class="ma-0 pa-0">
       <v-text-field
+        class="mb-3"
         single-line
         filled
         dense
@@ -25,7 +26,7 @@ import { mapMutations } from 'vuex'
 import Message from '../components/Message'
 import Service from '../Service'
 
-import * as fixer from '../assets/js/decimalPlacesFixer.js'
+// import * as fixer from '../assets/js/decimalPlacesFixer.js'
 
 const service = new Service()
 
@@ -68,7 +69,7 @@ export default {
     },
     search() {
       this.isLoading = true
-
+      this.results = []
       service
         .coordinatesSearch(this.coordinates)
         .then(response => {
@@ -84,39 +85,29 @@ export default {
             this.setSelectedResultId('')
             this.setSelectedResult({})
           } else {
-            const lat = response.geocoding.query['point.lat']
-            const lng = response.geocoding.query['point.lon']
-
-            this.results = response.features
-            if (this.results.length === 0) {
-              const newResult = {
-                properties: {
-                  id: 'newMarker',
-                  name: 'Din plats',
-                  isNew: true,
-                },
-                geometry: {
-                  coordinates: [fixer.digits(lng), fixer.digits(lat)],
-                },
-              }
-              this.setSelectedResult(newResult)
-              this.setSelectedResultId('newMarker')
-              this.results.unshift(newResult)
+            const theResults = response.features
+            if (theResults.length === 1) {
+              this.results = theResults
+              this.setDetailView(true)
             } else {
-              this.results[0].properties.id = 'newMarker'
-              this.results[0].properties.name = 'Din plats'
+              theResults.forEach(result => {
+                if (result.properties.id === 'newMarker') {
+                  this.results.unshift(result)
+                } else {
+                  this.results.push(result)
+                }
+              })
+              this.setDetailView(false)
             }
-            this.setDetailView(this.results.length === 1)
 
             if (this.results.length === 1) {
               this.setSelectedResultId(this.results[0])
               this.setSelectedResult(this.results[0])
             }
-
             const message =
-              this.results.length > 0
-                ? this.results.length + ' träffar'
-                : 'Sökningen gav inga träffar'
+              this.results.length > 1
+                ? '1 träff samt “Din plats"'
+                : 'Visar “Din plats'
             this.setMessage(message)
             this.setResults(this.results)
           }
@@ -126,7 +117,10 @@ export default {
           this.isLoading = false
         })
 
-      this.$router.push(`/search?coordinates=${this.coordinates}`)
+      const decodeUrl = decodeURIComponent(this.$route.fullPath)
+      if (decodeUrl !== `/search?coordinates=${this.coordinates}`) {
+        this.$router.push(`/search?coordinates=${this.coordinates}`)
+      }
     },
   },
 }

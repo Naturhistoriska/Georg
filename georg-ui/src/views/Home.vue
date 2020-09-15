@@ -4,7 +4,7 @@
       <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
       <AutocompleteSearch v-if="isAddressSearch" />
       <SearchCoordinates v-else />
-      <v-divider v-if="!detailView && results.length > 0"></v-divider>
+      <v-divider class="mt-2" v-if="!detailView && results.length > 0"></v-divider>
       <Results v-if="!detailView" v-bind:height="resultsHeight" />
     </v-card>
     <Detail v-if="detailView" />
@@ -16,7 +16,8 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import AutocompleteSearch from '../components/AutocompleteSearch'
+// import AutocompleteSearch from '../components/AutocompleteSearch'
+import AutocompleteSearch from '../components/ComboSearch'
 import Detail from '../components/Detail'
 import Map from '../components/Map'
 import Results from '../components/Results'
@@ -24,7 +25,7 @@ import SearchOptions from '../components/SearchOptions'
 import SearchCoordinates from '../components/SearchCoordinates'
 import Service from '../Service'
 
-import * as fixer from '../assets/js/decimalPlacesFixer.js'
+// import * as fixer from '../assets/js/decimalPlacesFixer.js'
 
 const service = new Service()
 
@@ -41,6 +42,7 @@ export default {
 
   data() {
     return {
+      didSearch: false,
       mapHeight: 'height: 1500px',
       resultsHeight: 'height: 1400px',
       tile: false,
@@ -70,6 +72,7 @@ export default {
 
   watch: {
     // $route(to, from) {
+    //   console.log('to, from...', to, from)
     // },
   },
   methods: {
@@ -98,6 +101,7 @@ export default {
           ? 'SWE'
           : ''
 
+      this.didSearch = false
       service
         .fetchAddressResults(value, countryCode)
         .then(response => {
@@ -124,6 +128,7 @@ export default {
         .finally(() => {
           this.setSearchCountry(countryCode)
           this.setSearchOption('address')
+          this.didSearch = true
         })
     },
 
@@ -131,36 +136,43 @@ export default {
       service
         .coordinatesSearch(value)
         .then(response => {
-          const lat = response.geocoding.query['point.lat']
-          const lng = response.geocoding.query['point.lon']
-
-          const newResult = {
-            properties: {
-              id: 'newMarker',
-              name: 'Din plats',
-              isNew: true,
-            },
-            geometry: {
-              coordinates: [fixer.digits(lng), fixer.digits(lat)],
-            },
-          }
-
-          const results = response.features
-          if (results.length > 0) {
+          if (response.error) {
+            const errMsg = response.error.msgKey
+            if (errMsg === 'Invalid coordinates') {
+              const msg =
+                "Koordinaterna måste anges på något av följande sätt:\n57°46'7\" N 14°49'37\" E\n57°46.113480' N 14°49.621740' E\n57.768558 14.827029"
+              this.setMessage(msg)
+            }
+            this.setResults([])
             this.setDetailView(false)
+            this.setSelectedResultId('')
+            this.setSelectedResult({})
           } else {
-            this.setSelectedResult(newResult)
-            this.setSelectedResultId('newMarker')
-            this.setDetailView(true)
+            const theResults = response.features
+            if (theResults.length === 1) {
+              this.results = theResults
+              this.setDetailView(true)
+            } else {
+              theResults.forEach(result => {
+                if (result.properties.id === 'newMarker') {
+                  this.results.unshift(result)
+                } else {
+                  this.results.push(result)
+                }
+              })
+              this.setDetailView(false)
+            }
+            if (this.results.length === 1) {
+              this.setSelectedResultId(this.results[0])
+              this.setSelectedResult(this.results[0])
+            }
+            const message =
+              this.results.length > 1
+                ? '1 träff samt “Din plats"'
+                : 'Visar “Din plats'
+            this.setMessage(message)
+            this.setResults(this.results)
           }
-          const message =
-            results.length > 0
-              ? results.length + ' träffar'
-              : 'Sökningen gav inga träffar'
-          this.setMessage(message)
-
-          results.unshift(newResult)
-          this.setResults(results)
         })
         .catch(function() {})
         .finally(() => {
