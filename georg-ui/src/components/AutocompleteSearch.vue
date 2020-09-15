@@ -19,13 +19,16 @@
         :items="items"
         :loading="isLoading"
         :search-input.sync="search"
+        @change="onChange"
         @click:clear="clearSearch"
         @keyup.enter="doSearchAddress"
         @click:append="searchAddress"
       >
         <template v-slot:item="{ item }">
           <v-list-item-icon>
-            <v-icon color="grey lighten-1">{{ item.icon }}</v-icon>
+            <v-icon color="grey lighten-1" v-if="item.icon">
+              {{ item.icon }}
+            </v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title
@@ -60,7 +63,8 @@ export default {
     entries: [],
     isLoading: false,
     isUpdating: false,
-    model: null,
+    model: 1,
+    // model: null,
     search: null,
     results: [],
   }),
@@ -92,6 +96,12 @@ export default {
         const element = { name, source, abbr, uncertainty, icon, id }
         elements.push(element)
       })
+
+      if (elements.length === 0) {
+        if (this.search) {
+          elements = [{ name: this.search, icon: '', id: 1 }]
+        }
+      }
       return elements
     },
   },
@@ -105,6 +115,8 @@ export default {
     model(value) {
       if (value !== null && value !== undefined) {
         this.filterResult(value)
+      } else {
+        this.filterResult(1)
       }
     },
     search(value) {
@@ -120,60 +132,67 @@ export default {
       'setSelectedResult',
     ]),
 
+    // onChange() {
+    //   console.log('on change...')
+    // },
+
     filterResult(id) {
-      this.isLoading = true
-      this.results = this.entries.filter(e => e.properties.id === id)
-      this.setResults(this.results)
-      this.setDetailView(true)
-      // this.setSelectedResultId('')
+      if (id !== 1) {
+        this.isLoading = true
+        this.results = this.entries.filter(e => e.properties.id === id)
+        this.setResults(this.results)
+        this.setDetailView(true)
+        // this.setSelectedResultId('')
 
-      this.setSelectedResultId(id)
-      this.setSelectedResult(this.results[0])
-      const message =
-        this.results.length > 0
-          ? this.results.length + ' träffar'
-          : 'Sökningen gav inga träffar'
-      this.setMessage(message)
-      this.isLoading = false
+        this.setSelectedResultId(id)
+        this.setSelectedResult(this.results[0])
+        const message =
+          this.results.length > 0
+            ? this.results.length + ' träffar'
+            : 'Sökningen gav inga träffar'
+        this.setMessage(message)
+        this.isLoading = false
 
-      if (this.$route.fullPath !== `/search?place_name=${this.search}`) {
-        this.$router.push(`/search?place_name=${this.search}`)
+        if (this.$route.fullPath !== `/search?place_name=${this.search}`) {
+          this.$router.push(`/search?place_name=${this.search}`)
+        }
       }
-
-      // this.entries = []
     },
     searchAddress() {
-      this.isLoading = true
-      service
-        .fetchAddressResults(this.search, this.searchCountry)
-        .then(response => {
-          this.results = response.features.filter(
-            r => r.properties.country != null
-          )
-          this.setResults(this.results)
-          const isSimpleResult = this.results.length === 1
-          const selectedResult = isSimpleResult ? this.results[0] : {}
-          const selectedResultId = isSimpleResult
-            ? this.results[0].properties.id
-            : ''
+      if (this.search) {
+        this.isLoading = true
+        service
+          .fetchAddressResults(this.search, this.searchCountry)
+          .then(response => {
+            this.results = response.features.filter(
+              r => r.properties.country != null
+            )
+            this.setResults(this.results)
+            const isSimpleResult = this.results.length === 1
+            const selectedResult = isSimpleResult ? this.results[0] : {}
+            const selectedResultId = isSimpleResult
+              ? this.results[0].properties.id
+              : ''
 
-          this.setDetailView(isSimpleResult ? true : false)
-          this.setSelectedResultId(selectedResultId)
-          this.setSelectedResult(selectedResult)
-          const message =
-            this.results.length > 0
-              ? this.results.length + ' träffar'
-              : 'Sökningen gav inga träffar'
-          this.setMessage(message)
-        })
-        .catch(function() {})
-        .finally(() => {
-          this.isLoading = false
-          this.entries = []
-        })
+            this.setDetailView(isSimpleResult ? true : false)
+            this.setSelectedResultId(selectedResultId)
+            this.setSelectedResult(selectedResult)
+            const message =
+              this.results.length > 0
+                ? this.results.length + ' träffar'
+                : 'Sökningen gav inga träffar'
+            this.setMessage(message)
+          })
+          .catch(function() {})
+          .finally(() => {
+            this.isLoading = false
+            this.entries = []
+          })
 
-      if (this.$route.fullPath !== `/search?place_name=${this.search}`) {
-        this.$router.push(`/search?place_name=${this.search}`)
+        this.model = 1
+        if (this.$route.fullPath !== `/search?place_name=${this.search}`) {
+          this.$router.push(`/search?place_name=${this.search}`)
+        }
       }
     },
     doSearchAddress() {
@@ -183,7 +202,6 @@ export default {
       }
     },
     autoCompleteSearch(value) {
-      // if (!this.isEmpty(value) && value.length >= 3) {
       if (!this.isEmpty(value)) {
         this.isLoading = true
         service
@@ -205,7 +223,6 @@ export default {
       this.setSelectedResultId('')
       this.setSelectedResult({})
       this.setMessage('')
-      // this.setDisplayJsonData(false)
       if (this.$route.fullPath !== '/') {
         this.$router.push('/')
       }
