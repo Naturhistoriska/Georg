@@ -4,7 +4,10 @@
       <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
       <AutocompleteSearch v-if="isAddressSearch" />
       <SearchCoordinates v-else />
-      <v-divider class="mt-2" v-if="!detailView && results.length > 0"></v-divider>
+      <v-divider
+        class="mt-2"
+        v-if="!detailView && results.length > 0"
+      ></v-divider>
       <Results v-if="!detailView" v-bind:height="resultsHeight" />
     </v-card>
     <Detail v-if="detailView" />
