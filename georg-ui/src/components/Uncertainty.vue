@@ -32,7 +32,8 @@
           v-for="tag in tags"
           :key="tag.label"
           @click="addAccuracyValue(tag.value)"
-        >{{ tag.label }}</v-chip>
+          >{{ tag.label }}</v-chip
+        >
       </v-chip-group>
       <v-container class="mt-0 pt-1 mb-0 pb-0">
         <v-row>
@@ -56,13 +57,16 @@
               color="red darken-2"
               text
               :disabled="disableSetUncertaintyBtn"
-            >Sätt osäkerhet</v-btn>
+              >Sätt osäkerhet</v-btn
+            >
           </v-col>
         </v-row>
       </v-container>
     </v-card>
 
-    <v-snackbar centered v-model="snackbar" :timeout="600">Kopierad till Urklipp</v-snackbar>
+    <v-snackbar centered v-model="snackbar" :timeout="600"
+      >Kopierad till Urklipp</v-snackbar
+    >
   </v-list-item-group>
 </template>
 <script>
