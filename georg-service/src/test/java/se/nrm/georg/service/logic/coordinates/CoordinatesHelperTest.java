@@ -70,7 +70,7 @@ public class CoordinatesHelperTest {
   @Test
   public void testBuildLatDDM() {
     System.out.println("buildDDM"); 
-    String expResult = "57°21.612000' N";
+    String expResult = "57°21.612' N";
     String result = instance.buildDDM(lat, true); 
     assertEquals(expResult, result); 
   }
@@ -78,7 +78,7 @@ public class CoordinatesHelperTest {
   @Test
   public void testBuildLngDDM() {
     System.out.println("buildDDM"); 
-    String expResult = "15°21.612000' E";
+    String expResult = "15°21.612' E";
     String result = instance.buildDDM(lng, false); 
     assertEquals(expResult, result); 
   }

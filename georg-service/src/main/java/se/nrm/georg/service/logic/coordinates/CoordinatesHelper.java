@@ -1,8 +1,6 @@
 package se.nrm.georg.service.logic.coordinates;
 
-import com.peertopark.java.geocalc.DMSCoordinate;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
+import com.peertopark.java.geocalc.DMSCoordinate; 
 import java.text.DecimalFormat;
 import java.util.StringJoiner;
 import java.util.stream.Stream;
@@ -34,7 +32,7 @@ public class CoordinatesHelper {
   private final String w = "w";
   
   private final DecimalFormat df = new DecimalFormat("00.0");
-  private final DecimalFormat df1 = new DecimalFormat("###.000000"); 
+  private final DecimalFormat df1 = new DecimalFormat("###.000"); 
 
   private static CoordinatesHelper instance = null;
 
@@ -116,8 +114,7 @@ public class CoordinatesHelper {
       lng = coors.length == 2 ? Double.valueOf(coors[1]) : Double.valueOf(coors[2]);
     } else {
       String strLat = getLatString(coordinates.toLowerCase());
-      String strLng = getlngString(coordinates.toLowerCase());
-      log.info("str lat, lng... {} --- {}", strLat, strLng);
+      String strLng = getlngString(coordinates.toLowerCase()); 
       if (isDMS(coordinates)) {
         lat = convertDMSToDD(strLat, coordinates.toLowerCase().contains(s));
         lng = convertDMSToDD(strLng, coordinates.toLowerCase().contains(w));
