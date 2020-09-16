@@ -46,6 +46,23 @@
       <Uncertainty v-if="isNewMarker" />
       <GbifDataSourceLinks v-else-if="isGbif" />
       <DataSourceLinks v-else />
+      <!-- <v-list-item v-if="hasUncertainty">
+        <v-list-item-icon>
+          <v-icon :color="makeIconColor">mdi-map-marker-radius</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title>
+            {{
+            selectedResult.properties.addendum.georg
+            .coordinateUncertaintyInMeters
+            }}
+            meter
+            <span
+              class="text--secondary"
+            >osäkerhetsradie</span>
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>-->
       <v-list-item v-if="isGbif">
         <v-list-item-action></v-list-item-action>
         <v-alert dense text type="warning" class="alertText">
@@ -127,22 +144,28 @@ export default {
     makeIconColor: function() {
       return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
     },
-    latDms: function() {
-      return this.result.properties.coordinates.dms[0]
-      // return converter.latlon(
-      //   this.selectedResult.geometry.coordinates[1],
-      //   'lat',
-      //   false
-      // )
-    },
+    // latDms: function() {
+    //   return this.result.properties.coordinates.dms[0]
+    //   // return converter.latlon(
+    //   //   this.selectedResult.geometry.coordinates[1],
+    //   //   'lat',
+    //   //   false
+    //   // )
+    // },
 
-    lngDms: function() {
-      return this.result.properties.coordinates.dms[1]
-      // return converter.latlon(
-      //   this.selectedResult.geometry.coordinates[0],
-      //   'lon',
-      //   false
-      // )
+    // lngDms: function() {
+    //   return this.result.properties.coordinates.dms[1]
+    //   // return converter.latlon(
+    //   //   this.selectedResult.geometry.coordinates[0],
+    //   //   'lon',
+    //   //   false
+    //   // )
+    // },
+    hasUncertainty: function() {
+      return (
+        this.selectedResult.properties.addendum.georg
+          .coordinateUncertaintyInMeters !== null
+      )
     },
   },
 
