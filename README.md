@@ -5,7 +5,7 @@
 
 Georg is a web application for georeferencing natural history collections.
 
-The development of Georg funded through the [Swedish Taxonomy Initiative](https://www.artdatabanken.se/en/verksamhet/svenska-artprojektet/) and [SYNTHESYS+](https://www.synthesys.info).
+The development of Georg is funded through the [Swedish Taxonomy Initiative](https://www.artdatabanken.se/en/verksamhet/svenska-artprojektet/) and [SYNTHESYS+](https://www.synthesys.info).
 
 
 ## Prerequisites
