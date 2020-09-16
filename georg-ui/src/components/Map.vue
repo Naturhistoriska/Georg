@@ -249,7 +249,12 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setAccuracy', 'setResults', 'setSelectedMarkerId']),
+    ...mapMutations([
+      'setAccuracy',
+      'setMessage',
+      'setResults',
+      'setSelectedMarkerId',
+    ]),
 
     removeUncertainties() {
       this.circles.forEach(circle => {
@@ -421,6 +426,7 @@ export default {
           // this.addNewMarkerResult(response.features[0])
           this.results.unshift(response.features[0])
           this.setResults(this.results)
+          this.setMessage('Visar “Din plats')
         })
         .catch(function() {})
     },
