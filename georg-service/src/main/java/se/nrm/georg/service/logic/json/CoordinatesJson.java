@@ -28,16 +28,13 @@ public class CoordinatesJson {
   private final String coordinatesKey = "coordinates";
   private final String propertiesKey = "properties";
   private final String nameKey = "name"; 
-  private final String idKey = "id";
-//  private final String bboxKey = "bbox";
-  private final String typeKey = "type";
-  private final String dinPlatsKey = "dinPlats";
+  private final String idKey = "id"; 
+  private final String typeKey = "type"; 
   private final String dinPlats = "Din plats";
   private final String newMarker = "newMarker";
   private final String feature = "Feature";
   private final String point = "Point";
-  
-  
+   
   private final String ddKey = "dd";
   private final String dmsKey = "dms";
   private final String ddmKey = "ddm";
@@ -102,36 +99,13 @@ public class CoordinatesJson {
         JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
         array.put(dinPlatsJson);
       }
-    }
-
-//     if (array.length() > 0) {
-//       array.iterator().forEachRemaining(element -> {
-//         JSONObject jsonObj = (JSONObject) element;
-//         JSONObject geometryJson = jsonObj.getJSONObject(geometryKey);
-//        parser.buildJsonObject(geometryJson, coordinatesKey, lng, lat); 
-//        JSONObject property = jsonObj.getJSONObject(propertiesKey);
-//        if (isNewMarker) {
-//          property.put(nameKey, dinPlats);
-//          property.put(idKey, newMarker);
-//        }
-//        property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(lat), roundDoubleToSix(lng)));
-//      });
-//    } else {
-//      JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
-//      array.put(dinPlatsJson);
-//    }
-//
-//    if (!isNewMarker && array.length() > 1) { 
-//      JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
-//      array.put(parser.buildJsonObject(dinPlatsKey, dinPlatsJson));
-//    }
+    } 
     return jsonObject.toString();
   }
 
   private JSONObject addDinPlats(double lat, double lng) {
     log.info("addDinPlats : {}");
-    JSONObject json = new JSONObject();
-//     JSONArray bboxArray = parser.getJsonArray(jsonObject, "bbox");
+    JSONObject json = new JSONObject(); 
     JSONObject geometryJson = new JSONObject();
     parser.buildJsonObject(geometryJson, coordinatesKey, lng, lat);
     geometryJson.put(typeKey, point);
@@ -139,8 +113,7 @@ public class CoordinatesJson {
     propertiesJson.put(idKey, newMarker);
     propertiesJson.put(nameKey, dinPlats);
     propertiesJson.put(coordinatesKey, buildCoordinatesTransformationJson(lat, lng));
-
-//    json.put(bboxKey, parser.getJsonArray(jsonObject, bboxKey));
+ 
     json.put(geometryKey, geometryJson);
     json.put(typeKey, feature);
     json.put(propertiesKey, propertiesJson);
@@ -164,25 +137,7 @@ public class CoordinatesJson {
       JSONObject geometry = parser.getJsonObject(jsonObj, geometryKey);
       JSONArray coordinates = parser.getJsonArray(geometry, coordinatesKey);
       BigDecimal lng = coordinates.getBigDecimal(0).setScale(6, RoundingMode.HALF_UP);
-      BigDecimal lat = coordinates.getBigDecimal(1).setScale(6, RoundingMode.HALF_UP);
-
-//      JSONObject coordinatesJson = new JSONObject(); 
-//      parser.buildJsonObject(coordinatesJson, ddKey, lat.doubleValue(), lng.doubleValue());
-//      parser.buildJsonObject(coordinatesJson, dmsKey, 
-//              CoordinatesHelper.getInstance().buildDMS(lat.doubleValue(), true), 
-//              CoordinatesHelper.getInstance().buildDMS(lng.doubleValue(), false));
-//      parser.buildJsonObject(coordinatesJson, ddmKey, 
-//              CoordinatesHelper.getInstance().buildDDM(lat.doubleValue(), true), 
-//              CoordinatesHelper.getInstance().buildDDM(lng.doubleValue(), false));
-//      
-//      ProjCoordinate rt90 = builder.buildRT90(lat, lng);
-//      ProjCoordinate sweref99 = builder.buildSWEREF99(lat, lng);
-//      parser.buildJsonObject(coordinatesJson, rt90Key, 
-//              String.valueOf(Math.round(rt90.y)), 
-//              String.valueOf(Math.round(rt90.x)));
-//      parser.buildJsonObject(coordinatesJson, sweref99Key, 
-//              String.valueOf(Math.round(sweref99.y)), 
-//              String.valueOf(Math.round(sweref99.x)));  
+      BigDecimal lat = coordinates.getBigDecimal(1).setScale(6, RoundingMode.HALF_UP); 
       JSONObject property = jsonObj.getJSONObject(propertiesKey);
       property.put(coordinatesKey,
               buildCoordinatesTransformationJson(lat.doubleValue(), lng.doubleValue()));
