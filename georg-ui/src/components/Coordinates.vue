@@ -5,6 +5,7 @@
         :class="{ highlight: expand == true }"
         @focus="expand = true"
         @blur="expand = false"
+        @click="copyText(latLonDms)"
       >
         <v-list-item-icon>
           <v-icon :color="makeIconColor">mdi-crosshairs-gps</v-icon>
@@ -32,6 +33,7 @@
         :class="{ highlight: expand1 == true }"
         @focus="expand1 = true"
         @blur="expand1 = false"
+        @click="copyText(latLonDdm)"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -53,7 +55,12 @@
       </v-list-item>
     </v-hover>
     <v-hover v-slot:default="{ hover }">
-      <v-list-item>
+      <v-list-item
+        :class="{ highlight: expand2 == true }"
+        @focus="expand2 = true"
+        @blur="expand2 = false"
+        @click="copyText(latLon)"
+      >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>{{ latLon }}</v-list-item-title>
@@ -74,7 +81,12 @@
       </v-list-item>
     </v-hover>
     <v-hover v-slot:default="{ hover }">
-      <v-list-item>
+      <v-list-item
+        :class="{ highlight: expand3 == true }"
+        @focus="expand3 = true"
+        @blur="expand3 = false"
+        @click="copyText(rt90)"
+      >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>{{ rt90 }}</v-list-item-title>
@@ -95,7 +107,12 @@
       </v-list-item>
     </v-hover>
     <v-hover v-slot:default="{ hover }">
-      <v-list-item>
+      <v-list-item
+        :class="{ highlight: expand4 == true }"
+        @focus="expand4 = true"
+        @blur="expand4 = false"
+        @click="copyText(sweref99)"
+      >
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
           <v-list-item-title>{{ sweref99 }}</v-list-item-title>
