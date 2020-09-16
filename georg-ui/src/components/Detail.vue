@@ -32,6 +32,7 @@
           </v-list-item-action>
         </v-list-item>
       </v-hover>
+      <v-divider inset v-if="!isDinPlats"></v-divider>
       <GeographicTree />
       <v-divider inset></v-divider>
       <Coordinates
