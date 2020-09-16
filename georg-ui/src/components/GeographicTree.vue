@@ -6,6 +6,8 @@
         class="geotree"
         :class="{ highlight: expand1 == true }"
         @click="copyText(selectedResult.properties.county)"
+        @focus="expand1 = true"
+        @blur="expand1 = false"
       >
         <v-list-item-icon>
           <v-icon v-bind:color="treeIconColor">mdi-file-tree</v-icon>
@@ -36,6 +38,8 @@
         class="geotree"
         :class="{ highlight: expand2 == true }"
         @click="copyText(selectedResult.properties.region)"
+        @focus="expand2 = true"
+        @blur="expand2 = false"
       >
         <v-list-item-icon>
           <v-icon v-bind:color="treeIconColor">{{ reginTreeIcon }}</v-icon>
@@ -69,6 +73,8 @@
         class="geotree"
         :class="{ highlight: expand3 == true }"
         @click="copyText(selectedResult.properties.country)"
+        @focus="expand3 = true"
+        @blur="expand3 = false"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
