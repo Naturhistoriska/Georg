@@ -29,7 +29,7 @@
     </v-hover>
     <v-hover v-slot:default="{ hover }">
       <v-list-item
-        :class="{ highlight: expand == true }"
+        :class="{ highlight: expand1 == true }"
         @focus="expand1 = true"
         @blur="expand1 = false"
       >
@@ -42,7 +42,7 @@
           <v-btn
             icon
             color="transparent"
-            :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
+            :class="{ 'show-btn': expand1 == true, 'show-btn-hover': hover }"
             @focus="expand1 = true"
             @blur="expand1 = false"
             @click="copyText(latLonDdm)"
