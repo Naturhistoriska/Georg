@@ -10,6 +10,7 @@
           :class="{ highlight: expand == true }"
           @focus="expand = true"
           @blur="expand = false"
+          @click="copyText(selectedResult.properties.name)"
         >
           <v-list-item-icon>
             <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
