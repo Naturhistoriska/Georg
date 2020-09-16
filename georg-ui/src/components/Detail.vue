@@ -10,6 +10,7 @@
           :class="{ highlight: expand == true }"
           @focus="expand = true"
           @blur="expand = false"
+          @click="copyText(selectedResult.properties.name)"
         >
           <v-list-item-icon>
             <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
@@ -32,15 +33,16 @@
           </v-list-item-action>
         </v-list-item>
       </v-hover>
+      <v-divider inset v-if="!isNewMarker"></v-divider>
       <GeographicTree />
-      <v-divider inset></v-divider>
+      <v-divider inset v-if="selectedResult.properties.country"></v-divider>
       <Coordinates
         v-bind:coordinates="selectedResult.properties.coordinates"
         v-bind:lat="selectedResult.geometry.coordinates[1]"
         v-bind:lon="selectedResult.geometry.coordinates[0]"
         v-bind:isNewMarker="isNewMarker"
       />
-      <v-divider inset></v-divider>
+      <v-divider></v-divider>
       <Uncertainty v-if="isNewMarker" />
       <GbifDataSourceLinks v-else-if="isGbif" />
       <DataSourceLinks v-else />
