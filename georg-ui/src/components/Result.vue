@@ -8,7 +8,9 @@
   >
     <template>
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title v-bind:class="nameColor">{{ name }}</v-list-item-title>
+        <v-list-item-title v-bind:class="nameColor">{{
+          name
+        }}</v-list-item-title>
         <v-list-item-subtitle class="text--primary">
           {{ result.properties.county }}
           {{ result.properties.region }}

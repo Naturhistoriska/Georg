@@ -66,6 +66,7 @@ export default {
       this.searchCoordinates(this.$route.query.coordinates)
     }
   },
+
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
   },
@@ -73,11 +74,18 @@ export default {
     ...mapGetters(['detailView', 'isAddressSearch', 'results']),
   },
 
-  watch: {
-    // $route(to, from) {
-    //   console.log('to, from...', to, from)
-    // },
-  },
+  // watch: {
+  //   $route(to, from, next) {
+  //     console.log('to and from...', from, to)
+  //     console.log('next...', next)
+  //   },
+  // },
+
+  // beforeRouteUpdate(to, from, next) {
+  //   console.log('beforeRouteUpdate')
+  //   console.log('to name....', Object.keys(to.query))
+  //   next()
+  // },
   methods: {
     ...mapMutations([
       'setDetailView',

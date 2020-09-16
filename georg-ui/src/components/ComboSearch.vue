@@ -199,7 +199,12 @@ export default {
 
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
         if (decodeUrl !== `/search?place_name=${this.search}`) {
-          this.$router.push(`/search?place_name=${this.search}`)
+          // this.$router.push({ path: `/search?place_name=${this.search}` })
+          this.$router.push({
+            path: 'search',
+            query: { place_name: this.search },
+          })
+          // this.$router.push(`/search?place_name=${this.search}`)
         }
       }
     },
