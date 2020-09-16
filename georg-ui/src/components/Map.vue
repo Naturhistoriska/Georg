@@ -426,7 +426,7 @@ export default {
           // this.addNewMarkerResult(response.features[0])
           this.results.unshift(response.features[0])
           this.setResults(this.results)
-          this.setMessage('Visar “Din plats')
+          this.setMessage('Visar “Din plats"')
         })
         .catch(function() {})
     },
