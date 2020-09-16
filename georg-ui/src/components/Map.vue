@@ -419,7 +419,9 @@ export default {
           this.results.unshift(response.features[0])
           this.setResults(this.results)
 
-          this.setMessage('Visar “Din plats"')
+          if (this.results.length === 1) {
+            this.setMessage('Visar "Din plats"')
+          }
         })
         .catch(function() {})
     },
