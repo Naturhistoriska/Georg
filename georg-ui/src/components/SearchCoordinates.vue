@@ -106,8 +106,8 @@ export default {
             }
             const message =
               this.results.length > 1
-                ? '1 träff samt “Din plats"'
-                : 'Visar “Din plats"'
+                ? '1 träff samt "Din plats"'
+                : 'Visar "Din plats"'
             this.setMessage(message)
             this.setResults(this.results)
           }

@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="map"
-    v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }"
-  >
+  <div id="map" v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }">
     <l-map
       ref="myMap"
       :center="center"
@@ -14,10 +11,7 @@
       @ready="fitMapBounds"
       @baselayerchange="layerChange"
     >
-      <l-control-layers
-        position="topright"
-        :collapsed="false"
-      ></l-control-layers>
+      <l-control-layers position="topright" :collapsed="false"></l-control-layers>
       <l-tile-layer
         v-for="tileProvider in tileProviders"
         :key="tileProvider.name"
@@ -39,9 +33,7 @@
         :style="iconCursor"
         :disabled="detailView"
       >
-        <v-icon :color="iconColor" id="newMarkerIcon"
-          >mdi-map-marker-plus</v-icon
-        >
+        <v-icon :color="iconColor" id="newMarkerIcon">mdi-map-marker-plus</v-icon>
       </v-btn>
     </div>
   </div>
@@ -426,6 +418,7 @@ export default {
           // this.addNewMarkerResult(response.features[0])
           this.results.unshift(response.features[0])
           this.setResults(this.results)
+
           this.setMessage('Visar “Din plats"')
         })
         .catch(function() {})
