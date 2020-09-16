@@ -1,5 +1,8 @@
 <template>
-  <div id="map" v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }">
+  <div
+    id="map"
+    v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }"
+  >
     <l-map
       ref="myMap"
       :center="center"
@@ -11,7 +14,10 @@
       @ready="fitMapBounds"
       @baselayerchange="layerChange"
     >
-      <l-control-layers position="topright" :collapsed="false"></l-control-layers>
+      <l-control-layers
+        position="topright"
+        :collapsed="false"
+      ></l-control-layers>
       <l-tile-layer
         v-for="tileProvider in tileProviders"
         :key="tileProvider.name"
@@ -33,7 +39,9 @@
         :style="iconCursor"
         :disabled="detailView"
       >
-        <v-icon :color="iconColor" id="newMarkerIcon">mdi-map-marker-plus</v-icon>
+        <v-icon :color="iconColor" id="newMarkerIcon"
+          >mdi-map-marker-plus</v-icon
+        >
       </v-btn>
     </div>
   </div>
@@ -43,16 +51,16 @@
 import L from 'leaflet'
 import { LMap, LTileLayer, LControlLayers } from 'vue2-leaflet'
 import { mapGetters, mapMutations } from 'vuex'
-import proj4 from 'proj4'
-import * as converter from '../assets/js/latlonConverter.js'
-// import * as fixer from '../assets/js/decimalPlacesFixer.js'
+// import proj4 from 'proj4'
+// import * as converter from '../assets/js/latlonConverter.js'
+// // import * as fixer from '../assets/js/decimalPlacesFixer.js'
 
-const wgs84 =
-  '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
-const rt90 =
-  '+title=RT90 +proj=tmerc +lat_0=0 +lon_0=15.80827777777778 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +towgs84=414.1,41.3,603.1,-0.855,2.141,-7.023,0 +units=m +no_defs'
-const sweref99 =
-  '+title=SWEREF99 TM +proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
+// const wgs84 =
+//   '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
+// const rt90 =
+//   '+title=RT90 +proj=tmerc +lat_0=0 +lon_0=15.80827777777778 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +towgs84=414.1,41.3,603.1,-0.855,2.141,-7.023,0 +units=m +no_defs'
+// const sweref99 =
+//   '+title=SWEREF99 TM +proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
 
 import Service from '../Service'
 const service = new Service()
@@ -459,38 +467,38 @@ export default {
     //   this.setResults(this.results)
     // },
 
-    latDms: function(lat) {
-      // return this.result.properties.coordinates.dms[0]
-      return converter.latlon(lat, 'lat', false)
-    },
+    // latDms: function(lat) {
+    //   // return this.result.properties.coordinates.dms[0]
+    //   return converter.latlon(lat, 'lat', false)
+    // },
 
-    lngDms: function(lng) {
-      // return this.result.properties.coordinates.dms[1]
-      return converter.latlon(lng, 'lon', false)
-    },
+    // lngDms: function(lng) {
+    //   // return this.result.properties.coordinates.dms[1]
+    //   return converter.latlon(lng, 'lon', false)
+    // },
 
-    latDdm: function(lat) {
-      return converter.latlon(lat, 'lat', true)
-    },
-    lngDdm: function(lng) {
-      return converter.latlon(lng, 'lon', true)
-    },
-    sweref99Lng: function(lat, lng) {
-      let result = proj4(wgs84, sweref99, [Number(lng), Number(lat)])
-      return Math.round(result[0])
-    },
-    sweref99Lat: function(lat, lng) {
-      let result = proj4(wgs84, sweref99, [Number(lng), Number(lat)])
-      return Math.round(result[1])
-    },
-    rt90lng: function(lat, lng) {
-      let result = proj4(wgs84, rt90, [Number(lng), Number(lat)])
-      return Math.round(result[0])
-    },
-    rt90lat: function(lat, lng) {
-      let result = proj4(wgs84, rt90, [Number(lng), Number(lat)])
-      return Math.round(result[1])
-    },
+    // latDdm: function(lat) {
+    //   return converter.latlon(lat, 'lat', true)
+    // },
+    // lngDdm: function(lng) {
+    //   return converter.latlon(lng, 'lon', true)
+    // },
+    // sweref99Lng: function(lat, lng) {
+    //   let result = proj4(wgs84, sweref99, [Number(lng), Number(lat)])
+    //   return Math.round(result[0])
+    // },
+    // sweref99Lat: function(lat, lng) {
+    //   let result = proj4(wgs84, sweref99, [Number(lng), Number(lat)])
+    //   return Math.round(result[1])
+    // },
+    // rt90lng: function(lat, lng) {
+    //   let result = proj4(wgs84, rt90, [Number(lng), Number(lat)])
+    //   return Math.round(result[0])
+    // },
+    // rt90lat: function(lat, lng) {
+    //   let result = proj4(wgs84, rt90, [Number(lng), Number(lat)])
+    //   return Math.round(result[1])
+    // },
 
     removeOldCustomMarker() {
       if (this.results.length > 0) {
