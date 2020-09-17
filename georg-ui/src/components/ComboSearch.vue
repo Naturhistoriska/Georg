@@ -121,6 +121,7 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
+      'setIsErrorMsg',
       'setMessage',
       'setResults',
       'setSelectedResultId',
@@ -184,6 +185,7 @@ export default {
                 ? this.results.length + ' träffar'
                 : 'Sökningen gav inga träffar'
             this.setMessage(message)
+            this.setIsErrorMsg(false)
           })
           .catch(function() {})
           .finally(() => {

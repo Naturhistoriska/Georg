@@ -28,17 +28,11 @@ export default {
   name: 'Message',
   data: () => ({}),
   computed: {
-    ...mapGetters(['detailView', 'message', 'results']),
+    ...mapGetters(['detailView', 'isErrorMsg', 'message', 'results']),
     linkText: function() {
       return this.results.length === 1
         ? 'TILL TRÄFFLISTAN'
         : '< TILLBAKA TILL TRÄFFLISTAN'
-    },
-    isErrorMsg: function() {
-      return this.message.includes(
-        'Koordinaterna måste anges på något av följande sätt:',
-        0
-      )
     },
   },
   // watch: {

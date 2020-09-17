@@ -246,6 +246,7 @@ export default {
   methods: {
     ...mapMutations([
       'setAccuracy',
+      'setIsErrorMsg',
       'setMessage',
       'setResults',
       'setSelectedMarkerId',
@@ -446,6 +447,7 @@ export default {
 
           if (this.results.length === 1) {
             this.setMessage('Visar "Din plats"')
+            this.setIsErrorMsg(false)
           }
         })
         .catch(function() {})

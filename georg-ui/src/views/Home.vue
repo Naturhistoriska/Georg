@@ -32,12 +32,12 @@ const service = new Service()
 export default {
   name: 'Home',
   components: {
-    SearchOptions,
     ComboSearch,
     Detail,
     Map,
     Results,
     SearchCoordinates,
+    SearchOptions,
   },
 
   data() {
@@ -85,6 +85,7 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
+      'setIsErrorMsg',
       'setMessage',
       'setResults',
       'setSelectedResultId',
@@ -110,8 +111,6 @@ export default {
         country.toLowerCase() === 'sverige'
           ? 'SWE'
           : ''
-
-      // this.didSearch = false
       service
         .fetchAddressResults(value, countryCode)
         .then(response => {
@@ -133,13 +132,12 @@ export default {
               ? results.length + ' träffar'
               : 'Sökningen gav inga träffar'
           this.setMessage(message)
+          this.setIsErrorMsg(false)
         })
         .catch(function() {})
         .finally(() => {
           this.setSearchCountry(countryCode)
           this.setSearchOption('address')
-
-          // this.didSearch = true
         })
     },
 
@@ -158,6 +156,7 @@ export default {
             this.setDetailView(false)
             this.setSelectedResultId('')
             this.setSelectedResult({})
+            this.setIsErrorMsg(true)
           } else {
             let theResults = response.features
             if (theResults.length === 1) {
@@ -183,6 +182,7 @@ export default {
                 : 'Visar “Din plats"'
             this.setMessage(message)
             this.setResults(this.results)
+            this.setIsErrorMsg(false)
           }
         })
         .catch(function() {})
