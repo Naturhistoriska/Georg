@@ -135,6 +135,7 @@ export default {
       isLoaded: false,
       layerGroup: {},
       maxZoom: 18,
+      // isDragged: false,
       zoom: 0,
     }
   },
@@ -236,6 +237,11 @@ export default {
         }
       })
     },
+    // isDragged() {
+    //   this.$nextTick(() => {
+    //     console.log('watch.. draged..', this.isDragged)
+    //   })
+    // },
   },
   methods: {
     ...mapMutations([
@@ -275,13 +281,48 @@ export default {
     buildDetailMarker() {
       this.resetLayerGroup()
       const lat = this.selectedResult.geometry.coordinates[1]
-      const lon = this.selectedResult.geometry.coordinates[0]
-      this.center = [lat, lon]
-      const theMarker = L.marker([lat, lon], {
-        icon: this.icon(this.selectedResult.properties.id),
-      })
+      const lng = this.selectedResult.geometry.coordinates[0]
+      this.center = [lat, lng]
+
+      let theMarker
+      if (this.selectedResult.properties.id === 'newMarker') {
+        theMarker = this.buildDraggableMarker(lat, lng)
+      } else {
+        theMarker = L.marker([lat, lng], {
+          icon: this.icon(this.selectedResult.properties.id),
+        })
+      }
       theMarker.addTo(this.layerGroup)
       this.addUncertainty(this.selectedResult)
+    },
+
+    buildDraggableMarker(lat, lng) {
+      const marker = L.marker([lat, lng], {
+        id: 'newMarker',
+        draggable: 'true',
+        pane: 'redMarker',
+        icon: MAP_ICONS.redIcon,
+      })
+      marker.on('dragend', function(e) {
+        const latLng = e.target.getLatLng()
+        // const pop = `${position.lat}` + ' ' + `${position.lng}`
+
+        // var popup = L.popup({
+        //   offset: [0, -30],
+        // }).setContent(pop)
+        marker.setLatLng(latLng, {
+          id: 'newMarker',
+          title: 'Din plats',
+          draggable: 'true',
+        })
+        // .bindPopup(popup)
+        // .openPopup()
+      })
+      marker.addEventListener('dragend', e => {
+        const latLng = e.target.getLatLng()
+        this.reverseResult(latLng.lat, latLng.lng)
+      })
+      return marker
     },
 
     highlightMarker() {
@@ -328,42 +369,17 @@ export default {
           icon,
         })
       } else if (result.properties.id === 'newMarker') {
-        // const marker = L.marker([lat, lon], {
-        //   id: 'newMarker',
-        //   draggable: 'true',
-        //   pane: 'redMarker',
-        //   icon,
-        // })
-        // marker.on('dragend', function(event) {
-        //   const marker = event.target
-        //   const position = marker.getLatLng()
-        //   const pop = `${position.lat}` + ' ' + `${position.lng}`
-
-        //   var popup = L.popup({
-        //     offset: [0, -30],
-        //   }).setContent(pop)
-        //   marker
-        //     .setLatLng(position, {
-        //       id: 'newMarker',
-        //       title: 'Transamerica Pyramid',
-        //       draggable: 'true',
-        //     })
-        //     .bindPopup(popup)
-        //     .openPopup()
-        //   // .update()
-        // })
-        // return marker
-        return L.marker([lat, lon], {
-          id: 'newMarker',
-          pane: 'redMarker',
-          icon,
-        })
+        return this.buildDraggableMarker(lat, lon)
       } else {
         return L.marker([lat, lon], {
           icon,
         })
       }
     },
+
+    // updateResults(lat, lng) {
+    //   console.log('update results...', lat, lng)
+    // },
 
     addUncertainty(result) {
       const uncertity = this.uncertainty(result)
@@ -407,13 +423,25 @@ export default {
     },
 
     reverseResult(lat, lng) {
+      let uncertity
+      if (this.results.length > 0) {
+        if (this.results[0].properties.id === 'newMarker') {
+          uncertity = this.results[0].properties.coordinateUncertaintyInMeters
+        }
+        this.removeOldCustomMarker()
+      }
+
       this.isLoaded = true
       return service
         .reverseGeoCodingResults(lat, lng)
         .then(response => {
           this.isLoaded = false
           // this.addNewMarkerResult(response.features[0])
-          this.results.unshift(response.features[0])
+          const result = response.features[0]
+          if (uncertity) {
+            result.properties.coordinateUncertaintyInMeters = uncertity
+          }
+          this.results.unshift(result)
           this.setResults(this.results)
 
           if (this.results.length === 1) {
