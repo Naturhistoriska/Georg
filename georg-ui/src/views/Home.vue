@@ -27,8 +27,6 @@ import SearchOptions from '../components/SearchOptions'
 import SearchCoordinates from '../components/SearchCoordinates'
 import Service from '../Service'
 
-// import * as fixer from '../assets/js/decimalPlacesFixer.js'
-
 const service = new Service()
 
 export default {
@@ -44,7 +42,6 @@ export default {
 
   data() {
     return {
-      didSearch: false,
       mapHeight: 'height: 1500px',
       resultsHeight: 'height: 1400px',
       tile: false,
@@ -114,7 +111,7 @@ export default {
           ? 'SWE'
           : ''
 
-      this.didSearch = false
+      // this.didSearch = false
       service
         .fetchAddressResults(value, countryCode)
         .then(response => {
@@ -141,7 +138,8 @@ export default {
         .finally(() => {
           this.setSearchCountry(countryCode)
           this.setSearchOption('address')
-          this.didSearch = true
+
+          // this.didSearch = true
         })
     },
 
