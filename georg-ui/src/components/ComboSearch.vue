@@ -14,7 +14,6 @@
         item-value="id"
         placeholder="Sök plats"
         v-model="select"
-        :disabled="isUpdating"
         :loading="isLoading"
         :open-on-clear="false"
         :items="items"
@@ -60,7 +59,6 @@ export default {
   data: () => ({
     autoSearch: true,
     entries: [],
-    isUpdating: false,
     select: null,
     search: null,
     isLoading: false,
@@ -116,18 +114,6 @@ export default {
         this.filterResult(this.select.id)
       }
     },
-    isUpdating(val) {
-      if (val) {
-        setTimeout(() => (this.isUpdating = false), 3000)
-      }
-    },
-    // model(value) {
-    //   if (value !== null && value !== undefined) {
-    //     this.filterResult(value)
-    //   } else {
-    //     this.filterResult(1)
-    //   }
-    // },
     search: function() {
       this.autoCompleteSearch()
     },
