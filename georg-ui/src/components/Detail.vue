@@ -43,26 +43,25 @@
         v-bind:isNewMarker="isNewMarker"
       />
       <v-divider></v-divider>
-      <Uncertainty v-if="isNewMarker" />
-      <GbifDataSourceLinks v-else-if="isGbif" />
-      <DataSourceLinks v-else />
-      <!-- <v-list-item v-if="hasUncertainty">
+      <v-list-item v-if="hasUncertainty">
         <v-list-item-icon>
           <v-icon :color="makeIconColor">mdi-map-marker-radius</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>
             {{
-            selectedResult.properties.addendum.georg
-            .coordinateUncertaintyInMeters
+              selectedResult.properties.addendum.georg
+                .coordinateUncertaintyInMeters
             }}
             meter
-            <span
-              class="text--secondary"
-            >osäkerhetsradie</span>
+            <span class="text--secondary">osäkerhetsradie</span>
           </v-list-item-title>
         </v-list-item-content>
-      </v-list-item>-->
+      </v-list-item>
+      <v-divider v-if="hasUncertainty"></v-divider>
+      <Uncertainty v-if="isNewMarker" />
+      <GbifDataSourceLinks v-else-if="isGbif" />
+      <DataSourceLinks v-else />
       <v-list-item v-if="isGbif">
         <v-list-item-action></v-list-item-action>
         <v-alert dense text type="warning" class="alertText">
@@ -119,6 +118,7 @@ export default {
     ...mapGetters([
       'displayJsonData',
       'isGbif',
+      'isWOF',
       'isNewMarker',
       'selectedResult',
     ]),
@@ -162,10 +162,12 @@ export default {
     //   // )
     // },
     hasUncertainty: function() {
-      return (
-        this.selectedResult.properties.addendum.georg
-          .coordinateUncertaintyInMeters !== null
-      )
+      return this.isWOF
+        ? false
+        : this.isNewMarker
+        ? false
+        : this.selectedResult.properties.addendum.georg
+            .coordinateUncertaintyInMeters !== null
     },
   },
 
