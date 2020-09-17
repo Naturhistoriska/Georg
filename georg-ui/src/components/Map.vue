@@ -51,17 +51,6 @@
 import L from 'leaflet'
 import { LMap, LTileLayer, LControlLayers } from 'vue2-leaflet'
 import { mapGetters, mapMutations } from 'vuex'
-// import proj4 from 'proj4'
-// import * as converter from '../assets/js/latlonConverter.js'
-// // import * as fixer from '../assets/js/decimalPlacesFixer.js'
-
-// const wgs84 =
-//   '+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees'
-// const rt90 =
-//   '+title=RT90 +proj=tmerc +lat_0=0 +lon_0=15.80827777777778 +k=1 +x_0=1500000 +y_0=0 +ellps=bessel +towgs84=414.1,41.3,603.1,-0.855,2.141,-7.023,0 +units=m +no_defs'
-// const sweref99 =
-//   '+title=SWEREF99 TM +proj=utm +zone=33 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs'
-
 import Service from '../Service'
 const service = new Service()
 
@@ -433,72 +422,6 @@ export default {
         })
         .catch(function() {})
     },
-
-    // addNewMarkerResult(result) {
-    //   this.removeOldCustomMarker()
-    //   if (result && result.properties.country !== undefined) {
-    //     result.properties.id = 'newMarker'
-    //     result.properties.name = 'Din plats'
-    //     result.properties.isNew = false
-    //     result.geometry.coordinates = [fixer.digits(lng), fixer.digits(lat)]
-    //   } else {
-    //     result = {
-    //       properties: {
-    //         id: 'newMarker',
-    //         name: 'Din plats',
-    //         // isNew: true,
-    //         coordinates: {
-    //           dd: [fixer.digits(lat), fixer.digits(lng)],
-    //           dms: [this.latDms(lat), this.lngDms(lng)],
-    //           ddm: [this.latDdm(lat), this.lngDdm(lng)],
-    //           rt90: [this.rt90lat(lat, lng), this.rt90lng(lat, lng)],
-    //           sweref99: [
-    //             this.sweref99Lat(lat, lng),
-    //             this.sweref99Lng(lat, lng),
-    //           ],
-    //         },
-    //       },
-    //       geometry: {
-    //         coordinates: [fixer.digits(lng), fixer.digits(lat)],
-    //       },
-    //     }
-    //   }
-    //   this.results.unshift(result)
-    //   this.setResults(this.results)
-    // },
-
-    // latDms: function(lat) {
-    //   // return this.result.properties.coordinates.dms[0]
-    //   return converter.latlon(lat, 'lat', false)
-    // },
-
-    // lngDms: function(lng) {
-    //   // return this.result.properties.coordinates.dms[1]
-    //   return converter.latlon(lng, 'lon', false)
-    // },
-
-    // latDdm: function(lat) {
-    //   return converter.latlon(lat, 'lat', true)
-    // },
-    // lngDdm: function(lng) {
-    //   return converter.latlon(lng, 'lon', true)
-    // },
-    // sweref99Lng: function(lat, lng) {
-    //   let result = proj4(wgs84, sweref99, [Number(lng), Number(lat)])
-    //   return Math.round(result[0])
-    // },
-    // sweref99Lat: function(lat, lng) {
-    //   let result = proj4(wgs84, sweref99, [Number(lng), Number(lat)])
-    //   return Math.round(result[1])
-    // },
-    // rt90lng: function(lat, lng) {
-    //   let result = proj4(wgs84, rt90, [Number(lng), Number(lat)])
-    //   return Math.round(result[0])
-    // },
-    // rt90lat: function(lat, lng) {
-    //   let result = proj4(wgs84, rt90, [Number(lng), Number(lat)])
-    //   return Math.round(result[1])
-    // },
 
     removeOldCustomMarker() {
       if (this.results.length > 0) {
