@@ -2,7 +2,7 @@
   <div id="container" class="container container--fluid">
     <v-card id="navi">
       <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
-      <AutocompleteSearch v-if="isAddressSearch" />
+      <ComboSearch v-if="isAddressSearch" />
       <SearchCoordinates v-else />
       <v-divider
         class="mt-2"
@@ -19,8 +19,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-// import AutocompleteSearch from '../components/AutocompleteSearch'
-import AutocompleteSearch from '../components/ComboSearch'
+import ComboSearch from '../components/ComboSearch'
 import Detail from '../components/Detail'
 import Map from '../components/Map'
 import Results from '../components/Results'
@@ -35,8 +34,8 @@ const service = new Service()
 export default {
   name: 'Home',
   components: {
-    AutocompleteSearch,
     SearchOptions,
+    ComboSearch,
     Detail,
     Map,
     Results,
