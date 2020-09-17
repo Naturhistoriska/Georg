@@ -454,7 +454,7 @@ export default {
     removeOldCustomMarker() {
       if (this.results.length > 0) {
         const firstResult = this.results[0]
-        if (firstResult.properties.id == 'newMarker') {
+        if (firstResult.properties.id === 'newMarker') {
           this.results.splice(0, 1)
         }
       }
