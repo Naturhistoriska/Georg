@@ -95,6 +95,8 @@ export default {
       'setSelectedResult',
       'setSearchCountry',
       'setSearchOption',
+      'setSearchCoordinates',
+      'setSearchText',
     ]),
 
     handleResize() {
@@ -105,6 +107,7 @@ export default {
     },
 
     searchAddress(value, country) {
+      this.setSearchText(value)
       const countryCode =
         !country ||
         country.toLowerCase() === 'sweden' ||
@@ -188,6 +191,7 @@ export default {
         .catch(function() {})
         .finally(() => {
           this.setSearchOption('coordinates')
+          this.setSearchCoordinates(value)
         })
     },
   },

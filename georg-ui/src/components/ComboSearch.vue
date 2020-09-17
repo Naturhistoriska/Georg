@@ -58,6 +58,7 @@ export default {
     Message,
   },
   data: () => ({
+    autoSearch: true,
     entries: [],
     isUpdating: false,
     select: null,
@@ -65,9 +66,15 @@ export default {
     isLoading: false,
     results: [],
   }),
+  mounted() {
+    if (this.select === null) {
+      this.select = this.searchText
+      this.entries = []
+      this.autoSearch = false
+    }
+  },
   computed: {
-    // ...mapGetters(['detailView']),
-    ...mapGetters(['searchCountry']),
+    ...mapGetters(['searchCountry', 'searchText']),
     items() {
       let elements = []
       this.entries.map(entry => {
@@ -210,7 +217,7 @@ export default {
       }
     },
     autoCompleteSearch() {
-      if (!this.isEmpty(this.search)) {
+      if (!this.isEmpty(this.search) && this.autoSearch) {
         this.isLoading = true
         service
           .autoCompleteSearch(this.search, this.searchCountry)
@@ -223,6 +230,7 @@ export default {
             this.isLoading = false
           })
       }
+      this.autoSearch = true
     },
     isEmpty: function(value) {
       return (

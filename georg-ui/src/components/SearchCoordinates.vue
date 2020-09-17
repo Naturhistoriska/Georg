@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import Message from '../components/Message'
 import Service from '../Service'
 
@@ -43,6 +43,20 @@ export default {
       results: [],
     }
   },
+  mounted() {
+    if (this.coordinates === '') {
+      this.coordinates = this.searchCoordinates
+    }
+  },
+  computed: {
+    ...mapGetters(['searchCoordinates']),
+  },
+
+  // watch: {
+  //   searchCoordinates: function() {
+  //     console.log('this.coordinates....', this.searchCoordinates)
+  //   },
+  // },
   methods: {
     ...mapMutations([
       'setDetailView',

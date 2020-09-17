@@ -12,6 +12,8 @@ const state = {
   selectedMarkerId: '',
   searchOption: 'address',
   searchCountry: 'SWE',
+  searchText: '',
+  searchCoordinates: '',
 }
 
 const getters = {
@@ -32,6 +34,8 @@ const getters = {
   selectedMarkerId: state => state.selectedMarkerId,
   searchCountry: state => state.searchCountry,
   searchOption: state => state.searchOption,
+  searchText: state => state.searchText,
+  searchCoordinates: state => state.searchCoordinates,
 }
 
 const actions = {}
@@ -49,6 +53,8 @@ const mutations = {
   setSelectedResultId: (state, payload) => (state.selectedResultId = payload),
   setSearchCountry: (state, payload) => (state.searchCountry = payload),
   setSearchOption: (state, payload) => (state.searchOption = payload),
+  setSearchText: (state, payload) => (state.searchText = payload),
+  setSearchCoordinates: (state, payload) => (state.searchCoordinates = payload),
 }
 
 export default {
