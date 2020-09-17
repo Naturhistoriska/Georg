@@ -406,8 +406,8 @@ export default {
     },
 
     onMapClick(event) {
-      this.removeOldCustomMarker()
       if (this.enableAddMapMarkers && !this.detailView) {
+        this.removeOldCustomMarker()
         const latlng = event.latlng
         this.reverseResult(latlng.lat, latlng.lng)
         this.rezoom = false
@@ -596,4 +596,14 @@ export default {
 .leaflet-bar a.leaflet-disabled {
   color: #bbb !important;
 }
+
+.leaflet-touch .leaflet-control-layers,
+.leaflet-touch .leaflet-bar {
+  border: none !important;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65) !important;
+}
+/* .leaflet-control-zoom .leaflet-bar .leaflet-control {
+  border: none !important;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65) !important;
+} */
 </style>
