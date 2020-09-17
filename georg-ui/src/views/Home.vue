@@ -159,9 +159,9 @@ export default {
             this.setSelectedResultId('')
             this.setSelectedResult({})
           } else {
-            const theResults = response.features
+            let theResults = response.features
             if (theResults.length === 1) {
-              this.results = theResults
+              this.results.push(theResults[0])
               this.setDetailView(true)
             } else {
               theResults.forEach(result => {
