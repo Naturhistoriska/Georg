@@ -11,9 +11,12 @@
     >
     <div
       id="message"
-      v-if="!detailView"
+      v-else-if="isErrorMsg"
       class="pl-3 grey--text text--darken-2 body-2 pre-formatted"
     >
+      {{ message }}
+    </div>
+    <div id="message" v-else class="pl-3 grey--text text--darken-2 body-2">
       {{ message }}
     </div>
   </v-card-actions>
@@ -23,15 +26,19 @@
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Message',
-  data: () => ({
-    // linkText: '< TILLBAKA TILL TRÄFFLISTAN',
-  }),
+  data: () => ({}),
   computed: {
     ...mapGetters(['detailView', 'message', 'results']),
     linkText: function() {
       return this.results.length === 1
         ? 'TILL TRÄFFLISTAN'
         : '< TILLBAKA TILL TRÄFFLISTAN'
+    },
+    isErrorMsg: function() {
+      return this.message.includes(
+        'Koordinaterna måste anges på något av följande sätt:',
+        0
+      )
     },
   },
   // watch: {

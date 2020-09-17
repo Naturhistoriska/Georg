@@ -9,6 +9,7 @@
         dense
         filled
         hide-no-data
+        hide-details
         item-text="name"
         item-value="id"
         placeholder="Sök plats"
@@ -24,9 +25,9 @@
       >
         <template v-slot:item="{ item }">
           <v-list-item-icon>
-            <v-icon color="grey lighten-1" v-if="item.icon">
-              {{ item.icon }}
-            </v-icon>
+            <v-icon color="grey lighten-1" v-if="item.icon">{{
+              item.icon
+            }}</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title class="font-weight-medium body-2 text-truncate"
