@@ -90,6 +90,7 @@ export default {
       'setResults',
       'setSelectedResultId',
       'setSelectedResult',
+      'setSelectedMarker',
       'setSearchCountry',
       'setSearchOption',
       'setSearchCoordinates',
@@ -125,8 +126,11 @@ export default {
             : ''
 
           this.setDetailView(isSimpleResult ? true : false)
+
           this.setSelectedResultId(selectedResultId)
           this.setSelectedResult(selectedResult)
+          this.setSelectedMarker(selectedResult)
+
           const message =
             results.length > 0
               ? results.length + ' träffar'
