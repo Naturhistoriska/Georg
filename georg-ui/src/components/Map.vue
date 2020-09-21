@@ -314,7 +314,7 @@ export default {
       const lat = this.selectedMarker.geometry.coordinates[1]
       const lng = this.selectedMarker.geometry.coordinates[0]
       this.center = [lat, lng]
-      this.zoom = 10
+      this.zoom = 4
     },
 
     removeUncertainties() {
