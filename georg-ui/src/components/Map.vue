@@ -251,6 +251,7 @@ export default {
   methods: {
     ...mapMutations([
       'setAccuracy',
+      'setDetailView',
       'setIsErrorMsg',
       'setMessage',
       'setResults',
@@ -277,7 +278,6 @@ export default {
       if (this.results.length > 0) {
         // this.removeOldDinPlatsMarker()
         if (this.results[0].properties.id === 'newMarker') {
-          console.log('removed...')
           uncertainty = moveUncertainty
             ? this.results[0].properties.coordinateUncertaintyInMeters
             : null
@@ -294,13 +294,9 @@ export default {
           if (uncertainty) {
             result.properties.coordinateUncertaintyInMeters = uncertainty
           }
-          console.log('length...', this.results.length)
           this.results.unshift(result)
-          console.log('length...', this.results.length)
           this.setResults(this.results)
-          console.log('isDetailview..', this.detailView)
           if (this.detailView) {
-            console.log('isDetailview 2..', this.detailView)
             this.setSelectedMarker(result)
           }
           if (this.results.length === 1) {
@@ -335,7 +331,6 @@ export default {
     },
 
     buildMarkers() {
-      console.log('build markers..', this.results.length)
       this.resetLayerGroup()
       this.removeUncertainties()
       this.bounds = L.latLngBounds()
@@ -364,7 +359,6 @@ export default {
 
       if (this.results != null && this.results.length > 0) {
         this.fitMapBounds()
-        console.log('what zoom...', this.zoom)
       }
       // this.highlightMarker()
       // if (this.detailView) {
@@ -429,33 +423,41 @@ export default {
     },
 
     buildPopContent: function(result) {
-      const displayBtn =
-        this.detailView &&
-        (result.properties.id === 'newMarker' ||
-          result.properties.id === this.selectedResultId)
+      // const displayBtn =
+      //   this.detailView &&
+      //   (result.properties.id === 'newMarker' ||
+      //     result.properties.id === this.selectedResultId)
 
       const containerWithBtn = L.DomUtil.create('div'),
         text = this.createText(result, containerWithBtn),
         showDetailBtn = this.createBnt('Visa detaljer', containerWithBtn)
 
-      const container = L.DomUtil.create('div'),
-        text1 = this.createText(result, container)
+      // const container = L.DomUtil.create('div'),
+      //   text1 = this.createText(result, container)
 
       if (showDetailBtn) {
         showDetailBtn.style.color = 'blue'
         showDetailBtn.style.textDecoration = 'underline'
       }
       text.style.color = 'gray'
-      text1.style.color = 'gray'
+      // text1.style.color = 'gray'
       L.DomEvent.on(showDetailBtn, 'click', () => {
         this.showDetail(result)
       })
-      return displayBtn ? containerWithBtn : container
+      // return displayBtn ? containerWithBtn : container
+      return containerWithBtn
     },
 
     showDetail(result) {
-      if (this.selectedMarker.properties.id !== result.properties.id) {
+      if (this.detailView) {
+        if (this.selectedMarker.properties.id !== result.properties.id) {
+          this.setSelectedMarker(result)
+        }
+      } else {
         this.setSelectedMarker(result)
+        this.setSelectedResult(result)
+        this.setSelectedResultId(result.properties.id)
+        this.setDetailView(true)
       }
     },
 
