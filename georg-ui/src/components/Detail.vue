@@ -62,7 +62,7 @@
       <Uncertainty v-if="isNewMarker" />
       <GbifDataSourceLinks v-else-if="isGbif" />
       <DataSourceLinks v-else />
-      <v-list-item v-if="isGbif">
+      <v-list-item v-if="displayGeodeticDatumWarning">
         <v-list-item-action></v-list-item-action>
         <v-alert dense text type="warning" class="alertText">
           Källan saknar geodetiskt datum.
@@ -122,6 +122,11 @@ export default {
       'selectedMarker',
       // 'selectedResult',
     ]),
+    displayGeodeticDatumWarning: function() {
+      return this.isGbif
+        ? this.selectedMarker.properties.addendum.gbif.geodeticDatum === null
+        : false
+    },
     title: function() {
       return this.isGbif
         ? this.selectedMarker.properties.addendum.georg.locationDisplayLabel
