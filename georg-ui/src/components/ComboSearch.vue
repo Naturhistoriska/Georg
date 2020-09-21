@@ -147,9 +147,11 @@ export default {
         this.setResults(this.results)
         this.setDetailView(true)
 
+        const selectedResult = this.results[0]
+
         this.setSelectedResultId(id)
-        this.setSelectedResult(this.results[0])
-        this.setSelectedMarker(this.results[0])
+        this.setSelectedResult(selectedResult)
+        this.setSelectedMarker(selectedResult)
         const message =
           this.results.length > 0
             ? this.results.length + ' träffar'
@@ -159,8 +161,12 @@ export default {
         this.isLoading = false
 
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
-        if (decodeUrl !== `/search?place_name=${this.search}`) {
-          this.$router.push(`/search?place_name=${this.search}`)
+        if (
+          decodeUrl !== `/search?place_name=${selectedResult.properties.name}`
+        ) {
+          this.$router.push(
+            `/search?place_name=${selectedResult.properties.name}`
+          )
         }
       }
     },
