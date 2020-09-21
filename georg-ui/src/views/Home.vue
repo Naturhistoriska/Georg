@@ -106,12 +106,14 @@ export default {
 
     searchAddress(value, country) {
       this.setSearchText(value)
-      const countryCode =
-        !country ||
-        country.toLowerCase() === 'sweden' ||
-        country.toLowerCase() === 'sverige'
-          ? 'SWE'
-          : ''
+
+      // fix to set default county in norden
+      const countryCode = !country
+        ? ''
+        : country.toLowerCase() === 'sweden' ||
+          country.toLowerCase() === 'sverige'
+        ? 'SWE'
+        : ''
       service
         .fetchAddressResults(value, countryCode)
         .then(response => {

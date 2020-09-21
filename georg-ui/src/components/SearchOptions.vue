@@ -38,7 +38,7 @@ export default {
       { text: 'i Norden', value: '' },
       { text: 'i Sverige', value: 'SWE' },
     ],
-    select: 'i Sverige',
+    select: 'i Norden',
   }),
 
   computed: {
