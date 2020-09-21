@@ -1,11 +1,11 @@
 <template>
   <v-list-item-group active-class="white-bg">
-    <v-hover v-slot:default="{ hover }" v-if="selectedResult.properties.county">
+    <v-hover v-slot:default="{ hover }" v-if="selectedMarker.properties.county">
       <v-list-item
         dense
         class="geotree"
         :class="{ highlight: expand1 == true }"
-        @click="copyText(selectedResult.properties.county)"
+        @click="copyText(selectedMarker.properties.county)"
         @focus="expand1 = true"
         @blur="expand1 = false"
       >
@@ -14,7 +14,7 @@
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>
-            {{ selectedResult.properties.county }}
+            {{ selectedMarker.properties.county }}
             <span class="text--secondary">county</span>
           </v-list-item-title>
         </v-list-item-content>
@@ -22,7 +22,7 @@
           <v-btn
             @focus="expand1 = true"
             @blur="expand1 = false"
-            @click="copyText(selectedResult.properties.county)"
+            @click="copyText(selectedMarker.properties.county)"
             color="transparent"
             :class="{ 'show-btn': expand1 == true, 'show-btn-hover': hover }"
             icon
@@ -32,12 +32,12 @@
         </v-list-item-action>
       </v-list-item>
     </v-hover>
-    <v-hover v-slot:default="{ hover }" v-if="selectedResult.properties.region">
+    <v-hover v-slot:default="{ hover }" v-if="selectedMarker.properties.region">
       <v-list-item
         dense
         class="geotree"
         :class="{ highlight: expand2 == true }"
-        @click="copyText(selectedResult.properties.region)"
+        @click="copyText(selectedMarker.properties.region)"
         @focus="expand2 = true"
         @blur="expand2 = false"
       >
@@ -46,7 +46,7 @@
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>
-            {{ selectedResult.properties.region }}
+            {{ selectedMarker.properties.region }}
             <span class="text--secondary">region</span>
           </v-list-item-title>
         </v-list-item-content>
@@ -57,7 +57,7 @@
             icon
             @focus="expand2 = true"
             @blur="expand2 = false"
-            @click="copyText(selectedResult.properties.region)"
+            @click="copyText(selectedMarker.properties.region)"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>
@@ -66,20 +66,20 @@
     </v-hover>
     <v-hover
       v-slot:default="{ hover }"
-      v-if="selectedResult.properties.country"
+      v-if="selectedMarker.properties.country"
     >
       <v-list-item
         dense
         class="geotree"
         :class="{ highlight: expand3 == true }"
-        @click="copyText(selectedResult.properties.country)"
+        @click="copyText(selectedMarker.properties.country)"
         @focus="expand3 = true"
         @blur="expand3 = false"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title>
-            {{ selectedResult.properties.country }}
+            {{ selectedMarker.properties.country }}
             <span class="text--secondary">country</span>
           </v-list-item-title>
         </v-list-item-content>
@@ -90,7 +90,7 @@
             @focus="expand3 = true"
             @blur="expand3 = false"
             color="transparent"
-            @click="copyText(selectedResult.properties.country)"
+            @click="copyText(selectedMarker.properties.country)"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>
@@ -115,17 +115,17 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['isNewMarker', 'selectedResult']),
+    ...mapGetters(['isNewMarker', 'selectedMarker']),
     treeIconColor: function() {
       return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
     },
     reginTreeIcon: function() {
-      return this.selectedResult.properties.county ? '' : 'mdi-file-tree'
+      return this.selectedMarker.properties.county ? '' : 'mdi-file-tree'
     },
     countryTreeIcon: function() {
-      return this.selectedResult.properties.county
+      return this.selectedMarker.properties.county
         ? ''
-        : this.selectedResult.properties.region
+        : this.selectedMarker.properties.region
         ? ''
         : 'mdi-file-tree'
     },

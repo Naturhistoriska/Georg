@@ -7,7 +7,7 @@
       <v-list-item-content>
         <v-list-item-title>
           Data från
-          {{ selectedResult.properties.source.toUpperCase() }}
+          {{ selectedMarker.properties.source.toUpperCase() }}
         </v-list-item-title>
       </v-list-item-content>
       <v-btn icon>
@@ -33,7 +33,7 @@
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>{{
-          selectedResult.properties.addendum.gbif.occurrenceID
+          selectedMarker.properties.addendum.gbif.occurrenceID
         }}</v-list-item-title>
         <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
       </v-list-item-content>
@@ -66,7 +66,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedResult']),
+    ...mapGetters(['selectedMarker']),
     datasetUrl: function() {
       return `${gbifDatasetUrl}${this.datasetKey()}`
     },
@@ -85,8 +85,8 @@ export default {
       }
     },
     getOccurrenceKey() {
-      const dataset = this.selectedResult.properties.layer
-      const occurrenceId = this.selectedResult.properties.addendum.gbif
+      const dataset = this.selectedMarker.properties.layer
+      const occurrenceId = this.selectedMarker.properties.addendum.gbif
         .occurrenceID
       service
         .fetchOccurrenceKey(dataset, occurrenceId)
@@ -104,7 +104,7 @@ export default {
         .catch(function() {})
     },
     datasetKey: function() {
-      const layer = this.selectedResult.properties.layer
+      const layer = this.selectedMarker.properties.layer
       return layer === 'nhrs-nrm'
         ? nhrsNrmKey
         : layer === 's-fbo'

@@ -63,6 +63,7 @@ export default {
       'setIsErrorMsg',
       'setMessage',
       'setResults',
+      'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
       'setSearchCountry',
@@ -71,6 +72,7 @@ export default {
     clearSearch() {
       this.setResults([])
       this.setDetailView(false)
+      this.setSelectedMarker({})
       this.setSelectedResultId('')
       this.setSelectedResult({})
       this.setMessage('')
@@ -81,6 +83,8 @@ export default {
 
     search(e) {
       e.preventDefault()
+      this.setSelectedResultId('')
+      this.setSelectedResult({})
       this.isLoading = true
       this.results = []
       if (this.coordinates) {
@@ -98,13 +102,13 @@ export default {
               }
               this.setResults([])
               this.setDetailView(false)
-              this.setSelectedResultId('')
-              this.setSelectedResult({})
+              this.setSelectedMarker({})
               this.setIsErrorMsg(true)
             } else {
               const theResults = response.features
               if (theResults.length === 1) {
                 this.results = theResults
+                this.setSelectedMarker(this.results[0])
                 this.setDetailView(true)
               } else {
                 theResults.forEach(result => {
@@ -114,13 +118,14 @@ export default {
                     this.results.push(result)
                   }
                 })
+                this.setSelectedMarker({})
                 this.setDetailView(false)
               }
 
-              if (this.results.length === 1) {
-                this.setSelectedResultId(this.results[0])
-                this.setSelectedResult(this.results[0])
-              }
+              // if (this.results.length === 1) {
+              //   this.setSelectedResultId(this.results[0])
+              //   this.setSelectedResult(this.results[0])
+              // }
               const message =
                 this.results.length > 1
                   ? '1 träff samt "Din plats"'

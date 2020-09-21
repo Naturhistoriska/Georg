@@ -10,13 +10,13 @@
           :class="{ highlight: expand == true }"
           @focus="expand = true"
           @blur="expand = false"
-          @click="copyText(selectedResult.properties.name)"
+          @click="copyText(selectedMarker.properties.name)"
         >
           <v-list-item-icon>
             <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
           </v-list-item-icon>
           <v-list-item-content v-if="isGbif">{{
-            selectedResult.properties.name
+            selectedMarker.properties.name
           }}</v-list-item-content>
           <v-list-item-content v-else>{{ title }}</v-list-item-content>
           <v-list-item-action>
@@ -26,7 +26,7 @@
               :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
               @focus="expand = true"
               @blur="expand = false"
-              @click="copyText(selectedResult.properties.name)"
+              @click="copyText(selectedMarker.properties.name)"
             >
               <v-icon small>mdi-content-copy</v-icon>
             </v-btn>
@@ -35,11 +35,11 @@
       </v-hover>
       <v-divider inset v-if="!isNewMarker"></v-divider>
       <GeographicTree />
-      <v-divider inset v-if="selectedResult.properties.country"></v-divider>
+      <v-divider inset v-if="selectedMarker.properties.country"></v-divider>
       <Coordinates
-        v-bind:coordinates="selectedResult.properties.coordinates"
-        v-bind:lat="selectedResult.geometry.coordinates[1]"
-        v-bind:lon="selectedResult.geometry.coordinates[0]"
+        v-bind:coordinates="selectedMarker.properties.coordinates"
+        v-bind:lat="selectedMarker.geometry.coordinates[1]"
+        v-bind:lon="selectedMarker.geometry.coordinates[0]"
         v-bind:isNewMarker="isNewMarker"
       />
       <v-divider></v-divider>
@@ -50,7 +50,7 @@
         <v-list-item-content>
           <v-list-item-title>
             {{
-              selectedResult.properties.addendum.georg
+              selectedMarker.properties.addendum.georg
                 .coordinateUncertaintyInMeters
             }}
             meter
@@ -91,7 +91,6 @@ import GbifDataSourceLinks from './GbifDataSourceLinks'
 import GeographicTree from './GeographicTree'
 import JsonController from './JsonController'
 import Uncertainty from './Uncertainty'
-// import * as converter from '../assets/js/latlonConverter.js'
 
 export default {
   name: 'Detail',
@@ -120,12 +119,13 @@ export default {
       'isGbif',
       'isWOF',
       'isNewMarker',
-      'selectedResult',
+      'selectedMarker',
+      // 'selectedResult',
     ]),
     title: function() {
       return this.isGbif
-        ? this.selectedResult.properties.addendum.georg.locationDisplayLabel
-        : this.selectedResult.properties.name
+        ? this.selectedMarker.properties.addendum.georg.locationDisplayLabel
+        : this.selectedMarker.properties.name
     },
     titleClass: function() {
       return this.isNewMarker
@@ -134,39 +134,19 @@ export default {
     },
 
     source: function() {
-      return this.selectedResult.properties.source === 'whosonfirst'
+      return this.selectedMarker.properties.source === 'whosonfirst'
         ? "Who's On First"
         : 'Virtuella Herbariet'
     },
-    // undefinedMarker: function() {
-    //   return this.selectedResult.properties.isNew
-    // },
+
     makeIconColor: function() {
       return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
     },
-    // latDms: function() {
-    //   return this.result.properties.coordinates.dms[0]
-    //   // return converter.latlon(
-    //   //   this.selectedResult.geometry.coordinates[1],
-    //   //   'lat',
-    //   //   false
-    //   // )
-    // },
 
-    // lngDms: function() {
-    //   return this.result.properties.coordinates.dms[1]
-    //   // return converter.latlon(
-    //   //   this.selectedResult.geometry.coordinates[0],
-    //   //   'lon',
-    //   //   false
-    //   // )
-    // },
     hasUncertainty: function() {
-      return this.isWOF
+      return this.isWOF || this.isNewMarker
         ? false
-        : this.isNewMarker
-        ? false
-        : this.selectedResult.properties.addendum.georg
+        : this.selectedMarker.properties.addendum.georg
             .coordinateUncertaintyInMeters !== null
     },
   },
@@ -176,10 +156,6 @@ export default {
       navigator.clipboard.writeText(value)
       this.snackbar2 = true
     },
-    // ...mapMutations(['setDisplayJsonData']),
-    // openOrCloseJsonView() {
-    //   this.setDisplayJsonData(!this.displayJsonData)
-    // },
   },
 }
 </script>

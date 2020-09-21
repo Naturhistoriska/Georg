@@ -19,15 +19,15 @@ export default {
   name: 'DataSourceLinks',
 
   computed: {
-    ...mapGetters(['selectedResult']),
+    ...mapGetters(['selectedMarker']),
 
     dataFromSource: function() {
-      return this.selectedResult.properties.source === 'whosonfirst'
+      return this.selectedMarker.properties.source === 'whosonfirst'
         ? "Who's On First (WOF)"
         : 'Virtuella Herbariet (SVH)'
     },
     externallink: function() {
-      return this.selectedResult.properties.source === 'whosonfirst'
+      return this.selectedMarker.properties.source === 'whosonfirst'
         ? 'https://whosonfirst.org/docs/licenses/'
         : 'https://github.com/mossnisse/Virtuella-Herbariet'
     },

@@ -1,8 +1,5 @@
 <template>
-  <div
-    id="map"
-    v-bind:class="{ addMarkerCursor: enableAddMapMarkers && !this.detailView }"
-  >
+  <div id="map" v-bind:class="{ addMarkerCursor: enableAddMapMarkers }">
     <l-map
       ref="myMap"
       :center="center"
@@ -36,8 +33,7 @@
         x-small
         id="iconbtn"
         @click="enableAddMarker"
-        :style="iconCursor"
-        :disabled="detailView"
+        style="cursor: pointer;"
       >
         <v-icon :color="iconColor" id="newMarkerIcon"
           >mdi-map-marker-plus</v-icon
@@ -99,8 +95,29 @@ export default {
   props: ['mapHeight'],
   data() {
     return {
-      url: baseUrl,
+      activeLayer: 'OpenStreetMap',
+      bounds: {},
       center: [59.0, 15.0],
+      circles: [],
+      circleOptionBlue: {
+        color: 'blue',
+        fillColor: '#99aaff',
+        fillOpacity: 0.3,
+        pane: 'circleMarker',
+      },
+
+      circleOptionRed: {
+        color: 'red',
+        fillColor: '#ff9999',
+        fillOpacity: 0.3,
+        pane: 'circleMarker',
+      },
+
+      enableAddMapMarkers: false,
+      isLoaded: false,
+      isViewChanged: false,
+      layerGroup: {},
+      maxZoom: 18,
       rezoom: true,
       tileProviders: [
         {
@@ -122,20 +139,7 @@ export default {
           attribution: lantmaterietMapAttribution,
         },
       ],
-      activeLayer: 'OpenStreetMap',
-      bounds: {},
-      circles: [],
-      circleOptions: {
-        color: 'red',
-        fillColor: '#ff9999',
-        fillOpacity: 0.3,
-        pane: 'circleMarker',
-      },
-      enableAddMapMarkers: false,
-      isLoaded: false,
-      layerGroup: {},
-      maxZoom: 18,
-      // isDragged: false,
+      url: baseUrl,
       zoom: 0,
     }
   },
@@ -146,17 +150,17 @@ export default {
     this.$refs.myMap.mapObject.getPane('topMarker').style.zIndex = 888
 
     this.$refs.myMap.mapObject.createPane('lowerMarker')
-    this.$refs.myMap.mapObject.getPane('lowerMarker').style.zIndex = 666
+    this.$refs.myMap.mapObject.getPane('lowerMarker').style.zIndex = 555
 
     this.$refs.myMap.mapObject.createPane('redMarker')
     this.$refs.myMap.mapObject.getPane('redMarker').style.zIndex = 999
 
     this.$refs.myMap.mapObject.createPane('circleMarker')
-    this.$refs.myMap.mapObject.getPane('circleMarker').style.zIndex = 555
+    this.$refs.myMap.mapObject.getPane('circleMarker').style.zIndex = 777
 
-    if (this.detailView) {
-      this.buildDetailMarker()
-    }
+    // if (this.detailView) {
+    //   this.buildDetailMarker()
+    // }
 
     this.$nextTick(() => {
       this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
@@ -175,12 +179,15 @@ export default {
 
     this.$refs.myMap.mapObject.invalidateSize()
   },
+
   computed: {
     ...mapGetters([
       'accuracy',
+      'addDinPlats',
       'detailView',
       'results',
       'hoveredResultId',
+      'selectedMarker',
       'selectedResult',
       'selectedResultId',
     ]),
@@ -188,25 +195,41 @@ export default {
     iconColor: function() {
       return this.enableAddMapMarkers ? 'red darken-2' : '#424242'
     },
-    iconCursor: function() {
-      return this.detailView ? '' : 'cursor: pointer;'
-    },
+    // iconCursor: function() {
+    //   return this.detailView ? '' : 'cursor: pointer;'
+    // },
   },
   watch: {
-    results: function() {
+    accuracy() {
       this.$nextTick(() => {
-        this.buildMarkers()
-      })
-    },
-    detailView: function() {
-      this.$nextTick(() => {
-        if (this.detailView) {
-          this.buildDetailMarker()
-        } else {
+        if (this.accuracy >= 0) {
           this.buildMarkers()
+          this.addUnertainties()
         }
       })
     },
+    addDinPlats: function() {
+      const lat = this.selectedMarker.geometry.coordinates[1]
+      const lng = this.selectedMarker.geometry.coordinates[0]
+      this.dinPlatsSearch(lat, lng, false)
+    },
+    detailView: function() {
+      this.$nextTick(() => {
+        this.isViewChanged = true
+        this.buildMarkers()
+        this.addUnertainties()
+      })
+    },
+    results: function() {
+      this.$nextTick(() => {
+        if (!this.isViewChanged) {
+          this.buildMarkers()
+          this.addUnertainties()
+        }
+        this.isViewChanged = false
+      })
+    },
+
     hoveredResultId() {
       this.$nextTick(() => {
         if (!this.detailView) {
@@ -229,19 +252,6 @@ export default {
         )
       })
     },
-    accuracy() {
-      this.$nextTick(() => {
-        this.removeUncertainties()
-        if (this.accuracy >= 0) {
-          this.addUncertainty(this.selectedResult)
-        }
-      })
-    },
-    // isDragged() {
-    //   this.$nextTick(() => {
-    //     console.log('watch.. draged..', this.isDragged)
-    //   })
-    // },
   },
   methods: {
     ...mapMutations([
@@ -249,96 +259,84 @@ export default {
       'setIsErrorMsg',
       'setMessage',
       'setResults',
-      'setSelectedMarkerId',
+      'setSelectedMarker',
+      'setSelectedResultId',
+      'setSelectedResult',
     ]),
+
+    onMapClick(event) {
+      if (this.enableAddMapMarkers) {
+        // this.removeOldDinPlatsMarker()
+        const latlng = event.latlng
+        this.dinPlatsSearch(latlng.lat, latlng.lng, false)
+        this.rezoom = false
+        this.setAccuracy(-1)
+        this.enableAddMapMarkers = false
+      }
+      // this.$emit("addMarker", event.latlng);
+    },
+
+    dinPlatsSearch(lat, lng, moveUncertainty) {
+      this.rezoom !== moveUncertainty
+      let uncertainty
+      if (this.results.length > 0) {
+        // this.removeOldDinPlatsMarker()
+        if (this.results[0].properties.id === 'newMarker') {
+          uncertainty = moveUncertainty
+            ? this.results[0].properties.coordinateUncertaintyInMeters
+            : null
+          this.results.splice(0, 1)
+        }
+      }
+
+      this.isLoaded = true
+      service
+        .reverseGeoCodingResults(lat, lng)
+        .then(response => {
+          this.isLoaded = false
+          const result = response.features[0]
+          if (uncertainty) {
+            result.properties.coordinateUncertaintyInMeters = uncertainty
+          }
+          this.results.unshift(result)
+          this.setResults(this.results)
+          if (this.detailView) {
+            this.setSelectedMarker(result)
+          }
+          if (this.results.length === 1) {
+            this.setMessage('Visar "Din plats"')
+            this.setIsErrorMsg(false)
+          }
+        })
+        .catch(function() {})
+    },
+    resetDetailViewZoom() {
+      const lat = this.selectedMarker.geometry.coordinates[1]
+      const lng = this.selectedMarker.geometry.coordinates[0]
+      this.center = [lat, lng]
+      this.zoom = 10
+    },
 
     removeUncertainties() {
       this.circles.forEach(circle => {
         this.$refs.myMap.mapObject.removeLayer(circle)
       })
     },
+
     resetLayerGroup() {
       this.removeUncertainties()
       this.$refs.myMap.mapObject.removeLayer(this.layerGroup)
       this.layerGroup = L.layerGroup().addTo(this.$refs.myMap.mapObject)
     },
 
-    isHoveredOrSelected: function(id) {
-      return (
-        id === this.selectedResultId ||
-        id === this.hoveredResultId ||
-        id === 'newMarker'
-      )
-    },
-
-    icon: function(id) {
-      return id === 'newMarker'
-        ? MAP_ICONS.redIcon
-        : this.isHoveredOrSelected(id)
-        ? MAP_ICONS.blueIcon
-        : MAP_ICONS.greyIcon
-    },
-
-    buildDetailMarker() {
-      this.resetLayerGroup()
-      const lat = this.selectedResult.geometry.coordinates[1]
-      const lng = this.selectedResult.geometry.coordinates[0]
-      this.center = [lat, lng]
-
-      let theMarker
-      if (this.selectedResult.properties.id === 'newMarker') {
-        theMarker = this.buildDraggableMarker(lat, lng)
-      } else {
-        theMarker = L.marker([lat, lng], {
-          icon: this.icon(this.selectedResult.properties.id),
-        })
-      }
-      theMarker.addTo(this.layerGroup)
-      this.addUncertainty(this.selectedResult)
-    },
-
-    buildDraggableMarker(lat, lng) {
-      const marker = L.marker([lat, lng], {
-        id: 'newMarker',
-        draggable: 'true',
-        pane: 'redMarker',
-        icon: MAP_ICONS.redIcon,
-      })
-      marker.on('dragend', function(e) {
-        const latLng = e.target.getLatLng()
-        // const pop = `${position.lat}` + ' ' + `${position.lng}`
-
-        // var popup = L.popup({
-        //   offset: [0, -30],
-        // }).setContent(pop)
-        marker.setLatLng(latLng, {
-          id: 'newMarker',
-          title: 'Din plats',
-          draggable: 'true',
-        })
-        // .bindPopup(popup)
-        // .openPopup()
-      })
-      marker.addEventListener('dragend', e => {
-        const latLng = e.target.getLatLng()
-        this.reverseResult(latLng.lat, latLng.lng)
-      })
-      return marker
-    },
-
     highlightMarker() {
-      this.resetLayerGroup()
-      this.results.forEach(result => {
-        this.marker(result).addTo(this.layerGroup)
-        if (this.isHoveredOrSelected(result.properties.id)) {
-          this.addUncertainty(result)
-        }
-      })
+      this.buildMarkers()
+      this.addUnertainties()
     },
 
     buildMarkers() {
       this.resetLayerGroup()
-
+      this.removeUncertainties()
       this.bounds = L.latLngBounds()
       this.results.forEach(result => {
         this.bounds.extend([
@@ -346,58 +344,178 @@ export default {
           result.geometry.coordinates[0],
         ])
 
-        this.marker(result).addTo(this.layerGroup)
+        const marker =
+          result.properties.id === 'newMarker'
+            ? this.buildDraggableMarker(result)
+            : this.buildMarker(result)
+
+        // const id = result.properties.id
+        // marker.addEventListener('click', () => {
+        //   if (
+        //     this.detailView &&
+        //     (id === this.selectedResultId || id === 'newMarker')
+        //   ) {
+        //     this.setSelectedMarker(result)
+        //   }
+        // })
+        marker.addTo(this.layerGroup)
       })
-      this.highlightMarker()
-      if (this.results != null && this.results.length > 0) {
-        this.fitMapBounds()
+      // this.highlightMarker()
+      if (this.detailView) {
+        this.center = [
+          this.selectedMarker.geometry.coordinates[1],
+          this.selectedMarker.geometry.coordinates[0],
+        ]
+        this.zoom = 10
+      } else {
+        if (this.results != null && this.results.length > 0) {
+          this.fitMapBounds()
+        }
       }
     },
 
-    marker: function(result) {
-      const icon = this.icon(result.properties.id)
+    buildMarker(result) {
+      const id = result.properties.id
+      const icon = this.isHoveredOrSelected(id)
+        ? MAP_ICONS.blueIcon
+        : MAP_ICONS.greyIcon
+      const pane = this.isHoveredOrSelected(id) ? 'topMarker' : 'lowerMarker'
 
       const lat = result.geometry.coordinates[1]
-      const lon = result.geometry.coordinates[0]
-      if (result.properties.id === this.hoveredResultId) {
-        return L.marker([lat, lon], {
-          pane: 'topMarker',
-          icon,
-        })
-      } else if (result.properties.id === this.selectedResultId) {
-        return L.marker([lat, lon], {
-          pane: 'lowerMarker',
-          icon,
-        })
-      } else if (result.properties.id === 'newMarker') {
-        return this.buildDraggableMarker(lat, lon)
-      } else {
-        return L.marker([lat, lon], {
-          icon,
-        })
+      const lng = result.geometry.coordinates[0]
+      const popup = L.popup({
+        offset: [0, -30],
+      }).setContent(this.buildPopContent(result))
+      return L.marker([lat, lng], {
+        pane,
+        icon,
+      }).bindPopup(popup)
+    },
+
+    createBnt(string, container) {
+      const btn = L.DomUtil.create('button', '', container)
+      btn.setAttribute('type', 'button')
+      btn.innerHTML = string
+      return btn
+    },
+
+    createText(result, container) {
+      const coordinates = result.properties.coordinates
+      const dd = coordinates.dd
+      const dms = coordinates.dms
+      const ddm = coordinates.ddm
+      const rt90 = coordinates.rt90
+      const sweref99 = coordinates.sweref99
+
+      const placeName = `<strong>${result.properties.name}</strong><br /><br />`
+      const popCoordinates = `<strong>WGS84 DMS</strong><br />${dms}<br /><br /><strong>WGS84 DMS</strong><br />${ddm}<br /><br /><strong>WGS84 DMS</strong><br />${dd}<br /><br /><strong>RT99 (nord, öst)</strong><br />${rt90}<br /><br /><strong>SWEREF99 TM (nord, öst)<br /></strong>${sweref99}<br /><br />`
+
+      let uncertainty = ''
+      if (this.uncertainty(result)) {
+        uncertainty = `<strong>Osäkerhetsradie: </strong>${this.uncertainty(
+          result
+        )}<br /><br />`
+      }
+      const string = placeName + popCoordinates + uncertainty
+      const text = L.DomUtil.create('div', string, container)
+      text.innerHTML = string
+      return text
+    },
+
+    buildPopContent: function(result) {
+      const displayBtn =
+        this.detailView &&
+        (result.properties.id === 'newMarker' ||
+          result.properties.id === this.selectedResultId)
+
+      const containerWithBtn = L.DomUtil.create('div'),
+        text = this.createText(result, containerWithBtn),
+        showDetailBtn = this.createBnt('Visa detaljer', containerWithBtn)
+
+      const container = L.DomUtil.create('div'),
+        text1 = this.createText(result, container)
+
+      if (showDetailBtn) {
+        showDetailBtn.style.color = 'blue'
+        showDetailBtn.style.textDecoration = 'underline'
+      }
+      text.style.color = 'gray'
+      text1.style.color = 'gray'
+      L.DomEvent.on(showDetailBtn, 'click', () => {
+        this.showDetail(result)
+      })
+      return displayBtn ? containerWithBtn : container
+    },
+
+    showDetail(result) {
+      if (this.selectedMarker.properties.id !== result.properties.id) {
+        this.setSelectedMarker(result)
       }
     },
 
-    // updateResults(lat, lng) {
-    //   console.log('update results...', lat, lng)
-    // },
+    buildDraggableMarker(result) {
+      const lat = result.geometry.coordinates[1]
+      const lng = result.geometry.coordinates[0]
+
+      var choicePopUp = L.popup({
+        offset: [0, -30],
+      })
+      choicePopUp.setContent(this.buildPopContent(result))
+
+      // var popup = L.popup({
+      //   offset: [0, -30],
+      // }).setContent(this.buildPopContent(result))
+
+      var marker = L.marker([lat, lng], {
+        id: 'newMarker',
+        draggable: true,
+        pane: 'redMarker',
+        icon: MAP_ICONS.redIcon,
+        volatility: true, // mark the object as volatile for the smooth dragging
+      }).bindPopup(choicePopUp)
+
+      marker.addEventListener('dragend', e => {
+        const latLng = e.target.getLatLng()
+        this.dinPlatsSearch(latLng.lat, latLng.lng, true)
+      })
+      return marker
+    },
+
+    isHoveredOrSelected: function(id) {
+      return id === this.selectedResultId || id === this.hoveredResultId
+    },
+
+    addUnertainties() {
+      this.removeUncertainties()
+      this.results.forEach(result => {
+        const id = result.properties.id
+        if (id === this.selectedResultId || id === 'newMarker') {
+          this.addUncertainty(result)
+        }
+      })
+    },
 
     addUncertainty(result) {
       const uncertity = this.uncertainty(result)
+      const circleOptions =
+        result.properties.id === 'newMarker'
+          ? this.circleOptionRed
+          : this.circleOptionBlue
+
       if (uncertity > 0) {
         const circle = new L.Circle(
           [result.geometry.coordinates[1], result.geometry.coordinates[0]],
           parseInt(uncertity),
-          this.circleOptions
+          circleOptions
         ).addTo(this.$refs.myMap.mapObject)
-        if (this.detailView) {
-          this.bounds = circle.getBounds()
-          this.fitMapBounds()
-        }
+        // if (this.detailView) {
+        //   this.bounds = circle.getBounds()
+        //   this.fitMapBounds()
+        // }
         this.circles.push(circle)
       } else {
         if (this.detailView) {
-          this.zoom = 18
+          this.zoom = 10
           this.fixZoom()
         }
       }
@@ -411,61 +529,8 @@ export default {
         : null
     },
 
-    onMapClick(event) {
-      if (this.enableAddMapMarkers && !this.detailView) {
-        this.removeOldCustomMarker()
-        const latlng = event.latlng
-        this.reverseResult(latlng.lat, latlng.lng)
-        this.rezoom = false
-        this.setAccuracy(-1)
-      }
-
-      // this.$emit("addMarker", event.latlng);
-    },
-
-    reverseResult(lat, lng) {
-      let uncertity
-      if (this.results.length > 0) {
-        if (this.results[0].properties.id === 'newMarker') {
-          uncertity = this.results[0].properties.coordinateUncertaintyInMeters
-        }
-        this.removeOldCustomMarker()
-      }
-
-      this.isLoaded = true
-      return service
-        .reverseGeoCodingResults(lat, lng)
-        .then(response => {
-          this.isLoaded = false
-          // this.addNewMarkerResult(response.features[0])
-          const result = response.features[0]
-          if (uncertity) {
-            result.properties.coordinateUncertaintyInMeters = uncertity
-          }
-          this.results.unshift(result)
-          this.setResults(this.results)
-
-          if (this.results.length === 1) {
-            this.setMessage('Visar "Din plats"')
-            this.setIsErrorMsg(false)
-          }
-        })
-        .catch(function() {})
-    },
-
-    removeOldCustomMarker() {
-      if (this.results.length > 0) {
-        const firstResult = this.results[0]
-        if (firstResult.properties.id === 'newMarker') {
-          this.results.splice(0, 1)
-        }
-      }
-    },
-
     enableAddMarker() {
-      if (!this.detailView) {
-        this.enableAddMapMarkers = !this.enableAddMapMarkers
-      }
+      this.enableAddMapMarkers = !this.enableAddMapMarkers
     },
 
     layerChange(e) {
@@ -476,8 +541,8 @@ export default {
     fixZoom() {
       if (this.activeLayer !== 'OpenStreetMap') {
         this.zoom = this.zoom > 15 ? 15 : this.zoom
-        if (this.detailView && !this.selectedResult.socken) {
-          this.maxZoom = 15
+        if (this.detailView && !this.selectedMarker.socken) {
+          this.maxZoom = 18
         }
       }
     },
@@ -490,11 +555,63 @@ export default {
       }
       this.rezoom = true
     },
-
-    onMarkerClick(id) {
-      this.setSelectedMarkerId(id)
-    },
   },
+
+  // buildDetailMarker() {
+  //   this.resetLayerGroup()
+  //   const lat = this.selectedResult.geometry.coordinates[1]
+  //   const lng = this.selectedResult.geometry.coordinates[0]
+  //   this.center = [lat, lng]
+
+  //   let theMarker
+  //   if (this.selectedResult.properties.id === 'newMarker') {
+  //     theMarker = this.buildDraggableMarker(this.selectedResult)
+  //   } else {
+  //     theMarker = L.marker([lat, lng], {
+  //       icon: this.icon(this.selectedResult.properties.id),
+  //     })
+  //   }
+  //   theMarker.addTo(this.layerGroup)
+  //   this.addUncertainty(this.selectedResult)
+  // },
+
+  // removeOldDinPlatsMarker() {
+  //   if (this.results.length > 0) {
+  //     const firstResult = this.results[0]
+  //     if (firstResult.properties.id === 'newMarker') {
+  //       this.results.splice(0, 1)
+  //     }
+  //   }
+  // },
+
+  // marker: function(result) {
+  //   const icon = this.icon(result.properties.id)
+
+  //   const lat = result.geometry.coordinates[1]
+  //   const lng = result.geometry.coordinates[0]
+
+  //   const popup = L.popup({
+  //     offset: [0, -30],
+  //   }).setContent(this.buildPopContent(result))
+
+  //   if (result.properties.id === this.hoveredResultId) {
+  //     return L.marker([lat, lng], {
+  //       pane: 'topMarker',
+  //       icon,
+  //     }).bindPopup(popup)
+  //   } else if (result.properties.id === this.selectedResultId) {
+  //     return L.marker([lat, lng], {
+  //       pane: 'lowerMarker',
+  //       icon,
+  //     }).bindPopup(popup)
+  //   } else if (result.properties.id === 'newMarker') {
+  //     return this.buildDraggableMarker(result)
+  //   } else {
+  //     return L.marker([lat, lng], {
+  //       icon,
+  //     }).bindPopup(popup)
+  //   }
+  // },
 }
 </script>
 <style scoped>
@@ -555,8 +672,8 @@ export default {
   border: none !important;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65) !important;
 }
-/* .leaflet-control-zoom .leaflet-bar .leaflet-control {
-  border: none !important;
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.65) !important;
-} */
+.leaflet-popup-pane,
+.leaflet-popup {
+  z-index: 1000 !important;
+}
 </style>

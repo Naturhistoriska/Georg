@@ -27,19 +27,17 @@
         >
         <v-icon left>mdi-content-copy</v-icon>Kopiera
       </v-chip>
-      <!--
-        To be added later:
-        <v-chip
+      <v-chip
         v-if="!isDinPlats"
         color="grey darken-2"
         outlined
         class="mr-2"
-        @click=""
+        @click="addDinPlats"
         tabindex="0"
       >
         <v-icon left>mdi-map-marker-plus</v-icon>
-        Min plats
-      </v-chip>-->
+        Din plats
+      </v-chip>
     </v-card-text>
     <v-dialog v-model="dialog" max-width="550">
       <JsonResult />
@@ -53,7 +51,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import JsonResult from './JsonResult'
 export default {
   name: 'JsonController',
@@ -69,9 +67,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['selectedResult']),
+    ...mapGetters(['selectedMarker']),
     jsonString: function() {
-      return JSON.stringify(this.selectedResult, null, 2)
+      return JSON.stringify(this.selectedMarker, null, 2)
+    },
+    isDinPlats: function() {
+      return this.selectedMarker.properties.id === 'newMarker'
+    },
+  },
+  methods: {
+    ...mapMutations(['setAddDinPlats']),
+
+    addDinPlats() {
+      this.setAddDinPlats(true)
     },
   },
 }

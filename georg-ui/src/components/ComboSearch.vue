@@ -124,6 +124,7 @@ export default {
       'setIsErrorMsg',
       'setMessage',
       'setResults',
+      'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
     ]),
@@ -133,6 +134,7 @@ export default {
       this.setDetailView(false)
       this.setSelectedResultId('')
       this.setSelectedResult({})
+      this.setSelectedMarker({})
       this.setMessage('')
       if (this.$route.fullPath !== '/') {
         this.$router.push('/')
@@ -144,15 +146,16 @@ export default {
         this.results = this.entries.filter(e => e.properties.id === id)
         this.setResults(this.results)
         this.setDetailView(true)
-        // this.setSelectedResultId('')
 
         this.setSelectedResultId(id)
         this.setSelectedResult(this.results[0])
+        this.setSelectedMarker(this.results[0])
         const message =
           this.results.length > 0
             ? this.results.length + ' träffar'
             : 'Sökningen gav inga träffar'
         this.setMessage(message)
+        this.setIsErrorMsg(false)
         this.isLoading = false
 
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
@@ -176,10 +179,11 @@ export default {
             const selectedResultId = isSimpleResult
               ? this.results[0].properties.id
               : ''
-
+            const selectedMarker = isSimpleResult ? this.results[0] : {}
             this.setDetailView(isSimpleResult ? true : false)
             this.setSelectedResultId(selectedResultId)
             this.setSelectedResult(selectedResult)
+            this.setSelectedMarker(selectedMarker)
             const message =
               this.results.length > 0
                 ? this.results.length + ' träffar'
@@ -195,7 +199,6 @@ export default {
 
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
         if (decodeUrl !== `/search?place_name=${this.search}`) {
-          // this.$router.push({ path: `/search?place_name=${this.search}` })
           this.$router.push({
             path: 'search',
             query: { place_name: this.search },

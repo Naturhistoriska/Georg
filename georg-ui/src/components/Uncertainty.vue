@@ -37,7 +37,7 @@
       </v-chip-group>
       <v-container class="mt-0 pt-1 mb-0 pb-0">
         <v-row>
-          <v-col cols="5" class="mt-0 pt-0 pl-1">
+          <v-col cols="6" class="mt-0 pt-0 pl-1">
             <v-text-field
               hide-details
               single-line
@@ -51,7 +51,7 @@
               @keyup.enter="setUncertaintyValue"
             ></v-text-field>
           </v-col>
-          <v-col cols="7" class="mt-1 pb-0">
+          <v-col cols="6" class="mt-1 ml-n6 pb-0">
             <v-btn
               @click="setUncertaintyValue"
               color="red darken-2"
@@ -108,12 +108,12 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['accuracy', 'selectedResult']),
+    ...mapGetters(['accuracy', 'selectedMarker']),
   },
   methods: {
     ...mapMutations(['setAccuracy']),
     setUncertaintyValue() {
-      this.selectedResult.properties.coordinateUncertaintyInMeters = this.accuracyValue
+      this.selectedMarker.properties.coordinateUncertaintyInMeters = this.accuracyValue
       this.setAccuracy(this.accuracyValue)
       this.disableSetUncertaintyBtn = true
       this.msgClass = 'grey--text'

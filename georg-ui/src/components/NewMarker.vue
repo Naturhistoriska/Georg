@@ -61,12 +61,15 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
+      'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
     ]),
     onclick() {
       this.setDetailView(true)
-      this.setSelectedResult(this.result)
+      // this.setSelectedResultId(this.result.properties.id)
+      // this.setSelectedResult(this.result)
+      this.setSelectedMarker(this.result)
     },
   },
 }

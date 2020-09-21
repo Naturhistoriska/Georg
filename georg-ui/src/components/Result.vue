@@ -112,6 +112,7 @@ export default {
     ...mapMutations([
       'setDetailView',
       'setHovedResultId',
+      'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
     ]),
@@ -126,6 +127,7 @@ export default {
       this.setSelectedResultId(this.result.properties.id)
       this.setDetailView(true)
       this.setSelectedResult(this.result)
+      this.setSelectedMarker(this.result)
       // this.$route.fullPath
       // this.$router.push(`${this.$route.fullPath}&detailView=true`)
     },

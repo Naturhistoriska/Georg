@@ -3,13 +3,13 @@
     <v-card-title class="pl-4 pr-2">{{ title }}</v-card-title>
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
       <strong class="text-capitalize">{{
-        selectedResult.properties.layer
+        selectedMarker.properties.layer
       }}</strong>
       enligt {{ source }}
     </v-card-subtitle>
     <v-card-subtitle v-else-if="isGbif">
       Plats från en
-      {{ selectedResult.properties.source.toUpperCase() }}-källa
+      {{ selectedMarker.properties.source.toUpperCase() }}-källa
     </v-card-subtitle>
     <v-card-subtitle v-else-if="isNewMarker">
       {{ latDms }}
@@ -24,24 +24,24 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'DetailName',
   computed: {
-    ...mapGetters(['isGbif', 'isNewMarker', 'selectedResult']),
+    ...mapGetters(['isGbif', 'isNewMarker', 'selectedMarker']),
     title: function() {
       return this.isGbif
-        ? this.selectedResult.properties.addendum.georg.locationDisplayLabel
-        : this.selectedResult.properties.name
+        ? this.selectedMarker.properties.addendum.georg.locationDisplayLabel
+        : this.selectedMarker.properties.name
     },
     source: function() {
-      return this.selectedResult.properties.source === 'whosonfirst'
+      return this.selectedMarker.properties.source === 'whosonfirst'
         ? "Who's On First"
         : 'Virtuella Herbariet'
     },
 
     latDms: function() {
-      return this.selectedResult.properties.coordinates.dms[0]
+      return this.selectedMarker.properties.coordinates.dms[0]
     },
 
     lngDms: function() {
-      return this.selectedResult.properties.coordinates.dms[1]
+      return this.selectedMarker.properties.coordinates.dms[1]
     },
 
     // titleClass: function() {
