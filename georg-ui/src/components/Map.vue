@@ -513,12 +513,18 @@ export default {
         //   this.fitMapBounds()
         // }
         this.circles.push(circle)
-      } else {
-        if (this.detailView) {
-          this.zoom = 10
+        if (parseInt(uncertity) >= 100000) {
+          this.zoom = 7
+          this.rezoom = true
           this.fixZoom()
         }
       }
+      // else {
+      //   if (this.detailView) {
+      //     this.zoom = 10
+      //     this.fixZoom()
+      //   }
+      // }
     },
 
     uncertainty: function(result) {
