@@ -115,7 +115,6 @@ export default {
 
       enableAddMapMarkers: false,
       isLoaded: false,
-      isViewChanged: false,
       layerGroup: {},
       maxZoom: 18,
       rezoom: true,
@@ -215,18 +214,14 @@ export default {
     },
     detailView: function() {
       this.$nextTick(() => {
-        this.isViewChanged = true
         this.buildMarkers()
         this.addUnertainties()
       })
     },
     results: function() {
       this.$nextTick(() => {
-        if (!this.isViewChanged) {
-          this.buildMarkers()
-          this.addUnertainties()
-        }
-        this.isViewChanged = false
+        this.buildMarkers()
+        this.addUnertainties()
       })
     },
 
@@ -277,11 +272,12 @@ export default {
     },
 
     dinPlatsSearch(lat, lng, moveUncertainty) {
-      this.rezoom !== moveUncertainty
+      this.rezoom = !moveUncertainty
       let uncertainty
       if (this.results.length > 0) {
         // this.removeOldDinPlatsMarker()
         if (this.results[0].properties.id === 'newMarker') {
+          console.log('removed...')
           uncertainty = moveUncertainty
             ? this.results[0].properties.coordinateUncertaintyInMeters
             : null
@@ -298,9 +294,13 @@ export default {
           if (uncertainty) {
             result.properties.coordinateUncertaintyInMeters = uncertainty
           }
+          console.log('length...', this.results.length)
           this.results.unshift(result)
+          console.log('length...', this.results.length)
           this.setResults(this.results)
+          console.log('isDetailview..', this.detailView)
           if (this.detailView) {
+            console.log('isDetailview 2..', this.detailView)
             this.setSelectedMarker(result)
           }
           if (this.results.length === 1) {
@@ -335,6 +335,7 @@ export default {
     },
 
     buildMarkers() {
+      console.log('build markers..', this.results.length)
       this.resetLayerGroup()
       this.removeUncertainties()
       this.bounds = L.latLngBounds()
@@ -360,18 +361,23 @@ export default {
         // })
         marker.addTo(this.layerGroup)
       })
-      // this.highlightMarker()
-      if (this.detailView) {
-        this.center = [
-          this.selectedMarker.geometry.coordinates[1],
-          this.selectedMarker.geometry.coordinates[0],
-        ]
-        this.zoom = 10
-      } else {
-        if (this.results != null && this.results.length > 0) {
-          this.fitMapBounds()
-        }
+
+      if (this.results != null && this.results.length > 0) {
+        this.fitMapBounds()
+        console.log('what zoom...', this.zoom)
       }
+      // this.highlightMarker()
+      // if (this.detailView) {
+      //   this.center = [
+      //     this.selectedMarker.geometry.coordinates[1],
+      //     this.selectedMarker.geometry.coordinates[0],
+      //   ]
+      //   this.zoom = 10
+      // } else {
+      //   if (this.results != null && this.results.length > 0) {
+      //     this.fitMapBounds()
+      //   }
+      // }
     },
 
     buildMarker(result) {
