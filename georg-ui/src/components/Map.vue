@@ -408,7 +408,7 @@ export default {
       const sweref99 = coordinates.sweref99[0] + ', ' + coordinates.sweref99[1]
 
       const placeName = `<strong>${result.properties.name}</strong><br /><br />`
-      const popCoordinates = `<strong>WGS84 DMS</strong><br />${dms}<br /><br /><strong>WGS84 DMS</strong><br />${ddm}<br /><br /><strong>WGS84 DMS</strong><br />${dd}<br /><br /><strong>RT99 (nord, öst)</strong><br />${rt90}<br /><br /><strong>SWEREF99 TM (nord, öst)<br /></strong>${sweref99}<br /><br />`
+      const popCoordinates = `<strong>WGS84 DMS</strong><br />${dms}<br /><br /><strong>WGS84 DDM</strong><br />${ddm}<br /><br /><strong>WGS84 DD</strong><br />${dd}<br /><br /><strong>RT99 (nord, öst)</strong><br />${rt90}<br /><br /><strong>SWEREF99 TM (nord, öst)<br /></strong>${sweref99}<br /><br />`
 
       let uncertainty = ''
       if (this.uncertainty(result)) {
