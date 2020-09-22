@@ -35,6 +35,8 @@ export default {
   components: {
     Message,
   },
+
+  props: ['passInValue'],
   data() {
     return {
       coordinates: '',
@@ -44,18 +46,23 @@ export default {
   },
   mounted() {
     if (this.coordinates === '') {
-      this.coordinates = this.searchCoordinates
+      if (this.passInValue !== null && this.passInValue !== '') {
+        this.coordinates = this.passInValue
+      } else {
+        this.coordinates = this.searchCoordinates
+      }
     }
+    this.setSearchCoordinates(this.coordinates)
   },
   computed: {
     ...mapGetters(['searchCoordinates']),
   },
 
-  // watch: {
-  //   searchCoordinates: function() {
-  //     console.log('this.coordinates....', this.searchCoordinates)
-  //   },
-  // },
+  watch: {
+    coordinates: function() {
+      this.setSearchCoordinates(this.coordinates)
+    },
+  },
   methods: {
     ...mapMutations([
       'setDetailView',
@@ -68,6 +75,7 @@ export default {
       'setSelectedResult',
       'setSearchCountry',
       'setSearchOption',
+      'setSearchCoordinates',
     ]),
     clearSearch() {
       this.setResults([])
@@ -75,6 +83,7 @@ export default {
       this.setSelectedMarker({})
       this.setSelectedResultId('')
       this.setSelectedResult({})
+      this.setSearchCoordinates('')
       this.setMessage('')
       if (this.$route.fullPath !== '/') {
         this.$router.push('/')
@@ -139,7 +148,7 @@ export default {
           .finally(() => {
             this.isLoading = false
           })
-
+        this.setSearchCoordinates(this.coordinates)
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
         if (decodeUrl !== `/search?coordinates=${this.coordinates}`) {
           this.$router.push(`/search?coordinates=${this.coordinates}`)

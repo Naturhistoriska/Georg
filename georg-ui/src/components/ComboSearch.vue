@@ -56,6 +56,7 @@ export default {
   components: {
     Message,
   },
+  props: ['passInValue'],
   data: () => ({
     autoSearch: true,
     entries: [],
@@ -66,13 +67,23 @@ export default {
   }),
   mounted() {
     if (this.select === null) {
-      this.select = this.searchText
+      if (this.passInValue !== null && this.passInValue !== '') {
+        this.select = this.passInValue
+      } else {
+        this.select = this.searchText
+      }
       this.entries = []
       this.autoSearch = false
     }
+    this.setSearchText(this.select)
   },
   computed: {
-    ...mapGetters(['searchCountry', 'searchText']),
+    ...mapGetters([
+      'searchCountry',
+      'searchText',
+      'searchCoordinates',
+      'searchOption',
+    ]),
     items() {
       let elements = []
       this.entries.map(entry => {
@@ -127,6 +138,7 @@ export default {
       'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
+      'setSearchText',
     ]),
     clearSearch() {
       this.entries = []
@@ -135,6 +147,7 @@ export default {
       this.setSelectedResultId('')
       this.setSelectedResult({})
       this.setSelectedMarker({})
+      this.setSearchText('')
       this.setMessage('')
       if (this.$route.fullPath !== '/') {
         this.$router.push('/')
@@ -203,6 +216,7 @@ export default {
             this.entries = []
           })
 
+        this.setSearchText(this.search)
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
         if (decodeUrl !== `/search?place_name=${this.search}`) {
           this.$router.push({
@@ -215,6 +229,7 @@ export default {
     },
     autoCompleteSearch() {
       if (!this.isEmpty(this.search) && this.autoSearch) {
+        this.setSearchText(this.search)
         this.isLoading = true
         service
           .autoCompleteSearch(this.search, this.searchCountry)

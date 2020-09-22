@@ -2,8 +2,8 @@
   <div id="container" class="container container--fluid">
     <v-card id="navi">
       <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
-      <ComboSearch v-if="isAddressSearch" />
-      <SearchCoordinates v-else />
+      <ComboSearch v-if="isAddressSearch" v-bind:passInValue="passInText" />
+      <SearchCoordinates v-else v-bind:passInValue="passInCoordinates" />
       <v-divider
         class="mt-2"
         v-if="!detailView && results.length > 0"
@@ -43,6 +43,8 @@ export default {
   data() {
     return {
       mapHeight: 'height: 1500px',
+      passInCoordinates: null,
+      passInText: null,
       resultsHeight: 'height: 1400px',
       tile: false,
     }
@@ -59,7 +61,7 @@ export default {
         this.$route.query.country
       )
     } else if (isCoordinatesSearch) {
-      this.searchCoordinates(this.$route.query.coordinates)
+      this.searchCoors(this.$route.query.coordinates)
     }
   },
 
@@ -67,21 +69,25 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   computed: {
-    ...mapGetters(['detailView', 'isAddressSearch', 'results']),
+    ...mapGetters([
+      'detailView',
+      'isAddressSearch',
+      'results',
+      'searchOption',
+      'searchCoordinates',
+      'searchText',
+    ]),
   },
 
-  // watch: {
-  //   $route(to, from, next) {
-  //     console.log('to and from...', from, to)
-  //     console.log('next...', next)
-  //   },
-  // },
-
-  // beforeRouteUpdate(to, from, next) {
-  //   console.log('beforeRouteUpdate')
-  //   console.log('to name....', Object.keys(to.query))
-  //   next()
-  // },
+  watch: {
+    searchOption: function() {
+      if (this.searchOption === 'address') {
+        this.passInText = this.searchCoordinates
+      } else {
+        this.passInCoordinates = this.searchText
+      }
+    },
+  },
   methods: {
     ...mapMutations([
       'setDetailView',
@@ -147,7 +153,7 @@ export default {
         })
     },
 
-    searchCoordinates(value) {
+    searchCoors(value) {
       service
         .coordinatesSearch(value)
         .then(response => {
