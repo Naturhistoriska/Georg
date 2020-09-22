@@ -101,12 +101,12 @@ export default {
         ? 'blue--text text--darken-2'
         : ''
     },
-    lat: function() {
-      return this.result.geometry.coordinates[1]
-    },
-    lng: function() {
-      return this.result.geometry.coordinates[0]
-    },
+    // lat: function() {
+    //   return this.result.geometry.coordinates[1]
+    // },
+    // lng: function() {
+    //   return this.result.geometry.coordinates[0]
+    // },
   },
 
   methods: {
