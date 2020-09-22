@@ -1,10 +1,11 @@
 <template>
-  <v-card class="mt-2" width="400" id="v-card-detail">
+  <v-card class="mt-2 overflow-y-auto" width="400" id="v-card-detail"
+    :style="height">
     <DetailName />
     <JsonController />
     <v-divider></v-divider>
 
-    <v-list>
+    <v-list >
       <v-hover v-slot:default="{ hover }" v-if="!isNewMarker">
         <v-list-item
           :class="{ highlight: expand == true }"
@@ -103,7 +104,7 @@ export default {
     JsonController,
     Uncertainty,
   },
-
+ props: ['height'],
   data() {
     return {
       dialog: false,
@@ -175,4 +176,16 @@ export default {
 #v-card-detail .v-card__title {
   word-break: break-word;
 }
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
 </style>

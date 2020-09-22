@@ -1,6 +1,6 @@
 <template>
   <v-card-actions class="ma-0 pa-0">
-    <v-btn
+    <!-- <v-btn
       small
       color="grey darken-2"
       id="backResultListLink"
@@ -8,17 +8,42 @@
       @click.prevent="onclick()"
       v-if="detailView"
       >{{ linkText }}</v-btn
+    >-->
+    <a
+      href=""
+      class="grey--text text--darken-3 body-2"
+      v-if="detailView"
+      @click.prevent="onclick()"
+      id="backResultListLink"
+      >{{ linkText }}</a
     >
+
     <div
       id="message"
       v-else-if="isErrorMsg"
-      class="pl-3 grey--text text--darken-2 body-2 pre-formatted"
+      class="pl-3 red--text text--darken-3 body-2 pre-formatted"
     >
       {{ message }}
     </div>
-    <div id="message" v-else class="pl-3 grey--text text--darken-2 body-2">
+    <div
+      id="message"
+      v-else-if="results.length > 0"
+      class="pl-3 grey--text text--darken-3 body-2"
+    >
       {{ message }}
     </div>
+    <v-spacer></v-spacer>
+   <a
+      class="grey--text text--darken-3 body-2"
+      tabindex="0"
+      v-if="results.length > 0"
+      @click="setDisplayResults(!displayResults)"
+      @keypress="setDisplayResults(!displayResults)"
+      >{{ linkText2 }}
+      <v-icon>{{
+        displayResults ? 'mdi-chevron-up' : 'mdi-chevron-down'
+      }}</v-icon>
+    </a>
   </v-card-actions>
 </template>
 
@@ -26,19 +51,37 @@
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Message',
-  data: () => ({}),
+  props: ['showresults'],
+  data() {
+    return {}
+  },
   computed: {
-    ...mapGetters(['detailView', 'isErrorMsg', 'message', 'results']),
+    ...mapGetters([
+      'detailView',
+      'isErrorMsg',
+      'message',
+      'results',
+      'displayResults',
+    ]),
     linkText: function() {
       return this.results.length === 1
-        ? 'TILL TRÄFFLISTAN'
-        : '< TILLBAKA TILL TRÄFFLISTAN'
+        ? 'Till träfflistan'
+        : 'Tillbaka till listan'
+    },
+    linkText2: function() {
+      return this.displayResults === true
+        ? 'Dölj resultatet'
+        : 'Visa resultatet'
     },
   },
   // watch: {
   // },
   methods: {
-    ...mapMutations(['setDetailView', 'setDisplayJsonData']),
+    ...mapMutations([
+      'setDetailView',
+      'setDisplayJsonData',
+      'setDisplayResults',
+    ]),
     onclick() {
       this.setDetailView(false)
       this.setDisplayJsonData(false)

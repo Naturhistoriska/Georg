@@ -6,11 +6,14 @@
       <SearchCoordinates v-else v-bind:passInValue="passInCoordinates" />
       <v-divider
         class="mt-2"
-        v-if="!detailView && results.length > 0"
+        v-if="!detailView && results.length && displayResults > 0"
       ></v-divider>
-      <Results v-if="!detailView" v-bind:height="resultsHeight" />
+      <Results
+        v-if="!detailView && displayResults"
+        v-bind:height="resultsHeight"
+      />
     </v-card>
-    <Detail v-if="detailView" />
+    <Detail v-if="detailView && displayResults" v-bind:height="resultsHeight" />
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
     </div>
@@ -76,6 +79,7 @@ export default {
       'searchOption',
       'searchCoordinates',
       'searchText',
+      'displayResults',
     ]),
   },
 
@@ -91,6 +95,7 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
+      'setDisplayResults',
       'setIsErrorMsg',
       'setMessage',
       'setResults',
@@ -102,10 +107,9 @@ export default {
       'setSearchCoordinates',
       'setSearchText',
     ]),
-
     handleResize() {
       const windowHeight = window.innerHeight - 64
-      const boxHeight = windowHeight - 200
+      const boxHeight = windowHeight - 182
       this.mapHeight = 'height: ' + windowHeight + 'px'
       this.resultsHeight = 'max-height: ' + boxHeight + 'px'
     },
