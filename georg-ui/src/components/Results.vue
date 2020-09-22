@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import NewMarker from './NewMarker'
 import Result from './Result'
 
@@ -40,12 +40,68 @@ export default {
       result: {},
     }
   },
-
-  computed: {
-    ...mapGetters(['results']),
+  mounted() {
+    window.addEventListener('keyup', event => {
+      if (event.keyCode === 13) {
+        this.callEvent()
+      }
+    })
   },
 
-  methods: {},
+  computed: {
+    ...mapGetters([
+      'results',
+      'selectedResultId',
+      'hoveredResultId',
+      'selectedResult',
+    ]),
+  },
+
+  methods: {
+    ...mapMutations([
+      'setDetailView',
+      'setHovedResultId',
+      'setSelectedMarker',
+      'setSelectedResultId',
+      'setSelectedResult',
+    ]),
+
+    callEvent() {
+      if (this.hoveredResultId !== '') {
+        this.results.forEach(result => {
+          if (result.properties.id === this.hoveredResultId) {
+            this.setSelectedResultId(result.properties.id)
+            this.setSelectedResult(result)
+            this.setSelectedMarker(result)
+            this.setHovedResultId('')
+            this.setDetailView(true)
+          }
+        })
+      }
+
+      // else if (this.selectedResultId !== '') {
+      //   this.setSelectedResultId(this.selectedResult.properties.id)
+      //   this.setSelectedResult(this.selectedResult)
+      //   this.setSelectedMarker(this.selectedResult)
+      //   this.setHovedResultId('')
+      //   this.setDetailView(true)
+      // }
+
+      // if (
+      //   this.hoveredResultId !== '' &&
+      //   this.result.properties.id == this.hoveredResultId
+      // ) {
+      //   this.onclick()
+      //   this.setDetailView(true)
+      // } else if (
+      //   this.setSelectedResultId !== '' &&
+      //   this.result.properties.id == this.selectedResultId
+      // ) {
+      //   this.onclick()
+      //   this.setDetailView(true)
+      // }
+    },
+  },
 }
 </script>
 <style scoped>
