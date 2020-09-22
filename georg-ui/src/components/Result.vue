@@ -8,9 +8,9 @@
   >
     <template>
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title v-bind:class="nameColor">{{
-          name
-        }}</v-list-item-title>
+        <v-list-item-title v-bind:class="nameColor"
+          >{{ name }}
+        </v-list-item-title>
         <v-list-item-subtitle class="text--primary">
           {{ result.properties.county }}
           {{ result.properties.region }}
@@ -19,7 +19,7 @@
         <v-list-item-subtitle v-if="isGbif">
           <span class="text-capitalize">{{ result.properties.name }}</span>
         </v-list-item-subtitle>
-        <v-list-item-subtitle>
+        <v-list-item-subtitle v-else>
           <span class="text-capitalize">{{ result.properties.layer }}</span>
           enligt {{ source }}.
         </v-list-item-subtitle>
@@ -37,13 +37,14 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Result',
   props: ['result'],
-
   data() {
     return {}
   },
 
+  watch: {},
+
   computed: {
-    ...mapGetters(['hoveredResultId', 'selectedResultId']),
+    ...mapGetters(['hoveredResultId', 'selectedResultId', 'detailView']),
     isActive: function() {
       return this.result.properties.id === this.selectedResultId
     },
@@ -128,6 +129,7 @@ export default {
       this.setDetailView(true)
       this.setSelectedResult(this.result)
       this.setSelectedMarker(this.result)
+      this.setHovedResultId('')
       // this.$route.fullPath
       // this.$router.push(`${this.$route.fullPath}&detailView=true`)
     },
