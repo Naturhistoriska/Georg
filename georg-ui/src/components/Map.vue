@@ -132,7 +132,7 @@ export default {
           attribution: lantmaterietMapAttribution,
         },
         {
-          name: 'Lantmäteriet topografisk – nedtonad',
+          name: 'Lantmäteriet nedtonad',
           visible: false,
           url: lantmaterietNedtonadUrl,
           attribution: lantmaterietMapAttribution,
