@@ -157,7 +157,7 @@ export default {
     //   return this.selectedResult.properties.name === 'Din plats'
     // },
     latLon: function() {
-      return this.coordinates.dd[0] + ' ' + this.coordinates.dd[1]
+      return this.coordinates.dd[0] + ', ' + this.coordinates.dd[1]
     },
 
     latLonDms: function() {
@@ -168,10 +168,10 @@ export default {
       return this.coordinates.ddm[0] + ' ' + this.coordinates.ddm[1]
     },
     sweref99: function() {
-      return this.coordinates.sweref99[0] + ' ' + this.coordinates.sweref99[1]
+      return this.coordinates.sweref99[0] + ', ' + this.coordinates.sweref99[1]
     },
     rt90: function() {
-      return this.coordinates.rt90[0] + ' ' + this.coordinates.rt90[1]
+      return this.coordinates.rt90[0] + ', ' + this.coordinates.rt90[1]
     },
 
     makeIconColor: function() {

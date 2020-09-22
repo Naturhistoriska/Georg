@@ -401,11 +401,11 @@ export default {
 
     createText(result, container) {
       const coordinates = result.properties.coordinates
-      const dd = coordinates.dd
-      const dms = coordinates.dms
-      const ddm = coordinates.ddm
-      const rt90 = coordinates.rt90
-      const sweref99 = coordinates.sweref99
+      const dd = coordinates.dd[0] + ', ' + coordinates.dd[1]
+      const dms = coordinates.dms[0] + ' ' + coordinates.dms[1]
+      const ddm = coordinates.ddm[0] + ' ' + coordinates.ddm[1]
+      const rt90 = coordinates.rt90[0] + ', ' + coordinates.rt90[1]
+      const sweref99 = coordinates.sweref99[0] + ', ' + coordinates.sweref99[1]
 
       const placeName = `<strong>${result.properties.name}</strong><br /><br />`
       const popCoordinates = `<strong>WGS84 DMS</strong><br />${dms}<br /><br /><strong>WGS84 DMS</strong><br />${ddm}<br /><br /><strong>WGS84 DMS</strong><br />${dd}<br /><br /><strong>RT99 (nord, öst)</strong><br />${rt90}<br /><br /><strong>SWEREF99 TM (nord, öst)<br /></strong>${sweref99}<br /><br />`
