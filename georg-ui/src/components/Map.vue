@@ -772,7 +772,6 @@ export default {
 .leaflet-bar a.leaflet-disabled {
   color: #bbb !important;
 }
-
 .leaflet-touch .leaflet-control-layers,
 .leaflet-touch .leaflet-bar {
   border: none !important;
@@ -781,5 +780,9 @@ export default {
 .leaflet-popup-pane,
 .leaflet-popup {
   z-index: 1000 !important;
+}
+.small-screen
+  .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control {
+  margin-top: 170px;
 }
 </style>

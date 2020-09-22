@@ -53,4 +53,8 @@ h4 {
 .routerLink {
   text-decoration: none;
 }
+
+header {
+  min-width: 320px;
+}
 </style>

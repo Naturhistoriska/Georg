@@ -1,40 +1,30 @@
 <template>
   <v-card-actions class="ma-0 pa-0">
-    <!-- <v-btn
-      small
-      color="grey darken-2"
-      id="backResultListLink"
-      text
-      @click.prevent="onclick()"
-      v-if="detailView"
-      >{{ linkText }}</v-btn
-    >-->
     <a
       href=""
-      class="grey--text text--darken-3 body-2"
+      class="grey--text text--darken-3 body-2 pl-1"
       v-if="detailView"
       @click.prevent="onclick()"
       id="backResultListLink"
       >{{ linkText }}</a
     >
-
     <div
       id="message"
       v-else-if="isErrorMsg"
-      class="pl-3 red--text text--darken-3 body-2 pre-formatted"
+      class="pl-2 red--text text--darken-3 body-2 pre-formatted"
     >
       {{ message }}
     </div>
     <div
       id="message"
       v-else-if="results.length > 0"
-      class="pl-3 grey--text text--darken-3 body-2"
+      class="pl-2 grey--text text--darken-3 body-2"
     >
       {{ message }}
     </div>
     <v-spacer></v-spacer>
-   <a
-      class="grey--text text--darken-3 body-2"
+    <a
+      class="grey--text text--darken-3 body-2 pl-2"
       tabindex="0"
       v-if="results.length > 0"
       @click="setDisplayResults(!displayResults)"

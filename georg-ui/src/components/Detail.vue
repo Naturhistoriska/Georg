@@ -1,11 +1,15 @@
 <template>
-  <v-card class="mt-2 overflow-y-auto" width="400" id="v-card-detail"
-    :style="height">
+  <v-card
+    class="mt-2 overflow-y-auto"
+    :class="{'card-sm': $vuetify.breakpoint.smAndUp }"
+    id="v-card-detail"
+    :style="height"
+  >
     <DetailName />
     <JsonController />
     <v-divider></v-divider>
 
-    <v-list >
+    <v-list>
       <v-hover v-slot:default="{ hover }" v-if="!isNewMarker">
         <v-list-item
           :class="{ highlight: expand == true }"
@@ -104,7 +108,7 @@ export default {
     JsonController,
     Uncertainty,
   },
- props: ['height'],
+  props: ['height'],
   data() {
     return {
       dialog: false,
@@ -187,5 +191,11 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
 }
+.card-sm {
+  width: 400px;
+}
 
+#v-card-detail {
+  min-width: 300px;
+}
 </style>

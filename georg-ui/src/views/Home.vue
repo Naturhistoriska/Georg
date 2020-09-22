@@ -1,6 +1,6 @@
 <template>
   <div id="container" class="container container--fluid">
-    <v-card id="navi">
+    <v-card id="navi" :class="{'card-sm': $vuetify.breakpoint.smAndUp}">
       <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
       <ComboSearch v-if="isAddressSearch" v-bind:passInValue="passInText" />
       <SearchCoordinates v-else v-bind:passInValue="passInCoordinates" />
@@ -165,7 +165,7 @@ export default {
             const errMsg = response.error.msgKey
             if (errMsg === 'Invalid coordinates') {
               const msg =
-                "Koordinaterna måste anges på något av följande sätt:\n57°46'7\" N 14°49'37\" E\n57°46.113480' N 14°49.621740' E\n57.768558 14.827029"
+                "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n  57.768558 14.827029"
               this.setMessage(msg)
             }
             this.setResults([])
@@ -219,8 +219,12 @@ export default {
 }
 #navi {
   padding: 12px 16px;
-  width: 400px;
   z-index: 2;
+  min-width: 300px;
+}
+
+.card-sm {
+  width: 400px;
 }
 #infoi {
   width: 100%;
