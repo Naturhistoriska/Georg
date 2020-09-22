@@ -112,7 +112,7 @@ export default {
         fillOpacity: 0.3,
         pane: 'circleMarker',
       },
-
+      clickedMarker: false,
       enableAddMapMarkers: false,
       isLoaded: false,
       layerGroup: {},
@@ -142,6 +142,7 @@ export default {
       zoom: 0,
     }
   },
+
   mounted() {
     this.bounds = initialBound
 
@@ -198,6 +199,7 @@ export default {
     //   return this.detailView ? '' : 'cursor: pointer;'
     // },
   },
+
   watch: {
     accuracy() {
       this.$nextTick(() => {
@@ -208,14 +210,24 @@ export default {
       })
     },
     addDinPlats: function() {
-      const lat = this.selectedMarker.geometry.coordinates[1]
-      const lng = this.selectedMarker.geometry.coordinates[0]
-      this.dinPlatsSearch(lat, lng, false)
+      if (this.addDinPlats) {
+        const lat = this.selectedMarker.geometry.coordinates[1]
+        const lng = this.selectedMarker.geometry.coordinates[0]
+        this.dinPlatsSearch(lat, lng, false)
+        this.setAddDinPlats(false)
+        this.rezoom(false)
+      }
     },
     detailView: function() {
+      this.clickedMarker = false
       this.$nextTick(() => {
         this.buildMarkers()
         this.addUnertainties()
+        // if (this.detailView) {
+        //   const lat = this.selectedMarker.geometry.coordinates[1]
+        //   const lng = this.selectedMarker.geometry.coordinates[0]
+        //   this.center = [lat, lng]
+        // }
       })
     },
     results: function() {
@@ -232,11 +244,12 @@ export default {
         }
       })
     },
+    selectedMarker() {
+      this.highlightMarker()
+    },
     selectedResultId() {
       this.$nextTick(() => {
-        if (!this.detailView) {
-          this.highlightMarker()
-        }
+        this.highlightMarker()
       })
     },
     center: function() {
@@ -250,6 +263,7 @@ export default {
   },
   methods: {
     ...mapMutations([
+      'setAddDinPlats',
       'setAccuracy',
       'setDetailView',
       'setIsErrorMsg',
@@ -261,6 +275,7 @@ export default {
     ]),
 
     onMapClick(event) {
+      // event.preventDefault()
       if (this.enableAddMapMarkers) {
         // this.removeOldDinPlatsMarker()
         const latlng = event.latlng
@@ -269,10 +284,10 @@ export default {
         this.setAccuracy(-1)
         this.enableAddMapMarkers = false
       }
-      // this.$emit("addMarker", event.latlng);
     },
 
     dinPlatsSearch(lat, lng, moveUncertainty) {
+      this.clickedMarker = false
       this.rezoom = !moveUncertainty
       let uncertainty
       if (this.results.length > 0) {
@@ -284,7 +299,6 @@ export default {
           this.results.splice(0, 1)
         }
       }
-
       this.isLoaded = true
       service
         .reverseGeoCodingResults(lat, lng)
@@ -306,12 +320,12 @@ export default {
         })
         .catch(function() {})
     },
-    resetDetailViewZoom() {
-      const lat = this.selectedMarker.geometry.coordinates[1]
-      const lng = this.selectedMarker.geometry.coordinates[0]
-      this.center = [lat, lng]
-      this.zoom = 4
-    },
+    // resetDetailViewZoom() {
+    //   const lat = this.selectedMarker.geometry.coordinates[1]
+    //   const lng = this.selectedMarker.geometry.coordinates[0]
+    //   this.center = [lat, lng]
+    //   this.zoom = 4
+    // },
 
     removeUncertainties() {
       this.circles.forEach(circle => {
@@ -326,11 +340,14 @@ export default {
     },
 
     highlightMarker() {
+      console.log('highlightMarker called...')
       this.buildMarkers()
       this.addUnertainties()
     },
 
     buildMarkers() {
+      // this.clickedMarker = null
+      // let openPop = false
       this.resetLayerGroup()
       this.removeUncertainties()
       this.bounds = L.latLngBounds()
@@ -345,21 +362,62 @@ export default {
             ? this.buildDraggableMarker(result)
             : this.buildMarker(result)
 
-        // const id = result.properties.id
-        // marker.addEventListener('click', () => {
-        //   if (
-        //     this.detailView &&
-        //     (id === this.selectedResultId || id === 'newMarker')
-        //   ) {
-        //     this.setSelectedMarker(result)
-        //   }
-        // })
-        marker.addTo(this.layerGroup)
-      })
+        const id = result.properties.id
+        marker.addEventListener('click', () => {
+          this.clickedMarker = true
+          // this.setSelectedResult(result)
+          // this.setSelectedResultId(id)
+          if (id !== 'newMarker') {
+            this.setSelectedResult(result)
+            this.setSelectedResultId(id)
+          }
+          if (this.detailView) {
+            this.setSelectedMarker(result)
+          }
+          // else {
+          //   this.setSelectedResult(result)
+          //   this.setSelectedResultId(id)
+          // }
+          this.rezoom = false
+        })
+        if (this.detailView) {
+          if (id === this.selectedMarker.properties.id && this.clickedMarker) {
+            marker.addTo(this.layerGroup).openPopup()
+          } else {
+            marker.addTo(this.layerGroup)
+          }
+        } else {
+          if (id === this.selectedResultId && this.clickedMarker) {
+            marker.addTo(this.layerGroup).openPopup()
+          } else {
+            marker.addTo(this.layerGroup)
+          }
+        }
 
-      if (this.results != null && this.results.length > 0) {
+        // if (this.detailView) {
+        //   if (id === this.selectedMarker.properties.id && this.clickedMarker) {
+        //     marker.addTo(this.layerGroup).openPopup()
+        //   } else {
+        //     marker.addTo(this.layerGroup)
+        //   }
+        // } else {
+        //   if (
+        //     result.properties.id === this.selectedResultId &&
+        //     this.clickedMarker
+        //   ) {
+        //     marker.addTo(this.layerGroup).openPopup()
+        //   } else {
+        //     marker.addTo(this.layerGroup)
+        //   }
+        // }
+      })
+      if (this.results != null && this.results.length > 0 && this.rezoom) {
         this.fitMapBounds()
       }
+      if (!this.detailView) {
+        this.clickedMarker = false
+      }
+
       // this.highlightMarker()
       // if (this.detailView) {
       //   this.center = [
@@ -426,26 +484,36 @@ export default {
       // const displayBtn =
       //   this.detailView &&
       //   (result.properties.id === 'newMarker' ||
-      //     result.properties.id === this.selectedResultId)
+      //     result.properties.id === this.selectedMarker.properties.id)
 
+      let displayBtn = true
+      if (!this.detailView) {
+        displayBtn = true
+      } else if (
+        (this.selectedMarker.properties &&
+          result.properties.id === this.selectedMarker.properties.id) ||
+        this.detailView
+      ) {
+        displayBtn = false
+      }
       const containerWithBtn = L.DomUtil.create('div'),
         text = this.createText(result, containerWithBtn),
         showDetailBtn = this.createBnt('Visa detaljer', containerWithBtn)
 
-      // const container = L.DomUtil.create('div'),
-      //   text1 = this.createText(result, container)
+      const container = L.DomUtil.create('div'),
+        text1 = this.createText(result, container)
 
       if (showDetailBtn) {
         showDetailBtn.style.color = 'blue'
         showDetailBtn.style.textDecoration = 'underline'
       }
       text.style.color = 'gray'
-      // text1.style.color = 'gray'
+      text1.style.color = 'gray'
       L.DomEvent.on(showDetailBtn, 'click', () => {
         this.showDetail(result)
       })
-      // return displayBtn ? containerWithBtn : container
-      return containerWithBtn
+      return displayBtn ? containerWithBtn : container
+      // return containerWithBtn
     },
 
     showDetail(result) {
@@ -465,10 +533,10 @@ export default {
       const lat = result.geometry.coordinates[1]
       const lng = result.geometry.coordinates[0]
 
-      var choicePopUp = L.popup({
+      var popup = L.popup({
         offset: [0, -30],
       })
-      choicePopUp.setContent(this.buildPopContent(result))
+      popup.setContent(this.buildPopContent(result))
 
       // var popup = L.popup({
       //   offset: [0, -30],
@@ -480,7 +548,7 @@ export default {
         pane: 'redMarker',
         icon: MAP_ICONS.redIcon,
         volatility: true, // mark the object as volatile for the smooth dragging
-      }).bindPopup(choicePopUp)
+      }).bindPopup(popup)
 
       marker.addEventListener('dragend', e => {
         const latLng = e.target.getLatLng()
@@ -490,16 +558,34 @@ export default {
     },
 
     isHoveredOrSelected: function(id) {
-      return id === this.selectedResultId || id === this.hoveredResultId
+      if (this.detailView) {
+        return id === this.selectedResultId
+      } else {
+        return id === this.selectedResultId || id === this.hoveredResultId
+      }
     },
 
+    uncertaintyAdd(id) {
+      if (id === 'newMarker') {
+        return true
+      } else {
+        return this.isHoveredOrSelected(id)
+      }
+    },
     addUnertainties() {
       this.removeUncertainties()
       this.results.forEach(result => {
         const id = result.properties.id
-        if (id === this.selectedResultId || id === 'newMarker') {
+        if (this.uncertaintyAdd(id)) {
           this.addUncertainty(result)
         }
+        // if (
+        //   id === this.selectedResultId ||
+        //   id === 'newMarker' ||
+        //   id === this.hoveredResultId
+        // ) {
+        //   this.addUncertainty(result)
+        // }
       })
     },
 
@@ -521,11 +607,13 @@ export default {
         //   this.fitMapBounds()
         // }
         this.circles.push(circle)
-        if (parseInt(uncertity) >= 100000) {
-          this.zoom = 7
-          this.rezoom = true
-          this.fixZoom()
-        }
+        // if (parseInt(uncertity) >= 100000) {
+        //   this.zoom = 7
+        //   this.rezoom = true
+        //   this.fixZoom()
+        // } else {
+        //   this.rezoom = false
+        // }
       }
       // else {
       //   if (this.detailView) {
@@ -564,8 +652,12 @@ export default {
     fitMapBounds() {
       if (this.rezoom) {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
-        this.zoom = this.$refs.myMap.mapObject.getZoom()
-        this.fixZoom()
+        this.zoom =
+          this.$refs.myMap.mapObject.getZoom() > 5
+            ? 5
+            : this.$refs.myMap.mapObject.getZoom()
+        console.log('zoom...', this.zoom)
+        // this.fixZoom()
       }
       this.rezoom = true
     },
