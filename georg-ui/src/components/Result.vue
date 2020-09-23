@@ -5,6 +5,7 @@
     :class="resultColor"
     :key="result.properties.id"
     :id="result.properties.id"
+    @keypress.prevent="onclick()"
   >
     <template>
       <v-list-item-content @click.prevent="onclick()">

@@ -1,9 +1,9 @@
 <template>
   <v-row align="baseline" dense class="pl-4 pt-0 pb-7">
-    <v-col cols="12" sm="3">
+    <v-col cols="12" sm="3" class="d-none d-sm-flex">
       <v-label>Hitta plats:</v-label>
     </v-col>
-    <v-col cols="12" sm="4">
+    <v-col class="pa-0" cols="5" sm="4">
       <v-combobox
         @change="onCountryChange"
         dense
@@ -13,11 +13,12 @@
         v-model="select"
         :items="dropdown_countries"
         hide-details
+        class="country-select"
       ></v-combobox>
     </v-col>
-
-    <v-col cols="12" sm="5" class="mt-n5 pa-0">
+    <v-col cols="7" sm="5" class="mt-n5 pa-0">
       <v-switch
+        class="float-right coordinate-switch"
         @change="onSwitchChange"
         dense
         v-model="coordinates"
@@ -75,4 +76,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.coordinate-switch {
+  width: 140px;
+  height: 22px;
+}
+.country-select {
+  width: 111px;
+}
+</style>

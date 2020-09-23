@@ -1,6 +1,10 @@
 <template>
   <div>
-    <v-card-title class="pl-4 pr-2">{{ title }}</v-card-title>
+    <v-card-title
+      :class="{ 'red--text': isNewMarker, 'blue--text': !isNewMarker }"
+      class="text--darken-2 pl-4 pr-2"
+      >{{ title }}</v-card-title
+    >
     <v-card-subtitle v-if="!isNewMarker && !isGbif">
       <strong class="text-capitalize">{{
         selectedMarker.properties.layer

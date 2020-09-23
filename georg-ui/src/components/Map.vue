@@ -1,5 +1,11 @@
 <template>
-  <div id="map" v-bind:class="{ addMarkerCursor: enableAddMapMarkers }">
+  <div
+    id="map"
+    v-bind:class="{
+      addMarkerCursor: enableAddMapMarkers,
+      'small-screen': $vuetify.breakpoint.xsOnly,
+    }"
+  >
     <l-map
       ref="myMap"
       :center="center"
@@ -65,17 +71,17 @@ const lantmaterietMapAttribution =
 
 const MAP_ICONS = {
   blueIcon: L.icon({
-    iconUrl: 'selected-marker.png',
-    iconSize: [22, 32], // size of the icon
-    iconAnchor: [11, 32],
+    iconUrl: 'blue-marker.png',
+    iconSize: [26, 38], // size of the icon
+    iconAnchor: [13, 38],
   }),
   redIcon: L.icon({
-    iconUrl: 'added-marker.png',
-    iconSize: [22, 32], // size of the icon
-    iconAnchor: [11, 32],
+    iconUrl: 'red-star-marker.png',
+    iconSize: [26, 38], // size of the icon
+    iconAnchor: [13, 38],
   }),
   greyIcon: L.icon({
-    iconUrl: 'default-marker.png',
+    iconUrl: 'grey-marker.png',
     iconSize: [22, 32],
     iconAnchor: [11, 32],
   }),
@@ -101,15 +107,15 @@ export default {
       center: [59.0, 15.0],
       circles: [],
       circleOptionBlue: {
-        color: 'blue',
-        fillColor: '#99aaff',
+        color: '#1976D2',
+        fillColor: '#1976D2',
         fillOpacity: 0.3,
         pane: 'circleMarker',
       },
 
       circleOptionRed: {
-        color: 'red',
-        fillColor: '#ff9999',
+        color: '#d32f2f',
+        fillColor: '#d32f2f',
         fillOpacity: 0.3,
         pane: 'circleMarker',
       },
@@ -133,7 +139,7 @@ export default {
           attribution: lantmaterietMapAttribution,
         },
         {
-          name: 'Lantmäteriet topografisk – nedtonad',
+          name: 'Lantmäteriet nedtonad',
           visible: false,
           url: lantmaterietNedtonadUrl,
           attribution: lantmaterietMapAttribution,
@@ -167,7 +173,7 @@ export default {
 
     L.control
       .scale({
-        position: 'bottomleft',
+        position: 'bottomright',
         maxWidth: 100,
         metric: true,
         imperial: false,
@@ -751,11 +757,11 @@ export default {
   color: #424242 !important;
 }
 #icondiv {
-  padding-bottom: 90px !important;
+  padding-bottom: 112px !important;
 }
 .addMarkerCursor .leaflet-container {
-  cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAgCAMAAAAhSXi5AAAA5FBMVEX///+3HBy3HBy3HBy3HBy3HBzvU1DrUE3oTEm+IyK3HBzkSUa8ISHhRUPYR0XbRUPdQkC7ICC3HBzaPjzUQkG9IiK8ISHAJSXQPjzTNza9IiG+IyPNPDy9IiHPNDPERETHPDzKOjq7ICC8ISG9IiLGOjnMMC+7IB+7ICDGNDTILSy6Hx+7IB/CMjLEKSjCMDDFKim/MjK5Hh65Hh69IiG5Hh65Hh66Hx69IiLBJiW6Hx+9IiK/Kyq/LS23HBy7JSW7Jia7JyfJUlLNYmLScXHbjY3fm5vkqqrouLjtxsbx1NT///9idWUoAAAATHRSTlMADhspN0VKS01OUlJbW2VlZWhudXt8iJOYmJmepaissLKys7a6vb3AwsjLzM7P0dPT1NXW1tfY2NjY2dnZ2dvb29vb29vb29vb29vbAcCeVQAAATBJREFUGBltwYsiwlAABuD/bPlPtY3ZhOMSSskwbDTXUK7t/d/HOYtq8X34ZdeDYMlCiWgkV5FSF/2ei5laEnkshPdHNn64mc8pldoouJnDOWFqQbMSjyXNNrTtLhfc1AExqNKQm8cHKyyEh0A9puE8jT4/9s4lNTkQ2FA0Om+5NlyjEVfQ8qg5L7kxfqTRDNDyqHnDvDCgoQK0PGrOZW6MH2k0A2woGg/vuTZaoxFXUI9oOM+vX5/DM0ljYMG6ZqG6s99ZljT8EwC9kAu66wDcmGWybwEQqcMS1YbR6HKevKvAEKnHOeoQE42YM9V+BRPiNORUtI1fS3eSP7xEYGo34oS8X8WMSHwWmm3Mq2WSmp9YKNm6IFnNaigTPUXebmGRnfrdHv6qZYmFf7g2pr4BVsYlcwwas0QAAAAASUVORK5CYII=')
-      11 31,
+  cursor: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAmCAMAAADtLHsqAAAACXBIWXMAAANJAAADSQHQJx2IAAAAjVBMVEX///////////////////////////////////////////////////////+9NzvXhIbDSU3IWFzETFDJW1/////68PC8MTbFT1PPbG+8MzjLX2O9NTq5KC3LYmW5Ki62ICW6LTK/O0DDSU3IV1vNZWnWgYTaj5LfnZ/kq63oubvtx8jx1db24+T68fH///+qqMVZAAAAH3RSTlMAECAwQFBgcICgsMDQ4Ojo6+vv8PDx8/Pz9fX3+fr7xKkgXwAAAThJREFUGBl1wYtiojAABMBNsUgRru0d9Em7MVETA+b/P68aYg7RziASedkMzg1NmQtcKFq7YbCxbYH/sspIJtJUGaKs1byg2wxB1irOqDbDSaV5RVc4KgxvMAUgWsmz9xeeyVYgN0x2OyYmR6mYDAcmqkTD5Mv7NyYNHIPu76t23g+Pz09/GDg4nnz3Pum/eeLgGHR7H+07Bg6OkfWBZeRQM+p80DGqUSqO/vngmSNVIt9yZLzf7bw3HG1ziJ6j3n2Sn67nqBdAqRh8MPhioEoA95Y32Hsc1WteWdc4yS2v2BxBvebMusZo4TjjFohWmhf0Cmd3g+SEHO6QFIYTpsBEpZnoClPZIBnJIcOF5Z7RfomZ1ZbBdoU50SgeqUbgyuIgSXlY4IZlL2W/xE0P1j7gF1WF3wiBiR9cAlOVFNCyBwAAAABJRU5ErkJggg==')
+      13 38,
     auto;
 }
 </style>
@@ -771,7 +777,6 @@ export default {
 .leaflet-bar a.leaflet-disabled {
   color: #bbb !important;
 }
-
 .leaflet-touch .leaflet-control-layers,
 .leaflet-touch .leaflet-bar {
   border: none !important;
@@ -780,5 +785,9 @@ export default {
 .leaflet-popup-pane,
 .leaflet-popup {
   z-index: 1000 !important;
+}
+.small-screen
+  .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control {
+  margin-top: 170px;
 }
 </style>
