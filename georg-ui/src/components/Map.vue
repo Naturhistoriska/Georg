@@ -786,3 +786,6 @@ export default {
   margin-top: 170px;
 }
 </style>
+      })
+        L.DomEvent.on(showDetailBtn, 'keydown', () => {
+        this.showDetail(result)

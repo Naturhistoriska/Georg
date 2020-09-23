@@ -1,5 +1,5 @@
 <template>
-  <v-list-item>
+  <v-list-item @keypress.prevent="onclick()">
     <v-list-item-content @click.prevent="onclick()">
       <v-list-item-title class="red--text darken-2">{{
         result.properties.name
