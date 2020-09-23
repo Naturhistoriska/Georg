@@ -33,6 +33,7 @@
         outlined
         class="mr-2"
         @click="addDinPlats"
+        @keypress="addDinPlats"
         tabindex="0"
       >
         <v-icon left>mdi-map-marker-plus</v-icon>
@@ -47,6 +48,9 @@
     >
     <v-snackbar centered v-model="snackbar2" :timeout="600"
       >Kopierad till Urklipp</v-snackbar
+    >
+    <v-snackbar centered v-model="snackbar3" :timeout="600"
+      >Skapar din plats från koordinaterna</v-snackbar
     >
   </div>
 </template>
@@ -63,6 +67,7 @@ export default {
       dialog: false,
       snackbar: false,
       snackbar2: false,
+      snackbar3: false,
       expand: false,
     }
   },
@@ -80,6 +85,7 @@ export default {
 
     addDinPlats() {
       this.setAddDinPlats(true)
+      this.snackbar3 = true
     },
   },
 }
