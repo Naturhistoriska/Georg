@@ -38,10 +38,10 @@ export default {
   // watch: {
   // },
   methods: {
-    ...mapMutations(['setDetailView', 'setDisplayJsonData']),
+    ...mapMutations(['setDetailView']),
     onclick() {
       this.setDetailView(false)
-      this.setDisplayJsonData(false)
+      // this.setDisplayJsonData(false)
     },
   },
 }
