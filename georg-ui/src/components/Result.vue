@@ -44,7 +44,12 @@ export default {
   watch: {},
 
   computed: {
-    ...mapGetters(['hoveredResultId', 'selectedResultId', 'detailView']),
+    ...mapGetters([
+      'hoveredResultId',
+      'selectedResultId',
+      'detailView',
+      'reBuildMarker',
+    ]),
     isActive: function() {
       return this.result.properties.id === this.selectedResultId
     },
@@ -116,13 +121,16 @@ export default {
       'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
+      'setReBuildMarker',
     ]),
 
     onhover() {
       this.setHovedResultId(this.result.properties.id)
+      this.setReBuildMarker(!this.reBuildMarker)
     },
     unhover() {
       this.setHovedResultId('')
+      this.setReBuildMarker(!this.reBuildMarker)
     },
     onclick() {
       this.setSelectedResultId(this.result.properties.id)
@@ -130,12 +138,14 @@ export default {
       this.setSelectedResult(this.result)
       this.setSelectedMarker(this.result)
       this.setHovedResultId('')
+      this.setReBuildMarker(!this.reBuildMarker)
       // this.$route.fullPath
       // this.$router.push(`${this.$route.fullPath}&detailView=true`)
     },
     onSelected() {
       this.setSelectedResultId(this.result.properties.id)
       this.setDetailView(false)
+      this.setReBuildMarker(!this.reBuildMarker)
     },
   },
 }
