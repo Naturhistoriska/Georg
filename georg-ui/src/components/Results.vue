@@ -1,25 +1,34 @@
 <template v-model="result">
-  <v-list
-    v-if="results.length"
-    id="scroll-target"
-    class="overflow-y-auto"
-    :style="height"
+  <div
+    tabindex="0"
+    id="resultListDiv"
+    ref="resultListDiv"
+    class="resultListDiv"
+    @mouseover="setFocus"
+    @keyup.enter="setFocus"
   >
-    <v-list-item-group id="resultList">
-      <template v-for="(result, index) in results">
-        <NewMarker
-          v-bind:result="result"
-          :key="result.properties.id"
-          v-if="result.properties.id === 'newMarker'"
-        />
-        <Result v-bind:result="result" :key="result.properties.id" v-else />
-        <v-divider
-          v-if="index + 1 < results.length"
-          :key="'devider-' + index"
-        ></v-divider>
-      </template>
-    </v-list-item-group>
-  </v-list>
+    <v-list
+      v-if="results.length"
+      id="scroll-target"
+      class="overflow-y-auto"
+      :style="height"
+    >
+      <v-list-item-group id="resultList" ref="myList">
+        <template v-for="(result, index) in results">
+          <NewMarker
+            v-bind:result="result"
+            :key="result.properties.id"
+            v-if="result.properties.id === 'newMarker'"
+          />
+          <Result v-bind:result="result" :key="result.properties.id" v-else />
+          <v-divider
+            v-if="index + 1 < results.length"
+            :key="'devider-' + index"
+          ></v-divider>
+        </template>
+      </v-list-item-group>
+    </v-list>
+  </div>
 </template>
 
 <script>
@@ -66,6 +75,10 @@ export default {
       'setSelectedResult',
     ]),
 
+    setFocus() {
+      this.$refs.resultListDiv.focus()
+    },
+
     callEvent() {
       if (this.hoveredResultId !== '') {
         this.results.forEach(result => {
@@ -78,33 +91,14 @@ export default {
           }
         })
       }
-
-      // else if (this.selectedResultId !== '') {
-      //   this.setSelectedResultId(this.selectedResult.properties.id)
-      //   this.setSelectedResult(this.selectedResult)
-      //   this.setSelectedMarker(this.selectedResult)
-      //   this.setHovedResultId('')
-      //   this.setDetailView(true)
-      // }
-
-      // if (
-      //   this.hoveredResultId !== '' &&
-      //   this.result.properties.id == this.hoveredResultId
-      // ) {
-      //   this.onclick()
-      //   this.setDetailView(true)
-      // } else if (
-      //   this.setSelectedResultId !== '' &&
-      //   this.result.properties.id == this.selectedResultId
-      // ) {
-      //   this.onclick()
-      //   this.setDetailView(true)
-      // }
     },
   },
 }
 </script>
 <style scoped>
+.resultListDiv {
+  border: none !important;
+}
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;

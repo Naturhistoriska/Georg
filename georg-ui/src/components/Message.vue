@@ -69,12 +69,11 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
-      'setDisplayJsonData',
       'setDisplayResults',
     ]),
     onclick() {
       this.setDetailView(false)
-      this.setDisplayJsonData(false)
+      // this.setDisplayJsonData(false)
     },
   },
 }

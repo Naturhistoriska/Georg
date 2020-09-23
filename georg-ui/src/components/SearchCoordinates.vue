@@ -131,10 +131,6 @@ export default {
                 this.setDetailView(false)
               }
 
-              // if (this.results.length === 1) {
-              //   this.setSelectedResultId(this.results[0])
-              //   this.setSelectedResult(this.results[0])
-              // }
               const message =
                 this.results.length > 1
                   ? '1 träff samt "Din plats"'

@@ -101,6 +101,7 @@ export default {
   props: ['mapHeight'],
   data() {
     return {
+      clickedId: null,
       activeLayer: 'OpenStreetMap',
       bounds: {},
       center: [59.0, 15.0],
@@ -164,10 +165,6 @@ export default {
     this.$refs.myMap.mapObject.createPane('circleMarker')
     this.$refs.myMap.mapObject.getPane('circleMarker').style.zIndex = 777
 
-    // if (this.detailView) {
-    //   this.buildDetailMarker()
-    // }
-
     this.$nextTick(() => {
       this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
       this.$refs.myMap.mapObject.invalidateSize()
@@ -191,6 +188,7 @@ export default {
       'accuracy',
       'addDinPlats',
       'detailView',
+      'reBuildMarker',
       'results',
       'hoveredResultId',
       'selectedMarker',
@@ -221,7 +219,7 @@ export default {
         const lng = this.selectedMarker.geometry.coordinates[0]
         this.dinPlatsSearch(lat, lng, false)
         this.setAddDinPlats(false)
-        this.rezoom(false)
+        this.rezoom = false
       }
     },
     detailView: function() {
@@ -242,22 +240,27 @@ export default {
         this.addUnertainties()
       })
     },
-
-    hoveredResultId() {
-      this.$nextTick(() => {
-        if (!this.detailView) {
-          this.highlightMarker()
-        }
-      })
-    },
-    selectedMarker() {
-      this.highlightMarker()
-    },
-    selectedResultId() {
+    reBuildMarker: function() {
       this.$nextTick(() => {
         this.highlightMarker()
       })
     },
+
+    // hoveredResultId() {
+    //   this.$nextTick(() => {
+    //     if (!this.detailView) {
+    //       this.highlightMarker()
+    //     }
+    //   })
+    // },
+    // selectedMarker() {
+    //   this.highlightMarker()
+    // },
+    // selectedResultId() {
+    //   this.$nextTick(() => {
+    //     this.highlightMarker()
+    //   })
+    // },
     center: function() {
       this.$nextTick(() => {
         this.$refs.myMap.mapObject.flyTo(
@@ -274,6 +277,7 @@ export default {
       'setDetailView',
       'setIsErrorMsg',
       'setMessage',
+      'setReBuildMarker',
       'setResults',
       'setSelectedMarker',
       'setSelectedResultId',
@@ -346,7 +350,6 @@ export default {
     },
 
     highlightMarker() {
-      console.log('highlightMarker called...')
       this.buildMarkers()
       this.addUnertainties()
     },
@@ -357,6 +360,7 @@ export default {
       this.resetLayerGroup()
       this.removeUncertainties()
       this.bounds = L.latLngBounds()
+
       this.results.forEach(result => {
         this.bounds.extend([
           result.geometry.coordinates[1],
@@ -371,8 +375,7 @@ export default {
         const id = result.properties.id
         marker.addEventListener('click', () => {
           this.clickedMarker = true
-          // this.setSelectedResult(result)
-          // this.setSelectedResultId(id)
+          this.clickedId = id
           if (id !== 'newMarker') {
             this.setSelectedResult(result)
             this.setSelectedResultId(id)
@@ -380,10 +383,7 @@ export default {
           if (this.detailView) {
             this.setSelectedMarker(result)
           }
-          // else {
-          //   this.setSelectedResult(result)
-          //   this.setSelectedResultId(id)
-          // }
+          this.setReBuildMarker(!this.reBuildMarker)
           this.rezoom = false
         })
         if (this.detailView) {
@@ -393,7 +393,7 @@ export default {
             marker.addTo(this.layerGroup)
           }
         } else {
-          if (id === this.selectedResultId && this.clickedMarker) {
+          if (id === this.clickedId && this.clickedMarker) {
             marker.addTo(this.layerGroup).openPopup()
           } else {
             marker.addTo(this.layerGroup)
@@ -662,7 +662,6 @@ export default {
           this.$refs.myMap.mapObject.getZoom() > 5
             ? 5
             : this.$refs.myMap.mapObject.getZoom()
-        console.log('zoom...', this.zoom)
         // this.fixZoom()
       }
       this.rezoom = true
