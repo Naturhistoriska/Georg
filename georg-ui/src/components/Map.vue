@@ -510,7 +510,7 @@ export default {
         text1 = this.createText(result, container)
 
       if (showDetailBtn) {
-        showDetailBtn.style.color = 'blue'
+        showDetailBtn.style.color = '#1976D2'
         showDetailBtn.style.textDecoration = 'underline'
       }
       text.style.color = 'gray'
