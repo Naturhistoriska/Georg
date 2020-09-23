@@ -790,7 +790,7 @@ export default {
   .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control {
   margin-top: 170px;
 }
-.leaflet-container {
+.leaflet-control-container, .leaflet-popup{
   font-family: roboto, sans-serif;
 }
 </style>
