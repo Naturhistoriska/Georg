@@ -1,5 +1,11 @@
 <template>
-  <div id="map" v-bind:class="{ addMarkerCursor: enableAddMapMarkers }">
+  <div
+    id="map"
+    v-bind:class="{
+      addMarkerCursor: enableAddMapMarkers,
+      'small-screen': $vuetify.breakpoint.xsOnly,
+    }"
+  >
     <l-map
       ref="myMap"
       :center="center"
@@ -786,6 +792,3 @@ export default {
   margin-top: 170px;
 }
 </style>
-      })
-        L.DomEvent.on(showDetailBtn, 'keydown', () => {
-        this.showDetail(result)
