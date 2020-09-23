@@ -1,12 +1,4 @@
 <template v-model="result">
-  <div
-    tabindex="0"
-    id="resultListDiv"
-    ref="resultListDiv"
-    class="resultListDiv"
-    @mouseover="setFocus"
-    @keyup.enter="setFocus"
-  >
     <v-list
       v-if="results.length"
       id="scroll-target"
@@ -28,7 +20,6 @@
         </template>
       </v-list-item-group>
     </v-list>
-  </div>
 </template>
 
 <script>
@@ -75,10 +66,6 @@ export default {
       'setSelectedResult',
     ]),
 
-    setFocus() {
-      this.$refs.resultListDiv.focus()
-    },
-
     callEvent() {
       if (this.hoveredResultId !== '') {
         this.results.forEach(result => {
@@ -96,9 +83,6 @@ export default {
 }
 </script>
 <style scoped>
-.resultListDiv {
-  border: none !important;
-}
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
