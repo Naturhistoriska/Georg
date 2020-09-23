@@ -106,13 +106,8 @@ export default {
         ? 'blue--text text--darken-2'
         : ''
     },
-    // lat: function() {
-    //   return this.result.geometry.coordinates[1]
-    // },
-    // lng: function() {
-    //   return this.result.geometry.coordinates[0]
-    // },
   },
+  mounted() {},
 
   methods: {
     ...mapMutations([
@@ -127,6 +122,7 @@ export default {
     onhover() {
       this.setHovedResultId(this.result.properties.id)
       this.setReBuildMarker(!this.reBuildMarker)
+      // const ref = `${this.result.properties.id}`
     },
     unhover() {
       this.setHovedResultId('')
