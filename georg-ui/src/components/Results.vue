@@ -5,7 +5,7 @@
     class="overflow-y-auto"
     :style="height"
   >
-    <v-list-item-group id="resultList">
+    <v-list-item-group id="resultList" ref="myList">
       <template v-for="(result, index) in results">
         <NewMarker
           v-bind:result="result"
@@ -44,8 +44,39 @@ export default {
     window.addEventListener('keyup', event => {
       if (event.keyCode === 13) {
         this.callEvent()
+        // console.log('do something,....')
       }
     })
+    // this.$refs.example.div
+    //   .hover(
+    //     function() {
+    //       console.log('hover.....on results....')
+    //       this.focus()
+    //     },
+    //     function() {
+    //       this.blur()
+    //     }
+    //   )
+    //   .keydown(function(e) {
+    //     alert(e.keyCode)
+    //   })
+    // this.$nextTick(() => {
+    //   setTimeout(() => {
+    //     this.$refs.myList.focus()
+    //   }, 10)
+    // })
+    // $('#example')
+    //   .hover(
+    //     function() {
+    //       this.focus()
+    //     },
+    //     function() {
+    //       this.blur()
+    //     }
+    //   )
+    //   .keydown(function(e) {
+    //     alert(e.keyCode)
+    //   })
   },
 
   computed: {
@@ -77,6 +108,7 @@ export default {
             this.setDetailView(true)
           }
         })
+        // this.startTimer()
       }
 
       // else if (this.selectedResultId !== '') {
