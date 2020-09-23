@@ -100,15 +100,15 @@ export default {
       center: [59.0, 15.0],
       circles: [],
       circleOptionBlue: {
-        color: 'blue',
-        fillColor: '#99aaff',
+        color: '#1976D2',
+        fillColor: '#1976D2',
         fillOpacity: 0.3,
         pane: 'circleMarker',
       },
 
       circleOptionRed: {
-        color: 'red',
-        fillColor: '#ff9999',
+        color: '#d32f2f',
+        fillColor: '#d32f2f',
         fillOpacity: 0.3,
         pane: 'circleMarker',
       },
