@@ -165,7 +165,7 @@ export default {
             const errMsg = response.error.msgKey
             if (errMsg === 'Invalid coordinates') {
               const msg =
-                "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n  57.768558 14.827029"
+                "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
               this.setMessage(msg)
             }
             this.setResults([])
