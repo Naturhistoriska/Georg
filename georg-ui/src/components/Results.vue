@@ -9,10 +9,10 @@
       <template v-for="(result, index) in results">
         <NewMarker
           v-bind:result="result"
-          :key="result.properties.id"
-          v-if="result.properties.id === 'newMarker'"
+          :key="result.properties.gid"
+          v-if="result.properties.gid === 'newMarker'"
         />
-        <Result v-bind:result="result" :key="result.properties.id" v-else />
+        <Result v-bind:result="result" :key="result.properties.gid" v-else />
         <v-divider
           v-if="index + 1 < results.length"
           :key="'devider-' + index"
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters } from 'vuex'
 import NewMarker from './NewMarker'
 import Result from './Result'
 
@@ -40,46 +40,12 @@ export default {
       result: {},
     }
   },
-  mounted() {
-    window.addEventListener('keyup', event => {
-      if (event.keyCode === 13) {
-        this.callEvent()
-      }
-    })
-  },
 
   computed: {
-    ...mapGetters([
-      'results',
-      'selectedResultId',
-      'hoveredResultId',
-      'selectedResult',
-    ]),
+    ...mapGetters(['results']),
   },
 
-  methods: {
-    ...mapMutations([
-      'setDetailView',
-      'setHovedResultId',
-      'setSelectedMarker',
-      'setSelectedResultId',
-      'setSelectedResult',
-    ]),
-
-    callEvent() {
-      if (this.hoveredResultId !== '') {
-        this.results.forEach(result => {
-          if (result.properties.id === this.hoveredResultId) {
-            this.setSelectedResultId(result.properties.id)
-            this.setSelectedResult(result)
-            this.setSelectedMarker(result)
-            this.setHovedResultId('')
-            this.setDetailView(true)
-          }
-        })
-      }
-    },
-  },
+  methods: {},
 }
 </script>
 <style scoped>

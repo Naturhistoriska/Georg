@@ -124,7 +124,7 @@ export default {
             ? ', ' + entry.properties.region
             : ''
         const name = entry.properties.name
-        const id = entry.properties.id
+        const id = entry.properties.gid
         const element = {
           name,
           source,
@@ -176,7 +176,7 @@ export default {
     filterResult(id) {
       if (id) {
         this.isLoading = true
-        this.results = this.entries.filter(e => e.properties.id === id)
+        this.results = this.entries.filter(e => e.properties.gid === id)
         this.setResults(this.results)
         this.setDetailView(true)
 
@@ -216,7 +216,7 @@ export default {
             const isSimpleResult = this.results.length === 1
             const selectedResult = isSimpleResult ? this.results[0] : {}
             const selectedResultId = isSimpleResult
-              ? this.results[0].properties.id
+              ? this.results[0].properties.gid
               : ''
             const selectedMarker = isSimpleResult ? this.results[0] : {}
             this.setDetailView(isSimpleResult ? true : false)

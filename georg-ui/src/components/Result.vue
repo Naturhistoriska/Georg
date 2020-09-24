@@ -3,8 +3,8 @@
     @mouseover="onhover"
     @mouseleave="unhover"
     :class="resultColor"
-    :key="result.properties.id"
-    :id="result.properties.id"
+    :key="result.properties.gid"
+    :id="result.properties.gid"
     @keypress.prevent="onclick()"
   >
     <template>
@@ -52,13 +52,13 @@ export default {
       'reBuildMarker',
     ]),
     isActive: function() {
-      return this.result.properties.id === this.selectedResultId
+      return this.result.properties.gid === this.selectedResultId
     },
     isHovered: function() {
-      return this.result.properties.id === this.hoveredResultId
+      return this.result.properties.gid === this.hoveredResultId
     },
     isNewMarker: function() {
-      return this.result.properties.id === 'newMarker'
+      return this.result.properties.gid === 'newMarker'
     },
     resultColor: function() {
       return this.isActive ? 'selected' : 'unSelected'
@@ -151,7 +151,7 @@ export default {
     ]),
 
     onhover() {
-      this.setHovedResultId(this.result.properties.id)
+      this.setHovedResultId(this.result.properties.gid)
       this.setReBuildMarker(!this.reBuildMarker)
       // const ref = `${this.result.properties.id}`
     },
@@ -160,7 +160,7 @@ export default {
       this.setReBuildMarker(!this.reBuildMarker)
     },
     onclick() {
-      this.setSelectedResultId(this.result.properties.id)
+      this.setSelectedResultId(this.result.properties.gid)
       this.setDetailView(true)
       this.setSelectedResult(this.result)
       this.setSelectedMarker(this.result)
@@ -170,7 +170,7 @@ export default {
       // this.$router.push(`${this.$route.fullPath}&detailView=true`)
     },
     onSelected() {
-      this.setSelectedResultId(this.result.properties.id)
+      this.setSelectedResultId(this.result.properties.gid)
       this.setDetailView(false)
       this.setReBuildMarker(!this.reBuildMarker)
     },

@@ -302,7 +302,7 @@ export default {
       let uncertainty
       if (this.results.length > 0) {
         // this.removeOldDinPlatsMarker()
-        if (this.results[0].properties.id === 'newMarker') {
+        if (this.results[0].properties.gid === 'newMarker') {
           uncertainty = moveUncertainty
             ? this.results[0].properties.coordinateUncertaintyInMeters
             : null
@@ -315,6 +315,7 @@ export default {
         .then(response => {
           this.isLoaded = false
           const result = response.features[0]
+
           if (uncertainty) {
             result.properties.coordinateUncertaintyInMeters = uncertainty
           }
@@ -368,11 +369,11 @@ export default {
         ])
 
         const marker =
-          result.properties.id === 'newMarker'
+          result.properties.gid === 'newMarker'
             ? this.buildDraggableMarker(result)
             : this.buildMarker(result)
 
-        const id = result.properties.id
+        const id = result.properties.gid
         marker.addEventListener('click', () => {
           this.clickedMarker = true
           this.clickedId = id
@@ -387,7 +388,7 @@ export default {
           this.rezoom = false
         })
         if (this.detailView) {
-          if (id === this.selectedMarker.properties.id && this.clickedMarker) {
+          if (id === this.selectedMarker.properties.gid && this.clickedMarker) {
             marker.addTo(this.layerGroup).openPopup()
           } else {
             marker.addTo(this.layerGroup)
@@ -439,7 +440,7 @@ export default {
     },
 
     buildMarker(result) {
-      const id = result.properties.id
+      const id = result.properties.gid
       const icon = this.isHoveredOrSelected(id)
         ? MAP_ICONS.blueIcon
         : MAP_ICONS.greyIcon
@@ -497,7 +498,7 @@ export default {
         displayBtn = true
       } else if (
         (this.selectedMarker.properties &&
-          result.properties.id === this.selectedMarker.properties.id) ||
+          result.properties.gid === this.selectedMarker.properties.gid) ||
         this.detailView
       ) {
         displayBtn = false
@@ -524,13 +525,13 @@ export default {
 
     showDetail(result) {
       if (this.detailView) {
-        if (this.selectedMarker.properties.id !== result.properties.id) {
+        if (this.selectedMarker.properties.gid !== result.properties.gid) {
           this.setSelectedMarker(result)
         }
       } else {
         this.setSelectedMarker(result)
         this.setSelectedResult(result)
-        this.setSelectedResultId(result.properties.id)
+        this.setSelectedResultId(result.properties.gid)
         this.setDetailView(true)
       }
     },
@@ -581,7 +582,7 @@ export default {
     addUnertainties() {
       this.removeUncertainties()
       this.results.forEach(result => {
-        const id = result.properties.id
+        const id = result.properties.gid
         if (this.uncertaintyAdd(id)) {
           this.addUncertainty(result)
         }
@@ -598,7 +599,7 @@ export default {
     addUncertainty(result) {
       const uncertity = this.uncertainty(result)
       const circleOptions =
-        result.properties.id === 'newMarker'
+        result.properties.gid === 'newMarker'
           ? this.circleOptionRed
           : this.circleOptionBlue
 
@@ -630,7 +631,7 @@ export default {
     },
 
     uncertainty: function(result) {
-      return result.properties.id === 'newMarker'
+      return result.properties.gid === 'newMarker'
         ? result.properties.coordinateUncertaintyInMeters
         : result.properties.source !== 'whosonfirst' &&
           result.properties.source !== 'openstreetmap' &&

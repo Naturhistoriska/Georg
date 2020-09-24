@@ -77,7 +77,7 @@ export default {
       return JSON.stringify(this.selectedMarker, null, 2)
     },
     isDinPlats: function() {
-      return this.selectedMarker.properties.id === 'newMarker'
+      return this.selectedMarker.properties.gid === 'newMarker'
     },
   },
   methods: {
