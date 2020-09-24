@@ -48,21 +48,50 @@
         v-bind:isNewMarker="isNewMarker"
       />
       <v-divider></v-divider>
-      <v-list-item v-if="hasUncertainty">
-        <v-list-item-icon>
-          <v-icon :color="makeIconColor">mdi-map-marker-radius</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{
+      <v-hover v-slot:default="{ hover }" v-if="hasUncertainty">
+        <v-list-item
+          :class="{ highlight: expand == true }"
+          @focus="expand = true"
+          @blur="expand = false"
+          @click="
+            copyText(
               selectedMarker.properties.addendum.georg
                 .coordinateUncertaintyInMeters
-            }}
-            meter
-            <span class="text--secondary">osäkerhetsradie</span>
-          </v-list-item-title>
-        </v-list-item-content>
-      </v-list-item>
+            )
+          "
+        >
+          <v-list-item-icon>
+            <v-icon :color="makeIconColor">mdi-map-marker-radius</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              {{
+                selectedMarker.properties.addendum.georg
+                  .coordinateUncertaintyInMeters
+              }}
+              meter
+              <span class="text--secondary">osäkerhetsradie</span>
+            </v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-btn
+              icon
+              color="transparent"
+              :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
+              @focus="expand = true"
+              @blur="expand = false"
+              @click="
+                copyText(
+                  selectedMarker.properties.addendum.georg
+                    .coordinateUncertaintyInMeters
+                )
+              "
+            >
+              <v-icon small>mdi-content-copy</v-icon>
+            </v-btn>
+          </v-list-item-action>
+        </v-list-item>
+      </v-hover>
       <v-divider v-if="hasUncertainty"></v-divider>
       <Uncertainty v-if="isNewMarker" />
       <GbifDataSourceLinks v-else-if="isGbif" />
