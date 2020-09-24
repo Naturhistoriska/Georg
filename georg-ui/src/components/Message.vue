@@ -23,13 +23,14 @@
       {{ message }}
     </div>
     <v-spacer></v-spacer>
-    <v-btn text small
+    <v-btn
+      text
+      small
       id="displaytoggle"
       class="grey--text text--darken-3 body-2 pl-2"
       tabindex="0"
       v-if="results.length > 0"
       @click="setDisplayResults(!displayResults)"
-      
       >{{ linkText2 }}
       <v-icon>{{
         displayResults ? 'mdi-chevron-up' : 'mdi-chevron-down'
@@ -80,5 +81,7 @@ export default {
 .pre-formatted {
   white-space: pre;
 }
-#displaytoggle { text-transform: none;}
+#displaytoggle {
+  text-transform: none;
+}
 </style>

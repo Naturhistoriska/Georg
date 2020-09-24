@@ -1,6 +1,6 @@
 <template>
   <div id="container" class="container container--fluid">
-    <v-card id="navi" :class="{'card-sm': $vuetify.breakpoint.smAndUp}">
+    <v-card id="navi" :class="{ 'card-sm': $vuetify.breakpoint.smAndUp }">
       <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
       <ComboSearch v-if="isAddressSearch" v-bind:passInValue="passInText" />
       <SearchCoordinates v-else v-bind:passInValue="passInCoordinates" />

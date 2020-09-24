@@ -1,25 +1,25 @@
 <template v-model="result">
-    <v-list
-      v-if="results.length"
-      id="scroll-target"
-      class="overflow-y-auto"
-      :style="height"
-    >
-      <v-list-item-group id="resultList" ref="myList">
-        <template v-for="(result, index) in results">
-          <NewMarker
-            v-bind:result="result"
-            :key="result.properties.id"
-            v-if="result.properties.id === 'newMarker'"
-          />
-          <Result v-bind:result="result" :key="result.properties.id" v-else />
-          <v-divider
-            v-if="index + 1 < results.length"
-            :key="'devider-' + index"
-          ></v-divider>
-        </template>
-      </v-list-item-group>
-    </v-list>
+  <v-list
+    v-if="results.length"
+    id="scroll-target"
+    class="overflow-y-auto"
+    :style="height"
+  >
+    <v-list-item-group id="resultList" ref="myList">
+      <template v-for="(result, index) in results">
+        <NewMarker
+          v-bind:result="result"
+          :key="result.properties.id"
+          v-if="result.properties.id === 'newMarker'"
+        />
+        <Result v-bind:result="result" :key="result.properties.id" v-else />
+        <v-divider
+          v-if="index + 1 < results.length"
+          :key="'devider-' + index"
+        ></v-divider>
+      </template>
+    </v-list-item-group>
+  </v-list>
 </template>
 
 <script>
