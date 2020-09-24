@@ -29,6 +29,7 @@ public class CoordinatesJson {
   private final String propertiesKey = "properties";
   private final String nameKey = "name"; 
   private final String idKey = "id"; 
+  private final String gidKey = "gid";
   private final String typeKey = "type"; 
   private final String dinPlats = "Din plats";
   private final String newMarker = "newMarker";
@@ -78,8 +79,7 @@ public class CoordinatesJson {
     log.info("addCoordinatesTransformation");
 
     JSONObject jsonObject = parser.convertStringToJson(jsonString);
-    JSONArray array = parser.getJsonArray(jsonObject, featuresKey);
-
+    JSONArray array = parser.getJsonArray(jsonObject, featuresKey); 
     if (array.length() == 0) {
       JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
       array.put(dinPlatsJson);
@@ -92,6 +92,7 @@ public class CoordinatesJson {
         if (isNewMarker) {
           property.put(nameKey, dinPlats);
           property.put(idKey, newMarker);
+          property.put(gidKey, newMarker);
         }
         property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(lat), roundDoubleToSix(lng)));
       });
@@ -111,6 +112,7 @@ public class CoordinatesJson {
     geometryJson.put(typeKey, point);
     JSONObject propertiesJson = new JSONObject();
     propertiesJson.put(idKey, newMarker);
+    propertiesJson.put(gidKey, newMarker);
     propertiesJson.put(nameKey, dinPlats);
     propertiesJson.put(coordinatesKey, buildCoordinatesTransformationJson(lat, lng));
  
