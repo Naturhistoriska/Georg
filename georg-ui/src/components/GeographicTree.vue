@@ -5,9 +5,11 @@
         dense
         class="geotree"
         :class="{ highlight: expand1 == true }"
-        @click="copyText(selectedMarker.properties.county)"
         @focus="expand1 = true"
         @blur="expand1 = false"
+        v-clipboard="selectedMarker.properties.county"
+        @click.stop="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <v-list-item-icon>
           <v-icon v-bind:color="treeIconColor">mdi-file-tree</v-icon>
@@ -22,7 +24,7 @@
           <v-btn
             @focus="expand1 = true"
             @blur="expand1 = false"
-            @click="copyText(selectedMarker.properties.county)"
+            v-clipboard="selectedMarker.properties.county"
             color="transparent"
             :class="{ 'show-btn': expand1 == true, 'show-btn-hover': hover }"
             icon
@@ -37,9 +39,11 @@
         dense
         class="geotree"
         :class="{ highlight: expand2 == true }"
-        @click="copyText(selectedMarker.properties.region)"
         @focus="expand2 = true"
         @blur="expand2 = false"
+        v-clipboard="selectedMarker.properties.region"
+        @click.stop="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <v-list-item-icon>
           <v-icon v-bind:color="treeIconColor">{{ reginTreeIcon }}</v-icon>
@@ -57,7 +61,7 @@
             icon
             @focus="expand2 = true"
             @blur="expand2 = false"
-            @click="copyText(selectedMarker.properties.region)"
+            v-clipboard="selectedMarker.properties.region"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>
@@ -72,9 +76,11 @@
         dense
         class="geotree"
         :class="{ highlight: expand3 == true }"
-        @click="copyText(selectedMarker.properties.country)"
         @focus="expand3 = true"
         @blur="expand3 = false"
+        v-clipboard="selectedMarker.properties.country"
+        @click.stop="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -90,7 +96,7 @@
             @focus="expand3 = true"
             @blur="expand3 = false"
             color="transparent"
-            @click="copyText(selectedMarker.properties.country)"
+            v-clipboard="selectedMarker.properties.country"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>

@@ -5,7 +5,9 @@
         :class="{ highlight: expand == true }"
         @focus="expand = true"
         @blur="expand = false"
-        @click="copyText(latLonDms)"
+        v-clipboard="latLonDms"
+        @click.stop="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <v-list-item-icon>
           <v-icon :color="makeIconColor">mdi-crosshairs-gps</v-icon>
@@ -21,7 +23,7 @@
             :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
             @focus="expand = true"
             @blur="expand = false"
-            @click="copyText(latLonDms)"
+            v-clipboard="latLonDms"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>
@@ -33,7 +35,9 @@
         :class="{ highlight: expand1 == true }"
         @focus="expand1 = true"
         @blur="expand1 = false"
-        @click="copyText(latLonDdm)"
+        v-clipboard="latLonDdm"
+        @click.stop="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -47,7 +51,7 @@
             :class="{ 'show-btn': expand1 == true, 'show-btn-hover': hover }"
             @focus="expand1 = true"
             @blur="expand1 = false"
-            @click="copyText(latLonDdm)"
+            v-clipboard="latLonDdm"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>
@@ -59,7 +63,9 @@
         :class="{ highlight: expand2 == true }"
         @focus="expand2 = true"
         @blur="expand2 = false"
-        @click="copyText(latLon)"
+        v-clipboard="latLon"
+        @click.stop="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -73,7 +79,7 @@
             :class="{ 'show-btn': expand2 == true, 'show-btn-hover': hover }"
             @focus="expand2 = true"
             @blur="expand2 = false"
-            @click="copyText(latLon)"
+            v-clipboard="latLon"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>
@@ -85,7 +91,9 @@
         :class="{ highlight: expand3 == true }"
         @focus="expand3 = true"
         @blur="expand3 = false"
-        @click="copyText(rt90)"
+        v-clipboard="rt90"
+        @click.stop="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -99,7 +107,7 @@
             :class="{ 'show-btn': expand3 == true, 'show-btn-hover': hover }"
             @focus="expand3 = true"
             @blur="expand3 = false"
-            @click="copyText(rt90)"
+            v-clipboard="rt90"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>
@@ -111,7 +119,9 @@
         :class="{ highlight: expand4 == true }"
         @focus="expand4 = true"
         @blur="expand4 = false"
-        @click="copyText(sweref99)"
+        v-clipboard="sweref99"
+        @click.stop="snackbar = true"
+        @keypress.stop="snackbar = true"
       >
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
@@ -125,7 +135,7 @@
             :class="{ 'show-btn': expand4 == true, 'show-btn-hover': hover }"
             @focus="expand4 = true"
             @blur="expand4 = false"
-            @click="copyText(sweref99)"
+            v-clipboard="sweref99"
           >
             <v-icon small>mdi-content-copy</v-icon>
           </v-btn>

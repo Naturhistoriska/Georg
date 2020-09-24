@@ -15,7 +15,9 @@
           :class="{ highlight: expand == true }"
           @focus="expand = true"
           @blur="expand = false"
-          @click="copyText(selectedMarker.properties.name)"
+          v-clipboard="selectedMarker.properties.name"
+          @click.stop="snackbar2 = true"
+          @keypress.stop="snackbar2 = true"
         >
           <v-list-item-icon>
             <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
@@ -31,7 +33,7 @@
               :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
               @focus="expand = true"
               @blur="expand = false"
-              @click="copyText(selectedMarker.properties.name)"
+              v-clipboard="selectedMarker.properties.name"
             >
               <v-icon small>mdi-content-copy</v-icon>
             </v-btn>
@@ -53,12 +55,9 @@
           :class="{ highlight: expand == true }"
           @focus="expand = true"
           @blur="expand = false"
-          @click="
-            copyText(
-              selectedMarker.properties.addendum.georg
-                .coordinateUncertaintyInMeters
-            )
-          "
+          v-clipboard="uncertaintyValue"
+          @click.stop="snackbar2 = true"
+          @keypress.stop="snackbar2 = true"
         >
           <v-list-item-icon>
             <v-icon :color="makeIconColor">mdi-map-marker-radius</v-icon>
@@ -80,12 +79,7 @@
               :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
               @focus="expand = true"
               @blur="expand = false"
-              @click="
-                copyText(
-                  selectedMarker.properties.addendum.georg
-                    .coordinateUncertaintyInMeters
-                )
-              "
+              v-clipboard="uncertaintyValue"
             >
               <v-icon small>mdi-content-copy</v-icon>
             </v-btn>
@@ -170,6 +164,10 @@ export default {
       return this.isNewMarker
         ? 'red--text darken-2'
         : 'headline blue--text text--darken-2'
+    },
+
+    uncertaintyValue: function() {
+      return `${this.selectedMarker.properties.addendum.georg.coordinateUncertaintyInMeters} meter`
     },
 
     source: function() {
