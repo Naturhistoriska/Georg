@@ -32,6 +32,7 @@
           v-for="tag in tags"
           :key="tag.label"
           @click="addAccuracyValue(tag.value)"
+          @keypress="addAccuracyValue(tag.value)"
           >{{ tag.label }}</v-chip
         >
       </v-chip-group>
@@ -54,6 +55,7 @@
           <v-col cols="6" class="mt-1 ml-n6 pb-0">
             <v-btn
               @click="setUncertaintyValue"
+              @keypress="setUncertaintyValue"
               color="red darken-2"
               text
               :disabled="disableSetUncertaintyBtn"
