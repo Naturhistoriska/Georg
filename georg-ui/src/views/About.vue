@@ -31,22 +31,35 @@
         </ol>
         <p class="mt-4">
           Platserna i resultatet visas upp på en karta och koordinater visas i
-          ett antal olika format så att du ska kunna kopiera dem som passar i
+          ett antal olika format så att du ska kunna kopiera de som passar till
           ditt system. I Georg har du också möjlighet att lägga till din egen
           plats och rita upp en osäkerhetsradie på kartan.
         </p>
         <p>
-          Verktyget fungerar enbart för svenska platser, men vi har planer på
-          att utöka till de nordiska länderna och så småningom resten av
-          världen.
+          För varje plats kan du titta på informationen som JSON. Vi har gjort
+          ett exempel på hur du kan använda JSON-informationen för att geokoda
+          direkt från FileMaker:
+          <a
+            href="https://github.com/Naturhistoriska/Georg/tree/master/georg-connector-example"
+            >FileMaker-exempel (Github)</a
+          >.
+        </p>
+        <h3>För platser i Norden</h3>
+        <p>
+          Med Georg kan du koordinatsätta platser i Norden*, men det går att
+          söka efter koordinater i hela världen. Allra bäst fungerar Georg just
+          nu för platser i Sverige, eftersom vi har mest data härifrån.
+        </p>
+        <p class="font-italic">
+          * För närvarande visar vi inte upp något resultat från Färöarna.
         </p>
         <h2>Datakällor</h2>
         <p>
           Här listar vi alla datakällor som Georg använder sig av för
           närvarande. Vi kommer att lägga till nya datakällor för Georg
-          allteftersom verktyget utvecklas.
+          allteftersom verktyget utvecklas. Datakällorna uppdateras just nu med
+          oregelbundna intervall.
         </p>
-        <p></p>
         <h3>GBIF</h3>
         <p>
           Vi hämtar ett antal olika
@@ -80,12 +93,19 @@
             >https://doi.org/10.15468/ufmslw</a
           >).
         </p>
-        <h3>Who's On First (WOF)</h3>
+        <h3>OpenAddresses (OA)</h3>
         <p>
-          <a href="https://whosonfirst.org/what">Who's On First</a> är en
-          ortnamnsförteckning som delar data med öppna licenser. Vi använder
-          Who's On First både som källa till koordinatsatta platser och för att
-          slå upp den administrativa indelningen för alla platser i Georg.
+          <a href="https://openaddresses.io/">OpenAddresses</a>
+          är en samling av datakällor för adresser över hela världen, som drivs
+          som ett projekt med öppen källkod. I Georg använder vi oss bara av
+          svenska adresser.
+        </p>
+        <h3>OpenStreetMap (OSM)</h3>
+        <p>
+          <a href="https://www.openstreetmap.org/about">OpenStreetMap</a>
+          är ett ideellt projekt för framtagning av geografisk information.
+          Georg använder OpenStreetMap till kartlager och för platser att söka
+          bland.
         </p>
         <h3>Virtuella herbariet (SVH)</h3>
         <p>
@@ -97,6 +117,19 @@
           <a href="https://github.com/mossnisse/Virtuella-Herbariet"
             >mossnisse / Virtuella-Herbariet på GitHub</a
           >.
+        </p>
+        <h3>Who's On First (WOF)</h3>
+        <p>
+          <a href="https://whosonfirst.org/what">Who's On First</a> är en
+          ortnamnsförteckning som delar data med öppna licenser. Vi använder
+          Who's On First både som källa till koordinatsatta platser och för att
+          slå upp den administrativa indelningen för alla platser i Georg.
+        </p>
+        <h2>Webbläsare</h2>
+        <p>
+          Georg fungerar i moderna webbläsare i mobiltelefoner, datorer och
+          surfplattor, till exempel nyare versioner av Google Chrome, Edge,
+          Firefox och Safari.
         </p>
         <h2>API</h2>
         <p>
