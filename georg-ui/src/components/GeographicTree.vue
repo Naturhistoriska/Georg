@@ -3,13 +3,12 @@
     <v-hover v-slot:default="{ hover }" v-if="selectedMarker.properties.county">
       <v-list-item
         dense
-        class="geotree"
+        class="geotree selectable-text"
         :class="{ highlight: expand1 == true }"
         @focus="expand1 = true"
         @blur="expand1 = false"
-        v-clipboard="selectedMarker.properties.county"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click="copyText(selectedMarker.properties.county)"
+
       >
         <v-list-item-icon>
           <v-icon v-bind:color="treeIconColor">mdi-file-tree</v-icon>
@@ -37,13 +36,11 @@
     <v-hover v-slot:default="{ hover }" v-if="selectedMarker.properties.region">
       <v-list-item
         dense
-        class="geotree"
+        class="geotree selectable-text"
         :class="{ highlight: expand2 == true }"
         @focus="expand2 = true"
         @blur="expand2 = false"
-        v-clipboard="selectedMarker.properties.region"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click="copyText(selectedMarker.properties.region)"
       >
         <v-list-item-icon>
           <v-icon v-bind:color="treeIconColor">{{ reginTreeIcon }}</v-icon>
@@ -74,13 +71,11 @@
     >
       <v-list-item
         dense
-        class="geotree"
+        class="geotree selectable-text"
         :class="{ highlight: expand3 == true }"
         @focus="expand3 = true"
         @blur="expand3 = false"
-        v-clipboard="selectedMarker.properties.country"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click="copyText(selectedMarker.properties.country)"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -138,7 +133,11 @@ export default {
   },
   methods: {
     copyText(value) {
-      navigator.clipboard.writeText(value)
+      if (window.getSelection() != '') {
+        this.$clipboard(window.getSelection().toString())
+      } else {
+        this.$clipboard(value)
+      }
       this.snackbar = true
     },
   },
