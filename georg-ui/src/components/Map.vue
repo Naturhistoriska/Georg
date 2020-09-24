@@ -314,8 +314,12 @@ export default {
         .reverseGeoCodingResults(lat, lng)
         .then(response => {
           this.isLoaded = false
-          const result = response.features[0]
 
+          let results = response.features.filter(
+            r => r.properties.gid === 'newMarker'
+          )
+
+          const result = results[0]
           if (uncertainty) {
             result.properties.coordinateUncertaintyInMeters = uncertainty
           }
