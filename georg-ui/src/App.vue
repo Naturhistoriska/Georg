@@ -53,8 +53,12 @@ h4 {
 .routerLink {
   text-decoration: none;
 }
-
 header {
   min-width: 320px;
+}
+.selectable-text {
+  -webkit-user-select: text !important; /* Safari */
+  -ms-user-select: text !important; /* IE 10+ and Edge */
+  user-select: text !important; /* Standard syntax */
 }
 </style>

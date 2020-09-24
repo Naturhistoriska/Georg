@@ -2,12 +2,11 @@
   <v-list-item-group active-class="white-bg">
     <v-hover v-slot:default="{ hover }">
       <v-list-item
+        class="selectable-text"
         :class="{ highlight: expand == true }"
         @focus="expand = true"
         @blur="expand = false"
-        v-clipboard="latLonDms"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click="copyText(latLonDms)"
       >
         <v-list-item-icon>
           <v-icon :color="makeIconColor">mdi-crosshairs-gps</v-icon>
@@ -32,12 +31,11 @@
     </v-hover>
     <v-hover v-slot:default="{ hover }">
       <v-list-item
+        class="selectable-text"
         :class="{ highlight: expand1 == true }"
         @focus="expand1 = true"
         @blur="expand1 = false"
-        v-clipboard="latLonDdm"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click="copyText(latLonDdm)"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -60,12 +58,11 @@
     </v-hover>
     <v-hover v-slot:default="{ hover }">
       <v-list-item
+        class="selectable-text"
         :class="{ highlight: expand2 == true }"
         @focus="expand2 = true"
         @blur="expand2 = false"
-        v-clipboard="latLon"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click="copyText(latLon)"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -88,12 +85,11 @@
     </v-hover>
     <v-hover v-slot:default="{ hover }">
       <v-list-item
+        class="selectable-text"
         :class="{ highlight: expand3 == true }"
         @focus="expand3 = true"
         @blur="expand3 = false"
-        v-clipboard="rt90"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click="copyText(rt90)"
       >
         <v-list-item-icon></v-list-item-icon>
         <v-list-item-content>
@@ -116,12 +112,11 @@
     </v-hover>
     <v-hover v-slot:default="{ hover }">
       <v-list-item
+        class="selectable-text"
         :class="{ highlight: expand4 == true }"
         @focus="expand4 = true"
         @blur="expand4 = false"
-        v-clipboard="sweref99"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click="copyText(sweref99)"
       >
         <v-list-item-action></v-list-item-action>
         <v-list-item-content>
@@ -190,7 +185,11 @@ export default {
   },
   methods: {
     copyText(value) {
-      navigator.clipboard.writeText(value)
+      if (window.getSelection() != '') {
+        this.$clipboard(window.getSelection().toString())
+      } else {
+        this.$clipboard(value)
+      }
       this.snackbar = true
     },
   },

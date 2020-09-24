@@ -12,12 +12,11 @@
     <v-list>
       <v-hover v-slot:default="{ hover }" v-if="!isNewMarker">
         <v-list-item
+          class="selectable-text"
           :class="{ highlight: expand == true }"
           @focus="expand = true"
           @blur="expand = false"
-          v-clipboard="selectedMarker.properties.name"
-          @click.stop="snackbar2 = true"
-          @keypress.stop="snackbar2 = true"
+          @click="copyText(selectedMarker.properties.name)"
         >
           <v-list-item-icon>
             <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
@@ -52,12 +51,11 @@
       <v-divider></v-divider>
       <v-hover v-slot:default="{ hover }" v-if="hasUncertainty">
         <v-list-item
+          class="selectable-text"
           :class="{ highlight: expand == true }"
           @focus="expand = true"
           @blur="expand = false"
-          v-clipboard="uncertaintyValue"
-          @click.stop="snackbar2 = true"
-          @keypress.stop="snackbar2 = true"
+          @click="copyText(uncertaintyValue)"
         >
           <v-list-item-icon>
             <v-icon :color="makeIconColor">mdi-map-marker-radius</v-icon>
@@ -217,7 +215,11 @@ export default {
 
   methods: {
     copyText(value) {
-      navigator.clipboard.writeText(value)
+      if (window.getSelection() != '') {
+        this.$clipboard(window.getSelection().toString())
+      } else {
+        this.$clipboard(value)
+      }
       this.snackbar2 = true
     },
   },
