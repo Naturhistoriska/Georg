@@ -18,9 +18,9 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['selectedResult']),
+    ...mapGetters(['selectedMarker']),
     jsonstr: function() {
-      return this.selectedResult
+      return this.selectedMarker
     },
   },
 
