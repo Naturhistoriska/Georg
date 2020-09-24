@@ -471,17 +471,17 @@ export default {
       const rt90 = coordinates.rt90[0] + ', ' + coordinates.rt90[1]
       const sweref99 = coordinates.sweref99[0] + ', ' + coordinates.sweref99[1]
 
-      const placeName = `<strong>${result.properties.name}</strong><br /><br />`
-      const popCoordinates = `<strong>WGS84 DMS</strong><br />${dms}<br /><br /><strong>WGS84 DDM</strong><br />${ddm}<br /><br /><strong>WGS84 DD</strong><br />${dd}<br /><br /><strong>RT99 (nord, öst)</strong><br />${rt90}<br /><br /><strong>SWEREF99 TM (nord, öst)<br /></strong>${sweref99}<br /><br />`
+      const placeName = `<div class="subtitle-2 mb-3 font-weight-bold">${result.properties.name}</div>`
+      const popCoordinates = `<div class="mb-3"><span class="font-weight-medium">WGS84 DMS</span><br />${dms}</div><div class="mb-3"><span class="font-weight-medium">WGS84 DDM</span><br />${ddm}</div><div class="mb-3"><span class="font-weight-medium">WGS84 DD</span><br />${dd}</div><div class="mb-3"><span class="font-weight-medium">RT99 (nord, öst)</span><br />${rt90}</div><div class="mb-5"><span class="font-weight-medium">SWEREF99 TM (nord, öst)</span><br />${sweref99}</div>`
 
       let uncertainty = ''
       if (this.uncertainty(result)) {
-        uncertainty = `<strong>Osäkerhetsradie: </strong>${this.uncertainty(
+        uncertainty = `<div class="mb-5"><span class="font-weight-medium">Osäkerhetsradie: </span>${this.uncertainty(
           result
-        )}<br /><br />`
+        )} meter</div>`
       }
       const string = placeName + popCoordinates + uncertainty
-      const text = L.DomUtil.create('div', string, container)
+      const text = L.DomUtil.create('div', 'popup-details', container)
       text.innerHTML = string
       return text
     },
@@ -790,7 +790,14 @@ export default {
   .leaflet-control-layers.leaflet-control-layers-expanded.leaflet-control {
   margin-top: 170px;
 }
-.leaflet-control-container, .leaflet-popup{
+.leaflet-control-container,
+.leaflet-popup {
   font-family: roboto, sans-serif;
+}
+.leaflet-container a.leaflet-popup-close-button {
+  margin: 4px;
+}
+.leaflet-popup-content {
+  margin: 19px !important;
 }
 </style>
