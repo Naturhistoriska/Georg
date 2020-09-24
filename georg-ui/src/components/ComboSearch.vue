@@ -88,14 +88,34 @@ export default {
       let elements = []
       this.entries.map(entry => {
         const source = entry.properties.source
-        const abbr =
-          source === 'swe-virtual-herbarium'
-            ? 'svh'
-            : source === 'whosonfirst'
-            ? 'wof'
-            : 'gbif'
+
+        let abbr
+        if (source === 'whosonfirst') {
+          abbr = 'wof'
+        }
+        if (source === 'openstreetmap') {
+          abbr = 'osm'
+        }
+        if (source === 'openaddress') {
+          abbr = 'oa'
+        }
+        if (source === 'gbif') {
+          abbr = 'gbif'
+        }
+        if (source === 'swe-virtual-herbarium') {
+          abbr = 'svh'
+        }
+
+        // const abbr =
+        //   source === 'swe-virtual-herbarium'
+        //     ? 'svh'
+        //     : source === 'whosonfirst'
+        //     ? 'wof'
+        //     : 'gbif'
         const uncertainty =
-          source !== 'whosonfirst'
+          source !== 'whosonfirst' &&
+          source !== 'openstreetmap' &&
+          source !== 'openaddress'
             ? entry.properties.addendum.georg.coordinateUncertaintyInMeters
             : undefined
         const icon = uncertainty ? 'mdi-map-marker-radius' : 'mdi-map-marker'

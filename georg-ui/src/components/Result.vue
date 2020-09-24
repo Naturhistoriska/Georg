@@ -64,16 +64,42 @@ export default {
       return this.isActive ? 'selected' : 'unSelected'
     },
     source: function() {
-      return this.result.properties.source === 'whosonfirst'
-        ? "Who's On First"
-        : 'Virtuella herbariet'
+      const source = this.result.properties.source
+      if (source === 'whosonfirst') {
+        return "Who's On First"
+      }
+      if (source === 'openstreetmap') {
+        return 'openstreetmap'
+      }
+      if (source === 'openaddress') {
+        return 'openaddress'
+      }
+      return 'Virtuella herbariet'
+      // return this.result.properties.source === 'whosonfirst'
+      //   ? "Who's On First"
+      //   : 'Virtuella herbariet'
     },
     sourceAlias: function() {
-      return this.result.properties.source === 'whosonfirst'
-        ? 'WOF'
-        : this.result.properties.source === 'gbif'
-        ? 'GBIF'
-        : 'SVH'
+      const source = this.result.properties.source
+      if (source === 'whosonfirst') {
+        return 'WOF'
+      }
+      if (source === 'openstreetmap') {
+        return 'OSM'
+      }
+      if (source === 'openaddress') {
+        return 'OA'
+      }
+      if (source === 'gbif') {
+        return 'GBIF'
+      }
+      return 'SVH'
+
+      // return this.result.properties.source === 'whosonfirst'
+      //   ? 'WOF'
+      //   : this.result.properties.source === 'gbif'
+      //   ? 'GBIF'
+      //   : 'SVH'
     },
     isGbif: function() {
       return this.result.properties.source === 'gbif'
@@ -92,7 +118,12 @@ export default {
     },
     markerIcon: function() {
       const source = this.result.properties.source
-      if (source === 'whosonfirst') {
+      console.log('source...', source)
+      if (
+        source === 'whosonfirst' ||
+        source === 'openstreetmap' ||
+        source === 'openaddress'
+      ) {
         return 'mdi-map-marker'
       }
 

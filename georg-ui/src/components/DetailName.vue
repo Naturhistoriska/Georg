@@ -35,9 +35,21 @@ export default {
         : this.selectedMarker.properties.name
     },
     source: function() {
-      return this.selectedMarker.properties.source === 'whosonfirst'
-        ? "Who's On First"
-        : 'Virtuella Herbariet'
+      const source = this.selectedMarker.properties.source
+      if (source === 'whosonfirst') {
+        return "Who's On First"
+      }
+      if (source === 'openstreetmap') {
+        return 'Open street map'
+      }
+      if (source === 'openaddress') {
+        return 'Open address'
+      }
+      return 'Virtuella Herbariet'
+
+      // return this.selectedMarker.properties.source === 'whosonfirst'
+      //   ? "Who's On First"
+      //   : 'Virtuella Herbariet'
     },
 
     latDms: function() {

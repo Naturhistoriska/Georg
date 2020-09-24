@@ -632,7 +632,9 @@ export default {
     uncertainty: function(result) {
       return result.properties.id === 'newMarker'
         ? result.properties.coordinateUncertaintyInMeters
-        : result.properties.source !== 'whosonfirst'
+        : result.properties.source !== 'whosonfirst' &&
+          result.properties.source !== 'openstreetmap' &&
+          result.properties.source !== 'openaddress'
         ? result.properties.addendum.georg.coordinateUncertaintyInMeters
         : null
     },

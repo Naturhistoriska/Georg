@@ -1,7 +1,7 @@
 <template>
   <v-card
     class="mt-2 overflow-y-auto"
-    :class="{'card-sm': $vuetify.breakpoint.smAndUp }"
+    :class="{ 'card-sm': $vuetify.breakpoint.smAndUp }"
     id="v-card-detail"
     :style="height"
   >
@@ -144,9 +144,20 @@ export default {
     },
 
     source: function() {
-      return this.selectedMarker.properties.source === 'whosonfirst'
-        ? "Who's On First"
-        : 'Virtuella Herbariet'
+      const source = this.selectedMarker.properties.source
+      if (source === 'whosonfirst') {
+        return "Who's On First"
+      }
+      if (source === 'openstreetmap') {
+        return 'Open street map'
+      }
+      if (source === 'openaddress') {
+        return 'Open address'
+      }
+      return 'Virtuella Herbariet'
+      // return this.selectedMarker.properties.source === 'whosonfirst'
+      //   ? "Who's On First"
+      //   : 'Virtuella Herbariet'
     },
 
     makeIconColor: function() {
@@ -154,10 +165,30 @@ export default {
     },
 
     hasUncertainty: function() {
-      return this.isWOF || this.isNewMarker
-        ? false
-        : this.selectedMarker.properties.addendum.georg
-            .coordinateUncertaintyInMeters !== null
+      if (this.isNewMarker) {
+        return false
+      }
+      const source = this.selectedMarker.properties.source
+      if (source === 'whosonfirst') {
+        return false
+      }
+      if (source === 'openstreetmap') {
+        return false
+      }
+      if (source === 'openaddress') {
+        return false
+      }
+      console.log(
+        this.selectedMarker.properties.addendum.georg
+          .coordinateUncertaintyInMeters
+      )
+      return this.selectedMarker.properties.addendum.georg
+        .coordinateUncertaintyInMeters
+
+      // return this.isWOF || this.isNewMarker
+      //   ? false
+      //   : this.selectedMarker.properties.addendum.georg
+      //       .coordinateUncertaintyInMeters !== null
     },
   },
 

@@ -22,11 +22,23 @@ export default {
     ...mapGetters(['selectedMarker']),
 
     dataFromSource: function() {
-      return this.selectedMarker.properties.source === 'whosonfirst'
-        ? "Who's On First (WOF)"
-        : 'Virtuella Herbariet (SVH)'
+      const source = this.selectedMarker.properties.source
+      if (source === 'whosonfirst') {
+        return "Who's On First (WOF)"
+      }
+      if (source === 'openstreetmap') {
+        return 'Open street map (OSM)'
+      }
+      if (source === 'openaddress') {
+        return 'Open address (OA)'
+      }
+      return 'Virtuella Herbariet (SVH)'
+      // return this.selectedMarker.properties.source === 'whosonfirst'
+      //   ? "Who's On First (WOF)"
+      //   : 'Virtuella Herbariet (SVH)'
     },
     externallink: function() {
+      // todo: add oms and oa licenses
       return this.selectedMarker.properties.source === 'whosonfirst'
         ? 'https://whosonfirst.org/docs/licenses/'
         : 'https://github.com/mossnisse/Virtuella-Herbariet'
