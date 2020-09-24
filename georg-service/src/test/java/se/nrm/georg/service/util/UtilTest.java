@@ -151,8 +151,9 @@ public class UtilTest {
  
     double lat = 59.3;
     double lon = 16.9; 
-    String expResult = "http://api.se/reverse?point.lon=16.9&point.lat=59.3&boundary.circle.radius=1000&layers=coarse";
+    String expResult = "http://api.se/reverse?point.lon=16.9&point.lat=59.3";
     String result = instance.buildReverseGeoCodePath(peliasPath, lat, lon); 
+    System.out.println("result..." + result);
     assertEquals(expResult, result); 
   }
 
