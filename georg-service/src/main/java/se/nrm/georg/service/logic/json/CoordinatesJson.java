@@ -76,25 +76,56 @@ public class CoordinatesJson {
 
   public String addCoordinatesTransformation(String jsonString,
           Double lat, Double lng, boolean isNewMarker) {
-    log.info("addCoordinatesTransformation");
+    log.info("addCoordinatesTransformation : {}", isNewMarker);
 
     JSONObject jsonObject = parser.convertStringToJson(jsonString);
-    JSONArray array = parser.getJsonArray(jsonObject, featuresKey); 
-    if (array.length() == 0) {
+    JSONArray array = parser.getJsonArray(jsonObject, featuresKey);
+    
+//    if (isNewMarker || array.length() == 0) {
+//      JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
+//      array.put(dinPlatsJson);
+//    } else {
+
+    if (array.length() == 0 ) {
       JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
       array.put(dinPlatsJson);
+    } else if (isNewMarker) {
+//      JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
+      JSONObject firstJson = array.getJSONObject(0);
+      JSONObject property = firstJson.getJSONObject(propertiesKey);
+
+      property.put(nameKey, dinPlats);
+      property.put(idKey, newMarker);
+      property.put(gidKey, newMarker);
+      JSONObject geometryJson = firstJson.getJSONObject(geometryKey);
+      parser.buildJsonObject(geometryJson, coordinatesKey, lng, lat); 
+      property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(lat), roundDoubleToSix(lng)));
     } else {
       array.iterator().forEachRemaining(element -> {
         JSONObject jsonObj = (JSONObject) element;
         JSONObject geometryJson = jsonObj.getJSONObject(geometryKey);
-        parser.buildJsonObject(geometryJson, coordinatesKey, lng, lat);
+
         JSONObject property = jsonObj.getJSONObject(propertiesKey);
-        if (isNewMarker) {
-          property.put(nameKey, dinPlats);
-          property.put(idKey, newMarker);
-          property.put(gidKey, newMarker);
-        }
-        property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(lat), roundDoubleToSix(lng)));
+//        if(!isNewMarker) {
+        JSONArray coordinates = parser.getJsonArray(geometryJson, coordinatesKey);
+        double realLng = coordinates.getBigDecimal(0).setScale(6, RoundingMode.HALF_UP).doubleValue();
+        double realLat = coordinates.getBigDecimal(1).setScale(6, RoundingMode.HALF_UP).doubleValue();
+        parser.buildJsonObject(geometryJson, coordinatesKey, realLng, realLat);
+        property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(realLat), roundDoubleToSix(realLng)));
+//        } else {
+//          parser.buildJsonObject(geometryJson, coordinatesKey, lng, lat);
+//          property.put(nameKey, dinPlats);
+//          property.put(idKey, newMarker);
+//          property.put(gidKey, newMarker);
+//          property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(lat), roundDoubleToSix(lng)));
+//        } 
+
+//        if (isNewMarker) {
+//          property.put(nameKey, dinPlats);
+//          property.put(idKey, newMarker);
+//          property.put(gidKey, newMarker);
+//        }
+//        property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(realLat), roundDoubleToSix(realLng)));
       });
       if (!isNewMarker) {
         JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
