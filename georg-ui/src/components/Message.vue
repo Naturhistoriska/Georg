@@ -15,11 +15,7 @@
     >
       {{ message }}
     </div>
-    <div
-      id="message"
-      v-else-if="results.length > 0"
-      class="pl-2 grey--text text--darken-3 body-2"
-    >
+    <div id="message" v-else class="pl-2 grey--text text--darken-3 body-2">
       {{ message }}
     </div>
     <v-spacer></v-spacer>
