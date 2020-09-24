@@ -6,8 +6,8 @@
         outlined
         class="mr-2"
         tabindex="0"
-        @click.stop="dialog = true"
-        @keypress.stop="dialog = true"
+        @click.stop="dialog = !dialog"
+        @keypress.stop="dialog = !dialog"
       >
         <!--Display dialog and snackbar should be fixed properly so that both works for clicking and pressing enter.-->
         <v-icon left>mdi-code-tags</v-icon>Visa JSON
@@ -40,7 +40,7 @@
         Din plats
       </v-chip>
     </v-card-text>
-    <v-dialog v-model="dialog" max-width="550">
+    <v-dialog v-model="dialog" @keydown.esc="dialog = false" max-width="550">
       <JsonResult />
     </v-dialog>
     <v-snackbar v-model="snackbar" centered :timeout="600"
