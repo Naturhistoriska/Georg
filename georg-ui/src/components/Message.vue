@@ -23,17 +23,18 @@
       {{ message }}
     </div>
     <v-spacer></v-spacer>
-    <a
+    <v-btn text small
+      id="displaytoggle"
       class="grey--text text--darken-3 body-2 pl-2"
       tabindex="0"
       v-if="results.length > 0"
       @click="setDisplayResults(!displayResults)"
-      @keypress="setDisplayResults(!displayResults)"
+      
       >{{ linkText2 }}
       <v-icon>{{
         displayResults ? 'mdi-chevron-up' : 'mdi-chevron-down'
       }}</v-icon>
-    </a>
+    </v-btn>
   </v-card-actions>
 </template>
 
@@ -67,10 +68,7 @@ export default {
   // watch: {
   // },
   methods: {
-    ...mapMutations([
-      'setDetailView',
-      'setDisplayResults',
-    ]),
+    ...mapMutations(['setDetailView', 'setDisplayResults']),
     onclick() {
       this.setDetailView(false)
       // this.setDisplayJsonData(false)
@@ -82,4 +80,5 @@ export default {
 .pre-formatted {
   white-space: pre;
 }
+#displaytoggle { text-transform: none;}
 </style>
