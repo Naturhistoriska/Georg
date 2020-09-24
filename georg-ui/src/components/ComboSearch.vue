@@ -96,7 +96,7 @@ export default {
         if (source === 'openstreetmap') {
           abbr = 'osm'
         }
-        if (source === 'openaddress') {
+        if (source === 'openaddresses') {
           abbr = 'oa'
         }
         if (source === 'gbif') {
@@ -115,7 +115,7 @@ export default {
         const uncertainty =
           source !== 'whosonfirst' &&
           source !== 'openstreetmap' &&
-          source !== 'openaddress'
+          source !== 'openaddresses'
             ? entry.properties.addendum.georg.coordinateUncertaintyInMeters
             : undefined
         const icon = uncertainty ? 'mdi-map-marker-radius' : 'mdi-map-marker'

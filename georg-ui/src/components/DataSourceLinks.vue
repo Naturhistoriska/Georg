@@ -27,10 +27,10 @@ export default {
         return "Who's On First (WOF)"
       }
       if (source === 'openstreetmap') {
-        return 'Open street map (OSM)'
+        return 'OpenStreetMap (OSM)'
       }
-      if (source === 'openaddress') {
-        return 'Open address (OA)'
+      if (source === 'openaddresses') {
+        return 'OpenAddresses (OA)'
       }
       return 'Virtuella Herbariet (SVH)'
       // return this.selectedMarker.properties.source === 'whosonfirst'
@@ -39,9 +39,21 @@ export default {
     },
     externallink: function() {
       // todo: add oms and oa licenses
-      return this.selectedMarker.properties.source === 'whosonfirst'
-        ? 'https://whosonfirst.org/docs/licenses/'
-        : 'https://github.com/mossnisse/Virtuella-Herbariet'
+      const source = this.selectedMarker.properties.source
+      if (source === 'whosonfirst') {
+        return 'https://whosonfirst.org/docs/licenses/'
+      }
+      if (source === 'openaddresses') {
+        return 'https://github.com/openaddresses/openaddresses/tree/master/sources'
+      }
+
+      if (source === 'openstreetmap') {
+        return 'https://www.openstreetmap.org/copyright'
+      }
+      return 'https://github.com/mossnisse/Virtuella-Herbariet'
+      // return this.selectedMarker.properties.source === 'whosonfirst'
+      //   ? 'https://whosonfirst.org/docs/licenses/'
+      //   : 'https://github.com/mossnisse/Virtuella-Herbariet'
     },
   },
   methods: {

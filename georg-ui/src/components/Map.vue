@@ -634,7 +634,7 @@ export default {
         ? result.properties.coordinateUncertaintyInMeters
         : result.properties.source !== 'whosonfirst' &&
           result.properties.source !== 'openstreetmap' &&
-          result.properties.source !== 'openaddress'
+          result.properties.source !== 'openaddresses'
         ? result.properties.addendum.georg.coordinateUncertaintyInMeters
         : null
     },

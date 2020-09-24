@@ -40,10 +40,10 @@ export default {
         return "Who's On First"
       }
       if (source === 'openstreetmap') {
-        return 'Open street map'
+        return 'OpenStreetMap'
       }
-      if (source === 'openaddress') {
-        return 'Open address'
+      if (source === 'openaddresses') {
+        return 'OpenAddresses'
       }
       return 'Virtuella Herbariet'
 

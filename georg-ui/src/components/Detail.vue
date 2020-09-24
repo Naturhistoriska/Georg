@@ -151,8 +151,8 @@ export default {
       if (source === 'openstreetmap') {
         return 'Open street map'
       }
-      if (source === 'openaddress') {
-        return 'Open address'
+      if (source === 'openaddresses') {
+        return 'Open openAddresses'
       }
       return 'Virtuella Herbariet'
       // return this.selectedMarker.properties.source === 'whosonfirst'
@@ -175,13 +175,9 @@ export default {
       if (source === 'openstreetmap') {
         return false
       }
-      if (source === 'openaddress') {
+      if (source === 'openaddresses') {
         return false
       }
-      console.log(
-        this.selectedMarker.properties.addendum.georg
-          .coordinateUncertaintyInMeters
-      )
       return this.selectedMarker.properties.addendum.georg
         .coordinateUncertaintyInMeters
 

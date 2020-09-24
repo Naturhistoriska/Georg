@@ -69,10 +69,10 @@ export default {
         return "Who's On First"
       }
       if (source === 'openstreetmap') {
-        return 'openstreetmap'
+        return 'OpenStreetMap'
       }
-      if (source === 'openaddress') {
-        return 'openaddress'
+      if (source === 'openaddresses') {
+        return 'OpenAddresses'
       }
       return 'Virtuella herbariet'
       // return this.result.properties.source === 'whosonfirst'
@@ -87,7 +87,7 @@ export default {
       if (source === 'openstreetmap') {
         return 'OSM'
       }
-      if (source === 'openaddress') {
+      if (source === 'openaddresses') {
         return 'OA'
       }
       if (source === 'gbif') {
@@ -118,11 +118,10 @@ export default {
     },
     markerIcon: function() {
       const source = this.result.properties.source
-      console.log('source...', source)
       if (
         source === 'whosonfirst' ||
         source === 'openstreetmap' ||
-        source === 'openaddress'
+        source === 'openaddresses'
       ) {
         return 'mdi-map-marker'
       }
