@@ -226,20 +226,15 @@ export default {
 <style scoped>
 #v-card-detail {
   z-index: 2;
+  min-width: 300px;
 }
 .alertText {
   font-size: 14px;
 }
-
-#v-card-detail .v-card__title {
-  word-break: break-word;
-}
-
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
 }
-
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.5);
@@ -247,9 +242,5 @@ export default {
 }
 .card-sm {
   width: 400px;
-}
-
-#v-card-detail {
-  min-width: 300px;
 }
 </style>
