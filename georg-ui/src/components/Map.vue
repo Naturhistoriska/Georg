@@ -14,7 +14,6 @@
       :zoom="zoom"
       :maxZoom="maxZoom"
       @click="onMapClick"
-      @ready="fitMapBounds"
       @baselayerchange="layerChange"
     >
       <l-control-layers
@@ -124,7 +123,6 @@ export default {
       isLoaded: false,
       layerGroup: {},
       maxZoom: 18,
-      rezoom: true,
       tileProviders: [
         {
           name: 'OpenStreetMap',
@@ -167,6 +165,7 @@ export default {
 
     this.$nextTick(() => {
       this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
+      this.$refs.myMap.mapObject.fitBounds(this.bounds)
       this.$refs.myMap.mapObject.invalidateSize()
       // this.buildMarkers()
     })
@@ -191,6 +190,7 @@ export default {
       'reBuildMarker',
       'results',
       'hoveredResultId',
+      'rezoom',
       'selectedMarker',
       'selectedResult',
       'selectedResultId',
@@ -219,7 +219,7 @@ export default {
         const lng = this.selectedMarker.geometry.coordinates[0]
         this.dinPlatsSearch(lat, lng, false)
         this.setAddDinPlats(false)
-        this.rezoom = false
+        // this.rezoom = false
       }
     },
     detailView: function() {
@@ -239,6 +239,7 @@ export default {
         this.buildMarkers()
         this.addUnertainties()
       })
+      // this.rezoom = true
     },
     reBuildMarker: function() {
       this.$nextTick(() => {
@@ -279,6 +280,7 @@ export default {
       'setMessage',
       'setReBuildMarker',
       'setResults',
+      'setRezoom',
       'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
@@ -290,7 +292,6 @@ export default {
         // this.removeOldDinPlatsMarker()
         const latlng = event.latlng
         this.dinPlatsSearch(latlng.lat, latlng.lng, false)
-        this.rezoom = false
         this.setAccuracy(-1)
         this.enableAddMapMarkers = false
       }
@@ -298,7 +299,7 @@ export default {
 
     dinPlatsSearch(lat, lng, moveUncertainty) {
       this.clickedMarker = false
-      this.rezoom = !moveUncertainty
+      this.setRezoom(false)
       let uncertainty
       if (this.results.length > 0) {
         // this.removeOldDinPlatsMarker()
@@ -389,7 +390,7 @@ export default {
             this.setSelectedMarker(result)
           }
           this.setReBuildMarker(!this.reBuildMarker)
-          this.rezoom = false
+          // this.rezoom = false
         })
         if (this.detailView) {
           if (id === this.selectedMarker.properties.gid && this.clickedMarker) {

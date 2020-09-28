@@ -99,6 +99,7 @@ export default {
       'setIsErrorMsg',
       'setMessage',
       'setResults',
+      'setRezoom',
       'setSelectedResultId',
       'setSelectedResult',
       'setSelectedMarker',
@@ -134,7 +135,7 @@ export default {
           const isSimpleResult = results.length === 1
           const selectedResult = isSimpleResult ? results[0] : {}
           const selectedResultId = isSimpleResult
-            ? results[0].properties.id
+            ? results[0].properties.gid
             : ''
 
           this.setDetailView(isSimpleResult ? true : false)
@@ -155,6 +156,7 @@ export default {
           this.setSearchCountry(countryCode)
           this.setSearchOption('address')
         })
+      this.setRezoom(true)
     },
 
     searchCoors(value) {
@@ -177,10 +179,11 @@ export default {
             let theResults = response.features
             if (theResults.length === 1) {
               this.results.push(theResults[0])
+              this.setSelectedMarker(this.results[0])
               this.setDetailView(true)
             } else {
               theResults.forEach(result => {
-                if (result.properties.id === 'newMarker') {
+                if (result.properties.gid === 'newMarker') {
                   this.results.unshift(result)
                 } else {
                   this.results.push(result)
@@ -206,6 +209,7 @@ export default {
           this.setSearchOption('coordinates')
           this.setSearchCoordinates(value)
         })
+      this.setRezoom(true)
     },
   },
 }

@@ -81,10 +81,11 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setAddDinPlats']),
+    ...mapMutations(['setAddDinPlats', 'setRezoom']),
 
     addDinPlats() {
       this.setAddDinPlats(true)
+      this.setRezoom(false)
       this.snackbar3 = true
     },
   },

@@ -70,6 +70,7 @@ export default {
       'setIsErrorMsg',
       'setMessage',
       'setResults',
+      'setRezoom',
       'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
@@ -146,6 +147,7 @@ export default {
             this.isLoading = false
           })
         this.setSearchCoordinates(this.coordinates)
+        this.setRezoom(true)
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
         if (decodeUrl !== `/search?coordinates=${this.coordinates}`) {
           this.$router.push(`/search?coordinates=${this.coordinates}`)

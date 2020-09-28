@@ -155,6 +155,7 @@ export default {
       'setIsErrorMsg',
       'setMessage',
       'setResults',
+      'setRezoom',
       'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
@@ -236,6 +237,7 @@ export default {
             this.entries = []
           })
 
+        this.setRezoom(true)
         this.setSearchText(this.search)
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
         if (decodeUrl !== `/search?place_name=${this.search}`) {
