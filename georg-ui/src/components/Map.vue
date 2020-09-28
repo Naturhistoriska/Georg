@@ -167,7 +167,6 @@ export default {
       this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
       this.$refs.myMap.mapObject.fitBounds(this.bounds)
       this.$refs.myMap.mapObject.invalidateSize()
-      // this.buildMarkers()
     })
 
     L.control
@@ -199,9 +198,6 @@ export default {
     iconColor: function() {
       return this.enableAddMapMarkers ? 'red darken-2' : '#424242'
     },
-    // iconCursor: function() {
-    //   return this.detailView ? '' : 'cursor: pointer;'
-    // },
   },
 
   watch: {
@@ -227,11 +223,6 @@ export default {
       this.$nextTick(() => {
         this.buildMarkers()
         this.addUnertainties()
-        // if (this.detailView) {
-        //   const lat = this.selectedMarker.geometry.coordinates[1]
-        //   const lng = this.selectedMarker.geometry.coordinates[0]
-        //   this.center = [lat, lng]
-        // }
       })
     },
     results: function() {
@@ -247,27 +238,9 @@ export default {
       })
     },
 
-    // hoveredResultId() {
-    //   this.$nextTick(() => {
-    //     if (!this.detailView) {
-    //       this.highlightMarker()
-    //     }
-    //   })
-    // },
-    // selectedMarker() {
-    //   this.highlightMarker()
-    // },
-    // selectedResultId() {
-    //   this.$nextTick(() => {
-    //     this.highlightMarker()
-    //   })
-    // },
     center: function() {
       this.$nextTick(() => {
-        this.$refs.myMap.mapObject.flyTo(
-          [this.center[0], this.center[1]],
-          this.zoom
-        )
+        this.$refs.myMap.mapObject.flyTo([this.center[0], this.center[1]], 5)
       })
     },
   },
@@ -289,7 +262,6 @@ export default {
     onMapClick(event) {
       // event.preventDefault()
       if (this.enableAddMapMarkers) {
-        // this.removeOldDinPlatsMarker()
         const latlng = event.latlng
         this.dinPlatsSearch(latlng.lat, latlng.lng, false)
         this.setAccuracy(-1)
@@ -302,7 +274,6 @@ export default {
       this.setRezoom(false)
       let uncertainty
       if (this.results.length > 0) {
-        // this.removeOldDinPlatsMarker()
         if (this.results[0].properties.gid === 'newMarker') {
           uncertainty = moveUncertainty
             ? this.results[0].properties.coordinateUncertaintyInMeters
@@ -340,7 +311,7 @@ export default {
     //   const lat = this.selectedMarker.geometry.coordinates[1]
     //   const lng = this.selectedMarker.geometry.coordinates[0]
     //   this.center = [lat, lng]
-    //   this.zoom = 4
+    //   // this.zoom = 6
     // },
 
     removeUncertainties() {
@@ -361,8 +332,6 @@ export default {
     },
 
     buildMarkers() {
-      // this.clickedMarker = null
-      // let openPop = false
       this.resetLayerGroup()
       this.removeUncertainties()
       this.bounds = L.latLngBounds()
@@ -405,23 +374,6 @@ export default {
             marker.addTo(this.layerGroup)
           }
         }
-
-        // if (this.detailView) {
-        //   if (id === this.selectedMarker.properties.id && this.clickedMarker) {
-        //     marker.addTo(this.layerGroup).openPopup()
-        //   } else {
-        //     marker.addTo(this.layerGroup)
-        //   }
-        // } else {
-        //   if (
-        //     result.properties.id === this.selectedResultId &&
-        //     this.clickedMarker
-        //   ) {
-        //     marker.addTo(this.layerGroup).openPopup()
-        //   } else {
-        //     marker.addTo(this.layerGroup)
-        //   }
-        // }
       })
       if (this.results != null && this.results.length > 0 && this.rezoom) {
         this.fitMapBounds()
@@ -429,19 +381,6 @@ export default {
       if (!this.detailView) {
         this.clickedMarker = false
       }
-
-      // this.highlightMarker()
-      // if (this.detailView) {
-      //   this.center = [
-      //     this.selectedMarker.geometry.coordinates[1],
-      //     this.selectedMarker.geometry.coordinates[0],
-      //   ]
-      //   this.zoom = 10
-      // } else {
-      //   if (this.results != null && this.results.length > 0) {
-      //     this.fitMapBounds()
-      //   }
-      // }
     },
 
     buildMarker(result) {
@@ -493,11 +432,6 @@ export default {
     },
 
     buildPopContent: function(result) {
-      // const displayBtn =
-      //   this.detailView &&
-      //   (result.properties.id === 'newMarker' ||
-      //     result.properties.id === this.selectedMarker.properties.id)
-
       let displayBtn = true
       if (!this.detailView) {
         displayBtn = true
@@ -550,10 +484,6 @@ export default {
       })
       popup.setContent(this.buildPopContent(result))
 
-      // var popup = L.popup({
-      //   offset: [0, -30],
-      // }).setContent(this.buildPopContent(result))
-
       var marker = L.marker([lat, lng], {
         id: 'newMarker',
         draggable: true,
@@ -591,13 +521,6 @@ export default {
         if (this.uncertaintyAdd(id)) {
           this.addUncertainty(result)
         }
-        // if (
-        //   id === this.selectedResultId ||
-        //   id === 'newMarker' ||
-        //   id === this.hoveredResultId
-        // ) {
-        //   this.addUncertainty(result)
-        // }
       })
     },
 
@@ -614,25 +537,9 @@ export default {
           parseInt(uncertity),
           circleOptions
         ).addTo(this.$refs.myMap.mapObject)
-        // if (this.detailView) {
-        //   this.bounds = circle.getBounds()
-        //   this.fitMapBounds()
-        // }
+
         this.circles.push(circle)
-        // if (parseInt(uncertity) >= 100000) {
-        //   this.zoom = 7
-        //   this.rezoom = true
-        //   this.fixZoom()
-        // } else {
-        //   this.rezoom = false
-        // }
       }
-      // else {
-      //   if (this.detailView) {
-      //     this.zoom = 10
-      //     this.fixZoom()
-      //   }
-      // }
     },
 
     uncertainty: function(result) {
@@ -666,71 +573,17 @@ export default {
     fitMapBounds() {
       if (this.rezoom) {
         this.$refs.myMap.mapObject.fitBounds(this.bounds)
-        this.zoom =
-          this.$refs.myMap.mapObject.getZoom() > 5
-            ? 5
-            : this.$refs.myMap.mapObject.getZoom()
-        // this.fixZoom()
+        if (this.$refs.myMap.mapObject.getZoom() === 0) {
+          this.zoom = 5
+        } else {
+          this.zoom =
+            this.$refs.myMap.mapObject.getZoom() > 5
+              ? 5
+              : this.$refs.myMap.mapObject.getZoom()
+        }
       }
-      this.rezoom = true
     },
   },
-
-  // buildDetailMarker() {
-  //   this.resetLayerGroup()
-  //   const lat = this.selectedResult.geometry.coordinates[1]
-  //   const lng = this.selectedResult.geometry.coordinates[0]
-  //   this.center = [lat, lng]
-
-  //   let theMarker
-  //   if (this.selectedResult.properties.id === 'newMarker') {
-  //     theMarker = this.buildDraggableMarker(this.selectedResult)
-  //   } else {
-  //     theMarker = L.marker([lat, lng], {
-  //       icon: this.icon(this.selectedResult.properties.id),
-  //     })
-  //   }
-  //   theMarker.addTo(this.layerGroup)
-  //   this.addUncertainty(this.selectedResult)
-  // },
-
-  // removeOldDinPlatsMarker() {
-  //   if (this.results.length > 0) {
-  //     const firstResult = this.results[0]
-  //     if (firstResult.properties.id === 'newMarker') {
-  //       this.results.splice(0, 1)
-  //     }
-  //   }
-  // },
-
-  // marker: function(result) {
-  //   const icon = this.icon(result.properties.id)
-
-  //   const lat = result.geometry.coordinates[1]
-  //   const lng = result.geometry.coordinates[0]
-
-  //   const popup = L.popup({
-  //     offset: [0, -30],
-  //   }).setContent(this.buildPopContent(result))
-
-  //   if (result.properties.id === this.hoveredResultId) {
-  //     return L.marker([lat, lng], {
-  //       pane: 'topMarker',
-  //       icon,
-  //     }).bindPopup(popup)
-  //   } else if (result.properties.id === this.selectedResultId) {
-  //     return L.marker([lat, lng], {
-  //       pane: 'lowerMarker',
-  //       icon,
-  //     }).bindPopup(popup)
-  //   } else if (result.properties.id === 'newMarker') {
-  //     return this.buildDraggableMarker(result)
-  //   } else {
-  //     return L.marker([lat, lng], {
-  //       icon,
-  //     }).bindPopup(popup)
-  //   }
-  // },
 }
 </script>
 <style scoped>
