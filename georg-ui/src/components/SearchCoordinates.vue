@@ -115,13 +115,14 @@ export default {
               this.setIsErrorMsg(true)
             } else {
               const theResults = response.features
+
               if (theResults.length === 1) {
                 this.results = theResults
                 this.setSelectedMarker(this.results[0])
                 this.setDetailView(true)
               } else {
                 theResults.forEach(result => {
-                  if (result.properties.id === 'newMarker') {
+                  if (result.properties.gid === 'newMarker') {
                     this.results.unshift(result)
                   } else {
                     this.results.push(result)

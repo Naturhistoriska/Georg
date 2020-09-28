@@ -28,7 +28,7 @@ const getters = {
   displayResults: state => state.displayResults,
   hoveredResultId: state => state.hoveredResultId,
   isAddressSearch: state => state.searchOption === 'address',
-  isNewMarker: state => state.selectedMarker.properties.id === 'newMarker',
+  isNewMarker: state => state.selectedMarker.properties.gid === 'newMarker',
   isGbif: state => state.selectedMarker.properties.source === 'gbif',
   isWOF: state => state.selectedMarker.properties.source === 'whosonfirst',
   isErrorMsg: state => state.isErrorMsg,
