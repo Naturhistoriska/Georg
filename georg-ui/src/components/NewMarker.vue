@@ -60,8 +60,6 @@ export default {
     ]),
     onclick() {
       this.setDetailView(true)
-      // this.setSelectedResultId(this.result.properties.id)
-      // this.setSelectedResult(this.result)
       this.setSelectedMarker(this.result)
     },
   },
