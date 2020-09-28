@@ -8,7 +8,6 @@
         @focus="expand1 = true"
         @blur="expand1 = false"
         @click="copyText(selectedMarker.properties.county)"
-
       >
         <v-list-item-icon>
           <v-icon v-bind:color="treeIconColor">mdi-file-tree</v-icon>
