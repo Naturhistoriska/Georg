@@ -9,7 +9,7 @@
       <v-spacer></v-spacer>
       <v-toolbar-title class="title">
         <v-tabs color="white" right background-color="blue darken-2" optional>
-          <v-tab id="aboutLink" key="about" to="/about">Om</v-tab>
+          <v-tab id="aboutLink" key="about" to="/about">Om Georg</v-tab>
         </v-tabs>
       </v-toolbar-title>
     </v-app-bar>
@@ -49,7 +49,6 @@ h4 {
 #body {
   background: transparent;
 }
-
 .routerLink {
   text-decoration: none;
 }
@@ -60,5 +59,8 @@ header {
   -webkit-user-select: text !important; /* Safari */
   -ms-user-select: text !important; /* IE 10+ and Edge */
   user-select: text !important; /* Standard syntax */
+}
+#aboutLink {
+  color: rgba(255, 255, 255, 1);
 }
 </style>
