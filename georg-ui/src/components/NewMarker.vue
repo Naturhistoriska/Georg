@@ -22,7 +22,6 @@
 </template>
 <script>
 import { mapMutations } from 'vuex'
-// import * as converter from '../assets/js/latlonConverter.js'
 
 export default {
   name: 'NewMarker',
