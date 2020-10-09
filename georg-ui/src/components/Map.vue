@@ -259,6 +259,11 @@ export default {
       'setSelectedResult',
     ]),
 
+    // onDblClick(event) {
+    //   console.log('event.latlng', event.latlng)
+    //   // this.zoom = this.$refs.myMap.mapObject.getZoom()
+    // },
+
     onMapClick(event) {
       // event.preventDefault()
       if (this.enableAddMapMarkers) {
@@ -336,6 +341,7 @@ export default {
       this.removeUncertainties()
       this.bounds = L.latLngBounds()
 
+      let detailMarker
       this.results.forEach(result => {
         this.bounds.extend([
           result.geometry.coordinates[1],
@@ -367,6 +373,7 @@ export default {
           } else {
             marker.addTo(this.layerGroup)
           }
+          detailMarker = marker
         } else {
           if (id === this.clickedId && this.clickedMarker) {
             marker.addTo(this.layerGroup).openPopup()
@@ -380,6 +387,24 @@ export default {
       }
       if (!this.detailView) {
         this.clickedMarker = false
+      } else {
+        if (detailMarker) {
+          const isInView = this.$refs.myMap.mapObject
+            .getBounds()
+            .contains(detailMarker.getLatLng())
+          if (!isInView) {
+            // this.conter = [
+            //   detailMarker.getLatLng().lat,
+            //   detailMarker.getLatLng().lng,
+            // ]
+
+            let zoom = this.$refs.myMap.mapObject.getZoom()
+            this.$refs.myMap.mapObject.flyTo(
+              [detailMarker.getLatLng().lat, detailMarker.getLatLng().lng],
+              zoom
+            )
+          }
+        }
       }
     },
 
@@ -558,29 +583,34 @@ export default {
 
     layerChange(e) {
       this.activeLayer = e.name
-      this.fixZoom()
+      // this.fixZoom()
     },
 
-    fixZoom() {
-      if (this.activeLayer !== 'OpenStreetMap') {
-        this.zoom = this.zoom > 15 ? 15 : this.zoom
-        if (this.detailView && !this.selectedMarker.socken) {
-          this.maxZoom = 18
-        }
-      }
-    },
+    // fixZoom() {
+    //   if (this.activeLayer !== 'OpenStreetMap') {
+    //     this.zoom = this.zoom > 15 ? 15 : this.zoom
+    //     if (this.detailView && !this.selectedMarker.socken) {
+    //       this.maxZoom = 18
+    //     }
+    //   }
+    // },
 
     fitMapBounds() {
       if (this.rezoom) {
-        this.$refs.myMap.mapObject.fitBounds(this.bounds)
-        if (this.$refs.myMap.mapObject.getZoom() === 0) {
-          this.zoom = 5
-        } else {
-          this.zoom =
-            this.$refs.myMap.mapObject.getZoom() > 5
-              ? 5
-              : this.$refs.myMap.mapObject.getZoom()
+        if (!this.detailView) {
+          this.$refs.myMap.mapObject.fitBounds(this.bounds)
+          this.zoom = this.$refs.myMap.mapObject.getZoom()
+          // if (this.$refs.myMap.mapObject.getZoom() === 0) {
+          //   this.zoom = 5
+          // }
         }
+
+        // else {
+        //   this.zoom =
+        //     this.$refs.myMap.mapObject.getZoom() > 5
+        //       ? 5
+        //       : this.$refs.myMap.mapObject.getZoom()
+        // }
       }
     },
   },
