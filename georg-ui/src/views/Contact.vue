@@ -9,7 +9,9 @@
         </p>
         <p>
           <v-icon>mdi-email</v-icon>
-          <a class="ml-1 title text-decoration-none" href="mailto: georg@nrm.se">georg@nrm.se</a>
+          <a class="ml-1 title text-decoration-none" href="mailto: georg@nrm.se"
+            >georg@nrm.se</a
+          >
         </p>
         <p></p>
       </v-col>
@@ -18,7 +20,7 @@
 </template>
 <script>
 export default {
-  name: 'About',
+  name: 'Contact',
   data() {
     return {
       version: 0,
