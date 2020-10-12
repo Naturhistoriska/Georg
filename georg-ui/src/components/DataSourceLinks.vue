@@ -2,21 +2,36 @@
   <v-list-item-group>
     <v-list-item @click.prevent="openExternalLink">
       <v-list-item-icon>
-        <v-icon color="blue darken-2">mdi-database-import</v-icon>
+        <BaseIcon v-bind:color="blueDarkenColor" v-bind:name="importIconName" />
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>Data från {{ dataFromSource }}</v-list-item-title>
       </v-list-item-content>
+      <IconButton />
       <v-btn icon :href="externallink" target="_blank" id="externalLink">
-        <v-icon>mdi-open-in-new</v-icon>
+        <BaseIcon v-bind:name="openNewIconName" />
       </v-btn>
     </v-list-item>
   </v-list-item-group>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import BaseIcon from '../components/baseComponents/BaseIcon'
+import IconButton from '../components/baseComponents/IconButton'
 export default {
   name: 'DataSourceLinks',
+  components: {
+    BaseIcon,
+    IconButton,
+  },
+
+  data() {
+    return {
+      blueDarkenColor: 'blue darken-2',
+      importIconName: 'mdi-database-import',
+      openNewIconName: 'mdi-open-in-new',
+    }
+  },
 
   computed: {
     ...mapGetters(['selectedMarker']),
