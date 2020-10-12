@@ -16,6 +16,8 @@
       <v-list dense>
         <v-list-item-group>
           <v-list-item active-class="white--text">
+            :style="activeLinkColor"
+            active-class="white--text"
             <v-list-item-content>
               <v-list-item-title>
                 <router-link :class="contactLinkColor" to="/kontakt"
@@ -70,6 +72,10 @@ export default {
   computed: {
     contactLinkColor() {
       return this.routeName === 'Contact' ? 'blue--text' : ''
+    activeLinkColor() {
+      return this.routeName === 'Contact'
+        ? 'background: #edf3f8;'
+        : 'background: #FFF;'
     },
   },
 
