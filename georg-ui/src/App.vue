@@ -2,10 +2,10 @@
   <v-app>
     <v-navigation-drawer app clipped stateless v-model="drawer">
       <v-list>
-        <v-list-item nav link>
+        <v-list-item nav link @click="onAboutLinkclick()">
           <v-list-item-content>
-            <v-list-item-title>
-              <router-link id="about" to="/om">Om Georg</router-link>
+            <v-list-item-title class="grey--text text--darken-2">
+              Om Georg
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -15,14 +15,15 @@
 
       <v-list dense>
         <v-list-item-group>
-          <v-list-item active-class="white--text">
+          <v-list-item
+            key="contactLink"
             :style="activeLinkColor"
             active-class="white--text"
+            @click="onContackLinkclick()"
+          >
             <v-list-item-content>
-              <v-list-item-title>
-                <router-link :class="contactLinkColor" to="/kontakt"
-                  >Kontakta oss</router-link
-                >
+              <v-list-item-title :class="contactLinkColor">
+                Kontakta oss
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -71,7 +72,10 @@ export default {
   },
   computed: {
     contactLinkColor() {
-      return this.routeName === 'Contact' ? 'blue--text' : ''
+      return this.routeName === 'Contact'
+        ? 'blue--text'
+        : 'grey--text text--darken-2'
+    },
     activeLinkColor() {
       return this.routeName === 'Contact'
         ? 'background: #edf3f8;'
@@ -79,18 +83,22 @@ export default {
     },
   },
 
-  methods: {},
+  methods: {
+    onContackLinkclick() {
+      const decodeUrl = decodeURIComponent(this.$route.fullPath)
+      if (decodeUrl !== '/kontakt') {
+        this.$router.push('/kontakt')
+      }
+    },
+    onAboutLinkclick() {
+      const decodeUrl = decodeURIComponent(this.$route.fullPath)
+      if (decodeUrl !== '/om') {
+        this.$router.push('/om')
+      }
+    },
+  },
 }
 </script>
-<style scoped>
-.custom_overlay {
-  position: fixed;
-  height: 100vh;
-  width: 100%;
-  background: rgba(50, 50, 50, 0.5);
-  z-index: 2;
-}
-</style>
 <style lang="scss">
 /*#app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -113,10 +121,10 @@ h4 {
 .routerLink {
   text-decoration: none;
 }
-.v-application a {
-  text-decoration: none;
-  color: #474242 !important;
-}
+// .v-application a {
+//   text-decoration: none;
+//   color: #474242 !important;
+// }
 header {
   min-width: 320px;
 }
