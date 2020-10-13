@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BaseIcon from '../components/baseComponents/BaseIcon'
+import BaseIcon from './BaseIcon'
 export default {
   name: 'IconButton',
   components: {

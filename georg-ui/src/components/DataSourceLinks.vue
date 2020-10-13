@@ -16,8 +16,8 @@
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import BaseIcon from '../components/baseComponents/BaseIcon'
-import IconButton from '../components/baseComponents/IconButton'
+import BaseIcon from './baseComponents/BaseIcon'
+import IconButton from './baseComponents/IconButton'
 export default {
   name: 'DataSourceLinks',
   components: {
