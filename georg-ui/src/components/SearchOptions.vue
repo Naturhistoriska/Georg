@@ -41,6 +41,12 @@ export default {
     ],
     select: 'i Norden',
   }),
+  created() {
+    const country = this.$route.query.country
+    if (country) {
+      this.select = country === '' ? 'i Norden' : 'i Sverige'
+    }
+  },
 
   computed: {
     ...mapGetters(['searchCountry', 'searchOption']),
