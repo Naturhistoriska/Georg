@@ -283,6 +283,7 @@ export default {
           uncertainty = moveUncertainty
             ? this.results[0].properties.coordinateUncertaintyInMeters
             : null
+
           this.results.splice(0, 1)
         }
       }
@@ -373,7 +374,9 @@ export default {
           } else {
             marker.addTo(this.layerGroup)
           }
-          detailMarker = marker
+          if (id === this.selectedMarker.properties.gid) {
+            detailMarker = marker
+          }
         } else {
           if (id === this.clickedId && this.clickedMarker) {
             marker.addTo(this.layerGroup).openPopup()
