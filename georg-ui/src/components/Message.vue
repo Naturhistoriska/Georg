@@ -4,52 +4,46 @@
       href=""
       class="grey--text text--darken-3 body-2 pl-1"
       v-if="detailView"
-      @click.prevent="onclick()"
+      @click.prevent="backToResultList()"
       id="backResultListLink"
       >{{ linkText }}</a
     >
-    <div
-      id="message"
-      v-else-if="isErrorMsg"
-      class="pl-2 red--text text--darken-3 body-2 pre-formatted"
-    >
-      {{ message }}
-    </div>
-    <div id="message" v-else class="pl-2 grey--text text--darken-3 body-2">
+    <div v-else id="message" :class="[isErrorMsg ? errorMsgClass : msgClass]">
       {{ message }}
     </div>
     <v-spacer></v-spacer>
-    <v-btn
-      text
-      small
+    <TextButton
       id="displaytoggle"
-      class="grey--text text--darken-3 body-2 pl-2"
       tabindex="0"
       v-if="results.length > 0"
-      @click="setDisplayResults(!displayResults)"
-      >{{ linkText2 }}
-      <v-icon>{{
-        displayResults ? 'mdi-chevron-up' : 'mdi-chevron-down'
-      }}</v-icon>
-    </v-btn>
+      v-bind:className="className"
+      v-bind:text="linkText2"
+      v-bind:iconAppend="icon"
+      @clicked="setDisplayResults(!displayResults)"
+    />
   </v-card-actions>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import TextButton from './baseComponents/TextButton'
 export default {
   name: 'Message',
-  props: ['showresults'],
-  data() {
-    return {}
+  components: {
+    TextButton,
+  },
+  created() {
+    this.className = 'grey--text text--darken-3 body-2 pl-2'
+    this.msgClass = 'pl-2 grey--text text--darken-3 body-2'
+    this.errorMsgClass = 'pl-2 red--text text--darken-3 body-2 pre-formatted'
   },
   computed: {
     ...mapGetters([
       'detailView',
+      'displayResults',
       'isErrorMsg',
       'message',
       'results',
-      'displayResults',
     ]),
     linkText: function() {
       return this.results.length === 1
@@ -61,14 +55,14 @@ export default {
         ? 'Dölj resultatet'
         : 'Visa resultatet'
     },
+    icon: function() {
+      return this.displayResults ? 'mdi-chevron-up' : 'mdi-chevron-down'
+    },
   },
-  // watch: {
-  // },
   methods: {
     ...mapMutations(['setDetailView', 'setDisplayResults']),
-    onclick() {
+    backToResultList() {
       this.setDetailView(false)
-      // this.setDisplayJsonData(false)
     },
   },
 }
