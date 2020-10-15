@@ -108,6 +108,9 @@ export default {
         this.uncertintyChangedByChip = false
       })
     },
+    accuracy: function() {
+      this.accuracyValue = this.accuracy < 0 ? null : this.accuracy
+    },
   },
   computed: {
     ...mapGetters(['accuracy', 'selectedMarker']),
