@@ -4,7 +4,7 @@
       <v-list-item-title class="red--text darken-2">{{
         result.properties.name
       }}</v-list-item-title>
-      <v-list-item-subtitle class="text--primary" v-if="!undefinedMarker">
+      <v-list-item-subtitle class="text--primary">
         {{ result.properties.county }}
         {{ result.properties.region }}
         {{ result.properties.country }}
@@ -16,7 +16,7 @@
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
-      <v-icon color="red darken-2">mdi-map-marker-star</v-icon>
+      <v-icon color="red darken-2">{{ markerIcon }}</v-icon>
     </v-list-item-action>
   </v-list-item>
 </template>
@@ -46,9 +46,14 @@ export default {
       // return converter.latlon(this.result.geometry.coordinates[0], 'lon', false)
     },
 
-    undefinedMarker: function() {
-      return this.result.properties.isNew
+    markerIcon: function() {
+      return this.result.properties.coordinateUncertaintyInMeters
+        ? 'mdi-map-marker-radius'
+        : 'mdi-map-marker-star'
     },
+    // undefinedMarker: function() {
+    //   return this.result.properties.isNew
+    // },
   },
   methods: {
     ...mapMutations([
