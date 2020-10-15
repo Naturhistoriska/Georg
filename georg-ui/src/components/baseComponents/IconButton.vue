@@ -1,5 +1,12 @@
 <template>
-  <v-btn icon :href="externallink" target="_blank" id="externalLink">
+  <v-btn
+    icon
+    small
+    :href="href"
+    target="_blank"
+    class="grey--text text--darken-3 body-2 pl-2"
+    tabindex="0"
+  >
     <BaseIcon v-bind:name="iconPrepend" v-if="iconPrepend" />
     {{ text }}
     <BaseIcon v-bind:name="iconAppend" v-if="iconAppend" />
