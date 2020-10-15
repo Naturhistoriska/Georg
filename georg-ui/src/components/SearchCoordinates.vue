@@ -1,29 +1,25 @@
 <template>
-  <div class="ma-0 pa-0">
-    <v-card-text class="ma-0 pa-0">
-      <v-text-field
-        class="mb-3"
-        single-line
-        filled
-        dense
-        hide-details
-        v-model="coordinates"
-        placeholder="Sök plats"
-        append-icon="search"
-        autofocus
-        clearable
-        :loading="loading"
-        @click:clear="clearSearch"
-        @click:append="search"
-        @keyup.enter="search"
-      ></v-text-field>
-    </v-card-text>
-    <Message />
-  </div>
+  <v-card-text class="ma-0 pa-0">
+    <v-text-field
+      class="mb-3"
+      single-line
+      filled
+      dense
+      hide-details
+      v-model="coordinates"
+      placeholder="Sök plats"
+      append-icon="search"
+      autofocus
+      clearable
+      :loading="loading"
+      @click:clear="clearSearch"
+      @click:append="search"
+      @keyup.enter="search"
+    ></v-text-field>
+  </v-card-text>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import Message from '../components/Message'
 import Service from '../Service'
 
 // import * as fixer from '../assets/js/decimalPlacesFixer.js'
@@ -32,10 +28,6 @@ const service = new Service()
 
 export default {
   name: 'SearchCoordinates',
-  components: {
-    Message,
-  },
-
   props: ['passInValue'],
   data() {
     return {

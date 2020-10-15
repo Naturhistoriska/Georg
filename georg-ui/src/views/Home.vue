@@ -4,6 +4,7 @@
       <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
       <ComboSearch v-if="isAddressSearch" v-bind:passInValue="passInText" />
       <SearchCoordinates v-else v-bind:passInValue="passInCoordinates" />
+      <Message />
       <v-divider
         class="mt-2"
         v-if="!detailView && results.length && displayResults > 0"
@@ -25,6 +26,7 @@ import { mapGetters, mapMutations } from 'vuex'
 import ComboSearch from '../components/ComboSearch'
 import Detail from '../components/Detail'
 import Map from '../components/Map'
+import Message from '../components/Message'
 import Results from '../components/Results'
 import SearchOptions from '../components/SearchOptions'
 import SearchCoordinates from '../components/SearchCoordinates'
@@ -38,6 +40,7 @@ export default {
     ComboSearch,
     Detail,
     Map,
+    Message,
     Results,
     SearchCoordinates,
     SearchOptions,
@@ -95,7 +98,6 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
-      'setDisplayResults',
       'setIsErrorMsg',
       'setMessage',
       'setResults',

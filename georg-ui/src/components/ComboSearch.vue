@@ -1,62 +1,55 @@
 <template>
-  <div class="ma-0 pa-0">
-    <v-card-text class="ma-0 pa-0" id="main-search">
-      <v-combobox
-        append-icon="search"
-        autofocus
-        class="mt-0 ml-0 mr-0 mb-3 pa-0"
-        clearable
-        dense
-        filled
-        hide-no-data
-        hide-details
-        item-text="name"
-        item-value="id"
-        placeholder="Sök plats"
-        v-model="select"
-        :loading="isLoading"
-        :open-on-clear="false"
-        :items="items"
-        :search-input.sync="search"
-        @click:clear="clearSearch"
-        @keyup.enter="searchAddress"
-        @click:append="searchAddress"
-        @blur="copySearchText"
-      >
-        <template v-slot:item="{ item }">
-          <v-list-item-icon>
-            <v-icon color="grey lighten-1" v-if="item.icon">{{
-              item.icon
-            }}</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title class="font-weight-medium body-2 text-truncate"
-              >{{ item.name }}{{ item.region }}</v-list-item-title
-            >
-          </v-list-item-content>
-          <v-list-item-action>
-            <span
-              class="font-weight-medium text--disabled text-caption text-uppercase"
-              >{{ item.abbr }}</span
-            >
-          </v-list-item-action>
-        </template>
-      </v-combobox>
-    </v-card-text>
-    <Message />
-  </div>
+  <v-card-text class="ma-0 pa-0" id="main-search">
+    <v-combobox
+      append-icon="search"
+      autofocus
+      class="mt-0 ml-0 mr-0 mb-3 pa-0"
+      clearable
+      dense
+      filled
+      hide-no-data
+      hide-details
+      item-text="name"
+      item-value="id"
+      placeholder="Sök plats"
+      v-model="select"
+      :loading="isLoading"
+      :open-on-clear="false"
+      :items="items"
+      :search-input.sync="search"
+      @click:clear="clearSearch"
+      @keyup.enter="searchAddress"
+      @click:append="searchAddress"
+      @blur="copySearchText"
+    >
+      <template v-slot:item="{ item }">
+        <v-list-item-icon>
+          <v-icon color="grey lighten-1" v-if="item.icon">{{
+            item.icon
+          }}</v-icon>
+        </v-list-item-icon>
+        <v-list-item-content>
+          <v-list-item-title class="font-weight-medium body-2 text-truncate"
+            >{{ item.name }}{{ item.region }}</v-list-item-title
+          >
+        </v-list-item-content>
+        <v-list-item-action>
+          <span
+            class="font-weight-medium text--disabled text-caption text-uppercase"
+            >{{ item.abbr }}</span
+          >
+        </v-list-item-action>
+      </template>
+    </v-combobox>
+  </v-card-text>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import Message from '../components/Message'
 import Service from '../Service'
 
 const service = new Service()
 export default {
   name: 'ComboSearch',
-  components: {
-    Message,
-  },
   props: ['passInValue'],
   data: () => ({
     autoSearch: true,
