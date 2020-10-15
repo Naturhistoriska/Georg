@@ -21,6 +21,7 @@
         @click:clear="clearSearch"
         @keyup.enter="searchAddress"
         @click:append="searchAddress"
+        @blur="copySearchText"
       >
         <template v-slot:item="{ item }">
           <v-list-item-icon>
@@ -161,6 +162,9 @@ export default {
       'setSelectedResult',
       'setSearchText',
     ]),
+    copySearchText() {
+      this.setSearchText(this.search)
+    },
     clearSearch() {
       this.entries = []
       this.setResults([])
