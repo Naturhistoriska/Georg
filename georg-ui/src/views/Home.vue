@@ -2,7 +2,11 @@
   <div id="container" class="container container--fluid">
     <v-card id="navi" :class="{ 'card-sm': $vuetify.breakpoint.smAndUp }">
       <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
-      <ComboSearch v-if="isAddressSearch" v-bind:passInValue="passInText" />
+      <ComboSearch
+        v-if="isAddressSearch"
+        v-bind:passInValue="passInText"
+        @search="searchAddress"
+      />
       <SearchCoordinates v-else v-bind:passInValue="passInCoordinates" />
       <Message />
       <v-divider
@@ -58,14 +62,21 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
+    this.errorMsg =
+      "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
 
     const isAddressSearch = this.$route.query.place_name !== undefined
     const isCoordinatesSearch = this.$route.query.coordinates !== undefined
     if (isAddressSearch) {
-      this.searchAddress(
-        this.$route.query.place_name,
-        this.$route.query.country
-      )
+      const country = this.$route.query.country
+      const countryCode = !country
+        ? ''
+        : country.toLowerCase() === 'sweden' ||
+          country.toLowerCase() === 'sverige' ||
+          country.toLowerCase() === 'swe'
+        ? 'SWE'
+        : ''
+      this.searchAddress(this.$route.query.place_name, countryCode)
     } else if (isCoordinatesSearch) {
       this.searchCoors(this.$route.query.coordinates)
     }
@@ -119,16 +130,8 @@ export default {
 
     searchAddress(value, country) {
       this.setSearchText(value)
-
-      // fix to set default county in norden
-      const countryCode = !country
-        ? ''
-        : country.toLowerCase() === 'sweden' ||
-          country.toLowerCase() === 'sverige'
-        ? 'SWE'
-        : ''
       service
-        .fetchAddressResults(value, countryCode)
+        .fetchAddressResults(value, country)
         .then(response => {
           const results = response.features.filter(
             r => r.properties.country != null
@@ -155,7 +158,7 @@ export default {
         })
         .catch(function() {})
         .finally(() => {
-          this.setSearchCountry(countryCode)
+          this.setSearchCountry(country)
           this.setSearchOption('address')
         })
       this.setRezoom(true)
@@ -168,9 +171,7 @@ export default {
           if (response.error) {
             const errMsg = response.error.msgKey
             if (errMsg === 'Invalid coordinates') {
-              const msg =
-                "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
-              this.setMessage(msg)
+              this.setMessage(this.errorMsg)
             }
             this.setResults([])
             this.setDetailView(false)

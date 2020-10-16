@@ -201,50 +201,21 @@ export default {
     searchAddress() {
       if (this.search) {
         this.isLoading = true
-        service
-          .fetchAddressResults(this.search, this.searchCountry)
-          .then(response => {
-            this.results = response.features.filter(
-              r => r.properties.country != null
-            )
-            this.setResults(this.results)
-            const isSimpleResult = this.results.length === 1
-            const selectedResult = isSimpleResult ? this.results[0] : {}
-            const selectedResultId = isSimpleResult
-              ? this.results[0].properties.gid
-              : ''
-            const selectedMarker = isSimpleResult ? this.results[0] : {}
-            this.setDetailView(isSimpleResult ? true : false)
-            this.setSelectedResultId(selectedResultId)
-            this.setSelectedResult(selectedResult)
-            this.setSelectedMarker(selectedMarker)
-            const message =
-              this.results.length > 0
-                ? this.results.length + ' träffar'
-                : 'Sökningen gav inga träffar'
-            this.setMessage(message)
-            this.setIsErrorMsg(false)
-          })
-          .catch(function() {})
-          .finally(() => {
-            this.isLoading = false
-            this.entries = []
-          })
-
-        this.setRezoom(true)
-        this.setSearchText(this.search)
+        this.$emit('search', this.search, this.searchCountry)
+        this.isLoading = false
+        this.entries = []
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
         if (decodeUrl !== `/search?place_name=${this.search}`) {
           this.$router.push({
             path: 'search',
             query: { place_name: this.search },
           })
-          // this.$router.push(`/search?place_name=${this.search}`)
         }
       }
     },
     autoCompleteSearch() {
-      if (!this.isEmpty(this.search) && this.autoSearch) {
+      // if (!this.isEmpty(this.search) && this.autoSearch) {
+      if (this.search && this.autoSearch) {
         this.setSearchText(this.search)
         this.isLoading = true
         service
@@ -260,13 +231,13 @@ export default {
       }
       this.autoSearch = true
     },
-    isEmpty: function(value) {
-      return (
-        value === null ||
-        value === undefined ||
-        (value.constructor === Object && Object.keys(value).length === 0)
-      )
-    },
+    // isEmpty: function(value) {
+    //   return (
+    //     value === null ||
+    //     value === undefined ||
+    //     (value.constructor === Object && Object.keys(value).length === 0)
+    //   )
+    // },
   },
 }
 </script>
