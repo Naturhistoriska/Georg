@@ -7,7 +7,6 @@
       <v-list-item-content>
         <v-list-item-title>Data från {{ dataFromSource }}</v-list-item-title>
       </v-list-item-content>
-      <IconButton />
       <v-btn icon :href="externallink" target="_blank" id="externalLink">
         <BaseIcon v-bind:name="openNewIconName" />
       </v-btn>
@@ -17,12 +16,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import BaseIcon from './baseComponents/BaseIcon'
-import IconButton from './baseComponents/IconButton'
+// import IconButton from './baseComponents/IconButton'
 export default {
   name: 'DataSourceLinks',
   components: {
     BaseIcon,
-    IconButton,
+    // IconButton,
   },
 
   data() {
