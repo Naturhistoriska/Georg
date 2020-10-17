@@ -107,12 +107,6 @@ export default {
           abbr = 'svh'
         }
 
-        // const abbr =
-        //   source === 'swe-virtual-herbarium'
-        //     ? 'svh'
-        //     : source === 'whosonfirst'
-        //     ? 'wof'
-        //     : 'gbif'
         const uncertainty =
           source !== 'whosonfirst' &&
           source !== 'openstreetmap' &&
@@ -157,6 +151,7 @@ export default {
       'setMessage',
       'setResults',
       'setRezoom',
+      'setSearchCoordinates',
       'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
@@ -166,13 +161,15 @@ export default {
       this.setSearchText(this.search)
     },
     clearSearch() {
+      this.search = null
       this.entries = []
       this.setResults([])
       this.setDetailView(false)
       this.setSelectedResultId('')
       this.setSelectedResult({})
       this.setSelectedMarker({})
-      this.setSearchText('')
+      this.setSearchCoordinates('')
+      this.setSearchText(this.search)
       this.setMessage('')
       if (this.$route.fullPath !== '/') {
         this.$router.push('/')

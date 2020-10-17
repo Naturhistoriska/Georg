@@ -65,12 +65,14 @@ export default {
   },
   methods: {
     ...mapMutations([
+      'setAccuracy',
       'setDetailView',
       'setDisplayJsonData',
       'setIsErrorMsg',
       'setMessage',
       'setResults',
       'setRezoom',
+      'setSearchText',
       'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
@@ -85,6 +87,7 @@ export default {
       this.setSelectedResultId('')
       this.setSelectedResult({})
       this.setSearchCoordinates('')
+      this.setSearchText(null)
       this.setMessage('')
       if (this.$route.fullPath !== '/') {
         this.$router.push('/')
@@ -98,6 +101,7 @@ export default {
       this.isLoading = true
       this.results = []
       if (this.coordinates) {
+        this.setAccuracy(-1)
         service
           .coordinatesSearch(this.coordinates)
           .then(response => {
