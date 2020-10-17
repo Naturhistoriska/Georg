@@ -86,61 +86,41 @@ public class CoordinatesJson {
  
     if (array.length() == 0) {
       JSONObject dinPlatsJson = addDinPlats(null, roundDoubleToSix(lat), roundDoubleToSix(lng));
+//      JSONObject dinPlatsJson = addDinPlats(null, lat, lng);
       array.put(dinPlatsJson);
-    } else if (isNewMarker) {
-//      JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
-      JSONObject firstJson = array.getJSONObject(0);
-      JSONObject property = firstJson.getJSONObject(propertiesKey);
-
-      property.put(nameKey, dinPlats);
-      property.put(idKey, newMarker);
-      property.put(gidKey, newMarker);
-      JSONObject geometryJson = firstJson.getJSONObject(geometryKey);
-      parser.buildJsonObject(geometryJson, coordinatesKey, lng, lat);
-      property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(lat), roundDoubleToSix(lng)));
-    } else { 
-      array.iterator().forEachRemaining(element -> {
-        JSONObject jsonObj = (JSONObject) element;
-        JSONObject geometryJson = jsonObj.getJSONObject(geometryKey);
-        JSONObject property = jsonObj.getJSONObject(propertiesKey);
-//        if(!isNewMarker) {
-        JSONArray coordinates = parser.getJsonArray(geometryJson, coordinatesKey);
-        double realLng = coordinates.getBigDecimal(0).setScale(6, RoundingMode.HALF_UP).doubleValue();
-        double realLat = coordinates.getBigDecimal(1).setScale(6, RoundingMode.HALF_UP).doubleValue();
-        parser.buildJsonObject(geometryJson, coordinatesKey, realLng, realLat);
-        property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(realLat), roundDoubleToSix(realLng)));
-
-      });
-
+//    } else if (isNewMarker) {
+////      JSONObject dinPlatsJson = addDinPlats(roundDoubleToSix(lat), roundDoubleToSix(lng));
+//      JSONObject firstJson = array.getJSONObject(0);
+//      JSONObject property = firstJson.getJSONObject(propertiesKey);
+//
+//      property.put(nameKey, dinPlats);
+//      property.put(idKey, newMarker);
+//      property.put(gidKey, newMarker);
+//      JSONObject geometryJson = firstJson.getJSONObject(geometryKey);
+//      parser.buildJsonObject(geometryJson, coordinatesKey, lng, lat);
+//      property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(lat), roundDoubleToSix(lng)));
+    } else {  
+      if (!isNewMarker) {
+        array.iterator().forEachRemaining(element -> {
+          JSONObject jsonObj = (JSONObject) element;
+          JSONObject geometryJson = jsonObj.getJSONObject(geometryKey);
+          JSONObject property = jsonObj.getJSONObject(propertiesKey);
+          JSONArray coordinates = parser.getJsonArray(geometryJson, coordinatesKey);
+          double realLng = coordinates.getBigDecimal(0).setScale(6, RoundingMode.HALF_UP).doubleValue();
+          double realLat = coordinates.getBigDecimal(1).setScale(6, RoundingMode.HALF_UP).doubleValue();
+          parser.buildJsonObject(geometryJson, coordinatesKey, realLng, realLat); 
+          property.put(coordinatesKey, buildCoordinatesTransformationJson(roundDoubleToSix(realLat), roundDoubleToSix(realLng)));
+        });
+      }  
       JSONObject dinPlatsJson = addDinPlats(array.getJSONObject(0).getJSONObject(propertiesKey), roundDoubleToSix(lat), roundDoubleToSix(lng)); 
       array.put(dinPlatsJson);
-
-
     }
     return jsonObject.toString();
   }
+ 
 
-//  private JSONObject addDinPlats(JSONObject json, double lat, double lng) {
-//    log.info("addDinPlats : {}");
-//
-//    String country = json.getJSONObject(propertiesKey).getString("country");
-//    String region = json.getJSONObject(propertiesKey).getString("region");
-//    String county = json.getJSONObject(propertiesKey).getString("county");
-//    JSONObject dinPlatsJson = addDinPlats(lat, lng);
-//
-//   
-//      dinPlatsJson.put(geometryKey, json.getJSONObject(geometryKey)); 
-//
-// 
-//
-//    return dinPlatsJson;
-//  }
-
-  private JSONObject addDinPlats(JSONObject json, double lat, double lng ) {
-     
-
-    
-    log.info("addDinPlats : {}");
+  private JSONObject addDinPlats(JSONObject json, double lat, double lng ) { 
+    log.info("addDinPlats");
     JSONObject dinPlatsJson = new JSONObject();
     JSONObject geometryJson = new JSONObject();
     parser.buildJsonObject(geometryJson, coordinatesKey, lng, lat);
@@ -150,25 +130,20 @@ public class CoordinatesJson {
     propertiesJson.put(gidKey, newMarker);
     propertiesJson.put(nameKey, dinPlats);
     propertiesJson.put(coordinatesKey, buildCoordinatesTransformationJson(lat, lng));
-    if (json != null) {
-      String country = json.has(countryKey) ? json.getString(countryKey) : null;
-      String region = json.has(regionKey) ? json.getString(regionKey) : null;
-      String county = json.has(countyKey) ? json.getString(countyKey) : null;
-      if (country != null) {
-        propertiesJson.put(countryKey, country);
+    if (json != null) {   
+      if (json.has(countryKey)) {
+        propertiesJson.put(countryKey, json.getString(countryKey));
       }
-      if (region != null) {
-        propertiesJson.put(regionKey, region);
+      if (json.has(regionKey)) {
+        propertiesJson.put(regionKey, json.getString(regionKey));
       }
-      if (county != null) {
-        propertiesJson.put(countyKey, county);
+      if (json.has(countyKey)) {
+        propertiesJson.put(countyKey, json.getString(countyKey));
       }
-    }
-
+    } 
     dinPlatsJson.put(geometryKey, geometryJson);
     dinPlatsJson.put(typeKey, feature);
-    dinPlatsJson.put(propertiesKey, propertiesJson);
-
+    dinPlatsJson.put(propertiesKey, propertiesJson); 
     return dinPlatsJson;
   }
 
