@@ -1,9 +1,8 @@
 <template>
-  <v-icon :color="color" :type="type">{{ name }}</v-icon>
+  <v-icon :small="small" :color="color"><slot></slot></v-icon>
 </template>
-
 <script>
 export default {
-  props: ['color', 'name', 'type'],
+  props: ['color', 'small'],
 }
 </script>

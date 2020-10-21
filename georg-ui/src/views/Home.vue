@@ -1,21 +1,16 @@
 <template>
   <div id="container" class="container container--fluid">
     <v-card id="navi" :class="{ 'card-sm': $vuetify.breakpoint.smAndUp }">
-      <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
-      <ComboSearch
-        v-if="isAddressSearch"
-        v-bind:passInValue="passInText"
-        @search="searchAddress"
+      <Search
+        v-bind:passInValue="passInValue"
+        @clear-search="clear"
+        @search-address="searchAddress"
+        @search-coordinates="searchCoors"
       />
-      <SearchCoordinates v-else v-bind:passInValue="passInCoordinates" />
       <Message />
-      <v-divider
-        class="mt-2"
-        v-if="!detailView && results.length && displayResults > 0"
-      ></v-divider>
       <Results
-        v-if="!detailView && displayResults"
         v-bind:height="resultsHeight"
+        v-if="!detailView && displayResults"
       />
     </v-card>
     <Detail v-if="detailView && displayResults" v-bind:height="resultsHeight" />
@@ -27,13 +22,11 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import ComboSearch from '../components/ComboSearch'
 import Detail from '../components/Detail'
 import Map from '../components/Map'
 import Message from '../components/Message'
 import Results from '../components/Results'
-import SearchOptions from '../components/SearchOptions'
-import SearchCoordinates from '../components/SearchCoordinates'
+import Search from '../components/Search'
 import Service from '../Service'
 
 const service = new Service()
@@ -41,20 +34,17 @@ const service = new Service()
 export default {
   name: 'Home',
   components: {
-    ComboSearch,
     Detail,
     Map,
     Message,
     Results,
-    SearchCoordinates,
-    SearchOptions,
+    Search,
   },
-
   data() {
     return {
       mapHeight: 'height: 1500px',
-      passInCoordinates: null,
-      passInText: null,
+      passInValue: null,
+      results: [],
       resultsHeight: 'height: 1400px',
       tile: false,
     }
@@ -65,9 +55,8 @@ export default {
     this.errorMsg =
       "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
 
-    const isAddressSearch = this.$route.query.place_name !== undefined
-    const isCoordinatesSearch = this.$route.query.coordinates !== undefined
-    if (isAddressSearch) {
+    const { place_name, coordinates } = this.$route.query
+    if (place_name) {
       const country = this.$route.query.country
       const countryCode = !country
         ? ''
@@ -77,11 +66,10 @@ export default {
         ? 'SWE'
         : ''
       this.searchAddress(this.$route.query.place_name, countryCode)
-    } else if (isCoordinatesSearch) {
+    } else if (coordinates) {
       this.searchCoors(this.$route.query.coordinates)
     }
   },
-
   destroyed() {
     window.removeEventListener('resize', this.handleResize)
   },
@@ -89,28 +77,27 @@ export default {
     ...mapGetters([
       'detailView',
       'isAddressSearch',
-      'results',
       'searchOption',
       'searchCoordinates',
       'searchText',
       'displayResults',
     ]),
   },
-
   watch: {
     searchOption: function() {
-      if (this.searchOption === 'address') {
-        this.passInText = this.searchCoordinates
-      } else {
-        this.passInCoordinates = this.searchText
-      }
+      this.passInValue =
+        this.searchOption === 'address'
+          ? this.searchCoordinates
+          : this.searchText
     },
   },
   methods: {
     ...mapMutations([
       'setDetailView',
+      // 'setDisplayResults',
       'setIsErrorMsg',
       'setMessage',
+      'setReBuildMarker',
       'setResults',
       'setRezoom',
       'setSelectedResultId',
@@ -121,6 +108,20 @@ export default {
       'setSearchCoordinates',
       'setSearchText',
     ]),
+    clear() {
+      this.setDetailView(false)
+      this.setMessage('')
+      this.setReBuildMarker(true)
+      this.setResults([])
+      this.setSearchCoordinates('')
+      this.setSelectedMarker({})
+      this.setSelectedResultId('')
+      this.setSelectedResult({})
+      this.setSearchText(null)
+      if (this.$route.fullPath !== '/') {
+        this.$router.push('/')
+      }
+    },
     handleResize() {
       const windowHeight = window.innerHeight - 64
       const boxHeight = windowHeight - 182
@@ -133,44 +134,40 @@ export default {
       service
         .fetchAddressResults(value, country)
         .then(response => {
-          const results = response.features.filter(
+          this.results = response.features.filter(
             r => r.properties.country != null
           )
-          this.setResults(results)
-          const isSimpleResult = results.length === 1
-          const selectedResult = isSimpleResult ? results[0] : {}
+          const isSimpleResult = this.results.length === 1
+          const selectedResult = isSimpleResult ? this.results[0] : {}
           const selectedResultId = isSimpleResult
-            ? results[0].properties.gid
+            ? this.results[0].properties.gid
             : ''
-
           this.setDetailView(isSimpleResult ? true : false)
-
           this.setSelectedResultId(selectedResultId)
           this.setSelectedResult(selectedResult)
           this.setSelectedMarker(selectedResult)
-
-          const message =
-            results.length > 0
-              ? results.length + ' träffar'
-              : 'Sökningen gav inga träffar'
-          this.setMessage(message)
+          this.setMessages()
           this.setIsErrorMsg(false)
+          this.setResults(this.results)
+          this.setRezoom(true)
+          this.setReBuildMarker(true)
         })
         .catch(function() {})
         .finally(() => {
           this.setSearchCountry(country)
           this.setSearchOption('address')
         })
-      this.setRezoom(true)
     },
 
     searchCoors(value) {
+      this.results = []
       service
         .coordinatesSearch(value)
         .then(response => {
+          this.setReBuildMarker(true)
           if (response.error) {
-            const errMsg = response.error.msgKey
-            if (errMsg === 'Invalid coordinates') {
+            const { msgKey } = response.error
+            if (msgKey === 'Invalid coordinates') {
               this.setMessage(this.errorMsg)
             }
             this.setResults([])
@@ -178,12 +175,15 @@ export default {
             this.setSelectedResultId('')
             this.setSelectedResult({})
             this.setIsErrorMsg(true)
+            this.reBuildMarker(true)
           } else {
             let theResults = response.features
             if (theResults.length === 1) {
-              this.results.push(theResults[0])
+              this.results = theResults
               this.setSelectedMarker(this.results[0])
               this.setDetailView(true)
+              this.setSelectedResultId(this.results[0])
+              this.setSelectedResult(this.results[0])
             } else {
               theResults.forEach(result => {
                 if (result.properties.gid === 'newMarker') {
@@ -192,17 +192,10 @@ export default {
                   this.results.push(result)
                 }
               })
+              this.setSelectedMarker({})
               this.setDetailView(false)
             }
-            if (this.results.length === 1) {
-              this.setSelectedResultId(this.results[0])
-              this.setSelectedResult(this.results[0])
-            }
-            const message =
-              this.results.length > 1
-                ? '1 träff samt “Din plats"'
-                : 'Visar “Din plats"'
-            this.setMessage(message)
+            this.setMessages()
             this.setResults(this.results)
             this.setIsErrorMsg(false)
           }
@@ -213,6 +206,21 @@ export default {
           this.setSearchCoordinates(value)
         })
       this.setRezoom(true)
+    },
+    setMessages() {
+      let message
+      if (this.searchOption === 'address') {
+        message =
+          this.results.length > 0
+            ? `${this.results.length} träffar`
+            : 'Sökningen gav inga träffar'
+      } else {
+        message =
+          this.results.length > 1
+            ? `${this.results.length - 1} träff samt "Din plats"`
+            : 'Visar “Din plats"'
+      }
+      this.setMessage(message)
     },
   },
 }

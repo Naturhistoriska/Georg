@@ -1,106 +1,59 @@
 <template>
   <div class="ma-0 pa-0">
-    <v-card-text class="ma-0 pa-0">
-      <v-text-field
-        single-line
-        filled
-        dense
-        hide-details
-        v-model="address"
-        placeholder="Sök plats"
-        append-icon="search"
-        autofocus
-        clearable
-        :loading="loading"
-        @click:clear="clearSearch"
-        @click:append="search"
-        @keyup.enter="search"
-      ></v-text-field>
-    </v-card-text>
-    <v-card-actions v-if="detailView">
-      <v-btn
-        small
-        color="grey darken-2"
-        id="backResultListLink"
-        text
-        @click.prevent="onclick()"
-        >{{ linkText }}</v-btn
-      >
-      <v-btn
-        small
-        color="grey darken-2"
-        id="toggleResultVisibility"
-        text
-        @click.prevent="onclick()"
-        >{{ linkText }}</v-btn
-      >
-    </v-card-actions>
-    <v-card-actions v-else>
-      <div id="message" class="pt-2 grey--text text--darken-3 body-2">
-        {{ message }}
-      </div>
-    </v-card-actions>
+    <SearchOptions class="mt-n1 mb-n6 ml-n5 pa-0" />
+    <ComboSearch
+      v-if="isAddressSearch"
+      v-bind:passInValue="passInValue"
+      @clear-search="clear"
+      @search="handleAddressSearch"
+    />
+    <SearchCoordinates
+      v-else
+      v-bind:passInValue="passInValue"
+      @clear-search="clear"
+      @search="handleCoordinateSearch"
+    />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-import Service from '../Service'
-const service = new Service()
+import { mapGetters } from 'vuex'
+import ComboSearch from './ComboSearch'
+import SearchCoordinates from './SearchCoordinates'
+import SearchOptions from './SearchOptions'
 
 export default {
   name: 'Search',
-  props: [],
+  components: {
+    ComboSearch,
+    SearchCoordinates,
+    SearchOptions,
+  },
+  props: ['passInValue'],
   data() {
     return {
-      address: '',
-      isSearch: false,
-      loading: false,
-      linkText: '< TILLBAKA TILL TRÄFFLISTAN',
-      message: '',
+      isAddressSearch: true,
     }
   },
-
   computed: {
-    ...mapGetters(['detailView']),
+    ...mapGetters(['searchOption']),
   },
-
+  watch: {
+    searchOption: function() {
+      this.isAddressSearch = this.searchOption === 'address'
+    },
+  },
   methods: {
-    ...mapMutations(['setResults', 'setDetailView', 'setSelectedResultId']),
-    clearSearch() {
-      this.setResults([])
-      this.setDetailView(false)
-      this.setSelectedResultId('')
-      this.message = ''
+    clear() {
+      this.$emit('clear-search')
     },
-    onclick() {
-      this.setDetailView(false)
+    handleAddressSearch(value, country) {
+      this.$emit('search-address', value, country)
     },
-    search() {
-      this.loading = true
-      service
-        .fetchAddressResults(this.address)
-        .then(response => {
-          this.results = response.features.filter(function(result) {
-            return result.properties.country != null
-          })
-          this.loading = false
-          this.setResults(this.results)
-          this.setDetailView(false)
-          this.setSelectedResultId('')
-          this.message =
-            this.results.length > 0
-              ? this.results.length + ' träffar'
-              : 'Sökningen gav inga träffar'
-        })
-        .catch(function() {})
+    handleCoordinateSearch(value) {
+      this.$emit('search-coordinates', value)
     },
   },
 }
 </script>
-
-<style scoped>
-#backResultListLink {
-  margin-left: -10px;
-}
-</style>
+<style scoped></style>

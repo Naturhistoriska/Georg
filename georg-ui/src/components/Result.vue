@@ -2,14 +2,14 @@
   <v-list-item
     @mouseover="onhover"
     @mouseleave="unhover"
-    :class="resultColor"
+    :class="resultcolor"
     :key="result.properties.gid"
     :id="result.properties.gid"
     @keypress.prevent="onclick()"
   >
     <template>
       <v-list-item-content @click.prevent="onclick()">
-        <v-list-item-title v-bind:class="nameColor"
+        <v-list-item-title v-bind:class="namecolor"
           >{{ name }}
         </v-list-item-title>
         <v-list-item-subtitle class="text--primary">
@@ -17,17 +17,14 @@
           {{ result.properties.region }}
           {{ result.properties.country }}
         </v-list-item-subtitle>
-        <v-list-item-subtitle v-if="isGbif">
-          <span class="text-capitalize">{{ result.properties.name }}</span>
-        </v-list-item-subtitle>
-        <v-list-item-subtitle v-else>
-          <span class="text-capitalize">{{ result.properties.layer }}</span>
-          enligt {{ source }}.
+        <v-list-item-subtitle>
+          <span class="text-capitalize">{{ text }}</span>
+          {{ source }}
         </v-list-item-subtitle>
       </v-list-item-content>
       <v-list-item-action @click.prevent="onSelected()">
-        <v-icon v-bind:color="markerIconColor">{{ markerIcon }}</v-icon>
-        <v-list-item-action-text>{{ sourceAlias }}</v-list-item-action-text>
+        <v-icon v-bind:color="iconcolor">{{ icon }}</v-icon>
+        <v-list-item-action-text>{{ alias }}</v-list-item-action-text>
       </v-list-item-action>
     </template>
   </v-list-item>
@@ -39,107 +36,81 @@ export default {
   name: 'Result',
   props: ['result'],
   data() {
-    return {}
+    return {
+      alias: null,
+      icon: null,
+      isGbif: false,
+      name: null,
+      source: null,
+      text: null,
+    }
   },
 
-  watch: {},
+  mounted() {
+    console.log('mounted..')
+    const { addendum, layer, name, source } = this.result.properties
+    if (
+      source === 'whosonfirst' ||
+      source === 'openstreetmap' ||
+      source === 'openaddresses'
+    ) {
+      this.icon = 'mdi-map-marker'
+    } else {
+      const uncertainty = this.result.properties.addendum.georg
+        .coordinateUncertaintyInMeters
+      this.icon = uncertainty ? 'mdi-map-marker-radius' : 'mdi-map-marker'
+    }
 
+    this.name = name
+    this.text = layer
+    switch (source) {
+      case 'whosonfirst':
+        this.alias = 'WOF'
+        this.source = "enligt Who's On First"
+        break
+      case 'openstreetmap':
+        this.alias = 'OSM'
+        this.source = 'enligt OpenStreetMap'
+        break
+      case 'openaddresses':
+        this.alias = 'OA'
+        this.icon = 'mdi-map-marker'
+        this.source = 'enligt OpenAddresses'
+        break
+      case 'gbif':
+        this.alias = 'GBIF'
+        this.isGbif = true
+        this.name = addendum.georg.locationDisplayLabel
+        this.text = name
+        break
+      case 'swe-virtual-herbarium':
+        this.alias = 'SVH'
+        this.source = 'Virtuella Herbariet'
+        break
+      default:
+        this.alias = null
+        this.source = null
+        break
+    }
+  },
   computed: {
-    ...mapGetters([
-      'hoveredResultId',
-      'selectedResultId',
-      'detailView',
-      'reBuildMarker',
-    ]),
+    ...mapGetters(['hoveredResultId', 'selectedResultId', 'reBuildMarker']),
     isActive: function() {
       return this.result.properties.gid === this.selectedResultId
     },
     isHovered: function() {
       return this.result.properties.gid === this.hoveredResultId
     },
-    isNewMarker: function() {
-      return this.result.properties.gid === 'newMarker'
+    resultcolor: function() {
+      return this.isActive ? 'selected' : 'unselected'
     },
-    resultColor: function() {
-      return this.isActive ? 'selected' : 'unSelected'
+    iconcolor: function() {
+      return this.isActive || this.isHovered ? 'primary' : 'grey lighten-1'
     },
-    source: function() {
-      const source = this.result.properties.source
-      if (source === 'whosonfirst') {
-        return "Who's On First"
-      }
-      if (source === 'openstreetmap') {
-        return 'OpenStreetMap'
-      }
-      if (source === 'openaddresses') {
-        return 'OpenAddresses'
-      }
-      return 'Virtuella herbariet'
-      // return this.result.properties.source === 'whosonfirst'
-      //   ? "Who's On First"
-      //   : 'Virtuella herbariet'
-    },
-    sourceAlias: function() {
-      const source = this.result.properties.source
-      if (source === 'whosonfirst') {
-        return 'WOF'
-      }
-      if (source === 'openstreetmap') {
-        return 'OSM'
-      }
-      if (source === 'openaddresses') {
-        return 'OA'
-      }
-      if (source === 'gbif') {
-        return 'GBIF'
-      }
-      return 'SVH'
-
-      // return this.result.properties.source === 'whosonfirst'
-      //   ? 'WOF'
-      //   : this.result.properties.source === 'gbif'
-      //   ? 'GBIF'
-      //   : 'SVH'
-    },
-    isGbif: function() {
-      return this.result.properties.source === 'gbif'
-    },
-    name: function() {
-      return this.isGbif
-        ? this.result.properties.addendum.georg.locationDisplayLabel
-        : this.result.properties.name
-    },
-    markerIconColor: function() {
-      return this.isNewMarker
-        ? 'red darken-2'
-        : this.isActive || this.isHovered
-        ? 'primary'
-        : 'grey lighten-1'
-    },
-    markerIcon: function() {
-      const source = this.result.properties.source
-      if (
-        source === 'whosonfirst' ||
-        source === 'openstreetmap' ||
-        source === 'openaddresses'
-      ) {
-        return 'mdi-map-marker'
-      }
-
-      const uncertainty = this.result.properties.addendum.georg
-        .coordinateUncertaintyInMeters
-      return uncertainty ? 'mdi-map-marker-radius' : 'mdi-map-marker'
-    },
-    nameColor: function() {
-      return this.isNewMarker
-        ? 'red--text darken-2'
-        : this.isActive || this.isHovered
-        ? 'blue--text text--darken-2'
-        : ''
+    namecolor: function() {
+      return this.isActive || this.isHovered ? 'blue--text text--darken-2' : ''
     },
   },
-  mounted() {},
-
   methods: {
     ...mapMutations([
       'setDetailView',
@@ -152,12 +123,11 @@ export default {
 
     onhover() {
       this.setHovedResultId(this.result.properties.gid)
-      this.setReBuildMarker(!this.reBuildMarker)
-      // const ref = `${this.result.properties.id}`
+      // this.setReBuildMarker(!this.reBuildMarker)
     },
     unhover() {
       this.setHovedResultId('')
-      this.setReBuildMarker(!this.reBuildMarker)
+      // this.setReBuildMarker(!this.reBuildMarker)
     },
     onclick() {
       this.setSelectedResultId(this.result.properties.gid)
@@ -165,14 +135,14 @@ export default {
       this.setSelectedResult(this.result)
       this.setSelectedMarker(this.result)
       this.setHovedResultId('')
-      this.setReBuildMarker(!this.reBuildMarker)
+      // this.setReBuildMarker(!this.reBuildMarker)
       // this.$route.fullPath
       // this.$router.push(`${this.$route.fullPath}&detailView=true`)
     },
     onSelected() {
       this.setSelectedResultId(this.result.properties.gid)
       this.setDetailView(false)
-      this.setReBuildMarker(!this.reBuildMarker)
+      // this.setReBuildMarker(!this.reBuildMarker)
     },
   },
 }
@@ -183,11 +153,11 @@ export default {
   background: #e6f2ff;
 }
 
-.unSelected {
+.unselected {
   background: transparent;
 }
 
-.unSelected:hover .selectableIcon {
+.unselected:hover {
   color: #1976d2 !important;
 }
 </style>

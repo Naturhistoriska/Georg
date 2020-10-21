@@ -1,7 +1,6 @@
 const state = {
   accuracy: -1,
   addDinPlats: false,
-  displayJsonData: false,
   displayResults: true,
   isAddressSearch: true,
   isDetailView: false,
@@ -25,7 +24,6 @@ const getters = {
   accuracy: state => state.accuracy,
   addDinPlats: state => state.addDinPlats,
   detailView: state => state.isDetailView,
-  displayJsonData: state => state.displayJsonData,
   displayResults: state => state.displayResults,
   hoveredResultId: state => state.hoveredResultId,
   isAddressSearch: state => state.searchOption === 'address',
@@ -54,7 +52,6 @@ const mutations = {
   setAccuracy: (state, payload) => (state.accuracy = payload),
   setAddDinPlats: (state, payload) => (state.addDinPlats = payload),
   setDetailView: (state, payload) => (state.isDetailView = payload),
-  setDisplayJsonData: (state, payload) => (state.displayJsonData = payload),
   setDisplayResults: (state, payload) => (state.displayResults = payload),
   setHovedResultId: (state, payload) => (state.hoveredResultId = payload),
   setIsErrorMsg: (state, payload) => (state.isErrorMsg = payload),

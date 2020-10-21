@@ -5,7 +5,7 @@
     class="overflow-y-auto"
     :style="height"
   >
-    <v-list-item-group id="resultList" ref="myList">
+    <v-list-item-group id="resultList">
       <template v-for="(result, index) in results">
         <NewMarker
           v-bind:result="result"
@@ -15,7 +15,7 @@
         <Result v-bind:result="result" :key="result.properties.gid" v-else />
         <v-divider
           v-if="index + 1 < results.length"
-          :key="'devider-' + index"
+          :key="`devider-${index}`"
         ></v-divider>
       </template>
     </v-list-item-group>
@@ -33,19 +33,10 @@ export default {
     NewMarker,
     Result,
   },
-
   props: ['height'],
-  data() {
-    return {
-      result: {},
-    }
-  },
-
   computed: {
     ...mapGetters(['results']),
   },
-
-  methods: {},
 }
 </script>
 <style scoped>
@@ -53,7 +44,6 @@ export default {
   -webkit-appearance: none;
   width: 7px;
 }
-
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.5);

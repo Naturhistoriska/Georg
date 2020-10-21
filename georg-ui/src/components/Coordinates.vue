@@ -1,226 +1,91 @@
 <template>
   <v-list-item-group active-class="white-bg">
-    <v-hover v-slot:default="{ hover }">
-      <v-list-item
-        class="selectable-text"
-        :class="{ highlight: expand == true }"
-        @focus="expand = true"
-        @blur="expand = false"
-        @click="copyText(latLonDms)"
-      >
-        <v-list-item-icon>
-          <v-icon :color="makeIconColor">mdi-crosshairs-gps</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ latLonDms }}</v-list-item-title>
-          <v-list-item-subtitle>WGS84 DMS</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            icon
-            color="transparent"
-            :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
-            @focus="expand = true"
-            @blur="expand = false"
-            v-clipboard="latLonDms"
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover>
-    <v-hover v-slot:default="{ hover }">
-      <v-list-item
-        class="selectable-text"
-        :class="{ highlight: expand1 == true }"
-        @focus="expand1 = true"
-        @blur="expand1 = false"
-        @click="copyText(latLonDdm)"
-      >
-        <v-list-item-icon></v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ latLonDdm }}</v-list-item-title>
-          <v-list-item-subtitle>WGS84 DDM</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            icon
-            color="transparent"
-            :class="{ 'show-btn': expand1 == true, 'show-btn-hover': hover }"
-            @focus="expand1 = true"
-            @blur="expand1 = false"
-            v-clipboard="latLonDdm"
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover>
-    <v-hover v-slot:default="{ hover }">
-      <v-list-item
-        class="selectable-text"
-        :class="{ highlight: expand2 == true }"
-        @focus="expand2 = true"
-        @blur="expand2 = false"
-        @click="copyText(latLon)"
-      >
-        <v-list-item-icon></v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ latLon }}</v-list-item-title>
-          <v-list-item-subtitle>WGS84 DD (lat, lon)</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            icon
-            color="transparent"
-            :class="{ 'show-btn': expand2 == true, 'show-btn-hover': hover }"
-            @focus="expand2 = true"
-            @blur="expand2 = false"
-            v-clipboard="latLon"
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover>
-    <v-hover v-slot:default="{ hover }">
-      <v-list-item
-        class="selectable-text"
-        :class="{ highlight: expand3 == true }"
-        @focus="expand3 = true"
-        @blur="expand3 = false"
-        @click="copyText(rt90)"
-      >
-        <v-list-item-icon></v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ rt90 }}</v-list-item-title>
-          <v-list-item-subtitle>RT90 (nord, öst)</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            icon
-            color="transparent"
-            :class="{ 'show-btn': expand3 == true, 'show-btn-hover': hover }"
-            @focus="expand3 = true"
-            @blur="expand3 = false"
-            v-clipboard="rt90"
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover>
-    <v-hover v-slot:default="{ hover }">
-      <v-list-item
-        class="selectable-text"
-        :class="{ highlight: expand4 == true }"
-        @focus="expand4 = true"
-        @blur="expand4 = false"
-        @click="copyText(sweref99)"
-      >
-        <v-list-item-action></v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title>{{ sweref99 }}</v-list-item-title>
-          <v-list-item-subtitle>SWEREF99 TM (nord, öst)</v-list-item-subtitle>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            icon
-            color="transparent"
-            :class="{ 'show-btn': expand4 == true, 'show-btn-hover': hover }"
-            @focus="expand4 = true"
-            @blur="expand4 = false"
-            v-clipboard="sweref99"
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover>
-    <v-snackbar centered v-model="snackbar" :timeout="600"
-      >Kopierad till Urklipp</v-snackbar
-    >
+    <HoverItem
+      v-bind:hastitle="true"
+      v-bind:iconColor="iconColor"
+      v-bind:iconName="crosshairsIcon"
+      v-bind:subtitle="dmsSubtitle"
+      v-bind:value="latLonDms"
+      @copy="handlecopy"
+    />
+    <HoverItem
+      v-bind:hastitle="true"
+      v-bind:subtitle="ddmSubtitle"
+      v-bind:value="latLonDdm"
+      @copy="handlecopy"
+    />
+    <HoverItem
+      v-bind:hastitle="true"
+      v-bind:subtitle="ddSubtitle"
+      v-bind:value="latLon"
+      @copy="handlecopy"
+    />
+    <HoverItem
+      v-bind:hastitle="true"
+      v-bind:value="rt90"
+      v-bind:subtitle="rt90Subtitle"
+      @copy="handlecopy"
+    />
+    <HoverItem
+      v-bind:hastitle="true"
+      v-bind:subtitle="sweref99Subtitle"
+      v-bind:value="sweref99"
+      @copy="handlecopy"
+    />
   </v-list-item-group>
 </template>
 <script>
+import HoverItem from './HoverItem'
 export default {
   name: 'Coordinates',
-
-  props: ['coordinates', 'isNewMarker', 'lat', 'lon'],
+  components: {
+    HoverItem,
+  },
+  props: ['coordinates', 'isNewMarker'],
   data() {
     return {
-      expand: false,
-      expand1: false,
-      expand2: false,
-      expand3: false,
-      expand4: false,
-      snackbar: false,
+      crosshairsIcon: 'mdi-crosshairs-gps',
+      dmsSubtitle: 'WGS84 DMS',
+      ddmSubtitle: 'WGS84 DDM',
+      ddSubtitle: 'WGS84 DD (lat, lon)',
+      sweref99Subtitle: 'SWEREF99 TM (nord, öst)',
+      rt90Subtitle: 'RT90 (nord, öst)',
     }
   },
   computed: {
-    // isDinPlats: function() {
-    //   return this.selectedResult.properties.name === 'Din plats'
-    // },
     latLon: function() {
-      return this.coordinates.dd[0] + ', ' + this.coordinates.dd[1]
+      const { dd } = this.coordinates
+      return `${dd[0]}, ${dd[1]}`
     },
-
     latLonDms: function() {
-      return this.coordinates.dms[0] + ' ' + this.coordinates.dms[1]
+      const { dms } = this.coordinates
+      return `${dms[0]} ${dms[1]}`
     },
-
     latLonDdm: function() {
-      return this.coordinates.ddm[0] + ' ' + this.coordinates.ddm[1]
+      const { ddm } = this.coordinates
+      return `${ddm[0]} ${ddm[1]}`
     },
     sweref99: function() {
-      return this.coordinates.sweref99[0] + ', ' + this.coordinates.sweref99[1]
+      const { sweref99 } = this.coordinates
+      return `${sweref99[0]}, ${sweref99[1]}`
     },
     rt90: function() {
-      return this.coordinates.rt90[0] + ', ' + this.coordinates.rt90[1]
+      const { rt90 } = this.coordinates
+      return `${rt90[0]}, ${rt90[1]}`
     },
-
-    makeIconColor: function() {
+    iconColor: function() {
       return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
     },
   },
   methods: {
-    copyText(value) {
-      if (window.getSelection() != '') {
-        this.$clipboard(window.getSelection().toString())
-      } else {
-        this.$clipboard(value)
-      }
-      this.snackbar = true
+    handlecopy(value) {
+      this.$emit('copy', value)
     },
   },
 }
 </script>
 <style>
-.geotree.v-list-item--dense {
-  min-height: 40px !important;
-  max-height: 40px !important;
-}
-
-.geotree.v-list-item--dense .v-list-item__title {
-  font-size: 1rem !important;
-  font-weight: 400 !important;
-}
-
 .white-bg:before {
   opacity: 0 !important;
-}
-
-.highlight::before {
-  background-color: currentColor !important;
-  opacity: 0.06 !important;
-}
-
-.v-application .show-btn-hover.transparent--text {
-  color: rgba(0, 0, 0, 0.54) !important;
-}
-
-.v-application .show-btn-hover.transparent--text,
-.v-application .show-btn.transparent--text {
-  color: rgba(0, 0, 0, 0.54) !important;
 }
 </style>

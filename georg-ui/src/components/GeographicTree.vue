@@ -1,117 +1,50 @@
 <template>
   <v-list-item-group active-class="white-bg">
-    <v-hover v-slot:default="{ hover }" v-if="selectedMarker.properties.county">
-      <v-list-item
-        dense
-        class="geotree selectable-text"
-        :class="{ highlight: expand1 == true }"
-        @focus="expand1 = true"
-        @blur="expand1 = false"
-        @click="copyText(selectedMarker.properties.county)"
-      >
-        <v-list-item-icon>
-          <v-icon v-bind:color="treeIconColor">mdi-file-tree</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ selectedMarker.properties.county }}
-            <span class="text--secondary">county</span>
-          </v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            @focus="expand1 = true"
-            @blur="expand1 = false"
-            v-clipboard="selectedMarker.properties.county"
-            color="transparent"
-            :class="{ 'show-btn': expand1 == true, 'show-btn-hover': hover }"
-            icon
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover>
-    <v-hover v-slot:default="{ hover }" v-if="selectedMarker.properties.region">
-      <v-list-item
-        dense
-        class="geotree selectable-text"
-        :class="{ highlight: expand2 == true }"
-        @focus="expand2 = true"
-        @blur="expand2 = false"
-        @click="copyText(selectedMarker.properties.region)"
-      >
-        <v-list-item-icon>
-          <v-icon v-bind:color="treeIconColor">{{ reginTreeIcon }}</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ selectedMarker.properties.region }}
-            <span class="text--secondary">region</span>
-          </v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            color="transparent"
-            :class="{ 'show-btn': expand2 == true, 'show-btn-hover': hover }"
-            icon
-            @focus="expand2 = true"
-            @blur="expand2 = false"
-            v-clipboard="selectedMarker.properties.region"
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover>
-    <v-hover
-      v-slot:default="{ hover }"
+    <HoverItem
+      v-if="selectedMarker.properties.county"
+      v-bind:dense="true"
+      v-bind:hastitle="true"
+      v-bind:iconColor="treeIconColor"
+      v-bind:iconName="treeIcon"
+      v-bind:spanvalue="county"
+      v-bind:value="selectedMarker.properties.county"
+      @copy="handlecopy"
+    />
+    <HoverItem
+      v-if="selectedMarker.properties.region"
+      v-bind:dense="true"
+      v-bind:hastitle="true"
+      v-bind:iconColor="treeIconColor"
+      v-bind:iconName="reginTreeIcon"
+      v-bind:spanvalue="region"
+      v-bind:value="selectedMarker.properties.region"
+      @copy="handlecopy"
+    />
+    <HoverItem
       v-if="selectedMarker.properties.country"
-    >
-      <v-list-item
-        dense
-        class="geotree selectable-text"
-        :class="{ highlight: expand3 == true }"
-        @focus="expand3 = true"
-        @blur="expand3 = false"
-        @click="copyText(selectedMarker.properties.country)"
-      >
-        <v-list-item-icon></v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>
-            {{ selectedMarker.properties.country }}
-            <span class="text--secondary">country</span>
-          </v-list-item-title>
-        </v-list-item-content>
-        <v-list-item-action>
-          <v-btn
-            icon
-            :class="{ 'show-btn': expand3 == true, 'show-btn-hover': hover }"
-            @focus="expand3 = true"
-            @blur="expand3 = false"
-            color="transparent"
-            v-clipboard="selectedMarker.properties.country"
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover>
-    <v-snackbar centered v-model="snackbar" :timeout="600"
-      >Kopierad till Urklipp</v-snackbar
-    >
+      v-bind:dense="true"
+      v-bind:hastitle="true"
+      v-bind:iconColor="treeIconColor"
+      v-bind:iconName="countryTreeIcon"
+      v-bind:spanvalue="country"
+      v-bind:value="selectedMarker.properties.country"
+      @copy="handlecopy"
+    />
   </v-list-item-group>
 </template>
 <script>
 import { mapGetters } from 'vuex'
+import HoverItem from './HoverItem'
 export default {
   name: 'GeographTree',
-
+  components: {
+    HoverItem,
+  },
   data: () => ({
-    expand1: false,
-    expand2: false,
-    expand3: false,
-    snackbar: false,
+    county: 'county',
+    country: 'country',
+    region: 'region',
+    treeIcon: 'mdi-file-tree',
   }),
 
   computed: {
@@ -123,51 +56,19 @@ export default {
       return this.selectedMarker.properties.county ? '' : 'mdi-file-tree'
     },
     countryTreeIcon: function() {
-      return this.selectedMarker.properties.county
-        ? ''
-        : this.selectedMarker.properties.region
-        ? ''
-        : 'mdi-file-tree'
+      const { county, region } = this.selectedMarker.properties
+      return county ? '' : region ? '' : 'mdi-file-tree'
     },
   },
   methods: {
-    copyText(value) {
-      if (window.getSelection() != '') {
-        this.$clipboard(window.getSelection().toString())
-      } else {
-        this.$clipboard(value)
-      }
-      this.snackbar = true
+    handlecopy(value) {
+      this.$emit('copy', value)
     },
   },
 }
 </script>
 <style>
-.geotree.v-list-item--dense {
-  min-height: 40px !important;
-  max-height: 40px !important;
-}
-
-.geotree.v-list-item--dense .v-list-item__title {
-  font-size: 1rem !important;
-  font-weight: 400 !important;
-}
-
 .white-bg:before {
   opacity: 0 !important;
-}
-
-.highlight::before {
-  background-color: currentColor !important;
-  opacity: 0.06 !important;
-}
-
-.v-application .show-btn-hover.transparent--text {
-  color: rgba(0, 0, 0, 0.54) !important;
-}
-
-.v-application .show-btn-hover.transparent--text,
-.v-application .show-btn.transparent--text {
-  color: rgba(0, 0, 0, 0.54) !important;
 }
 </style>

@@ -10,9 +10,7 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
-
       <v-divider></v-divider>
-
       <v-list dense>
         <v-list-item-group>
           <v-list-item
@@ -22,7 +20,13 @@
             @click="onContackLinkclick()"
           >
             <v-list-item-content>
-              <v-list-item-title :class="contactLinkColor">
+              <v-list-item-title
+                :class="[
+                  this.routeName === 'Contact'
+                    ? 'blue--text'
+                    : 'grey--text text--darken-2',
+                ]"
+              >
                 Kontakta oss
               </v-list-item-title>
             </v-list-item-content>
@@ -56,7 +60,6 @@
 <script>
 export default {
   name: 'App',
-
   data() {
     return {
       drawer: null,
@@ -71,18 +74,12 @@ export default {
     },
   },
   computed: {
-    contactLinkColor() {
-      return this.routeName === 'Contact'
-        ? 'blue--text'
-        : 'grey--text text--darken-2'
-    },
     activeLinkColor() {
       return this.routeName === 'Contact'
         ? 'background: #edf3f8;'
         : 'background: #FFF;'
     },
   },
-
   methods: {
     onContackLinkclick() {
       const decodeUrl = decodeURIComponent(this.$route.fullPath)
@@ -121,10 +118,6 @@ h4 {
 .routerLink {
   text-decoration: none;
 }
-// .v-application a {
-//   text-decoration: none;
-//   color: #474242 !important;
-// }
 header {
   min-width: 320px;
 }
@@ -133,7 +126,4 @@ header {
   -ms-user-select: text !important; /* IE 10+ and Edge */
   user-select: text !important; /* Standard syntax */
 }
-// #aboutLink {
-//   color: rgba(255, 255, 255, 1);
-// }
 </style>

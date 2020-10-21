@@ -5,7 +5,7 @@
     </v-col>
     <v-col class="pa-0" cols="5" sm="4">
       <v-combobox
-        @change="onCountryChange"
+        @change="onCountryChanged"
         dense
         :disabled="isCountrySelectDisabled"
         flat
@@ -19,7 +19,7 @@
     <v-col cols="7" sm="5" class="mt-n5 pa-0">
       <v-switch
         class="float-right coordinate-switch"
-        @change="onSwitchChange"
+        @change="onSwitchChanged"
         dense
         v-model="coordinates"
         value="coordinates"
@@ -47,14 +47,12 @@ export default {
       this.select = country === '' ? 'i Norden' : 'i Sverige'
     }
   },
-
   computed: {
     ...mapGetters(['searchCountry', 'searchOption']),
     isCountrySelectDisabled: function() {
       return this.coordinates ? true : false
     },
   },
-
   watch: {
     searchCountry: function() {
       this.select = this.searchCountry === '' ? 'i Norden' : 'i Sverige'
@@ -67,16 +65,15 @@ export default {
 
   methods: {
     ...mapMutations(['setMessage', 'setSearchCountry', 'setSearchOption']),
-    onCountryChange({ value }) {
+    onCountryChanged({ value }) {
       this.setSearchCountry(value)
     },
-    onSwitchChange(value) {
+    onSwitchChanged(value) {
       this.setSearchOption(value ? 'coordinates' : 'address')
-      this.setMessage('')
-
-      if (this.$route.fullPath !== '/') {
-        this.$router.push('/')
-      }
+      // this.setMessage('')
+      // if (this.$route.fullPath !== '/') {
+      //   this.$router.push('/')
+      // }
     },
   },
 }

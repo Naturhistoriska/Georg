@@ -1,6 +1,6 @@
 <template>
   <v-list-item-group active-class="white-bg">
-    <v-hover v-slot:default="{ hover }">
+    <!-- <v-hover v-slot:default="{ hover }">
       <v-list-item
         :class="{ highlight: expand == true }"
         @click="snackbar = true"
@@ -24,7 +24,14 @@
           </v-btn>
         </v-list-item-action>
       </v-list-item>
-    </v-hover>
+    </v-hover> -->
+    <v-list-item>
+      <v-list-item-icon>
+        <v-icon color="red darken-2">mdi-map-marker-radius</v-icon>
+      </v-list-item-icon>
+      <v-list-item-title>Osäkerhetsradie</v-list-item-title>
+      <v-list-item-action> </v-list-item-action>
+    </v-list-item>
     <v-card class="ml-16" id="v-card-uncertainty" flat>
       <v-chip-group>
         <v-chip
@@ -65,16 +72,16 @@
         </v-row>
       </v-container>
     </v-card>
-
-    <v-snackbar centered v-model="snackbar" :timeout="600"
+    <!-- <v-snackbar centered v-model="snackbar" :timeout="600"
       >Kopierad till Urklipp</v-snackbar
-    >
+    > -->
   </v-list-item-group>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Uncertainty',
+
   data() {
     return {
       accuracyValue: null,
@@ -87,8 +94,8 @@ export default {
         { label: '100 km', value: 100000 },
       ],
       uncertintyChangedByChip: false,
-      expand: false,
-      snackbar: false,
+      // expand: false,
+      // snackbar: false,
     }
   },
   mounted() {

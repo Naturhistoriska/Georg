@@ -2,17 +2,15 @@
   <v-list-item @keypress.prevent="onclick()">
     <v-list-item-content @click.prevent="onclick()">
       <v-list-item-title class="red--text darken-2">{{
-        result.properties.name
+        name
       }}</v-list-item-title>
       <v-list-item-subtitle class="text--primary">
-        {{ result.properties.county }}
-        {{ result.properties.region }}
-        {{ result.properties.country }}
+        {{ county }}
+        {{ region }}
+        {{ country }}
       </v-list-item-subtitle>
-
       <v-list-item-subtitle id="resultContent" class="text--primary">
-        {{ latDms }}
-        {{ lngDms }}
+        {{ dmsLatlng }}
       </v-list-item-subtitle>
     </v-list-item-content>
     <v-list-item-action>
@@ -26,42 +24,38 @@ import { mapMutations } from 'vuex'
 export default {
   name: 'NewMarker',
   props: ['result'],
-
-  computed: {
-    lat: function() {
-      return this.result.geometry.coordinates[1]
-    },
-
-    lng: function() {
-      return this.result.geometry.coordinates[0]
-    },
-
-    latDms: function() {
-      return this.result.properties.coordinates.dms[0]
-      // return converter.latlon(this.result.geometry.coordinates[1], 'lat', false)
-    },
-
-    lngDms: function() {
-      return this.result.properties.coordinates.dms[1]
-      // return converter.latlon(this.result.geometry.coordinates[0], 'lon', false)
-    },
-
-    markerIcon: function() {
-      return this.result.properties.coordinateUncertaintyInMeters
-        ? 'mdi-map-marker-radius'
-        : 'mdi-map-marker-star'
-    },
-    // undefinedMarker: function() {
-    //   return this.result.properties.isNew
-    // },
+  data() {
+    return {
+      dmsLatlng: null,
+      name: null,
+      country: null,
+      county: null,
+      markerIcon: null,
+      region: null,
+    }
   },
+  mounted() {
+    const {
+      coordinates,
+      name,
+      country,
+      county,
+      region,
+      coordinateUncertaintyInMeters,
+    } = this.result.properties
+    const { dms } = coordinates
+    this.dmsLatlng = `${dms[0]} ${dms[1]}`
+    this.county = county
+    this.country = country
+    this.region = region
+    this.name = name
+    this.markerIcon = coordinateUncertaintyInMeters
+      ? 'mdi-map-marker-radius'
+      : 'mdi-map-marker-star'
+  },
+  computed: {},
   methods: {
-    ...mapMutations([
-      'setDetailView',
-      'setSelectedMarker',
-      'setSelectedResultId',
-      'setSelectedResult',
-    ]),
+    ...mapMutations(['setDetailView', 'setSelectedMarker']),
     onclick() {
       this.setDetailView(true)
       this.setSelectedMarker(this.result)

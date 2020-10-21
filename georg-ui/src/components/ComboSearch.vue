@@ -17,16 +17,14 @@
       :open-on-clear="false"
       :items="items"
       :search-input.sync="search"
-      @click:clear="clearSearch"
+      @click:clear="clear"
       @keyup.enter="searchAddress"
       @click:append="searchAddress"
       @blur="copySearchText"
     >
       <template v-slot:item="{ item }">
         <v-list-item-icon>
-          <v-icon color="grey lighten-1" v-if="item.icon">{{
-            item.icon
-          }}</v-icon>
+          <v-icon color="grey lighten-1">{{ item.icon }}</v-icon>
         </v-list-item-icon>
         <v-list-item-content>
           <v-list-item-title class="font-weight-medium body-2 text-truncate"
@@ -54,10 +52,10 @@ export default {
   data: () => ({
     autoSearch: true,
     entries: [],
-    select: null,
-    search: null,
     isLoading: false,
     results: [],
+    search: null,
+    select: null,
   }),
   mounted() {
     if (this.select === null) {
@@ -81,46 +79,41 @@ export default {
     items() {
       let elements = []
       this.entries.map(entry => {
-        const source = entry.properties.source
-
+        const { gid, name, region, source } = entry.properties
         let abbr
-        if (source === 'whosonfirst') {
-          abbr = 'wof'
-        }
-        if (source === 'openstreetmap') {
-          abbr = 'osm'
-        }
-        if (source === 'openaddresses') {
-          abbr = 'oa'
-        }
-        if (source === 'gbif') {
-          abbr = 'gbif'
-        }
-        if (source === 'swe-virtual-herbarium') {
-          abbr = 'svh'
+        switch (source) {
+          case 'whosonfirst':
+            abbr = 'wof'
+            break
+          case 'openstreetmap':
+            abbr = 'osm'
+            break
+          case 'openaddresses':
+            abbr = 'oa'
+            break
+          case 'gbif':
+            abbr = 'gbif'
+            break
+          case 'swe-virtual-herbarium':
+            abbr = 'svh'
+            break
+          default:
+            abbr = 'gbif'
         }
 
         const uncertainty =
-          source !== 'whosonfirst' &&
-          source !== 'openstreetmap' &&
-          source !== 'openaddresses'
+          source === 'gbif' || source === 'swe-virtual-herbarium'
             ? entry.properties.addendum.georg.coordinateUncertaintyInMeters
             : undefined
         const icon = uncertainty ? 'mdi-map-marker-radius' : 'mdi-map-marker'
-        const region =
-          entry.properties.region !== undefined
-            ? ', ' + entry.properties.region
-            : ''
-        const name = entry.properties.name
-        const id = entry.properties.gid
         const element = {
-          name,
-          source,
           abbr,
-          uncertainty,
           icon,
-          region,
-          id,
+          id: gid,
+          name,
+          region: region !== undefined ? `, ${region}` : '',
+          source,
+          uncertainty,
         }
         elements.push(element)
       })
@@ -130,7 +123,7 @@ export default {
   watch: {
     select: function() {
       if (this.select) {
-        this.filterResult(this.select.id)
+        this.filterResult(this.select)
       }
     },
     search: function() {
@@ -153,48 +146,26 @@ export default {
     copySearchText() {
       this.setSearchText(this.search)
     },
-    clearSearch() {
+    clear() {
       this.search = null
       this.entries = []
-      this.setResults([])
-      this.setDetailView(false)
-      this.setSelectedResultId('')
-      this.setSelectedResult({})
-      this.setSelectedMarker({})
-      this.setSearchCoordinates('')
-      this.setSearchText(this.search)
-      this.setMessage('')
-      if (this.$route.fullPath !== '/') {
-        this.$router.push('/')
-      }
+      this.$emit('clear-search')
     },
-    filterResult(id) {
+    filterResult({ id }) {
       if (id) {
-        this.isLoading = true
         this.results = this.entries.filter(e => e.properties.gid === id)
-        this.setResults(this.results)
-        this.setDetailView(true)
-
         const selectedResult = this.results[0]
-
         this.setSelectedResultId(id)
         this.setSelectedResult(selectedResult)
         this.setSelectedMarker(selectedResult)
-        const message =
-          this.results.length > 0
-            ? this.results.length + ' träffar'
-            : 'Sökningen gav inga träffar'
-        this.setMessage(message)
         this.setIsErrorMsg(false)
-        this.isLoading = false
+        this.setResults(this.results)
+        this.setDetailView(true)
 
+        const { name } = selectedResult.properties
         const decodeUrl = decodeURIComponent(this.$route.fullPath)
-        if (
-          decodeUrl !== `/search?place_name=${selectedResult.properties.name}`
-        ) {
-          this.$router.push(
-            `/search?place_name=${selectedResult.properties.name}`
-          )
+        if (decodeUrl !== `/search?place_name=${name}`) {
+          this.$router.push(`/search?place_name=${name}`)
         }
       }
     },
@@ -214,7 +185,6 @@ export default {
       }
     },
     autoCompleteSearch() {
-      // if (!this.isEmpty(this.search) && this.autoSearch) {
       if (this.search && this.autoSearch) {
         this.setSearchText(this.search)
         this.isLoading = true
@@ -231,13 +201,6 @@ export default {
       }
       this.autoSearch = true
     },
-    // isEmpty: function(value) {
-    //   return (
-    //     value === null ||
-    //     value === undefined ||
-    //     (value.constructor === Object && Object.keys(value).length === 0)
-    //   )
-    // },
   },
 }
 </script>

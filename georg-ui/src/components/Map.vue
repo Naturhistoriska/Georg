@@ -198,13 +198,44 @@ export default {
     iconColor: function() {
       return this.enableAddMapMarkers ? 'red darken-2' : '#424242'
     },
+    propertyAAndPropertyB() {
+      this.setRezoom(false)
+      return `${this.hoveredResultId}|${this.selectedResultId}`
+    },
   },
 
   watch: {
+    propertyAAndPropertyB() {
+      console.log('propertyAAndPropertyB changed...')
+      this.highlightMarker()
+    },
+    results: function() {
+      console.log('results changed....', this.reBuildMarker)
+      if (this.reBuildMarker) {
+        this.highlightMarker()
+        this.setReBuildMarker(false)
+      }
+
+      // this.buildMarkers()
+      // this.addUnertainties()
+      // this.$nextTick(() => {
+      //   this.buildMarkers()
+      //   this.addUnertainties()
+      // })
+      // this.rezoom = true
+    },
+
+    detailView() {
+      console.log('detailView changed....')
+      if (this.reBuildMarker) {
+        this.highlightMarker()
+        this.setReBuildMarker(false)
+      }
+    },
+
     accuracy() {
       this.$nextTick(() => {
         if (this.accuracy >= 0) {
-          this.buildMarkers()
           this.addUnertainties()
         }
       })
@@ -215,29 +246,8 @@ export default {
         const lng = this.selectedMarker.geometry.coordinates[0]
         this.dinPlatsSearch(lat, lng, false)
         this.setAddDinPlats(false)
-        // this.rezoom = false
       }
     },
-    detailView: function() {
-      this.clickedMarker = false
-      this.$nextTick(() => {
-        this.buildMarkers()
-        this.addUnertainties()
-      })
-    },
-    results: function() {
-      this.$nextTick(() => {
-        this.buildMarkers()
-        this.addUnertainties()
-      })
-      // this.rezoom = true
-    },
-    reBuildMarker: function() {
-      this.$nextTick(() => {
-        this.highlightMarker()
-      })
-    },
-
     center: function() {
       this.$nextTick(() => {
         this.$refs.myMap.mapObject.flyTo([this.center[0], this.center[1]], 5)
@@ -275,34 +285,38 @@ export default {
     },
 
     dinPlatsSearch(lat, lng, moveUncertainty) {
+      console.log('dinPlatsSearch', moveUncertainty)
       this.clickedMarker = false
       this.setRezoom(false)
+
       let uncertainty
       if (this.results.length > 0) {
-        if (this.results[0].properties.gid === 'newMarker') {
+        const result = this.results.find(r => r.properties.gid === 'newMarker')
+        if (result) {
           uncertainty = moveUncertainty
-            ? this.results[0].properties.coordinateUncertaintyInMeters
+            ? result.properties.coordinateUncertaintyInMeters
             : null
-
           this.results.splice(0, 1)
         }
+        // if (newResults[0].properties.gid === 'newMarker') {
+        //   uncertainty = moveUncertainty
+        //     ? this.results[0].properties.coordinateUncertaintyInMeters
+        //     : null
+        //   this.results.splice(0, 1)
+        //   console.log('changed here...')
+        // }
       }
       this.isLoaded = true
       service
         .reverseGeoCodingResults(lat, lng)
         .then(response => {
-          this.isLoaded = false
-
-          let results = response.features.filter(
+          const result = response.features.find(
             r => r.properties.gid === 'newMarker'
           )
-
-          const result = results[0]
           if (uncertainty) {
             result.properties.coordinateUncertaintyInMeters = uncertainty
           }
           this.results.unshift(result)
-          this.setResults(this.results)
           if (this.detailView) {
             this.setSelectedMarker(result)
           }
@@ -310,8 +324,13 @@ export default {
             this.setMessage('Visar "Din plats"')
             this.setIsErrorMsg(false)
           }
+          this.setResults(this.results)
+          this.setReBuildMarker(true)
         })
         .catch(function() {})
+        .finally(() => {
+          this.isLoaded = false
+        })
     },
     // resetDetailViewZoom() {
     //   const lat = this.selectedMarker.geometry.coordinates[1]
@@ -338,52 +357,47 @@ export default {
     },
 
     buildMarkers() {
+      console.log('buildMarkers')
       this.resetLayerGroup()
-      this.removeUncertainties()
       this.bounds = L.latLngBounds()
 
       let detailMarker
       this.results.forEach(result => {
-        this.bounds.extend([
-          result.geometry.coordinates[1],
-          result.geometry.coordinates[0],
-        ])
-
-        const marker =
-          result.properties.gid === 'newMarker'
-            ? this.buildDraggableMarker(result)
-            : this.buildMarker(result)
-
-        const id = result.properties.gid
-        marker.addEventListener('click', () => {
-          this.clickedMarker = true
-          this.clickedId = id
-          if (id !== 'newMarker') {
-            this.setSelectedResult(result)
-            this.setSelectedResultId(id)
-          }
-          if (this.detailView) {
-            this.setSelectedMarker(result)
-          }
-          this.setReBuildMarker(!this.reBuildMarker)
-          // this.rezoom = false
-        })
-        if (this.detailView) {
-          if (id === this.selectedMarker.properties.gid && this.clickedMarker) {
-            marker.addTo(this.layerGroup).openPopup()
-          } else {
-            marker.addTo(this.layerGroup)
-          }
-          if (id === this.selectedMarker.properties.gid) {
-            detailMarker = marker
-          }
-        } else {
-          if (id === this.clickedId && this.clickedMarker) {
-            marker.addTo(this.layerGroup).openPopup()
-          } else {
-            marker.addTo(this.layerGroup)
-          }
-        }
+        const { coordinates } = result.geometry
+        const { gid } = result.properties
+        this.bounds.extend([coordinates[1], coordinates[0]])
+        const marker = this.buildMarker(gid, result)
+        this.addMarkerClickListener(marker, gid, result)
+        // const id = result.properties.gid
+        // marker.addEventListener('click', () => {
+        //   this.clickedMarker = true
+        //   this.clickedId = gid
+        //   if (gid !== 'newMarker') {
+        //     this.setSelectedResult(result)
+        //     this.setSelectedResultId(id)
+        //   }
+        //   if (this.detailView) {
+        //     this.setSelectedMarker(result)
+        //   }
+        //   this.setReBuildMarker(!this.reBuildMarker)
+        //   // this.rezoom = false
+        // })
+        // if (this.detailView) {
+        //   if (id === this.selectedMarker.properties.gid && this.clickedMarker) {
+        //     marker.addTo(this.layerGroup).openPopup()
+        //   } else {
+        //     marker.addTo(this.layerGroup)
+        //   }
+        //   if (id === this.selectedMarker.properties.gid) {
+        //     detailMarker = marker
+        //   }
+        // } else {
+        //   if (id === this.clickedId && this.clickedMarker) {
+        //     marker.addTo(this.layerGroup).openPopup()
+        //   } else {
+        //     marker.addTo(this.layerGroup)
+        //   }
+        // }
       })
       if (this.results != null && this.results.length > 0 && this.rezoom) {
         this.fitMapBounds()
@@ -411,7 +425,51 @@ export default {
       }
     },
 
-    buildMarker(result) {
+    addMarkerClickListener(marker, id, result) {
+      marker.addEventListener('click', () => {
+        this.clickedMarker = true
+        this.clickedId = id
+        if (id !== 'newMarker') {
+          this.setSelectedResult(result)
+          this.setSelectedResultId(id)
+        }
+        if (this.detailView) {
+          this.setSelectedMarker(result)
+        }
+        // this.setReBuildMarker(!this.reBuildMarker)
+        // this.rezoom = false
+      })
+      if (id === this.clickedId && this.clickedMarker) {
+        marker.addTo(this.layerGroup).openPopup()
+      } else {
+        marker.addTo(this.layerGroup)
+      }
+
+      // if (this.detailView) {
+      //   if (id === this.selectedMarker.properties.gid && this.clickedMarker) {
+      //     marker.addTo(this.layerGroup).openPopup()
+      //   } else {
+      //     marker.addTo(this.layerGroup)
+      //   }
+      //   if (id === this.selectedMarker.properties.gid) {
+      //     detailMarker = marker
+      //   }
+      // } else {
+      //   if (id === this.clickedId && this.clickedMarker) {
+      //     marker.addTo(this.layerGroup).openPopup()
+      //   } else {
+      //     marker.addTo(this.layerGroup)
+      //   }
+      // }
+    },
+
+    buildMarker(id, result) {
+      return id === 'newMarker'
+        ? this.buildDraggableMarker(result)
+        : this.buildUndraggableMarker(result)
+    },
+
+    buildUndraggableMarker(result) {
       const id = result.properties.gid
       const icon = this.isHoveredOrSelected(id)
         ? MAP_ICONS.blueIcon
@@ -428,91 +486,14 @@ export default {
         icon,
       }).bindPopup(popup)
     },
-
-    createBnt(string, container) {
-      const btn = L.DomUtil.create('button', '', container)
-      btn.setAttribute('type', 'button')
-      btn.innerHTML = string
-      return btn
-    },
-
-    createText(result, container) {
-      const coordinates = result.properties.coordinates
-      const dd = coordinates.dd[0] + ', ' + coordinates.dd[1]
-      const dms = coordinates.dms[0] + ' ' + coordinates.dms[1]
-      const ddm = coordinates.ddm[0] + ' ' + coordinates.ddm[1]
-      const rt90 = coordinates.rt90[0] + ', ' + coordinates.rt90[1]
-      const sweref99 = coordinates.sweref99[0] + ', ' + coordinates.sweref99[1]
-
-      const placeName = `<div class="subtitle-2 mb-3 font-weight-bold">${result.properties.name}</div>`
-      const popCoordinates = `<div class="mb-3"><span class="font-weight-medium">WGS84 DMS</span><br />${dms}</div><div class="mb-3"><span class="font-weight-medium">WGS84 DDM</span><br />${ddm}</div><div class="mb-3"><span class="font-weight-medium">WGS84 DD</span><br />${dd}</div><div class="mb-3"><span class="font-weight-medium">RT99 (nord, öst)</span><br />${rt90}</div><div class="mb-5"><span class="font-weight-medium">SWEREF99 TM (nord, öst)</span><br />${sweref99}</div>`
-
-      let uncertainty = ''
-      if (this.uncertainty(result)) {
-        uncertainty = `<div class="mb-5"><span class="font-weight-medium">Osäkerhetsradie: </span>${this.uncertainty(
-          result
-        )} meter</div>`
-      }
-      const string = placeName + popCoordinates + uncertainty
-      const text = L.DomUtil.create('div', 'popup-details', container)
-      text.innerHTML = string
-      return text
-    },
-
-    buildPopContent: function(result) {
-      let displayBtn = true
-      if (!this.detailView) {
-        displayBtn = true
-      } else if (
-        (this.selectedMarker.properties &&
-          result.properties.gid === this.selectedMarker.properties.gid) ||
-        this.detailView
-      ) {
-        displayBtn = false
-      }
-      const containerWithBtn = L.DomUtil.create('div'),
-        text = this.createText(result, containerWithBtn),
-        showDetailBtn = this.createBnt('Visa detaljer', containerWithBtn)
-
-      const container = L.DomUtil.create('div'),
-        text1 = this.createText(result, container)
-
-      if (showDetailBtn) {
-        showDetailBtn.style.color = '#1976D2'
-        showDetailBtn.style.textDecoration = 'underline'
-      }
-      text.style.color = 'gray'
-      text1.style.color = 'gray'
-      L.DomEvent.on(showDetailBtn, 'click', () => {
-        this.showDetail(result)
-      })
-      return displayBtn ? containerWithBtn : container
-      // return containerWithBtn
-    },
-
-    showDetail(result) {
-      if (this.detailView) {
-        if (this.selectedMarker.properties.gid !== result.properties.gid) {
-          this.setSelectedMarker(result)
-        }
-      } else {
-        this.setSelectedMarker(result)
-        this.setSelectedResult(result)
-        this.setSelectedResultId(result.properties.gid)
-        this.setDetailView(true)
-      }
-    },
-
     buildDraggableMarker(result) {
-      const lat = result.geometry.coordinates[1]
-      const lng = result.geometry.coordinates[0]
-
+      const { coordinates } = result.geometry
       var popup = L.popup({
         offset: [0, -30],
       })
       popup.setContent(this.buildPopContent(result))
 
-      var marker = L.marker([lat, lng], {
+      var marker = L.marker([coordinates[1], coordinates[0]], {
         id: 'newMarker',
         draggable: true,
         pane: 'redMarker',
@@ -525,6 +506,67 @@ export default {
         this.dinPlatsSearch(latLng.lat, latLng.lng, true)
       })
       return marker
+    },
+
+    createBnt(string, container) {
+      const btn = L.DomUtil.create('button', '', container)
+      btn.setAttribute('type', 'button')
+      btn.innerHTML = string
+      return btn
+    },
+
+    createText(result, container) {
+      const { coordinates, name } = result.properties
+      const dd = `${coordinates.dd[0]}, ${coordinates.dd[1]}`
+      const dms = `${coordinates.dms[0]} ${coordinates.dms[1]}`
+      const ddm = `${coordinates.ddm[0]} ${coordinates.ddm[1]}`
+      const rt90 = `${coordinates.rt90[0]}, ${coordinates.rt90[1]}`
+      const sweref99 = `${coordinates.sweref99[0]}, ${coordinates.sweref99[1]}`
+
+      const placeName = `<div class="subtitle-2 mb-3 font-weight-bold">${name}</div>`
+      const popCoordinates = `<div class="mb-3"><span class="font-weight-medium">WGS84 DMS</span><br />${dms}</div><div class="mb-3"><span class="font-weight-medium">WGS84 DDM</span><br />${ddm}</div><div class="mb-3"><span class="font-weight-medium">WGS84 DD</span><br />${dd}</div><div class="mb-3"><span class="font-weight-medium">RT99 (nord, öst)</span><br />${rt90}</div><div class="mb-5"><span class="font-weight-medium">SWEREF99 TM (nord, öst)</span><br />${sweref99}</div>`
+
+      let uncertainty = ''
+      if (this.uncertainty(result)) {
+        uncertainty = `<div class="mb-5"><span class="font-weight-medium">Osäkerhetsradie: </span>${this.uncertainty(
+          result
+        )} meter</div>`
+      }
+      const string = `${placeName} ${popCoordinates} ${uncertainty}`
+      const text = L.DomUtil.create('div', 'popup-details', container)
+      text.innerHTML = string
+      return text
+    },
+
+    buildPopContent: function(result) {
+      return this.detailView
+        ? this.buildContainer(result)
+        : this.buildContainerWithBtn(result)
+    },
+
+    buildContainer(result) {
+      const container = L.DomUtil.create('div'),
+        text = this.createText(result, container)
+      text.style.color = 'gray'
+      return container
+    },
+    buildContainerWithBtn(result) {
+      const containerWithBtn = L.DomUtil.create('div'),
+        text = this.createText(result, containerWithBtn),
+        showDetailBtn = this.createBnt('Visa detaljer', containerWithBtn)
+
+      showDetailBtn.style.color = '#1976D2'
+      showDetailBtn.style.textDecoration = 'underline'
+      text.style.color = 'gray'
+      L.DomEvent.on(showDetailBtn, 'click', () => {
+        this.showDetail(result)
+      })
+      return containerWithBtn
+    },
+    showDetail(result) {
+      this.setSelectedMarker(result)
+      this.setReBuildMarker(true)
+      this.setDetailView(true)
     },
 
     isHoveredOrSelected: function(id) {

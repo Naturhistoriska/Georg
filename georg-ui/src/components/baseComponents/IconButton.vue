@@ -2,6 +2,8 @@
   <v-btn
     icon
     small
+    :class="iconClass"
+    :color="color"
     :href="href"
     target="_blank"
     class="grey--text text--darken-3 body-2 pl-2"
@@ -20,6 +22,6 @@ export default {
   components: {
     BaseIcon,
   },
-  props: ['href', 'iconPrepend', 'iconAppend', 'text'],
+  props: ['iconClass', 'color', 'href', 'iconPrepend', 'iconAppend', 'text'],
 }
 </script>

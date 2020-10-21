@@ -5,89 +5,45 @@
     id="v-card-detail"
     :style="height"
   >
-    <DetailName />
+    <DetailName v-bind:source="source" />
     <JsonController />
     <v-divider></v-divider>
-
     <v-list>
-      <v-hover v-slot:default="{ hover }" v-if="!isNewMarker">
-        <v-list-item
-          class="selectable-text"
-          :class="{ highlight: expand == true }"
-          @focus="expand = true"
-          @blur="expand = false"
-          @click="copyText(selectedMarker.properties.name)"
-        >
-          <v-list-item-icon>
-            <v-icon :color="makeIconColor">mdi-map-marker</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content v-if="isGbif">{{
-            selectedMarker.properties.name
-          }}</v-list-item-content>
-          <v-list-item-content v-else>{{ title }}</v-list-item-content>
-          <v-list-item-action>
-            <v-btn
-              icon
-              color="transparent"
-              :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
-              @focus="expand = true"
-              @blur="expand = false"
-              v-clipboard="selectedMarker.properties.name"
-            >
-              <v-icon small>mdi-content-copy</v-icon>
-            </v-btn>
-          </v-list-item-action>
-        </v-list-item>
-      </v-hover>
-      <v-divider inset v-if="!isNewMarker"></v-divider>
-      <GeographicTree />
+      <div v-if="!isNewMarker" class="ma-0 pa-0">
+        <HoverItem
+          v-bind:iconColor="marckericoncolor"
+          v-bind:iconName="markericon"
+          v-bind:value="selectedMarker.properties.name"
+          @copy="copyText"
+        />
+        <v-divider></v-divider>
+      </div>
+      <GeographicTree @copy="copyText" />
       <v-divider inset v-if="selectedMarker.properties.country"></v-divider>
       <Coordinates
         v-bind:coordinates="selectedMarker.properties.coordinates"
-        v-bind:lat="selectedMarker.geometry.coordinates[1]"
-        v-bind:lon="selectedMarker.geometry.coordinates[0]"
         v-bind:isNewMarker="isNewMarker"
+        @copy="copyText"
       />
       <v-divider></v-divider>
-      <v-hover v-slot:default="{ hover }" v-if="hasUncertainty">
-        <v-list-item
-          class="selectable-text"
-          :class="{ highlight: expand == true }"
-          @focus="expand = true"
-          @blur="expand = false"
-          @click="copyText(uncertaintyValue)"
-        >
-          <v-list-item-icon>
-            <v-icon :color="makeIconColor">mdi-map-marker-radius</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>
-              {{
-                selectedMarker.properties.addendum.georg
-                  .coordinateUncertaintyInMeters
-              }}
-              meter
-              <span class="text--secondary">osäkerhetsradie</span>
-            </v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-btn
-              icon
-              color="transparent"
-              :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
-              @focus="expand = true"
-              @blur="expand = false"
-              v-clipboard="uncertaintyValue"
-            >
-              <v-icon small>mdi-content-copy</v-icon>
-            </v-btn>
-          </v-list-item-action>
-        </v-list-item>
-      </v-hover>
-      <v-divider v-if="hasUncertainty"></v-divider>
+      <div v-if="hasUncertainty" class="ma-0 pa-0">
+        <HoverItem
+          v-bind:hastitle="true"
+          v-bind:iconColor="marckericoncolor"
+          v-bind:iconName="markerwithradiusicon"
+          v-bind:spanvalue="uncertainty"
+          v-bind:value="uncertaintyValue"
+          @copy="copyText"
+        />
+        <v-divider></v-divider>
+      </div>
       <Uncertainty v-if="isNewMarker" />
       <GbifDataSourceLinks v-else-if="isGbif" />
-      <DataSourceLinks v-else />
+      <DataSourceLinks
+        v-bind:externallink="externallink"
+        v-bind:dataFromSource="dataFromSource"
+        v-else
+      />
       <v-list-item v-if="displayGeodeticDatumWarning">
         <v-list-item-action></v-list-item-action>
         <v-alert dense text type="warning" class="alertText">
@@ -99,10 +55,7 @@
     <v-dialog v-model="dialog" max-width="550">
       <JsonResult />
     </v-dialog>
-    <!-- <v-snackbar v-model="snackbar" centered :timeout="600"
-      >Platsens JSON har kopierats till Urklipp</v-snackbar
-    >-->
-    <v-snackbar centered v-model="snackbar2" :timeout="600"
+    <v-snackbar centered v-model="snackbar" :timeout="600"
       >Kopierad till Urklipp</v-snackbar
     >
   </v-card>
@@ -115,8 +68,15 @@ import DataSourceLinks from './DataSourceLinks'
 import DetailName from './DetailName'
 import GbifDataSourceLinks from './GbifDataSourceLinks'
 import GeographicTree from './GeographicTree'
+import HoverItem from './HoverItem'
 import JsonController from './JsonController'
 import Uncertainty from './Uncertainty'
+
+const woflink = 'https://whosonfirst.org/docs/licenses/'
+const osmlink = 'https://www.openstreetmap.org/copyright'
+const oalink =
+  'https://github.com/openaddresses/openaddresses/tree/master/sources'
+const svhlink = 'https://github.com/mossnisse/Virtuella-Herbariet'
 
 export default {
   name: 'Detail',
@@ -126,101 +86,101 @@ export default {
     DetailName,
     GbifDataSourceLinks,
     GeographicTree,
+    HoverItem,
     JsonController,
     Uncertainty,
   },
   props: ['height'],
   data() {
     return {
+      dataFromSource: null,
       dialog: false,
-      // snackbar: false,
-      snackbar2: false,
-      expand: false,
+      externallink: null,
+      hasUncertainty: false,
+      markericon: 'mdi-map-marker',
+      markerwithradiusicon: 'mdi-map-marker-radius',
+      marckericoncolor: 'blue darken-2',
+      snackbar: false,
+      source: null,
+      uncertainty: 'osäkerhetsradie',
     }
+  },
+  mounted() {
+    this.buildData()
+  },
+  watch: {
+    selectedMarker: function() {
+      this.buildData()
+    },
   },
 
   computed: {
-    ...mapGetters([
-      'displayJsonData',
-      'isGbif',
-      'isWOF',
-      'isNewMarker',
-      'selectedMarker',
-      // 'selectedResult',
-    ]),
+    ...mapGetters(['isGbif', 'isNewMarker', 'selectedMarker']),
     displayGeodeticDatumWarning: function() {
       return this.isGbif
         ? this.selectedMarker.properties.addendum.gbif.geodeticDatum === null
         : false
-    },
-    title: function() {
-      return this.isGbif
-        ? this.selectedMarker.properties.addendum.georg.locationDisplayLabel
-        : this.selectedMarker.properties.name
     },
     titleClass: function() {
       return this.isNewMarker
         ? 'red--text darken-2'
         : 'headline blue--text text--darken-2'
     },
-
     uncertaintyValue: function() {
       return `${this.selectedMarker.properties.addendum.georg.coordinateUncertaintyInMeters} meter`
     },
-
-    source: function() {
-      const source = this.selectedMarker.properties.source
-      if (source === 'whosonfirst') {
-        return "Who's On First"
-      }
-      if (source === 'openstreetmap') {
-        return 'Open street map'
-      }
-      if (source === 'openaddresses') {
-        return 'Open openAddresses'
-      }
-      return 'Virtuella Herbariet'
-      // return this.selectedMarker.properties.source === 'whosonfirst'
-      //   ? "Who's On First"
-      //   : 'Virtuella Herbariet'
-    },
-
     makeIconColor: function() {
       return this.isNewMarker ? 'red darken-2' : 'blue darken-2'
-    },
-
-    hasUncertainty: function() {
-      if (this.isNewMarker) {
-        return false
-      }
-      const source = this.selectedMarker.properties.source
-      if (source === 'whosonfirst') {
-        return false
-      }
-      if (source === 'openstreetmap') {
-        return false
-      }
-      if (source === 'openaddresses') {
-        return false
-      }
-      return this.selectedMarker.properties.addendum.georg
-        .coordinateUncertaintyInMeters
-
-      // return this.isWOF || this.isNewMarker
-      //   ? false
-      //   : this.selectedMarker.properties.addendum.georg
-      //       .coordinateUncertaintyInMeters !== null
     },
   },
 
   methods: {
+    buildData() {
+      const { addendum, source } = this.selectedMarker.properties
+      switch (source) {
+        case 'whosonfirst':
+          this.source = "enligt Who's On First"
+          this.dataFromSource = "Who's On First (WOF)"
+          this.externallink = woflink
+          this.hasUncertainty = false
+          break
+        case 'openstreetmap':
+          this.source = 'enligt OpenStreetMap'
+          this.dataFromSource = 'OpenStreetMap (OSM)'
+          this.externallink = osmlink
+          this.hasUncertainty = false
+          break
+        case 'openaddresses':
+          this.source = 'enligt OpenAddresses'
+          this.dataFromSource = 'OpenAddresses (OA)'
+          this.externallink = oalink
+          this.hasUncertainty = false
+          break
+        case 'gbif':
+          this.source = 'Plats från en GBIF-källa'
+          this.hasUncertainty = addendum.georg.coordinateUncertaintyInMeters
+          break
+        case 'swe-virtual-herbarium':
+          this.source = 'enligt Virtuella Herbariet'
+          this.dataFromSource = 'Virtuella Herbariet (SVH)'
+          this.externallink = svhlink
+          this.hasUncertainty = addendum.georg.coordinateUncertaintyInMeters
+          break
+        default:
+          this.source = null
+          this.dataFromSource = null
+          this.externallink = null
+          this.hasUncertainty = false
+          break
+      }
+    },
     copyText(value) {
       if (window.getSelection() != '') {
         this.$clipboard(window.getSelection().toString())
       } else {
         this.$clipboard(value)
       }
-      this.snackbar2 = true
+      this.snackbar = true
     },
   },
 }

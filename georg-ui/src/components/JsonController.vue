@@ -18,13 +18,9 @@
         class="mr-2"
         tabindex="0"
         v-clipboard="jsonString"
-        @click.stop="snackbar = true"
-        @keypress.stop="snackbar = true"
+        @click.stop="openSnackbar"
+        @keypress.stop="openSnackbar = true"
       >
-        <!--Copy and snackbar should be fixed properly so that both works for clicking and pressing enter.-->
-        <v-snackbar v-model="snackbar" centered :timeout="600"
-          >Platsens JSON har kopierats till Urklipp</v-snackbar
-        >
         <v-icon left>mdi-content-copy</v-icon>Kopiera
       </v-chip>
       <v-chip
@@ -43,15 +39,9 @@
     <v-dialog v-model="dialog" @keydown.esc="dialog = false" max-width="550">
       <JsonResult />
     </v-dialog>
-    <v-snackbar v-model="snackbar" centered :timeout="600"
-      >Platsens JSON har kopierats till Urklipp</v-snackbar
-    >
-    <v-snackbar centered v-model="snackbar2" :timeout="600"
-      >Kopierad till Urklipp</v-snackbar
-    >
-    <v-snackbar centered v-model="snackbar3" :timeout="600"
-      >Skapar din plats från koordinaterna</v-snackbar
-    >
+    <v-snackbar v-model="snackbar" centered :timeout="600">{{
+      snackbartext
+    }}</v-snackbar>
   </div>
 </template>
 <script>
@@ -66,9 +56,7 @@ export default {
     return {
       dialog: false,
       snackbar: false,
-      snackbar2: false,
-      snackbar3: false,
-      expand: false,
+      snackbartext: null,
     }
   },
   computed: {
@@ -82,11 +70,16 @@ export default {
   },
   methods: {
     ...mapMutations(['setAddDinPlats', 'setRezoom']),
-
     addDinPlats() {
+      console.log('addDinPlats components')
       this.setAddDinPlats(true)
-      this.setRezoom(false)
-      this.snackbar3 = true
+      // this.setRezoom(false)
+      this.snackbar = true
+      this.snackbartext = 'Skapar din plats från koordinaterna'
+    },
+    openSnackbar() {
+      this.snackbar = true
+      this.snackbartext = 'Platsens JSON har kopierats till Urklipp'
     },
   },
 }

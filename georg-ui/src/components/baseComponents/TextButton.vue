@@ -1,5 +1,5 @@
 <template>
-  <v-btn text small :class="className" @click="onclick">
+  <v-btn text small :class="classname" @click="onclick">
     <BaseIcon v-bind:name="iconPrepend" v-if="iconPrepend" />
     {{ text }}
     <BaseIcon v-bind:name="iconAppend" v-if="iconAppend" />
@@ -12,7 +12,7 @@ export default {
   components: {
     BaseIcon,
   },
-  props: ['className', 'iconPrepend', 'iconAppend', 'text'],
+  props: ['classname', 'iconPrepend', 'iconAppend', 'text'],
   methods: {
     onclick() {
       this.$emit('clicked')

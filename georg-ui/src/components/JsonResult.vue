@@ -10,26 +10,15 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'JsonResult',
-
-  data() {
-    return {
-      tile: false,
-    }
-  },
-
   computed: {
     ...mapGetters(['selectedMarker']),
     jsonstr: function() {
       return this.selectedMarker
     },
   },
-
   filters: {
     pretty: function(value) {
-      if (value !== undefined) {
-        return JSON.stringify(value, null, 2)
-      }
-      return ''
+      return value !== undefined ? JSON.stringify(value, null, 2) : ''
     },
   },
 }

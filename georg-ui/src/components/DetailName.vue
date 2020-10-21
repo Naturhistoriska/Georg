@@ -1,23 +1,18 @@
 <template>
   <div>
     <v-card-title
-      :class="{ 'red--text': isNewMarker, 'blue--text': !isNewMarker }"
+      :class="[isNewMarker ? 'red--text' : 'blue--text']"
       class="text--darken-2 pl-4 pr-2"
       >{{ title }}</v-card-title
     >
-    <v-card-subtitle v-if="!isNewMarker && !isGbif">
-      <strong class="text-capitalize">{{
+    <v-card-subtitle v-if="isNewMarker">
+      {{ latlng }}
+    </v-card-subtitle>
+    <v-card-subtitle v-else>
+      <strong class="text-capitalize" v-if="!isGbif">{{
         selectedMarker.properties.layer
       }}</strong>
-      enligt {{ source }}
-    </v-card-subtitle>
-    <v-card-subtitle v-else-if="isGbif">
-      Plats från en
-      {{ selectedMarker.properties.source.toUpperCase() }}-källa
-    </v-card-subtitle>
-    <v-card-subtitle v-else-if="isNewMarker">
-      {{ latDms }}
-      {{ lngDms }}
+      {{ source }}
     </v-card-subtitle>
     <v-divider></v-divider>
   </div>
@@ -26,44 +21,17 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'DetailName',
+  props: ['source'],
   computed: {
     ...mapGetters(['isGbif', 'isNewMarker', 'selectedMarker']),
     title: function() {
-      return this.isGbif
-        ? this.selectedMarker.properties.addendum.georg.locationDisplayLabel
-        : this.selectedMarker.properties.name
+      const { addendum, name } = this.selectedMarker.properties
+      return this.isGbif ? addendum.georg.locationDisplayLabel : name
     },
-    source: function() {
-      const source = this.selectedMarker.properties.source
-      if (source === 'whosonfirst') {
-        return "Who's On First"
-      }
-      if (source === 'openstreetmap') {
-        return 'OpenStreetMap'
-      }
-      if (source === 'openaddresses') {
-        return 'OpenAddresses'
-      }
-      return 'Virtuella Herbariet'
-
-      // return this.selectedMarker.properties.source === 'whosonfirst'
-      //   ? "Who's On First"
-      //   : 'Virtuella Herbariet'
+    latlng: function() {
+      const { dms } = this.selectedMarker.properties.coordinates
+      return `${dms[0]} ${dms[1]}`
     },
-
-    latDms: function() {
-      return this.selectedMarker.properties.coordinates.dms[0]
-    },
-
-    lngDms: function() {
-      return this.selectedMarker.properties.coordinates.dms[1]
-    },
-
-    // titleClass: function() {
-    //   return this.isNewMarker
-    //     ? 'red--text darken-2'
-    //     : 'headline blue--text text--darken-2'
-    // },
   },
 }
 </script>
