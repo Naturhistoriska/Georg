@@ -25,7 +25,7 @@ import se.nrm.georg.service.logic.exceptions.ErrorMessageBuilder;
 @SwaggerDefinition(
   info = @Info(
                 title = "Georg API",
-                version = "0.4.2"
+                version = "1.0"
         ),
   tags = {
           @Tag(name = "georg", description = "Georeference tool")
