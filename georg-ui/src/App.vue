@@ -38,8 +38,8 @@
     <v-app-bar app clipped-left color="blue darken-2" dark dense>
       <v-toolbar-title class="title">
         <router-link id="home" class="white--text routerLink" to="/"
-          >Georg</router-link
-        >
+          >Georg
+        </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-title class="title">
@@ -115,15 +115,34 @@ h4 {
 #body {
   background: transparent;
 }
-.routerLink {
-  text-decoration: none;
-}
 header {
   min-width: 320px;
+}
+#main-search .v-select.v-select--is-menu-active .v-input__icon--append .v-icon {
+  transform: none !important ;
+}
+.routerLink {
+  text-decoration: none;
 }
 .selectable-text {
   -webkit-user-select: text !important; /* Safari */
   -ms-user-select: text !important; /* IE 10+ and Edge */
   user-select: text !important; /* Standard syntax */
+}
+.white-bg:before {
+  opacity: 0 !important;
+}
+.highlight::before {
+  background-color: currentColor !important;
+  opacity: 0.06 !important;
+}
+
+.v-application .show-btn-hover.transparent--text {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+
+.v-application .show-btn-hover.transparent--text,
+.v-application .show-btn.transparent--text {
+  color: rgba(0, 0, 0, 0.54) !important;
 }
 </style>
