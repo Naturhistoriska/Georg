@@ -214,26 +214,6 @@ export default {
       this.setReBuildMarker(false)
       this.setRezoom(false)
     },
-    // results: function() {
-    //   console.log('map: results changed....', this.reBuildMarker)
-    //   if (this.reBuildMarker) {
-    //     this.highlightMarker()
-    //     this.setReBuildMarker(false)
-    //   }
-    // },
-
-    // detailView() {
-    //   console.log('map detailView changed....', this.detailView)
-    //   if (this.reBuildMarker) {
-    //     this.highlightMarker()
-    //     this.setReBuildMarker(false)
-    //   }
-
-    //   if (!this.detailView) {
-    //     this.fitMapBounds()
-    //   }
-    // },
-
     accuracy() {
       this.$nextTick(() => {
         if (this.accuracy >= 0) {
@@ -270,33 +250,7 @@ export default {
       'setSelectedResultId',
       'setSelectedResult',
     ]),
-
-    // onDblClick(event) {
-    //   console.log('event.latlng', event.latlng)
-    //   // this.zoom = this.$refs.myMap.mapObject.getZoom()
-    // },
-
-    // showDetailMarker() {
-    //   const detailMarker = this.selectedMarker
-    //   const isInView = this.$refs.myMap.mapObject
-    //     .getBounds()
-    //     .contains(detailMarker.getLatLng())
-    //   if (!isInView) {
-    //     // this.conter = [
-    //     //   detailMarker.getLatLng().lat,
-    //     //   detailMarker.getLatLng().lng,
-    //     // ]
-
-    //     let zoom = this.$refs.myMap.mapObject.getZoom()
-    //     this.$refs.myMap.mapObject.flyTo(
-    //       [detailMarker.getLatLng().lat, detailMarker.getLatLng().lng],
-    //       zoom
-    //     )
-    //   }
-    // },
-
     onMapClick(event) {
-      // event.preventDefault()
       if (this.enableAddMapMarkers) {
         const { lat, lng } = event.latlng
         this.dinPlatsSearch(lat, lng, false)
@@ -376,56 +330,15 @@ export default {
         if (this.detailView && gid === this.selectedMarker.properties.gid) {
           detailMarker = marker
         }
-
-        // const id = result.properties.gid
-        // marker.addEventListener('click', () => {
-        //   this.clickedMarker = true
-        //   this.clickedId = gid
-        //   if (gid !== 'newMarker') {
-        //     this.setSelectedResult(result)
-        //     this.setSelectedResultId(id)
-        //   }
-        //   if (this.detailView) {
-        //     this.setSelectedMarker(result)
-        //   }
-        //   this.setReBuildMarker(!this.reBuildMarker)
-        //   // this.rezoom = false
-        // })
-        // if (this.detailView) {
-        //   if (id === this.selectedMarker.properties.gid && this.clickedMarker) {
-        //     marker.addTo(this.layerGroup).openPopup()
-        //   } else {
-        //     marker.addTo(this.layerGroup)
-        //   }
-        //   if (id === this.selectedMarker.properties.gid) {
-        //     detailMarker = marker
-        //   }
-        // } else {
-        //   if (id === this.clickedId && this.clickedMarker) {
-        //     marker.addTo(this.layerGroup).openPopup()
-        //   } else {
-        //     marker.addTo(this.layerGroup)
-        //   }
-        // }
       })
-      // if (this.results != null && this.results.length > 0 && this.rezoom) {
-      //   console.log('map: ', this.results)
-      //   this.fitMapBounds()
-      // }
       if (!this.detailView) {
         this.clickedMarker = false
-        // this.fitMapBounds()
       } else {
         if (detailMarker) {
           const isInView = this.$refs.myMap.mapObject
             .getBounds()
             .contains(detailMarker.getLatLng())
           if (!isInView) {
-            // this.conter = [
-            //   detailMarker.getLatLng().lat,
-            //   detailMarker.getLatLng().lng,
-            // ]
-
             let zoom = this.$refs.myMap.mapObject.getZoom()
             this.$refs.myMap.mapObject.flyTo(
               [detailMarker.getLatLng().lat, detailMarker.getLatLng().lng],
@@ -455,23 +368,6 @@ export default {
       } else {
         marker.addTo(this.layerGroup)
       }
-
-      // if (this.detailView) {
-      //   if (id === this.selectedMarker.properties.gid && this.clickedMarker) {
-      //     marker.addTo(this.layerGroup).openPopup()
-      //   } else {
-      //     marker.addTo(this.layerGroup)
-      //   }
-      //   if (id === this.selectedMarker.properties.gid) {
-      //     detailMarker = marker
-      //   }
-      // } else {
-      //   if (id === this.clickedId && this.clickedMarker) {
-      //     marker.addTo(this.layerGroup).openPopup()
-      //   } else {
-      //     marker.addTo(this.layerGroup)
-      //   }
-      // }
     },
 
     buildMarker(id, result) {
