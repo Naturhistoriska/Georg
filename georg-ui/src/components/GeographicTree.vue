@@ -68,7 +68,7 @@ export default {
 }
 </script>
 <style>
-.white-bg:before {
+/* .white-bg:before {
   opacity: 0 !important;
-}
+} */
 </style>

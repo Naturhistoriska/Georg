@@ -23,40 +23,42 @@
       @blur="copySearchText"
     >
       <template v-slot:item="{ item }">
-        <v-list-item-icon>
-          <v-icon color="grey lighten-1">{{ item.icon }}</v-icon>
-        </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title class="font-weight-medium body-2 text-truncate"
-            >{{ item.name }}{{ item.region }}</v-list-item-title
-          >
-        </v-list-item-content>
-        <v-list-item-action>
-          <span
-            class="font-weight-medium text--disabled text-caption text-uppercase"
-            >{{ item.abbr }}</span
-          >
-        </v-list-item-action>
+        <ItemIcon v-bind:iconColor="iconColor" v-bind:iconName="item.icon" />
+        <ItemContent v-bind:tleClass="tleClass" v-bind:title="item.fullName" />
+        <ItemAction v-bind:itemClass="itemClass" v-bind:text="item.abbr" />
       </template>
     </v-combobox>
   </v-card-text>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import ItemAction from './baseComponents/ItemAction'
+import ItemContent from './baseComponents/ItemContent'
+import ItemIcon from './baseComponents/ItemIcon'
 import Service from '../Service'
 
 const service = new Service()
 export default {
   name: 'ComboSearch',
+  components: {
+    ItemAction,
+    ItemContent,
+    ItemIcon,
+  },
   props: ['passInValue'],
   data: () => ({
     autoSearch: true,
     entries: [],
     isLoading: false,
-    results: [],
     search: null,
     select: null,
   }),
+  created() {
+    this.iconColor = 'grey lighten-1'
+    this.itemClass =
+      'font-weight-medium text--disabled text-caption text-uppercase'
+    this.tleClass = 'font-weight-medium body-2 text-truncate'
+  },
   mounted() {
     if (this.select === null) {
       if (this.passInValue !== null && this.passInValue !== '') {
@@ -80,27 +82,8 @@ export default {
       let elements = []
       this.entries.map(entry => {
         const { gid, name, region, source } = entry.properties
-        let abbr
-        switch (source) {
-          case 'whosonfirst':
-            abbr = 'wof'
-            break
-          case 'openstreetmap':
-            abbr = 'osm'
-            break
-          case 'openaddresses':
-            abbr = 'oa'
-            break
-          case 'gbif':
-            abbr = 'gbif'
-            break
-          case 'swe-virtual-herbarium':
-            abbr = 'svh'
-            break
-          default:
-            abbr = 'gbif'
-        }
-
+        const abbr = this.getAbbr(source)
+        const fullName = region !== undefined ? `${name}, ${region}` : `${name}`
         const uncertainty =
           source === 'gbif' || source === 'swe-virtual-herbarium'
             ? entry.properties.addendum.georg.coordinateUncertaintyInMeters
@@ -108,10 +91,10 @@ export default {
         const icon = uncertainty ? 'mdi-map-marker-radius' : 'mdi-map-marker'
         const element = {
           abbr,
+          fullName,
           icon,
           id: gid,
           name,
-          region: region !== undefined ? `, ${region}` : '',
           source,
           uncertainty,
         }
@@ -135,9 +118,9 @@ export default {
       'setDetailView',
       'setIsErrorMsg',
       'setMessage',
+      'setReBuildMarker',
       'setResults',
       'setRezoom',
-      'setSearchCoordinates',
       'setSelectedMarker',
       'setSelectedResultId',
       'setSelectedResult',
@@ -153,20 +136,22 @@ export default {
     },
     filterResult({ id }) {
       if (id) {
-        this.results = this.entries.filter(e => e.properties.gid === id)
-        const selectedResult = this.results[0]
+        let results = []
+        const selectedResult = this.entries.find(
+          ({ properties }) => properties.gid === id
+        )
+        results.push(selectedResult)
         this.setSelectedResultId(id)
         this.setSelectedResult(selectedResult)
         this.setSelectedMarker(selectedResult)
         this.setIsErrorMsg(false)
-        this.setResults(this.results)
+        this.setMessage('1 träffar')
+        this.setResults(results)
         this.setDetailView(true)
-
+        this.setRezoom(true)
+        this.setReBuildMarker(true)
         const { name } = selectedResult.properties
-        const decodeUrl = decodeURIComponent(this.$route.fullPath)
-        if (decodeUrl !== `/search?place_name=${name}`) {
-          this.$router.push(`/search?place_name=${name}`)
-        }
+        this.pushUrl(name)
       }
     },
     searchAddress() {
@@ -175,13 +160,7 @@ export default {
         this.$emit('search', this.search, this.searchCountry)
         this.isLoading = false
         this.entries = []
-        const decodeUrl = decodeURIComponent(this.$route.fullPath)
-        if (decodeUrl !== `/search?place_name=${this.search}`) {
-          this.$router.push({
-            path: 'search',
-            query: { place_name: this.search },
-          })
-        }
+        this.pushUrl(this.search)
       }
     },
     autoCompleteSearch() {
@@ -201,12 +180,37 @@ export default {
       }
       this.autoSearch = true
     },
+    pushUrl(name) {
+      const decodeUrl = decodeURIComponent(this.$route.fullPath)
+      if (decodeUrl !== `/search?place_name=${name}`) {
+        this.$router.push({
+          path: 'search',
+          query: { place_name: name },
+        })
+      }
+    },
+    getAbbr(source) {
+      switch (source) {
+        case 'whosonfirst':
+          return 'wof'
+        case 'openstreetmap':
+          return 'osm'
+        case 'openaddresses':
+          return 'oa'
+        case 'gbif':
+          return 'gbif'
+        case 'swe-virtual-herbarium':
+          return 'svh'
+        default:
+          return ''
+      }
+    },
   },
 }
 </script>
 
 <style>
-#main-search .v-select.v-select--is-menu-active .v-input__icon--append .v-icon {
+/* #main-search .v-select.v-select--is-menu-active .v-input__icon--append .v-icon {
   transform: none !important ;
-}
+} */
 </style>

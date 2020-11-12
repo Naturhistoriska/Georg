@@ -94,7 +94,7 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
-      // 'setDisplayResults',
+      'setHovedResultId',
       'setIsErrorMsg',
       'setMessage',
       'setReBuildMarker',
@@ -110,6 +110,7 @@ export default {
     ]),
     clear() {
       this.setDetailView(false)
+      this.setHovedResultId('')
       this.setMessage('')
       this.setReBuildMarker(true)
       this.setResults([])
@@ -128,7 +129,6 @@ export default {
       this.mapHeight = 'height: ' + windowHeight + 'px'
       this.resultsHeight = 'max-height: ' + boxHeight + 'px'
     },
-
     searchAddress(value, country) {
       this.setSearchText(value)
       service
@@ -149,7 +149,7 @@ export default {
           this.setMessages()
           this.setIsErrorMsg(false)
           this.setResults(this.results)
-          this.setRezoom(true)
+          this.setRezoom(this.results.length > 0)
           this.setReBuildMarker(true)
         })
         .catch(function() {})
@@ -175,7 +175,7 @@ export default {
             this.setSelectedResultId('')
             this.setSelectedResult({})
             this.setIsErrorMsg(true)
-            this.reBuildMarker(true)
+            this.setRezoom(false)
           } else {
             let theResults = response.features
             if (theResults.length === 1) {
@@ -198,6 +198,7 @@ export default {
             this.setMessages()
             this.setResults(this.results)
             this.setIsErrorMsg(false)
+            this.setRezoom(true)
           }
         })
         .catch(function() {})
@@ -205,7 +206,6 @@ export default {
           this.setSearchOption('coordinates')
           this.setSearchCoordinates(value)
         })
-      this.setRezoom(true)
     },
     setMessages() {
       let message

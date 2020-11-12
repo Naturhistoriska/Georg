@@ -1,36 +1,12 @@
 <template>
   <v-list-item-group active-class="white-bg">
-    <!-- <v-hover v-slot:default="{ hover }">
-      <v-list-item
-        :class="{ highlight: expand == true }"
-        @click="snackbar = true"
-        @focus="expand = true"
-        @blur="expand = false"
-      >
-        <v-list-item-icon>
-          <v-icon color="red darken-2">mdi-map-marker-radius</v-icon>
-        </v-list-item-icon>
-        <v-list-item-title>Osäkerhetsradie</v-list-item-title>
-        <v-list-item-action>
-          <v-btn
-            icon
-            color="transparent"
-            :class="{ 'show-btn': expand == true, 'show-btn-hover': hover }"
-            @focus="expand = true"
-            @blur="expand = false"
-            @click="snackbar = true"
-          >
-            <v-icon small>mdi-content-copy</v-icon>
-          </v-btn>
-        </v-list-item-action>
-      </v-list-item>
-    </v-hover> -->
     <v-list-item>
-      <v-list-item-icon>
-        <v-icon color="red darken-2">mdi-map-marker-radius</v-icon>
-      </v-list-item-icon>
-      <v-list-item-title>Osäkerhetsradie</v-list-item-title>
-      <v-list-item-action> </v-list-item-action>
+      <ItemIcon
+        v-bind:iconColor="redDarkenColor"
+        v-bind:iconName="markerWithRadius"
+      />
+      <ItemTitle>Osäkerhetsradie</ItemTitle>
+      <ItemAction />
     </v-list-item>
     <v-card class="ml-16" id="v-card-uncertainty" flat>
       <v-chip-group>
@@ -72,16 +48,20 @@
         </v-row>
       </v-container>
     </v-card>
-    <!-- <v-snackbar centered v-model="snackbar" :timeout="600"
-      >Kopierad till Urklipp</v-snackbar
-    > -->
   </v-list-item-group>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import ItemAction from './baseComponents/ItemAction'
+import ItemIcon from './baseComponents/ItemIcon'
+import ItemTitle from './baseComponents/ItemTitle'
 export default {
   name: 'Uncertainty',
-
+  components: {
+    ItemAction,
+    ItemIcon,
+    ItemTitle,
+  },
   data() {
     return {
       accuracyValue: null,
@@ -94,9 +74,16 @@ export default {
         { label: '100 km', value: 100000 },
       ],
       uncertintyChangedByChip: false,
-      // expand: false,
-      // snackbar: false,
     }
+  },
+  created() {
+    this.redDarkenColor = 'red darken-2'
+    this.markerWithRadius = 'mdi-map-marker-radius'
+    this.iconToggleGbifData = 'mdi-chevron-down'
+    this.importIconName = 'mdi-database-import'
+    this.occurrenceDataset = 'GBIF Occurrence dataset'
+    this.occurrenceId = 'GBIF Occurrence ID'
+    this.opennewicon = 'mdi-open-in-new'
   },
   mounted() {
     if (this.accuracy >= 0) {
@@ -147,11 +134,11 @@ export default {
 }
 </script>
 <style>
-.white-bg:before {
+/* .white-bg:before {
   opacity: 0 !important;
-}
+} */
 
-.highlight::before {
+/* .highlight::before {
   background-color: currentColor !important;
   opacity: 0.06 !important;
 }
@@ -163,5 +150,5 @@ export default {
 .v-application .show-btn-hover.transparent--text,
 .v-application .show-btn.transparent--text {
   color: rgba(0, 0, 0, 0.54) !important;
-}
+} */
 </style>

@@ -15,7 +15,6 @@
     />
   </div>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
 import ComboSearch from './ComboSearch'

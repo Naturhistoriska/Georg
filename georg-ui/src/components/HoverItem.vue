@@ -8,9 +8,7 @@
       @blur="expand = false"
       @click="onClick(value)"
     >
-      <v-list-item-icon>
-        <BaseIcon v-bind:color="iconColor">{{ iconName }}</BaseIcon>
-      </v-list-item-icon>
+      <ItemIcon v-bind:iconColor="iconColor" v-bind:iconName="iconName" />
       <v-list-item-content v-if="hastitle">
         <v-list-item-title
           >{{ value }}
@@ -41,10 +39,12 @@
 </template>
 <script>
 import BaseIcon from './baseComponents/BaseIcon'
+import ItemIcon from './baseComponents/ItemIcon'
 export default {
   name: 'Coordinates',
   components: {
     BaseIcon,
+    ItemIcon,
   },
   props: [
     'dense',

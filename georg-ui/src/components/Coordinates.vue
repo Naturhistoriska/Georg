@@ -42,15 +42,13 @@ export default {
     HoverItem,
   },
   props: ['coordinates', 'isNewMarker'],
-  data() {
-    return {
-      crosshairsIcon: 'mdi-crosshairs-gps',
-      dmsSubtitle: 'WGS84 DMS',
-      ddmSubtitle: 'WGS84 DDM',
-      ddSubtitle: 'WGS84 DD (lat, lon)',
-      sweref99Subtitle: 'SWEREF99 TM (nord, öst)',
-      rt90Subtitle: 'RT90 (nord, öst)',
-    }
+  created() {
+    this.crosshairsIcon = 'mdi-crosshairs-gps'
+    this.dmsSubtitle = 'WGS84 DMS'
+    this.ddmSubtitle = 'WGS84 DDM'
+    this.ddSubtitle = 'WGS84 DD (lat, lon)'
+    this.sweref99Subtitle = 'SWEREF99 TM (nord, öst)'
+    this.rt90Subtitle = 'RT90 (nord, öst)'
   },
   computed: {
     latLon: function() {
@@ -85,7 +83,7 @@ export default {
 }
 </script>
 <style>
-.white-bg:before {
+/* .white-bg:before {
   opacity: 0 !important;
-}
+} */
 </style>

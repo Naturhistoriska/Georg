@@ -143,7 +143,7 @@ export default {
           attribution: lantmaterietMapAttribution,
         },
       ],
-      url: baseUrl,
+      // url: baseUrl,
       zoom: 0,
     }
   },
@@ -199,39 +199,40 @@ export default {
       return this.enableAddMapMarkers ? 'red darken-2' : '#424242'
     },
     propertyAAndPropertyB() {
-      this.setRezoom(false)
-      return `${this.hoveredResultId}|${this.selectedResultId}`
+      return `${this.hoveredResultId}|${this.selectedResultId}|${this.reBuildMarker}|${this.detailView}`
     },
   },
 
   watch: {
     propertyAAndPropertyB() {
-      console.log('propertyAAndPropertyB changed...')
-      this.highlightMarker()
-    },
-    results: function() {
-      console.log('results changed....', this.reBuildMarker)
       if (this.reBuildMarker) {
         this.highlightMarker()
-        this.setReBuildMarker(false)
       }
-
-      // this.buildMarkers()
-      // this.addUnertainties()
-      // this.$nextTick(() => {
-      //   this.buildMarkers()
-      //   this.addUnertainties()
-      // })
-      // this.rezoom = true
-    },
-
-    detailView() {
-      console.log('detailView changed....')
-      if (this.reBuildMarker) {
-        this.highlightMarker()
-        this.setReBuildMarker(false)
+      if (this.rezoom) {
+        this.fitMapBounds()
       }
+      this.setReBuildMarker(false)
+      this.setRezoom(false)
     },
+    // results: function() {
+    //   console.log('map: results changed....', this.reBuildMarker)
+    //   if (this.reBuildMarker) {
+    //     this.highlightMarker()
+    //     this.setReBuildMarker(false)
+    //   }
+    // },
+
+    // detailView() {
+    //   console.log('map detailView changed....', this.detailView)
+    //   if (this.reBuildMarker) {
+    //     this.highlightMarker()
+    //     this.setReBuildMarker(false)
+    //   }
+
+    //   if (!this.detailView) {
+    //     this.fitMapBounds()
+    //   }
+    // },
 
     accuracy() {
       this.$nextTick(() => {
@@ -259,6 +260,7 @@ export default {
       'setAddDinPlats',
       'setAccuracy',
       'setDetailView',
+      'setHovedResultId',
       'setIsErrorMsg',
       'setMessage',
       'setReBuildMarker',
@@ -274,18 +276,36 @@ export default {
     //   // this.zoom = this.$refs.myMap.mapObject.getZoom()
     // },
 
+    // showDetailMarker() {
+    //   const detailMarker = this.selectedMarker
+    //   const isInView = this.$refs.myMap.mapObject
+    //     .getBounds()
+    //     .contains(detailMarker.getLatLng())
+    //   if (!isInView) {
+    //     // this.conter = [
+    //     //   detailMarker.getLatLng().lat,
+    //     //   detailMarker.getLatLng().lng,
+    //     // ]
+
+    //     let zoom = this.$refs.myMap.mapObject.getZoom()
+    //     this.$refs.myMap.mapObject.flyTo(
+    //       [detailMarker.getLatLng().lat, detailMarker.getLatLng().lng],
+    //       zoom
+    //     )
+    //   }
+    // },
+
     onMapClick(event) {
       // event.preventDefault()
       if (this.enableAddMapMarkers) {
-        const latlng = event.latlng
-        this.dinPlatsSearch(latlng.lat, latlng.lng, false)
+        const { lat, lng } = event.latlng
+        this.dinPlatsSearch(lat, lng, false)
         this.setAccuracy(-1)
         this.enableAddMapMarkers = false
       }
     },
 
     dinPlatsSearch(lat, lng, moveUncertainty) {
-      console.log('dinPlatsSearch', moveUncertainty)
       this.clickedMarker = false
       this.setRezoom(false)
 
@@ -298,13 +318,6 @@ export default {
             : null
           this.results.splice(0, 1)
         }
-        // if (newResults[0].properties.gid === 'newMarker') {
-        //   uncertainty = moveUncertainty
-        //     ? this.results[0].properties.coordinateUncertaintyInMeters
-        //     : null
-        //   this.results.splice(0, 1)
-        //   console.log('changed here...')
-        // }
       }
       this.isLoaded = true
       service
@@ -332,13 +345,6 @@ export default {
           this.isLoaded = false
         })
     },
-    // resetDetailViewZoom() {
-    //   const lat = this.selectedMarker.geometry.coordinates[1]
-    //   const lng = this.selectedMarker.geometry.coordinates[0]
-    //   this.center = [lat, lng]
-    //   // this.zoom = 6
-    // },
-
     removeUncertainties() {
       this.circles.forEach(circle => {
         this.$refs.myMap.mapObject.removeLayer(circle)
@@ -357,10 +363,8 @@ export default {
     },
 
     buildMarkers() {
-      console.log('buildMarkers')
       this.resetLayerGroup()
       this.bounds = L.latLngBounds()
-
       let detailMarker
       this.results.forEach(result => {
         const { coordinates } = result.geometry
@@ -368,6 +372,11 @@ export default {
         this.bounds.extend([coordinates[1], coordinates[0]])
         const marker = this.buildMarker(gid, result)
         this.addMarkerClickListener(marker, gid, result)
+
+        if (this.detailView && gid === this.selectedMarker.properties.gid) {
+          detailMarker = marker
+        }
+
         // const id = result.properties.gid
         // marker.addEventListener('click', () => {
         //   this.clickedMarker = true
@@ -399,11 +408,13 @@ export default {
         //   }
         // }
       })
-      if (this.results != null && this.results.length > 0 && this.rezoom) {
-        this.fitMapBounds()
-      }
+      // if (this.results != null && this.results.length > 0 && this.rezoom) {
+      //   console.log('map: ', this.results)
+      //   this.fitMapBounds()
+      // }
       if (!this.detailView) {
         this.clickedMarker = false
+        // this.fitMapBounds()
       } else {
         if (detailMarker) {
           const isInView = this.$refs.myMap.mapObject
@@ -432,12 +443,12 @@ export default {
         if (id !== 'newMarker') {
           this.setSelectedResult(result)
           this.setSelectedResultId(id)
+          this.setHovedResultId(id)
         }
         if (this.detailView) {
           this.setSelectedMarker(result)
         }
-        // this.setReBuildMarker(!this.reBuildMarker)
-        // this.rezoom = false
+        this.setReBuildMarker(true)
       })
       if (id === this.clickedId && this.clickedMarker) {
         marker.addTo(this.layerGroup).openPopup()
@@ -628,34 +639,13 @@ export default {
 
     layerChange(e) {
       this.activeLayer = e.name
-      // this.fixZoom()
     },
 
-    // fixZoom() {
-    //   if (this.activeLayer !== 'OpenStreetMap') {
-    //     this.zoom = this.zoom > 15 ? 15 : this.zoom
-    //     if (this.detailView && !this.selectedMarker.socken) {
-    //       this.maxZoom = 18
-    //     }
-    //   }
-    // },
-
     fitMapBounds() {
-      if (this.rezoom) {
-        if (!this.detailView) {
-          this.$refs.myMap.mapObject.fitBounds(this.bounds)
-          this.zoom = this.$refs.myMap.mapObject.getZoom()
-          // if (this.$refs.myMap.mapObject.getZoom() === 0) {
-          //   this.zoom = 5
-          // }
-        }
-
-        // else {
-        //   this.zoom =
-        //     this.$refs.myMap.mapObject.getZoom() > 5
-        //       ? 5
-        //       : this.$refs.myMap.mapObject.getZoom()
-        // }
+      if (this.rezoom || !this.detailView) {
+        // this.$refs.myMap.mapObject.closePopup()
+        this.$refs.myMap.mapObject.fitBounds(this.bounds)
+        this.zoom = this.$refs.myMap.mapObject.getZoom()
       }
     },
   },

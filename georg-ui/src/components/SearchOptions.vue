@@ -62,18 +62,13 @@ export default {
         this.searchOption == 'address' ? null : this.searchOption
     },
   },
-
   methods: {
-    ...mapMutations(['setMessage', 'setSearchCountry', 'setSearchOption']),
+    ...mapMutations(['setSearchCountry', 'setSearchOption']),
     onCountryChanged({ value }) {
       this.setSearchCountry(value)
     },
     onSwitchChanged(value) {
       this.setSearchOption(value ? 'coordinates' : 'address')
-      // this.setMessage('')
-      // if (this.$route.fullPath !== '/') {
-      //   this.$router.push('/')
-      // }
     },
   },
 }

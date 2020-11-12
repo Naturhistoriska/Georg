@@ -71,9 +71,7 @@ export default {
   methods: {
     ...mapMutations(['setAddDinPlats', 'setRezoom']),
     addDinPlats() {
-      console.log('addDinPlats components')
       this.setAddDinPlats(true)
-      // this.setRezoom(false)
       this.snackbar = true
       this.snackbartext = 'Skapar din plats från koordinaterna'
     },

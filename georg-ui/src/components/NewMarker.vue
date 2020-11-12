@@ -37,11 +37,11 @@ export default {
   mounted() {
     const {
       coordinates,
+      coordinateUncertaintyInMeters,
       name,
       country,
       county,
       region,
-      coordinateUncertaintyInMeters,
     } = this.result.properties
     const { dms } = coordinates
     this.dmsLatlng = `${dms[0]} ${dms[1]}`

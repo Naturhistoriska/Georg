@@ -1,36 +1,31 @@
 <template>
   <v-list-item-group>
     <v-list-item @click="openOrCloseGbifData()">
-      <v-list-item-icon>
-        <v-icon color="blue darken-2">mdi-database-import</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>
-          Data från GBIF
-        </v-list-item-title>
-      </v-list-item-content>
+      <ItemIcon
+        v-bind:iconColor="blueDarkenColor"
+        v-bind:iconName="importIconName"
+      />
+      <ItemContent v-bind:title="dataFromSource" />
       <BaseIconButton v-bind:iconName="iconToggleGbifData" />
     </v-list-item>
     <div v-if="displayGbifData" class="ma-0 pa-0">
       <v-list-item :href="datasetUrl" target="_blank">
-        <v-list-item-icon> </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{ datasetTitle }}</v-list-item-title>
-          <v-list-item-subtitle>GBIF Occurrence dataset</v-list-item-subtitle>
-        </v-list-item-content>
+        <ItemIcon />
+        <ItemContent
+          v-bind:subtitle="occurrenceDataset"
+          v-bind:title="datasetTitle"
+        />
         <BaseIconButton
           v-bind:iconName="opennewicon"
           v-bind:href="datasetUrl"
         />
       </v-list-item>
       <v-list-item :href="occurrenceUrl" target="_blank">
-        <v-list-item-icon> </v-list-item-icon>
-        <v-list-item-content>
-          <v-list-item-title>{{
-            selectedMarker.properties.addendum.gbif.occurrenceID
-          }}</v-list-item-title>
-          <v-list-item-subtitle>GBIF Occurrence ID</v-list-item-subtitle>
-        </v-list-item-content>
+        <ItemIcon />
+        <ItemContent
+          v-bind:subtitle="occurrenceId"
+          v-bind:title="selectedMarker.properties.addendum.gbif.occurrenceID"
+        />
         <BaseIconButton
           v-bind:iconName="opennewicon"
           v-bind:href="occurrenceUrl"
@@ -43,6 +38,8 @@
 import { mapGetters } from 'vuex'
 import Service from '../Service'
 import BaseIconButton from './baseComponents/BaseIconButton'
+import ItemContent from './baseComponents/ItemContent'
+import ItemIcon from './baseComponents/ItemIcon'
 
 const service = new Service()
 const nhrsNrmKey = process.env.VUE_APP_NHRS_NRM_KEY
@@ -56,15 +53,24 @@ export default {
   name: 'GbifDataSourceLinks',
   components: {
     BaseIconButton,
+    ItemContent,
+    ItemIcon,
   },
   data() {
     return {
-      iconToggleGbifData: 'mdi-chevron-down',
       datasetTitle: '',
       displayGbifData: false,
       occurrenceUrl: '',
-      opennewicon: 'mdi-open-in-new',
     }
+  },
+  created() {
+    this.blueDarkenColor = 'blue darken-2'
+    this.dataFromSource = 'Data från GBIF'
+    this.iconToggleGbifData = 'mdi-chevron-down'
+    this.importIconName = 'mdi-database-import'
+    this.occurrenceDataset = 'GBIF Occurrence dataset'
+    this.occurrenceId = 'GBIF Occurrence ID'
+    this.opennewicon = 'mdi-open-in-new'
   },
   computed: {
     ...mapGetters(['selectedMarker']),

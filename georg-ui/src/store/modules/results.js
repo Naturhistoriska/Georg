@@ -33,7 +33,6 @@ const getters = {
   isErrorMsg: state => state.isErrorMsg,
   message: state => state.message,
   newMarker: state => state.newMarker,
-  // unhoveredResultId: state => state.unhoveredResultId,
   selectedResult: state => state.selectedResult,
   results: state => state.results,
   reBuildMarker: state => state.reBuildMarker,

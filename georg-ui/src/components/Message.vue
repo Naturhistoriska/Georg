@@ -66,9 +66,16 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setDetailView', 'setDisplayResults']),
+    ...mapMutations([
+      'setDetailView',
+      'setDisplayResults',
+      'setReBuildMarker',
+      'setRezoom',
+    ]),
     backToResultList() {
       this.setDetailView(false)
+      this.setReBuildMarker(true)
+      this.setRezoom(true)
     },
   },
 }

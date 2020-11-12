@@ -97,13 +97,15 @@ export default {
       dialog: false,
       externallink: null,
       hasUncertainty: false,
-      markericon: 'mdi-map-marker',
-      markerwithradiusicon: 'mdi-map-marker-radius',
-      marckericoncolor: 'blue darken-2',
       snackbar: false,
       source: null,
-      uncertainty: 'osäkerhetsradie',
     }
+  },
+  created() {
+    this.markericon = 'mdi-map-marker'
+    this.markerwithradiusicon = 'mdi-map-marker-radius'
+    this.marckericoncolor = 'blue darken-2'
+    this.uncertainty = 'osäkerhetsradie'
   },
   mounted() {
     this.buildData()
@@ -140,19 +142,19 @@ export default {
       switch (source) {
         case 'whosonfirst':
           this.source = "enligt Who's On First"
-          this.dataFromSource = "Who's On First (WOF)"
+          this.dataFromSource = "Data från Who's On First (WOF)"
           this.externallink = woflink
           this.hasUncertainty = false
           break
         case 'openstreetmap':
           this.source = 'enligt OpenStreetMap'
-          this.dataFromSource = 'OpenStreetMap (OSM)'
+          this.dataFromSource = 'Data från OpenStreetMap (OSM)'
           this.externallink = osmlink
           this.hasUncertainty = false
           break
         case 'openaddresses':
           this.source = 'enligt OpenAddresses'
-          this.dataFromSource = 'OpenAddresses (OA)'
+          this.dataFromSource = 'Data från OpenAddresses (OA)'
           this.externallink = oalink
           this.hasUncertainty = false
           break
@@ -162,7 +164,7 @@ export default {
           break
         case 'swe-virtual-herbarium':
           this.source = 'enligt Virtuella Herbariet'
-          this.dataFromSource = 'Virtuella Herbariet (SVH)'
+          this.dataFromSource = 'Data från Virtuella Herbariet (SVH)'
           this.externallink = svhlink
           this.hasUncertainty = addendum.georg.coordinateUncertaintyInMeters
           break
