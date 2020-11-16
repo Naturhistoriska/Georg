@@ -1,8 +1,6 @@
 process.env.VUE_APP_VERSION = require('./package.json').version
 
 module.exports = {
-  transpileDependencies: ['vuetify'],
-
   // pluginOptions: {
   //   proxy: {
   //     enabled: true,
@@ -13,4 +11,15 @@ module.exports = {
   //     },
   //   },
   // },
+  runtimeCompiler: true,
+  transpileDependencies: ['vuetify'],
+
+  pluginOptions: {
+    i18n: {
+      locale: 'sv',
+      fallbackLocale: 'en',
+      localeDir: 'locales',
+      enableInSFC: false,
+    },
+  },
 }

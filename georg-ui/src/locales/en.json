@@ -1,0 +1,14 @@
+{
+  "menu": {
+    "home": "Georg",
+    "about": "About Georg"
+  } ,
+  "about": {
+    "about":"About Georg",
+    "aboutText": "Georg är ett verktyg för koordinatsättning som utvecklas vid Naturhistoriska riksmuseet."
+  },
+  "contact": {
+    "contactus": "Contact us"
+  },
+  "message": "hello i18n !!"
+}

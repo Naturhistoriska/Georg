@@ -11,13 +11,19 @@
       <v-list>
         <v-list-item nav link @click="onAboutLinkclick()">
           <v-list-item-content>
+<<<<<<< HEAD
             <v-list-item-title>
               Om Georg
+=======
+            <v-list-item-title class="grey--text text--darken-2">
+              {{ $t('about.about') }}
+>>>>>>> ad15618... Add localization
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
+<<<<<<< HEAD
       <v-list nav>
         <v-list-item key="contactLink" @click="onContackLinkclick()">
           <v-list-item-content>
@@ -48,6 +54,29 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+=======
+      <v-list dense>
+        <v-list-item-group>
+          <v-list-item
+            key="contactLink"
+            :style="activeLinkColor"
+            active-class="white--text"
+            @click="onContackLinkclick()"
+          >
+            <v-list-item-content>
+              <v-list-item-title
+                :class="[
+                  this.routeName === 'Contact'
+                    ? 'blue--text'
+                    : 'grey--text text--darken-2',
+                ]"
+              >
+                {{ $t('contact.contactus') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+>>>>>>> ad15618... Add localization
       </v-list>
     </v-navigation-drawer>
 
@@ -62,16 +91,24 @@
         @click.stop="drawerState = !drawerState"
       ></v-app-bar-nav-icon>
       <v-toolbar-title class="title">
-        <router-link id="home" class="white--text routerLink" to="/"
-          >Georg
+        <router-link
+          id="home"
+          class="white--text routerLink"
+          :to="$i18nRoute({ name: 'Home' })"
+          >{{ $t('menu.home') }}
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <LocaleSwitcher />
       <v-toolbar-title class="title">
         <v-tabs color="white" right background-color="blue darken-2" optional>
-          <v-tab id="aboutLink" key="about" class="white--text " to="/om"
-            >Om Georg</v-tab
-          >
+          <v-tab
+            id="aboutLink"
+            key="about"
+            class="white--text "
+            :to="$i18nRoute({ name: aboutUrl })"
+            >{{ $t('menu.about') }}
+          </v-tab>
         </v-tabs>
       </v-toolbar-title>
     </v-app-bar>
@@ -95,8 +132,12 @@
 </template>
 
 <script>
+import LocaleSwitcher from './components/LocaleSwitcher'
 export default {
   name: 'App',
+  components: {
+    LocaleSwitcher,
+  },
   data() {
     return {
       drawer: null,
@@ -109,11 +150,22 @@ export default {
       document.title = to.meta.title || 'Georg'
       const { name } = to
       this.drawer =
+<<<<<<< HEAD
         name === 'About' || name === 'Contact' || name === 'Accessibility'
+=======
+        name === 'About' ||
+        name === 'Om' ||
+        name === 'Contact' ||
+        name === 'Kontakt'
+>>>>>>> ad15618... Add localization
       this.routeName = name
     },
   },
   computed: {
+    aboutUrl() {
+      console.log('aboutUrl', this.$i18n.locale)
+      return this.$i18n.locale === 'sv' ? 'Om' : 'About'
+    },
     activeLinkColor() {
       return this.routeName === 'Contact'
         ? 'background: #edf3f8;'
@@ -128,16 +180,26 @@ export default {
       }
     },
     onContackLinkclick() {
+      const locale = this.$i18n.locale
+      const pushUrl =
+        locale === 'sv' ? `/${locale}/kontakt` : `/${locale}/contact`
       const decodeUrl = decodeURIComponent(this.$route.fullPath)
-      if (decodeUrl !== '/kontakt') {
-        this.$router.push('/kontakt')
+      if (decodeUrl !== pushUrl) {
+        this.$router.push(pushUrl)
       }
     },
     onAboutLinkclick() {
+      const locale = this.$i18n.locale
+      const pushUrl = locale === 'sv' ? `/${locale}/om` : `/${locale}/about`
       const decodeUrl = decodeURIComponent(this.$route.fullPath)
+<<<<<<< HEAD
       if (decodeUrl !== '/om') {
         this.$router.push('/om')
         this.drawerState = false
+=======
+      if (decodeUrl !== pushUrl) {
+        this.$router.push(pushUrl)
+>>>>>>> ad15618... Add localization
       }
     },
   },
