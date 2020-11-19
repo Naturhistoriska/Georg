@@ -1,9 +1,14 @@
 <template>
   <v-row align="baseline" dense class="pl-4 pt-0 pb-7">
-    <v-col cols="12" sm="3" class="d-none d-sm-flex">
-      <v-label>Hitta plats:</v-label>
+    <v-col
+      cols="12"
+      sm="3"
+      :class="$vuetify.breakpoint.xsOnly && 'visuallyhidden'"
+    >
+      <v-label for="main-input">Hitta plats:</v-label>
     </v-col>
     <v-col class="pa-0" cols="5" sm="4">
+      <label for="geography" class="visuallyhidden">Välj område</label>
       <v-combobox
         @change="onCountryChanged"
         dense
@@ -14,6 +19,7 @@
         :items="dropdown_countries"
         hide-details
         class="country-select"
+        id="geography"
       ></v-combobox>
     </v-col>
     <v-col cols="7" sm="5" class="mt-n5 pa-0">

@@ -16,7 +16,7 @@
           v-bind:value="selectedMarker.properties.name"
           @copy="copyText"
         />
-        <v-divider></v-divider>
+        <v-divider inset></v-divider>
       </div>
       <GeographicTree @copy="copyText" />
       <v-divider inset v-if="selectedMarker.properties.country"></v-divider>
@@ -25,7 +25,7 @@
         v-bind:isNewMarker="isNewMarker"
         @copy="copyText"
       />
-      <v-divider></v-divider>
+      <v-divider inset></v-divider>
       <div v-if="hasUncertainty" class="ma-0 pa-0">
         <HoverItem
           v-bind:hastitle="true"
@@ -35,7 +35,7 @@
           v-bind:value="uncertaintyValue"
           @copy="copyText"
         />
-        <v-divider></v-divider>
+        <v-divider inset></v-divider>
       </div>
       <Uncertainty v-if="isNewMarker" />
       <GbifDataSourceLinks v-else-if="isGbif" />
@@ -46,15 +46,15 @@
       />
       <v-list-item v-if="displayGeodeticDatumWarning">
         <v-list-item-action></v-list-item-action>
-        <v-alert dense text type="warning" class="alertText">
+        <v-alert outlined type="warning" color="grey darken-1" border="left">
           Källan saknar geodetiskt datum.
           <br />WGS84 har antagits.
         </v-alert>
       </v-list-item>
     </v-list>
-    <v-dialog v-model="dialog" max-width="550">
-      <JsonResult />
-    </v-dialog>
+    <!-- <v-dialog v-model="dialog" @keydown.esc="dialog = false" scrollable max-width="550">
+      <JsonResult @close-dialog="closeDialog" />
+    </v-dialog>-->
     <v-snackbar centered v-model="snackbar" :timeout="600"
       >Kopierad till Urklipp</v-snackbar
     >
@@ -176,6 +176,7 @@ export default {
           break
       }
     },
+
     copyText(value) {
       if (window.getSelection() != '') {
         this.$clipboard(window.getSelection().toString())
@@ -192,9 +193,6 @@ export default {
   z-index: 2;
   min-width: 300px;
 }
-.alertText {
-  font-size: 14px;
-}
 ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
@@ -208,3 +206,4 @@ export default {
   width: 400px;
 }
 </style>
+s

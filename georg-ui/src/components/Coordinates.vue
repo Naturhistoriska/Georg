@@ -1,5 +1,5 @@
 <template>
-  <v-list-item-group active-class="white-bg">
+  <v-list active-class="white-bg">
     <HoverItem
       v-bind:hastitle="true"
       v-bind:iconColor="iconColor"
@@ -32,7 +32,7 @@
       v-bind:value="sweref99"
       @copy="handlecopy"
     />
-  </v-list-item-group>
+  </v-list>
 </template>
 <script>
 import HoverItem from './HoverItem'
@@ -83,7 +83,7 @@ export default {
 }
 </script>
 <style>
-/* .white-bg:before {
+.white-bg:before {
   opacity: 0 !important;
-} */
+}
 </style>

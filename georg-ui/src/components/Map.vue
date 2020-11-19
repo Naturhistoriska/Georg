@@ -39,6 +39,7 @@
         id="iconbtn"
         @click="enableAddMarker"
         style="cursor: pointer;"
+        aria-label="Placera en egen kartnål"
       >
         <v-icon :color="iconColor" id="newMarkerIcon"
           >mdi-map-marker-plus</v-icon

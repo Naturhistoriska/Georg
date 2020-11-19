@@ -15,6 +15,7 @@
       @click:clear="clear"
       @click:append="search"
       @keyup.enter="search"
+      id="main-input"
     ></v-text-field>
   </v-card-text>
 </template>

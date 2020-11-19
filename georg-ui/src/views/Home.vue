@@ -7,6 +7,7 @@
         @search-address="searchAddress"
         @search-coordinates="searchCoors"
       />
+      <h2 v-if="results.length" class="visuallyhidden">Resultat</h2>
       <Message />
       <Results
         v-bind:height="resultsHeight"
@@ -124,8 +125,8 @@ export default {
       }
     },
     handleResize() {
-      const windowHeight = window.innerHeight - 64
-      const boxHeight = windowHeight - 182
+      const windowHeight = window.innerHeight - 84
+      const boxHeight = windowHeight - 176
       this.mapHeight = 'height: ' + windowHeight + 'px'
       this.resultsHeight = 'max-height: ' + boxHeight + 'px'
     },

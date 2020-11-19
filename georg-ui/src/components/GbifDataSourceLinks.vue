@@ -1,12 +1,15 @@
 <template>
-  <v-list-item-group>
+  <v-list>
     <v-list-item @click="openOrCloseGbifData()">
       <ItemIcon
         v-bind:iconColor="blueDarkenColor"
         v-bind:iconName="importIconName"
       />
       <ItemContent v-bind:title="dataFromSource" />
-      <BaseIconButton v-bind:iconName="iconToggleGbifData" />
+      <BaseIconButton
+        aria-label="Visa information om datakällan"
+        v-bind:iconName="iconToggleGbifData"
+      />
     </v-list-item>
     <div v-if="displayGbifData" class="ma-0 pa-0">
       <v-list-item :href="datasetUrl" target="_blank">
@@ -15,9 +18,11 @@
           v-bind:subtitle="occurrenceDataset"
           v-bind:title="datasetTitle"
         />
+        <span class="visuallyhidden"> (öppnas i ett nytt fönster)</span>
         <BaseIconButton
           v-bind:iconName="opennewicon"
           v-bind:href="datasetUrl"
+          aria-label="Öppna datasetet hos GBIF i ett nytt fönster"
         />
       </v-list-item>
       <v-list-item :href="occurrenceUrl" target="_blank">
@@ -26,13 +31,15 @@
           v-bind:subtitle="occurrenceId"
           v-bind:title="selectedMarker.properties.addendum.gbif.occurrenceID"
         />
+        <span class="visuallyhidden"> (öppnas i ett nytt fönster)</span>
         <BaseIconButton
           v-bind:iconName="opennewicon"
           v-bind:href="occurrenceUrl"
+          aria-label="Öppna denna GBIF occurrence i ett nytt fönster"
         />
       </v-list-item>
     </div>
-  </v-list-item-group>
+  </v-list>
 </template>
 <script>
 import { mapGetters } from 'vuex'

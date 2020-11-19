@@ -41,7 +41,7 @@
           direkt från FileMaker:
           <a
             href="https://github.com/Naturhistoriska/Georg/tree/master/georg-connector-example"
-            >FileMaker-exempel (Github)</a
+            >FileMaker-exempel (GitHub)</a
           >.
         </p>
         <h3>För platser i Norden</h3>
@@ -147,7 +147,7 @@
         <p>Version: {{ version }}</p>
         <p>
           Projektet finns på
-          <a href="https://github.com/Naturhistoriska/Georg">Github</a>.
+          <a href="https://github.com/Naturhistoriska/Georg">GitHub</a>.
         </p>
       </v-col>
     </v-row>

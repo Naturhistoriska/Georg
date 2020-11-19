@@ -6,6 +6,7 @@
     :key="result.properties.gid"
     :id="result.properties.gid"
     @keypress.prevent="onclick()"
+    tabindex="0"
   >
     <!-- <template> -->
     <v-list-item-content @click.prevent="onclick()">

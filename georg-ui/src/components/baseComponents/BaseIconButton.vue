@@ -6,6 +6,7 @@
     :small="small"
     icon
     target="_blank"
+    role="button"
   >
     <BaseIcon>{{ iconName }}</BaseIcon>
   </v-btn>

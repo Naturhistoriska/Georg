@@ -1,41 +1,66 @@
 <template>
   <v-app>
-    <v-navigation-drawer app clipped stateless v-model="drawer">
+    <v-navigation-drawer
+      v-if="drawer"
+      app
+      :clipped="$vuetify.breakpoint.smAndUp"
+      :stateless="$vuetify.breakpoint.smAndUp"
+      v-model="drawerState"
+      :permanent="$vuetify.breakpoint.smAndUp"
+    >
       <v-list>
         <v-list-item nav link @click="onAboutLinkclick()">
           <v-list-item-content>
-            <v-list-item-title class="grey--text text--darken-2">
+            <v-list-item-title>
               Om Georg
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-      <v-list dense>
-        <v-list-item-group>
-          <v-list-item
-            key="contactLink"
-            :style="activeLinkColor"
-            active-class="white--text"
-            @click="onContackLinkclick()"
-          >
-            <v-list-item-content>
-              <v-list-item-title
-                :class="[
-                  this.routeName === 'Contact'
-                    ? 'blue--text'
-                    : 'grey--text text--darken-2',
-                ]"
-              >
-                Kontakta oss
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group>
+      <v-list nav>
+        <v-list-item key="contactLink" @click="onContackLinkclick()">
+          <v-list-item-content>
+            <v-list-item-title
+              :class="[
+                this.routeName === 'Contact'
+                  ? 'blue--text text--darken-2'
+                  : 'grey--text text--darken-2',
+              ]"
+            >
+              Kontakta oss
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item
+          key="accessibilityLink"
+          @click="onAccessibilityLinkclick()"
+        >
+          <v-list-item-content>
+            <v-list-item-title
+              :class="[
+                this.routeName === 'Accessibility'
+                  ? 'blue--text text--darken-2'
+                  : 'grey--text text--darken-2',
+              ]"
+            >
+              Tillgänglighetsredogörelse
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
     </v-navigation-drawer>
 
     <v-app-bar app clipped-left color="blue darken-2" dark dense>
+      <v-app-bar-nav-icon
+        aria-label="Open navigation menu"
+        v-if="
+          (this.$vuetify.breakpoint.xs && this.routeName === 'About') ||
+            this.routeName === 'Contact' ||
+            this.routeName === 'Accessibility'
+        "
+        @click.stop="drawerState = !drawerState"
+      ></v-app-bar-nav-icon>
       <v-toolbar-title class="title">
         <router-link id="home" class="white--text routerLink" to="/"
           >Georg
@@ -54,6 +79,18 @@
     <v-main>
       <router-view />
     </v-main>
+    <v-footer color="grey lighten-4" fixed app padless>
+      <v-row no-gutters>
+        <v-col class="pl-3 text-center " cols="12">
+          <span class="grey--text text--darken-3">
+            Naturhistoriska riksmuseet - {{ new Date().getFullYear() }}
+          </span>
+          <v-btn color="grey darken-3" text @click="onContackLinkclick()">
+            <v-icon left dark> mdi-email-outline </v-icon>Kontakta oss
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 
@@ -63,13 +100,16 @@ export default {
   data() {
     return {
       drawer: null,
+      drawerState: null,
       routeName: 'Home',
     }
   },
   watch: {
     $route(to) {
+      document.title = to.meta.title || 'Georg'
       const { name } = to
-      this.drawer = name === 'About' || name === 'Contact'
+      this.drawer =
+        name === 'About' || name === 'Contact' || name === 'Accessibility'
       this.routeName = name
     },
   },
@@ -77,10 +117,16 @@ export default {
     activeLinkColor() {
       return this.routeName === 'Contact'
         ? 'background: #edf3f8;'
-        : 'background: #FFF;'
+        : 'background: #FFFFFF;'
     },
   },
   methods: {
+    onAccessibilityLinkclick() {
+      const decodeUrl = decodeURIComponent(this.$route.fullPath)
+      if (decodeUrl !== '/tillganglighetsredogorelse') {
+        this.$router.push('/tillganglighetsredogorelse')
+      }
+    },
     onContackLinkclick() {
       const decodeUrl = decodeURIComponent(this.$route.fullPath)
       if (decodeUrl !== '/kontakt') {
@@ -91,6 +137,7 @@ export default {
       const decodeUrl = decodeURIComponent(this.$route.fullPath)
       if (decodeUrl !== '/om') {
         this.$router.push('/om')
+        this.drawerState = false
       }
     },
   },
@@ -144,5 +191,15 @@ header {
 .v-application .show-btn-hover.transparent--text,
 .v-application .show-btn.transparent--text {
   color: rgba(0, 0, 0, 0.54) !important;
+}
+.visuallyhidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 </style>

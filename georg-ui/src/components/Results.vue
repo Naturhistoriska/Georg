@@ -1,11 +1,11 @@
 <template v-model="result">
-  <v-list
+  <div
     v-if="results.length"
     id="scroll-target"
     class="overflow-y-auto"
     :style="height"
   >
-    <v-list-item-group id="resultList">
+    <div id="resultList">
       <template v-for="(result, index) in results">
         <NewMarker
           v-bind:result="result"
@@ -18,8 +18,8 @@
           :key="`devider-${index}`"
         ></v-divider>
       </template>
-    </v-list-item-group>
-  </v-list>
+    </div>
+  </div>
 </template>
 
 <script>

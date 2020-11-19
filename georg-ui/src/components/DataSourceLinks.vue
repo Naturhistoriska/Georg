@@ -1,17 +1,19 @@
 <template>
-  <v-list-item-group>
+  <v-list>
     <v-list-item :href="externallink" target="_blank">
       <ItemIcon
         v-bind:iconColor="blueDarkenColor"
         v-bind:iconName="importIconName"
       />
       <ItemContent v-bind:title="dataFromSource" />
+      <span class="visuallyhidden"> (öppnas i ett nytt fönster)</span>
       <BaseIconButton
         v-bind:iconName="openNewIconName"
         v-bind:href="externallink"
+        aria-label="Öppna information om datakällan i ett nytt fönster"
       />
     </v-list-item>
-  </v-list-item-group>
+  </v-list>
 </template>
 <script>
 import BaseIconButton from './baseComponents/BaseIconButton'

@@ -1,10 +1,13 @@
 <template>
   <div>
-    <v-card-title
-      :class="[isNewMarker ? 'red--text' : 'blue--text']"
+    <h3
+      :class="[
+        isNewMarker ? 'red--text v-card__title' : 'blue--text v-card__title',
+      ]"
       class="text--darken-2 pl-4 pr-2"
-      >{{ title }}</v-card-title
     >
+      {{ title }}
+    </h3>
     <v-card-subtitle v-if="isNewMarker">
       {{ latlng }}
     </v-card-subtitle>

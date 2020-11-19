@@ -1,7 +1,7 @@
 <template>
-  <v-list-item @keypress.prevent="onclick()">
+  <v-list-item role="option" @keypress.prevent="onclick()">
     <v-list-item-content @click.prevent="onclick()">
-      <v-list-item-title class="red--text darken-2">{{
+      <v-list-item-title class="red--text text--darken-2">{{
         name
       }}</v-list-item-title>
       <v-list-item-subtitle class="text--primary">

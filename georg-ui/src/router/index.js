@@ -4,6 +4,7 @@ import VueRouter from 'vue-router'
 const Home = () => import('../views/Home.vue')
 const About = () => import('../views/About.vue')
 const Contact = () => import('../views/Contact.vue')
+const Accessibility = () => import('../views/Accessibility.vue')
 
 Vue.use(VueRouter)
 
@@ -12,6 +13,9 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    meta: {
+      title: 'Georg',
+    },
   },
   {
     path: '/om',
@@ -19,6 +23,9 @@ const routes = [
     component: About,
     // component: () =>
     //   import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    meta: {
+      title: 'Om Georg | Georg',
+    },
   },
   {
     path: '/kontakt',
@@ -26,6 +33,17 @@ const routes = [
     component: Contact,
     // component: () =>
     //   import(/* webpackChunkName: "contact" */ '../views/Contact.vue'),
+    meta: {
+      title: 'Kontakta oss | Georg',
+    },
+  },
+  {
+    path: '/tillganglighetsredogorelse',
+    name: 'Accessibility',
+    component: Accessibility,
+    meta: {
+      title: 'Tillgänglighetsredogörelse | Georg',
+    },
   },
   { path: '/search', name: 'Search', component: Home },
 ]

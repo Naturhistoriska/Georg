@@ -1,5 +1,5 @@
 <template>
-  <v-list-item-group active-class="white-bg">
+  <v-list active-class="white-bg">
     <HoverItem
       v-if="selectedMarker.properties.county"
       v-bind:dense="true"
@@ -30,7 +30,7 @@
       v-bind:value="selectedMarker.properties.country"
       @copy="handlecopy"
     />
-  </v-list-item-group>
+  </v-list>
 </template>
 <script>
 import { mapGetters } from 'vuex'

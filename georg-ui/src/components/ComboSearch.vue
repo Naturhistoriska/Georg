@@ -21,6 +21,7 @@
       @keyup.enter="searchAddress"
       @click:append="searchAddress"
       @blur="copySearchText"
+      id="main-input"
     >
       <template v-slot:item="{ item }">
         <ItemIcon v-bind:iconColor="iconColor" v-bind:iconName="item.icon" />

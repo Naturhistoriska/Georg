@@ -8,6 +8,8 @@
         tabindex="0"
         @click.stop="dialog = !dialog"
         @keypress.stop="dialog = !dialog"
+        role="button"
+        aria-label="Visa JSON"
       >
         <!--Display dialog and snackbar should be fixed properly so that both works for clicking and pressing enter.-->
         <v-icon left>mdi-code-tags</v-icon>Visa JSON
@@ -20,6 +22,8 @@
         v-clipboard="jsonString"
         @click.stop="openSnackbar"
         @keypress.stop="openSnackbar = true"
+        role="button"
+        aria-label="Kopiera"
       >
         <v-icon left>mdi-content-copy</v-icon>Kopiera
       </v-chip>
@@ -31,13 +35,20 @@
         @click="addDinPlats"
         @keypress="addDinPlats"
         tabindex="0"
+        role="button"
+        aria-label="Lägg till din plats"
       >
         <v-icon left>mdi-map-marker-plus</v-icon>
         Din plats
       </v-chip>
     </v-card-text>
-    <v-dialog v-model="dialog" @keydown.esc="dialog = false" max-width="550">
-      <JsonResult />
+    <v-dialog
+      v-model="dialog"
+      scrollable
+      @keydown.esc="dialog = false"
+      max-width="550"
+    >
+      <JsonResult @close-dialog="closeDialog" />
     </v-dialog>
     <v-snackbar v-model="snackbar" centered :timeout="600">{{
       snackbartext
@@ -78,6 +89,9 @@ export default {
     openSnackbar() {
       this.snackbar = true
       this.snackbartext = 'Platsens JSON har kopierats till Urklipp'
+    },
+    closeDialog() {
+      this.dialog = false
     },
   },
 }
