@@ -81,7 +81,7 @@
     </v-main>
     <v-footer color="grey lighten-4" fixed app padless>
       <v-row no-gutters>
-        <v-col class="pl-3 text-center " cols="12">
+        <v-col class="pl-3 " cols="8">
           <span class="grey--text text--darken-3">
             Naturhistoriska riksmuseet - {{ new Date().getFullYear() }}
           </span>
@@ -89,8 +89,34 @@
             <v-icon left dark> mdi-email-outline </v-icon>Kontakta oss
           </v-btn>
         </v-col>
+        <v-col class="pl-3 text-right" cols="4">
+          <v-btn color="grey darken-3" text @click="dialog2 = !dialog2">
+            <v-icon left dark> mdi-web</v-icon>Svenska
+          </v-btn>
+        </v-col>
       </v-row>
     </v-footer>
+    <v-dialog v-model="dialog2" max-width="500px">
+      <v-card>
+        <v-card-title>
+          Språkinställning
+        </v-card-title>
+        <v-card-text>
+          <v-select
+            :items="select"
+            label="Välj språk"
+            v-model="selectedLanguage"
+            item-value="text"
+            prepend-inner-icon="mdi-web"
+          ></v-select>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="primary" text @click="dialog2 = false">
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -102,6 +128,9 @@ export default {
       drawer: null,
       drawerState: null,
       routeName: 'Home',
+      dialog2: null,
+      select: [{ text: 'Svenska' }, { text: 'English' }],
+      selectedLanguage: 'Svenska',
     }
   },
   watch: {
