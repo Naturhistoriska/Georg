@@ -54,8 +54,10 @@
     "github": "Github"
   },
   "contact": {
-    "contactus": "Kontakta oss",
     "contactText": "Om du har några frågor eller synpunkter är du välkommen att höra av dig via e-postadressen här nedanför."
+  },
+  "footer": {
+    "nrm": "Naturhistoriska riksmuseet"
   },
   "home": {
     "backToReslut": "Till träfflistan",
@@ -70,6 +72,9 @@
     "searchPlace": "Sök plats",
     "inNordic": "i Norden",
     "inSweden": "i Sverige"
+  },
+  "common": {
+    "contactus": "Kontakta oss"
   },
   "error": {
     "inValidCoordinates": "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"

@@ -11,9 +11,7 @@
       <v-list>
         <v-list-item nav link @click="onAboutLinkclick()">
           <v-list-item-content>
-            <v-list-item-title>
-              {{ $t('about.about') }}
-            </v-list-item-title>
+            <v-list-item-title>{{ $t('about.about') }} </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -92,7 +90,6 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <LocaleSwitcher />
       <v-toolbar-title class="title">
         <v-tabs color="white" right background-color="blue darken-2" optional>
           <v-tab
@@ -113,24 +110,20 @@
       <v-row no-gutters>
         <v-col class="pl-3 text-center " cols="12">
           <span class="grey--text text--darken-3">
-            Naturhistoriska riksmuseet - {{ new Date().getFullYear() }}
+            {{ $t('footer.nrm') }} - {{ new Date().getFullYear() }}
           </span>
           <v-btn color="grey darken-3" text @click="onContackLinkclick()">
-            <v-icon left dark> mdi-email-outline </v-icon>Kontakta oss
+            <v-icon left dark> mdi-email-outline </v-icon
+            >{{ $t('common.contactus') }}
           </v-btn>
         </v-col>
       </v-row>
     </v-footer>
   </v-app>
 </template>
-
 <script>
-import LocaleSwitcher from './components/LocaleSwitcher'
 export default {
   name: 'App',
-  components: {
-    LocaleSwitcher,
-  },
   data() {
     return {
       drawer: null,
@@ -142,12 +135,14 @@ export default {
     $route(to) {
       document.title = to.meta.title || 'Georg'
       const { name } = to
+      console.log('name....', name)
       this.drawer =
         name === 'About' ||
         name === 'Om' ||
         name === 'Contact' ||
-        name === 'Kontakt' ||
-        name === 'Accessibility'
+        name === 'kontakt'
+      // ||
+      // name === 'Accessibility'
       this.routeName = name
     },
   },

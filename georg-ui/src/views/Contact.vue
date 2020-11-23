@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col class="col-lg-6 col-md-12 pl-md-10 pr-md-12">
-        <h1>{{ $t('contact.contactus') }}</h1>
+        <h1>{{ $t('common.contactus') }}</h1>
         <p class="title font-weight-light text-darken-3">
           {{ $t('contact.contactText') }}
         </p>

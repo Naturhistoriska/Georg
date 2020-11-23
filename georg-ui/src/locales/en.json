@@ -54,8 +54,10 @@
     "github": "Github"
   },
   "contact": {
-    "contactus": "Contact us",
     "contactText": "Om du har några frågor eller synpunkter är du välkommen att höra av dig via e-postadressen här nedanför."
+  },
+  "footer": {
+    "nrm": "Swedish Museum of Natural History"
   },
   "home": {
     "backToReslut": "Back to result",
@@ -71,6 +73,9 @@
     "inSweden": "in Sweden",
     "searchPlace": "Search place",
     "viaCoordinate": "via coordinate"
+  },
+  "common": {
+    "contactus": "Contact us"
   },
   "error": {
     "inValidCoordinates": "TODO: change to English\n Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
