@@ -4,150 +4,130 @@
       <v-col class="col-lg-6 col-md-12 pl-md-10 pr-md-12">
         <h1>{{ $t('about.about') }}</h1>
         <p class="title font-weight-light text-darken-3">
-          Georg är ett verktyg för koordinatsättning som utvecklas vid
-          Naturhistoriska riksmuseet.
+          {{ $t('about.aboutText') }}
         </p>
-        <h2>Så här fungerar Georg</h2>
+        <h2>{{ $t('about.howToWorks') }}</h2>
         <p>
-          Tanken med Georg är att underlätta koordinatsättning av museiföremål
-          genom att dra nytta av den information om insamlingslokaler som redan
-          är digitaliserad. Informationen kommer framför allt från samlingar som
-          lagt upp data på GBIF, men Georg har även andra källor.
+          {{ $t('about.howToWorksText') }}
         </p>
-        <h3>Hur går det till i praktiken?</h3>
+        <h3>{{ $t('about.howToWorkInpractice') }}</h3>
         <ol>
           <li class="pt-1">
-            Vi samlar in lokaluppgifter för koordinatsatta platser från olika
-            datakällor.
+            {{ $t('about.howToWorkInpracticeText1') }}
           </li>
           <li class="pt-1">
-            Därefter bearbetar vi uppgifterna så att platserna ska bli sökbara
-            och importerar dem till Georg.
+            {{ $t('about.howToWorkInpracticeText2') }}
           </li>
           <li class="pt-1">
-            När du gör en sökning rankar och sammanställer Georg resultatet så
-            att du får de mest relevanta träffarna.
+            {{ $t('about.howToWorkInpracticeText3') }}
           </li>
         </ol>
         <p class="mt-4">
-          Platserna i resultatet visas upp på en karta och koordinater visas i
-          ett antal olika format så att du ska kunna kopiera de som passar till
-          ditt system. I Georg har du också möjlighet att lägga till din egen
-          plats och rita upp en osäkerhetsradie på kartan.
+          {{ $t('about.howToWorkInpracticeText4') }}
         </p>
         <p>
-          För varje plats kan du titta på informationen som JSON. Vi har gjort
-          ett exempel på hur du kan använda JSON-informationen för att geokoda
-          direkt från FileMaker:
+          {{ $t('about.howToWorkInpracticeText5') }}
           <a
             href="https://github.com/Naturhistoriska/Georg/tree/master/georg-connector-example"
-            >FileMaker-exempel (GitHub)</a
+            >{{ $t('about.fileMakerExampleLink') }}</a
           >.
         </p>
-        <h3>För platser i Norden</h3>
+        <h3>{{ $t('about.placesInNordics') }}</h3>
         <p>
-          Med Georg kan du koordinatsätta platser i Norden*, men det går att
-          söka efter koordinater i hela världen. Allra bäst fungerar Georg just
-          nu för platser i Sverige, eftersom vi har mest data härifrån.
+          {{ $t('about.placesInNordicsText1') }}
         </p>
         <p class="font-italic">
-          * För närvarande visar vi inte upp något resultat från Färöarna.
+          {{ $t('about.placesInNordicsText2') }}
         </p>
-        <h2>Datakällor</h2>
+        <h2>{{ $t('about.dataSource') }}</h2>
         <p>
-          Här listar vi alla datakällor som Georg använder sig av för
-          närvarande. Vi kommer att lägga till nya datakällor för Georg
-          allteftersom verktyget utvecklas. Datakällorna uppdateras just nu med
-          oregelbundna intervall.
+          {{ $t('about.dataSourceText') }}
         </p>
-        <h3>GBIF</h3>
+        <h3>{{ $t('about.gbif') }}</h3>
         <p>
-          Vi hämtar ett antal olika
-          <span class="font-weight-medium">Occurrence dataset</span> från GBIF
-          där informationen framför allt kommer från föremålsetiketter som har
-          digitaliserats. I resultatlistan kan du enbart se att källan är GBIF,
-          men om du klickar in på detaljerna kan du se exakt vilket dataset
-          platsen är hämtad ifrån.
+          {{ $t('about.gbifText') }}
+          <span class="font-weight-medium">{{
+            $t('about.occurrenceDataset')
+          }}</span>
+          {{ $t('about.gbifText1') }}
         </p>
         <h4>
-          Entomological Collections (NHRS), Swedish Museum of Natural History
-          (NRM)
+          {{ $t('about.nhrsNrm') }}
         </h4>
         <p>
-          De entomologiska samlingarna vid Naturhistoriska riksmuseet (<a
+          {{ $t('about.nhrsNrmLinkText') }} (<a
             href="https://doi.org/10.15468/fpzyjx"
             >https://doi.org/10.15468/fpzyjx</a
           >).
         </p>
-        <h4>Phanerogamic Botanical Collections (S)</h4>
+        <h4>{{ $t('about.phanerogamic') }}</h4>
         <p>
-          Kärlväxtsamlingarna vid Naturhistoriska riksmuseet (<a
+          {{ $t('about.phanerogamicLinkText') }} (<a
             href="https://doi.org/10.15468/yo3mmu"
             >https://doi.org/10.15468/yo3mmu</a
           >).
         </p>
-        <h4>Botany (UPS)</h4>
+        <h4>{{ $t('about.botanyUPS') }}</h4>
         <p>
-          Botaniska samlingen hos Evolutionsmuseet i Uppsala (<a
+          {{ $t('about.botanyUPSLinkText') }} (<a
             href="https://doi.org/10.15468/ufmslw"
             >https://doi.org/10.15468/ufmslw</a
           >).
         </p>
-        <h3>OpenAddresses (OA)</h3>
+        <h3>{{ $t('about.oa') }}</h3>
         <p>
-          <a href="https://openaddresses.io/">OpenAddresses</a>
-          är en samling av datakällor för adresser över hela världen, som drivs
-          som ett projekt med öppen källkod. I Georg använder vi oss bara av
-          svenska adresser.
+          <a href="https://openaddresses.io/">{{ $t('about.oaLinkText') }}</a>
+          {{ $t('about.oaDescription') }}
         </p>
-        <h3>OpenStreetMap (OSM)</h3>
+        <h3>{{ $t('about.osm') }}</h3>
         <p>
-          <a href="https://www.openstreetmap.org/about">OpenStreetMap</a>
-          är ett ideellt projekt för framtagning av geografisk information.
-          Georg använder OpenStreetMap till kartlager och för platser att söka
-          bland.
+          <a href="https://www.openstreetmap.org/about">{{
+            $t('about.osmLinkText')
+          }}</a>
+          {{ $t('about.osmDescription') }}
         </p>
-        <h3>Virtuella herbariet (SVH)</h3>
+        <h3>{{ $t('about.svh') }}</h3>
         <p>
-          <a href="http://herbarium.emg.umu.se/"
-            >Sveriges virtuella herbarium</a
-          >
-          är en databas med information om botaniska föremål som drivs som ett
-          samarbete mellan Sveriges största herbarier. Vi hämtar data från
-          <a href="https://github.com/mossnisse/Virtuella-Herbariet"
-            >mossnisse / Virtuella-Herbariet på GitHub</a
+          <a href="http://herbarium.emg.umu.se/">{{
+            $t('about.svhLinkText')
+          }}</a>
+          {{ $t('about.svhDescription') }}
+          <a href="https://github.com/mossnisse/Virtuella-Herbariet">{{
+            $t('about.svhGithubLinkText')
+          }}</a
           >.
         </p>
-        <h3>Who's On First (WOF)</h3>
+        <h3>{{ $t('about.wof') }}</h3>
         <p>
-          <a href="https://whosonfirst.org/what">Who's On First</a> är en
-          ortnamnsförteckning som delar data med öppna licenser. Vi använder
-          Who's On First både som källa till koordinatsatta platser och för att
-          slå upp den administrativa indelningen för alla platser i Georg.
+          <a href="https://whosonfirst.org/what">{{
+            $t('about.wofLinkText')
+          }}</a
+          >{{ $t('about.wofDescription') }}
         </p>
-        <h2>Webbläsare</h2>
+        <h2>{{ $t('about.browser') }}</h2>
         <p>
-          Georg fungerar i moderna webbläsare i mobiltelefoner, datorer och
-          surfplattor, till exempel nyare versioner av Google Chrome, Edge,
-          Firefox och Safari.
+          {{ $t('about.browserDescription') }}
         </p>
-        <h2>API</h2>
+        <h2>{{ $t('about.api') }}</h2>
         <p>
-          Vi har ett API som gör det möjligt att skicka textinformation med
-          lokaluppgifter och få tillbaka platsförslag (i JSON-format).
+          {{ $t('about.apiText') }}
         </p>
         <p>
-          API-dokumentation:
+          {{ $t('about.apiDocumention') }}
           <a
             href="https://georg.nrm.se/swagger-ui/index.html?url=/api/swagger.json"
-            >https://georg.nrm.se/swagger-ui/index.html?url=/api/swagger.json</a
+          >
+            {{ $t('about.apiLinkText') }} </a
           >.
         </p>
-        <h2>Version</h2>
-        <p>Version: {{ version }}</p>
+        <h2>{{ $t('about.version') }}</h2>
+        <p>{{ $t('about.version') }}: {{ version }}</p>
         <p>
-          Projektet finns på
-          <a href="https://github.com/Naturhistoriska/Georg">GitHub</a>.
+          {{ $t('about.project') }}
+          <a href="https://github.com/Naturhistoriska/Georg">{{
+            $t('about.github')
+          }}</a
+          >.
         </p>
       </v-col>
     </v-row>

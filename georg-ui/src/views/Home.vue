@@ -53,8 +53,8 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
-    this.errorMsg =
-      "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
+    // this.errorMsg =
+    //   "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
 
     const { place_name, coordinates } = this.$route.query
     if (place_name) {
@@ -83,6 +83,9 @@ export default {
       'searchText',
       'displayResults',
     ]),
+    // errorMsg: function() {
+    //   return this.$t('home.backToResluts')
+    // },
   },
   watch: {
     searchOption: function() {
@@ -168,14 +171,15 @@ export default {
           this.setReBuildMarker(true)
           if (response.error) {
             const { msgKey } = response.error
-            if (msgKey === 'Invalid coordinates') {
-              this.setMessage(this.errorMsg)
-            }
+            // if (msgKey === 'Invalid coordinates') {
+            //   this.setMessage(msgKey)
+            // }
             this.setResults([])
             this.setDetailView(false)
             this.setSelectedResultId('')
             this.setSelectedResult({})
             this.setIsErrorMsg(true)
+            this.setMessage(msgKey)
             this.setRezoom(false)
           } else {
             let theResults = response.features

@@ -2,10 +2,9 @@
   <v-container fluid>
     <v-row>
       <v-col class="col-lg-6 col-md-12 pl-md-10 pr-md-12">
-        <h1>Kontakta oss</h1>
+        <h1>{{ $t('contact.contactus') }}</h1>
         <p class="title font-weight-light text-darken-3">
-          Om du har några frågor eller synpunkter är du välkommen att höra av
-          dig via e-postadressen här nedanför.
+          {{ $t('contact.contactText') }}
         </p>
         <p>
           <v-icon>mdi-email</v-icon>
@@ -21,19 +20,19 @@
 <script>
 export default {
   name: 'Contact',
-  data() {
-    return {
-      version: 0,
-    }
-  },
+  // data() {
+  //   return {
+  //     version: 0,
+  //   }
+  // },
 
-  mounted() {
-    this.setVersion()
-  },
-  methods: {
-    setVersion() {
-      this.version = process.env.VUE_APP_VERSION
-    },
-  },
+  // mounted() {
+  //   this.setVersion()
+  // },
+  // methods: {
+  //   setVersion() {
+  //     this.version = process.env.VUE_APP_VERSION
+  //   },
+  // },
 }
 </script>

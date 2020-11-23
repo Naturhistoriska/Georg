@@ -42,6 +42,7 @@ export default {
       console.log('switchLocale: ', locale)
       if (this.$i18n.locale !== locale) {
         const to = this.$router.resolve({ params: { locale } })
+        // const to = this.$router.resolve()
         return Trans.changeLocale(locale).then(() => {
           console.log('to location...', to.location)
           this.$router.push(to.location)

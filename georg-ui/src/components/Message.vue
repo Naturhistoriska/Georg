@@ -15,7 +15,7 @@
         id="message"
         :class="[isErrorMsg ? errorclass : msgclass]"
       >
-        {{ message }}
+        {{ msg }}
       </div>
       <v-spacer></v-spacer>
       <TextButton
@@ -58,16 +58,24 @@ export default {
     ]),
     backtolist: function() {
       return this.results.length === 1
-        ? 'Till träfflistan'
-        : 'Tillbaka till listan'
+        ? this.$t('home.backToReslut')
+        : this.$t('home.backToResluts')
     },
     displaytoggle: function() {
       return this.displayResults === true
-        ? 'Dölj resultatet'
-        : 'Visa resultatet'
+        ? this.$t('home.hideResults')
+        : this.$t('home.displyResults')
     },
     icon: function() {
       return this.displayResults ? 'mdi-chevron-up' : 'mdi-chevron-down'
+    },
+    msg: function() {
+      if (this.isErrorMsg) {
+        if (this.message === 'Invalid coordinates') {
+          return this.$t('error.inValidCoordinates')
+        }
+      }
+      return ''
     },
   },
   methods: {

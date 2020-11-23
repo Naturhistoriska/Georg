@@ -11,7 +11,7 @@
       hide-details
       item-text="name"
       item-value="id"
-      placeholder="Sök plats"
+      :placeholder="$t('home.searchPlace')"
       v-model="select"
       :loading="isLoading"
       :open-on-clear="false"
