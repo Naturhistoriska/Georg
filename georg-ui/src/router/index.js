@@ -17,8 +17,8 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    // path: '/:locale',
-    path: '/',
+    path: '/:locale',
+    // path: '/',
     component: {
       template: '<router-view></router-view>',
     },
