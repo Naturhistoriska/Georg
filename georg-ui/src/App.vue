@@ -167,7 +167,7 @@ export default {
     onContackLinkclick() {
       const locale = this.$i18n.locale
       const pushUrl = locale === 'sv' ? '/kontakt' : '/contact'
-      // locale === 'sv' ? `/${locale}/kontakt` : `/${locale}/contact`
+      locale === 'sv' ? `/${locale}/kontakt` : `/${locale}/contact`
 
       const decodeUrl = decodeURIComponent(this.$route.fullPath)
       if (decodeUrl !== pushUrl) {
