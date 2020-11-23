@@ -107,6 +107,7 @@
             label="Välj språk"
             v-model="selectedLanguage"
             item-value="text"
+            filled
             prepend-inner-icon="mdi-web"
           ></v-select>
         </v-card-text>
