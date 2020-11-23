@@ -65,13 +65,21 @@ const routes = [
         component: load('Contact'),
       },
       {
-        path: '/tillganglighetsredogorelse',
+        path: 'tillganglighetsredogorelse',
         name: 'Accessibility',
         component: load('Accessibility'),
         meta: {
           title: 'Tillgänglighetsredogörelse | Georg',
         },
       },
+      // {
+      //   path: 'tillganglighetsredogorelse',
+      //   name: 'Accessibility',
+      //   component: load('Accessibility'),
+      //   meta: {
+      //     title: 'Tillgänglighetsredogörelse | Georg',
+      //   },
+      // },
     ],
   },
   {
