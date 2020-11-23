@@ -11,19 +11,13 @@
       <v-list>
         <v-list-item nav link @click="onAboutLinkclick()">
           <v-list-item-content>
-<<<<<<< HEAD
             <v-list-item-title>
-              Om Georg
-=======
-            <v-list-item-title class="grey--text text--darken-2">
               {{ $t('about.about') }}
->>>>>>> ad15618... Add localization
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
       <v-divider></v-divider>
-<<<<<<< HEAD
       <v-list nav>
         <v-list-item key="contactLink" @click="onContackLinkclick()">
           <v-list-item-content>
@@ -54,8 +48,8 @@
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-=======
-      <v-list dense>
+
+        <!-- <v-list dense>
         <v-list-item-group>
           <v-list-item
             key="contactLink"
@@ -75,8 +69,7 @@
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
-        </v-list-item-group>
->>>>>>> ad15618... Add localization
+        </v-list-item-group> -->
       </v-list>
     </v-navigation-drawer>
 
@@ -150,14 +143,11 @@ export default {
       document.title = to.meta.title || 'Georg'
       const { name } = to
       this.drawer =
-<<<<<<< HEAD
-        name === 'About' || name === 'Contact' || name === 'Accessibility'
-=======
         name === 'About' ||
         name === 'Om' ||
         name === 'Contact' ||
-        name === 'Kontakt'
->>>>>>> ad15618... Add localization
+        name === 'Kontakt' ||
+        name === 'Accessibility'
       this.routeName = name
     },
   },
@@ -190,18 +180,15 @@ export default {
       }
     },
     onAboutLinkclick() {
-      const locale = this.$i18n.locale
+      // const locale = this.$i18n.locale
       // const pushUrl = locale === 'sv' ? `/${locale}/om` : `/${locale}/about`
-      const pushUrl = locale === 'sv' ? '/om' : '/about'
+      // const pushUrl = locale === 'sv' ? '/om' : '/about'
       const decodeUrl = decodeURIComponent(this.$route.fullPath)
-<<<<<<< HEAD
       if (decodeUrl !== '/om') {
         this.$router.push('/om')
         this.drawerState = false
-=======
-      if (decodeUrl !== pushUrl) {
-        this.$router.push(pushUrl)
->>>>>>> ad15618... Add localization
+        // if (decodeUrl !== pushUrl) {
+        //   this.$router.push(pushUrl)
       }
     },
   },

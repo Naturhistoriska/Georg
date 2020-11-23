@@ -1,16 +1,11 @@
 <template>
   <v-row align="baseline" dense class="pl-4 pt-0 pb-7">
-<<<<<<< HEAD
     <v-col
       cols="12"
       sm="3"
       :class="$vuetify.breakpoint.xsOnly && 'visuallyhidden'"
     >
-      <v-label for="main-input">Hitta plats:</v-label>
-=======
-    <v-col cols="12" sm="3" class="d-none d-sm-flex">
-      <v-label>{{ $t('home.findPlace') }}</v-label>
->>>>>>> ea391f5... Add locale
+      <v-label for="main-input">{{ $t('home.findPlace') }}</v-label>
     </v-col>
     <v-col class="pa-0" cols="5" sm="4">
       <label for="geography" class="visuallyhidden">Välj område</label>
