@@ -43,14 +43,18 @@ export default {
   data() {
     return {
       // selectedLocale: this.currentLocale,
-      // selectedLocale: Trans.currentLocale,
+      selectedLocale: Trans.currentLocale,
       theLocale: this.currentLocale,
-      localeChanged: false,
     }
   },
-  // activated: {
-  //   console.log("locale...", this.$i18n.locale)
-  // },
+  watch: {
+    $route(to) {
+      const { locale } = to.params
+      this.selectedLocale = locale
+      this.drawer = name !== 'Home' && name !== 'Search'
+      this.routeName = name
+    },
+  },
   computed: {
     supportedLocales() {
       let supportLocale = []
@@ -62,26 +66,26 @@ export default {
       })
       return supportLocale
     },
-    selectedLocale: {
-      set(selectedLocale) {
-        console.log('set....')
-        this.theLocale = selectedLocale
-        // this.localeChanged = false
-      },
-      get() {
-        console.log('what is locale...', this.theLocale, this.currentLocale)
-        // this.theLocale = this.currentLocale
-        // if (this.localeChanged) {
-        //   return this.selectedLocale
-        // }
-        return this.currentLocale
-      },
-    },
+    // selectedLocale: {
+    //   set(selectedLocale) {
+    //     console.log('set....', selectedLocale)
+    //     this.theLocale = selectedLocale
+    //     // this.localeChanged = false
+    //   },
+    //   get() {
+    //     console.log('what is locale...', this.theLocale, this.currentLocale)
+    //     // this.theLocale = this.currentLocale
+    //     // if (this.localeChanged) {
+    //     //   return this.selectedLocale
+    //     // }
+    //     return this.theLocale
+    //   },
+    // },
   },
   methods: {
-    switchLocale(value) {
-      this.selectedLocale = value
-      this.localeChanged = true
+    switchLocale() {
+      // this.selectedLocale = value
+      // this.localeChanged = true
     },
     closeDialog() {
       this.$emit('close-dialog', this.selectedLocale)
