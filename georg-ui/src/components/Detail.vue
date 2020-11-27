@@ -5,7 +5,7 @@
     id="v-card-detail"
     :style="height"
   >
-    <DetailName v-bind:source="source" />
+    <DetailName />
     <JsonController />
     <v-divider></v-divider>
     <v-list>
@@ -47,17 +47,17 @@
       <v-list-item v-if="displayGeodeticDatumWarning">
         <v-list-item-action></v-list-item-action>
         <v-alert outlined type="warning" color="grey darken-1" border="left">
-          Källan saknar geodetiskt datum.
-          <br />WGS84 har antagits.
+          {{ $t('result.noGeodetic') }}
+          <br />{{ $t('result.wgs84') }}
         </v-alert>
       </v-list-item>
     </v-list>
     <!-- <v-dialog v-model="dialog" @keydown.esc="dialog = false" scrollable max-width="550">
       <JsonResult @close-dialog="closeDialog" />
     </v-dialog>-->
-    <v-snackbar centered v-model="snackbar" :timeout="600"
-      >Kopierad till Urklipp</v-snackbar
-    >
+    <v-snackbar centered v-model="snackbar" :timeout="600">{{
+      $t('result.copyToClipboard')
+    }}</v-snackbar>
   </v-card>
 </template>
 
@@ -93,12 +93,12 @@ export default {
   props: ['height'],
   data() {
     return {
-      dataFromSource: null,
-      dialog: false,
+      // dataFromSource: null,
+      // dialog: false,
       externallink: null,
       hasUncertainty: false,
       snackbar: false,
-      source: null,
+      // source: null,
     }
   },
   created() {
@@ -118,11 +118,41 @@ export default {
 
   computed: {
     ...mapGetters(['isGbif', 'isNewMarker', 'selectedMarker']),
+    dataFromSource: function() {
+      const { source } = this.selectedMarker.properties
+      switch (source) {
+        case 'whosonfirst':
+          return this.$t('result.dataFromWof')
+        case 'openstreetmap':
+          return this.$t('result.dataFromOsm')
+        case 'openaddresses':
+          return this.$t('result.dataFromOa')
+        case 'swe-virtual-herbarium':
+          return this.$t('result.dataFromSvh')
+        default:
+          return ''
+      }
+    },
     displayGeodeticDatumWarning: function() {
       return this.isGbif
         ? this.selectedMarker.properties.addendum.gbif.geodeticDatum === null
         : false
     },
+    // externallink: function() {
+    //   const { source } = this.selectedMarker.properties
+    //   switch (source) {
+    //     case 'whosonfirst':
+    //       return woflink
+    //     case 'openstreetmap':
+    //       return osmlink
+    //     case 'openaddresses':
+    //       return oalink
+    //     case 'swe-virtual-herbarium':
+    //       return svhlink
+    //     default:
+    //       return ''
+    //   }
+    // },
     titleClass: function() {
       return this.isNewMarker
         ? 'red--text darken-2'
@@ -141,36 +171,25 @@ export default {
       const { addendum, source } = this.selectedMarker.properties
       switch (source) {
         case 'whosonfirst':
-          this.source = this.$t('result.accordingwof')
-          this.dataFromSource = "Data från Who's On First (WOF)"
           this.externallink = woflink
           this.hasUncertainty = false
           break
         case 'openstreetmap':
-          this.source = 'enligt OpenStreetMap'
-          this.dataFromSource = 'Data från OpenStreetMap (OSM)'
           this.externallink = osmlink
           this.hasUncertainty = false
           break
         case 'openaddresses':
-          this.source = 'enligt OpenAddresses'
-          this.dataFromSource = 'Data från OpenAddresses (OA)'
           this.externallink = oalink
           this.hasUncertainty = false
           break
         case 'gbif':
-          this.source = 'Plats från en GBIF-källa'
           this.hasUncertainty = addendum.georg.coordinateUncertaintyInMeters
           break
         case 'swe-virtual-herbarium':
-          this.source = 'enligt Virtuella Herbariet'
-          this.dataFromSource = 'Data från Virtuella Herbariet (SVH)'
           this.externallink = svhlink
           this.hasUncertainty = addendum.georg.coordinateUncertaintyInMeters
           break
         default:
-          this.source = null
-          this.dataFromSource = null
           this.externallink = null
           this.hasUncertainty = false
           break

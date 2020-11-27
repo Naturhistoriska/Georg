@@ -112,9 +112,24 @@
   },
   "result": {
     "accordingwof": "enligt Who's On First",
-    "sweref99": "SWEREF99 TM (nord, öst)",
+    "accordingsvh": "enligt Virtuella Herbariet",
+    "accordingoa": "enligt OpenAddresses",
+    "accordingosm": "enligt OpenStreetMap",
+    "copy": "Kopiera",
+    "copyToClipboard": "Kopierad till Urklipp",
+    "dataFromGbif": "Data från GBIF",
+    "dataFromWof": "Data från Who's On First (WOF)",
+    "dataFromOsm": "Data från OpenStreetMap (OSM)",
+    "dataFromOa": "Data från OpenAddresses (OA)",
+    "dataFromSvh": "Data från Virtuella Herbariet (SVH)",
+    "displayJson": "Visa JSON",
+    "fromGbif": "Plats från en GBIF-källa",
+    "noGeodetic": "Källan saknar geodetiskt datum.",
+    "parish": "Socken",
     "rt90": "RT90 (nord, öst)",
-    "uncertainty": "osäkerhetsradie"
+    "sweref99": "SWEREF99 TM (nord, öst)",
+    "uncertainty": "osäkerhetsradie",
+    "wgs84": "WGS84 har antagits."
   },
   "error": {
     "inValidCoordinates": "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"

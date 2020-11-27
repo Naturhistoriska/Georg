@@ -115,9 +115,24 @@
   },
   "result": {
     "accordingwof": "according to Who's On First",
-    "sweref99": "SWEREF99 TM (north, east)",
+    "accordingsvh": "according to Virtual Herbarium",
+    "accordingoa": "according to OpenAddresses",
+    "accordingosm": "according to OpenStreetMap",
+    "copy": "Copy",
+    "copyToClipboard": "Copied to Clipboard",
+    "dataFromGbif": "Data from GBIF",
+    "dataFromWof": "Data from Who's On First (WOF)",
+    "dataFromOsm": "Data from OpenStreetMap (OSM)",
+    "dataFromOa": "Data from OpenAddresses (OA)",
+    "dataFromSvh": "Data from Virtuella Herbariet (SVH)",
+    "displayJson": "Display JSON",
+    "fromGbif": "Location from a GBIF source",
+    "noGeodetic": "The source has no geodetic date.",
+    "parish": "Parish",
     "rt90": "RT90 (north, east)",
-    "uncertainty": "uncertainty"
+    "sweref99": "SWEREF99 TM (north, east)",
+    "uncertainty": "uncertainty",
+    "wgs84": "WGS84 has been adopted."
   },
   "error": {
     "inValidCoordinates": "TODO: change to English\n Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"

@@ -12,9 +12,7 @@
       {{ latlng }}
     </v-card-subtitle>
     <v-card-subtitle v-else>
-      <strong class="text-capitalize" v-if="!isGbif">{{
-        selectedMarker.properties.layer
-      }}</strong>
+      <strong class="text-capitalize" v-if="!isGbif">{{ layer }}</strong>
       {{ source }}
     </v-card-subtitle>
     <v-divider></v-divider>
@@ -24,9 +22,12 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'DetailName',
-  props: ['source'],
   computed: {
     ...mapGetters(['isGbif', 'isNewMarker', 'selectedMarker']),
+    layer: function() {
+      const { layer } = this.selectedMarker.properties
+      return layer === 'socken' ? this.$t('result.parish') : layer
+    },
     title: function() {
       const { addendum, name } = this.selectedMarker.properties
       return this.isGbif ? addendum.georg.locationDisplayLabel : name
@@ -34,6 +35,23 @@ export default {
     latlng: function() {
       const { dms } = this.selectedMarker.properties.coordinates
       return `${dms[0]} ${dms[1]}`
+    },
+    source: function() {
+      const { source } = this.selectedMarker.properties
+      switch (source) {
+        case 'whosonfirst':
+          return this.$t('result.accordingwof')
+        case 'openstreetmap':
+          return this.$t('result.accordingosm')
+        case 'openaddresses':
+          return this.$t('result.accordingoa')
+        case 'gbif':
+          return this.$t('result.fromGbif')
+        case 'swe-virtual-herbarium':
+          return this.$t('result.accordingsvh')
+        default:
+          return ''
+      }
     },
   },
 }

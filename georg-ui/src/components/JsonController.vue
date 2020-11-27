@@ -9,10 +9,10 @@
         @click.stop="dialog = !dialog"
         @keypress.stop="dialog = !dialog"
         role="button"
-        aria-label="Visa JSON"
+        :aria-label="$t('result.displayJson')"
       >
         <!--Display dialog and snackbar should be fixed properly so that both works for clicking and pressing enter.-->
-        <v-icon left>mdi-code-tags</v-icon>Visa JSON
+        <v-icon left>mdi-code-tags</v-icon>{{ $t('result.displayJson') }}
       </v-chip>
       <v-chip
         color="grey darken-2"
@@ -23,9 +23,9 @@
         @click.stop="openSnackbar"
         @keypress.stop="openSnackbar = true"
         role="button"
-        aria-label="Kopiera"
+        :aria-label="$t('result.copy')"
       >
-        <v-icon left>mdi-content-copy</v-icon>Kopiera
+        <v-icon left>mdi-content-copy</v-icon>{{ $t('result.copy') }}
       </v-chip>
       <v-chip
         v-if="!isDinPlats"

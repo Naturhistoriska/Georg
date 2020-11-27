@@ -5,7 +5,7 @@
         v-bind:iconColor="blueDarkenColor"
         v-bind:iconName="importIconName"
       />
-      <ItemContent v-bind:title="dataFromSource" />
+      <ItemContent v-bind:title="$t('result.dataFromGbif')" />
       <BaseIconButton
         aria-label="Visa information om datakällan"
         v-bind:iconName="iconToggleGbifData"
@@ -72,7 +72,7 @@ export default {
   },
   created() {
     this.blueDarkenColor = 'blue darken-2'
-    this.dataFromSource = 'Data från GBIF'
+    // this.dataFromSource = this.$t('result.dataFromGbif')
     this.iconToggleGbifData = 'mdi-chevron-down'
     this.importIconName = 'mdi-database-import'
     this.occurrenceDataset = 'GBIF Occurrence dataset'
