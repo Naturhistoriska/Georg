@@ -1,7 +1,8 @@
 {
   "menu": {
     "home": "Georg",
-    "about": "Om Georg"
+    "about": "Om Georg",
+    "accessibility": "Tillgänglighetsredogörelse"
   } ,
   "about": {
     "about":"Om Georg",
@@ -53,11 +54,38 @@
     "project": "HEAD Projektet finns på",
     "github": "Github"
   },
+  "accessibility": {
+    "accessibility": "Tillgänglighetsredogörelse",
+    "accessibilityText": "Naturhistoriska riksmuseet står bakom den här webbplatsen. Vi vill att så många som möjligt ska kunna använda webbplatsen. Den här sidan beskriver hur georg.nrm.se uppfyller lagen om tillgänglighet till digital offentlig service, eventuellt kända tillgänglighetsproblem och hur du kan rapportera brister till oss så att vi kan åtgärda dem.",
+    "how": "Hur tillgänglig är webbplatsen?",
+    "howText": "Vi är medvetna om att delar av webbplatsen inte är helt tillgängliga. Se avsnittet om innehåll som inte är tillgängligt nedan för mer information.",
+    "what": "Vad kan du göra om du inte kan använda delar av webbplatsen?",
+    "whatText": "Om du behöver innehåll från georg.nrm.se som inte är tillgängligt för dig, men som är undantaget från lagens tillämpningsområde enligt beskrivningen nedan, kan du kontakta oss via epost till",
+    "report": "Rapportera brister i webbplatsens tillgänglighet",
+    "reportText": "Vi strävar hela tiden efter att förbättra webbplatsens tillgänglighet. Om du upptäcker problem som inte är beskrivna på den här sidan, eller om du anser att vi inte uppfyller lagens krav, meddela oss genom att",
+    "reportLink": "fylla i det här formuläret",
+    "reportText1": "så att vi får veta att problemet finns.",
+    "supervision": "Tillsyn",
+    "supervisionText": "Myndigheten för digital förvaltning har ansvaret för tillsyn för lagenom tillgänglighet till digital offentlig service. Om du inte är nöjd med hur vi hanterar ditt påpekande om bristande innehåll kan du",
+    "supervisionLink": "anmäla till Myndighetn för digital förvatning",
+    "supervisionText1": "och påtala det.",
+    "techInfo": "Teknisk information om webbplatsens tillgänglighet",
+    "techInfoText": "Den här webbplatsen är helt förenlig med lagen om tillgänglighet till digital offentlig service.",
+    "contentNotAvailable": "Innehåll som inte är tillgängligt",
+    "contentNotCover": "Innehåll som inte omfattas av lagen",
+    "contentText": "Det innehåll som beskrivs här är inte fullt tillgängligt, men undantas enligt 9 § lagen om tillgänglighet till digital offentlig service.",
+    "contentText1": "Webbtillgänglighetsdirektivet gäller endast karttjänster avsedda för navigation. Georgs karttjänst är därför undantagen från lagens tillämpning, se 9 § 2 p SFS 2018:1937.",
+    "test": "Hur vi testat webbplatsen",
+    "testText1": "Vi har gjort en självskattning (intern testning) av ",
+    "testText2": "Senaste bedömningen gjordes den 27 November 2020.",
+    "testText3": "Redogörelsen uppdaterades senast den 27 November 2020."
+  },
   "contact": {
     "contactText": "Om du har några frågor eller synpunkter är du välkommen att höra av dig via e-postadressen här nedanför."
   },
   "footer": {
-    "nrm": "Naturhistoriska riksmuseet"
+    "nrm": "Naturhistoriska riksmuseet",
+    "currentLanguage": "SVENSKA"
   },
   "home": {
     "backToReslut": "Till träfflistan",
@@ -74,7 +102,19 @@
     "inSweden": "i Sverige"
   },
   "common": {
-    "contactus": "Kontakta oss"
+    "close": "Stäng",
+    "contactus": "Kontakta oss",
+    "languageSetting": "Språkinställning",
+    "ok": "Ok",
+    "selectLanguage": "Välj språk",
+    "en": "English",
+    "sv": "Svenska"
+  },
+  "result": {
+    "accordingwof": "enligt Who's On First",
+    "sweref99": "SWEREF99 TM (nord, öst)",
+    "rt90": "RT90 (nord, öst)",
+    "uncertainty": "osäkerhetsradie"
   },
   "error": {
     "inValidCoordinates": "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"

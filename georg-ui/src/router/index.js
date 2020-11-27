@@ -48,38 +48,51 @@ const routes = [
         path: 'about',
         name: 'About',
         component: load('About'),
+        meta: {
+          title: 'About | Georg',
+        },
       },
       {
         path: 'om',
         name: 'Om',
         component: load('About'),
+        meta: {
+          title: 'Om | Georg',
+        },
       },
       {
         path: 'kontakt',
         name: 'Kontakt',
         component: load('Contact'),
+        meta: {
+          title: 'Kontakt | Georg',
+        },
       },
       {
         path: 'contact',
         name: 'Contact',
         component: load('Contact'),
+        meta: {
+          title: 'Contact | Georg',
+        },
       },
       {
         path: 'tillganglighetsredogorelse',
-        name: 'Accessibility',
+        name: 'Tillganglighetsredogorelse',
         component: load('Accessibility'),
         meta: {
           title: 'Tillgänglighetsredogörelse | Georg',
         },
       },
-      // {
-      //   path: 'tillganglighetsredogorelse',
-      //   name: 'Accessibility',
-      //   component: load('Accessibility'),
-      //   meta: {
-      //     title: 'Tillgänglighetsredogörelse | Georg',
-      //   },
-      // },
+      {
+        path: 'accessibility',
+        name: 'Accessibility',
+        component: load('Accessibility'),
+        meta: {
+          title: 'Accessibility | Georg',
+        },
+      },
+      { path: 'search', name: 'Search', component: load('Home') },
     ],
   },
   {

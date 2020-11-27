@@ -1,5 +1,10 @@
 <template>
   <v-app>
+    <LocaleSwitcher
+      @close-dialog="closeDialog"
+      v-bind:currentLocale="currentLocale"
+      v-bind:dialogStatus="dialogStatus"
+    />
     <v-navigation-drawer
       v-if="drawer"
       app
@@ -26,7 +31,7 @@
                   : 'grey--text text--darken-2',
               ]"
             >
-              Kontakta oss
+              {{ $t('common.contactus') }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -42,32 +47,10 @@
                   : 'grey--text text--darken-2',
               ]"
             >
-              Tillgänglighetsredogörelse
+              {{ $t('menu.accessibility') }}
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <!-- <v-list dense>
-        <v-list-item-group>
-          <v-list-item
-            key="contactLink"
-            :style="activeLinkColor"
-            active-class="white--text"
-            @click="onContackLinkclick()"
-          >
-            <v-list-item-content>
-              <v-list-item-title
-                :class="[
-                  this.routeName === 'Contact'
-                    ? 'blue--text'
-                    : 'grey--text text--darken-2',
-                ]"
-              >
-                {{ $t('contact.contactus') }}
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-item-group> -->
       </v-list>
     </v-navigation-drawer>
 
@@ -108,7 +91,7 @@
     </v-main>
     <v-footer color="grey lighten-4" fixed app padless>
       <v-row no-gutters>
-        <v-col class="pl-3 text-center " cols="12">
+        <v-col class="pl-3" cols="10">
           <span class="grey--text text--darken-3">
             {{ $t('footer.nrm') }} - {{ new Date().getFullYear() }}
           </span>
@@ -117,38 +100,45 @@
             >{{ $t('common.contactus') }}
           </v-btn>
         </v-col>
+
+        <v-col class="pl-3" cols="2">
+          <v-btn color="grey darken-3" text @click="onLanguageClick()">
+            <v-icon left dark> mdi-web </v-icon
+            >{{ $t('footer.currentLanguage') }}
+          </v-btn>
+        </v-col>
       </v-row>
     </v-footer>
   </v-app>
 </template>
 <script>
+import LocaleSwitcher from './components/LocaleSwitcher'
+import { Trans } from '@/plugins/Translation'
 export default {
   name: 'App',
+  components: {
+    LocaleSwitcher,
+  },
   data() {
     return {
+      currentLocale: 'sv',
+      dialogStatus: false,
       drawer: null,
       drawerState: null,
       routeName: 'Home',
+      webIcon: 'mdi-web',
     }
   },
   watch: {
     $route(to) {
       document.title = to.meta.title || 'Georg'
       const { name } = to
-      console.log('name....', name)
-      this.drawer =
-        name === 'About' ||
-        name === 'Om' ||
-        name === 'Contact' ||
-        name === 'kontakt'
-      // ||
-      // name === 'Accessibility'
+      this.drawer = name !== 'Home' && name !== 'Search'
       this.routeName = name
     },
   },
   computed: {
     aboutUrl() {
-      console.log('aboutUrl', this.$i18n.locale)
       return this.$i18n.locale === 'sv' ? 'Om' : 'About'
     },
     activeLinkColor() {
@@ -158,32 +148,47 @@ export default {
     },
   },
   methods: {
-    onAccessibilityLinkclick() {
-      const decodeUrl = decodeURIComponent(this.$route.fullPath)
-      if (decodeUrl !== '/tillganglighetsredogorelse') {
-        this.$router.push('/tillganglighetsredogorelse')
+    onLanguageClick() {
+      this.currentLocale = this.$i18n.locale
+      this.dialogStatus = true
+    },
+    closeDialog(selectedLocale) {
+      const locale = selectedLocale
+      const query = this.$route.query
+      this.dialogStatus = false
+      if (this.$i18n.locale !== locale) {
+        const to = this.$router.resolve({
+          params: { locale },
+          query,
+        })
+        return Trans.changeLocale(locale).then(() => {
+          this.$router.push(to.location)
+        })
       }
+    },
+    onAccessibilityLinkclick() {
+      const locale = this.$i18n.locale
+      const pushUrl =
+        locale === 'sv'
+          ? `/${locale}/tillganglighetsredogorelse`
+          : `/${locale}/accessibility`
+      this.pushUrl(pushUrl)
     },
     onContackLinkclick() {
       const locale = this.$i18n.locale
-      const pushUrl = locale === 'sv' ? '/kontakt' : '/contact'
-      locale === 'sv' ? `/${locale}/kontakt` : `/${locale}/contact`
-
-      const decodeUrl = decodeURIComponent(this.$route.fullPath)
-      if (decodeUrl !== pushUrl) {
-        this.$router.push(pushUrl)
-      }
+      const pushUrl =
+        locale === 'sv' ? `/${locale}/kontakt` : `/${locale}/contact`
+      this.pushUrl(pushUrl)
     },
     onAboutLinkclick() {
-      // const locale = this.$i18n.locale
-      // const pushUrl = locale === 'sv' ? `/${locale}/om` : `/${locale}/about`
-      // const pushUrl = locale === 'sv' ? '/om' : '/about'
+      const locale = this.$i18n.locale
+      const pushUrl = locale === 'sv' ? `/${locale}/om` : `/${locale}/about`
+      this.pushUrl(pushUrl)
+    },
+    pushUrl(url) {
       const decodeUrl = decodeURIComponent(this.$route.fullPath)
-      if (decodeUrl !== '/om') {
-        this.$router.push('/om')
-        this.drawerState = false
-        // if (decodeUrl !== pushUrl) {
-        //   this.$router.push(pushUrl)
+      if (decodeUrl !== url) {
+        this.$router.push(url)
       }
     },
   },

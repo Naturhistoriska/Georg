@@ -60,10 +60,10 @@ export default {
       this.isLoading = true
       this.$emit('search', this.coordinates)
       this.isLoading = false
-      const decodeUrl = decodeURIComponent(this.$route.fullPath)
-      if (decodeUrl !== `/search?coordinates=${this.coordinates}`) {
-        this.$router.push(`/search?coordinates=${this.coordinates}`)
-      }
+      // const decodeUrl = decodeURIComponent(this.$route.fullPath)
+      // if (decodeUrl !== `/search?coordinates=${this.coordinates}`) {
+      //   this.$router.push(`/search?coordinates=${this.coordinates}`)
+      // }
     },
   },
 }

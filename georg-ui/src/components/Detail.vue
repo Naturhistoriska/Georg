@@ -31,7 +31,7 @@
           v-bind:hastitle="true"
           v-bind:iconColor="marckericoncolor"
           v-bind:iconName="markerwithradiusicon"
-          v-bind:spanvalue="uncertainty"
+          v-bind:spanvalue="$t('result.uncertainty')"
           v-bind:value="uncertaintyValue"
           @copy="copyText"
         />
@@ -141,7 +141,7 @@ export default {
       const { addendum, source } = this.selectedMarker.properties
       switch (source) {
         case 'whosonfirst':
-          this.source = "enligt Who's On First"
+          this.source = this.$t('result.accordingwof')
           this.dataFromSource = "Data från Who's On First (WOF)"
           this.externallink = woflink
           this.hasUncertainty = false

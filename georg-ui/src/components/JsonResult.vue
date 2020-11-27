@@ -16,7 +16,7 @@
         text
         @click="closeDialog"
       >
-        Stäng
+        {{ $t('common.close') }}
       </v-btn>
     </v-card-actions>
   </v-card>

@@ -71,17 +71,17 @@ const lantmaterietMapAttribution =
 
 const MAP_ICONS = {
   blueIcon: L.icon({
-    iconUrl: 'blue-marker.png',
+    iconUrl: '../blue-marker.png',
     iconSize: [26, 38], // size of the icon
     iconAnchor: [13, 38],
   }),
   redIcon: L.icon({
-    iconUrl: 'red-star-marker.png',
+    iconUrl: '../red-star-marker.png',
     iconSize: [26, 38], // size of the icon
     iconAnchor: [13, 38],
   }),
   greyIcon: L.icon({
-    iconUrl: 'grey-marker.png',
+    iconUrl: '../grey-marker.png',
     iconSize: [22, 32],
     iconAnchor: [11, 32],
   }),
@@ -243,7 +243,7 @@ export default {
       'setDetailView',
       'setHovedResultId',
       'setIsErrorMsg',
-      'setMessage',
+      'setMsgKey',
       'setReBuildMarker',
       'setResults',
       'setRezoom',
@@ -289,7 +289,7 @@ export default {
             this.setSelectedMarker(result)
           }
           if (this.results.length === 1) {
-            this.setMessage('Visar "Din plats"')
+            this.setMsgKey('home.displyDinPlats')
             this.setIsErrorMsg(false)
           }
           this.setResults(this.results)

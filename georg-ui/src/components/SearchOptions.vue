@@ -41,6 +41,7 @@ export default {
   name: 'SearchOptions',
   data: () => ({
     coordinates: null,
+    country: null,
     // dropdown_countries: [
     //   { text: 'i Norden', value: '' },
     //   { text: 'i Sverige', value: 'SWE' },
@@ -49,10 +50,9 @@ export default {
   }),
   created() {
     const country = this.$route.query.country
-
-    this.select = this.$t('home.inNordic')
+    this.country = this.$t('home.inNordic')
     if (country) {
-      this.select =
+      this.country =
         country === '' ? this.$t('home.inNordic') : this.$t('home.inSweden')
     }
     // const nodicTex = this.$t('home.inNordic')
@@ -68,15 +68,39 @@ export default {
       return this.coordinates ? true : false
     },
     dropdown_countries: function() {
-      const nodicTex = this.$t('home.inNordic')
-      const swedenTex = this.$t('home.inSweden')
+      const nodicText = this.$t('home.inNordic')
+      const swedenText = this.$t('home.inSweden')
       return [
-        { text: nodicTex, value: '' },
-        { text: swedenTex, value: 'SWE' },
+        { text: nodicText, value: '' },
+        { text: swedenText, value: 'SWE' },
       ]
     },
-
-    // select: function() {
+    select: {
+      set(select) {
+        this.country = select
+      },
+      get() {
+        // const country = this.$route.query.country
+        // if (country) {
+        //   return country === ''
+        //     ? this.$t('home.inNordic')
+        //     : this.$t('home.inSweden')
+        // } else
+        //  if (this.country) {
+        return this.country === 'i Sverige' || this.country === 'in Sweden'
+          ? this.$t('home.inSweden')
+          : this.$t('home.inNordic')
+        // }
+        // return this.$t('home.inNordic')
+      },
+    },
+    // select() {
+    //   const country = this.$route.query.country
+    //   if (country) {
+    //     return country === ''
+    //       ? this.$t('home.inNordic')
+    //       : this.$t('home.inSweden')
+    //   }
     //   return this.$t('home.inNordic')
     // },
   },
@@ -110,6 +134,6 @@ export default {
   height: 22px;
 }
 .country-select {
-  width: 120px;
+  width: 130px;
 }
 </style>

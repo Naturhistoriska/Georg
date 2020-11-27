@@ -36,6 +36,7 @@ export default {
   name: 'Home',
   components: {
     Detail,
+    // LocaleSwitcher,
     Map,
     Message,
     Results,
@@ -43,6 +44,7 @@ export default {
   },
   data() {
     return {
+      // dialog: false,
       mapHeight: 'height: 1500px',
       passInValue: null,
       results: [],
@@ -83,9 +85,6 @@ export default {
       'searchText',
       'displayResults',
     ]),
-    // errorMsg: function() {
-    //   return this.$t('home.backToResluts')
-    // },
   },
   watch: {
     searchOption: function() {
@@ -94,13 +93,16 @@ export default {
           ? this.searchCoordinates
           : this.searchText
     },
+    // openLanguageSetting: function() {
+    //   this.dialog = this.openLanguageSetting
+    // },
   },
   methods: {
     ...mapMutations([
       'setDetailView',
       'setHovedResultId',
       'setIsErrorMsg',
-      'setMessage',
+      'setMsgKey',
       'setReBuildMarker',
       'setResults',
       'setRezoom',
@@ -115,7 +117,7 @@ export default {
     clear() {
       this.setDetailView(false)
       this.setHovedResultId('')
-      this.setMessage('')
+      this.setMsgKey('')
       this.setReBuildMarker(true)
       this.setResults([])
       this.setSearchCoordinates('')
@@ -123,8 +125,10 @@ export default {
       this.setSelectedResultId('')
       this.setSelectedResult({})
       this.setSearchText(null)
-      if (this.$route.fullPath !== '/') {
-        this.$router.push('/')
+      if (this.$route.fullPath !== '/${locale}') {
+        this.$router.push({
+          name: 'Home',
+        })
       }
     },
     handleResize() {
@@ -150,6 +154,7 @@ export default {
           this.setSelectedResultId(selectedResultId)
           this.setSelectedResult(selectedResult)
           this.setSelectedMarker(selectedResult)
+          // this.setErrorMsgKey()
           this.setMessages()
           this.setIsErrorMsg(false)
           this.setResults(this.results)
@@ -171,15 +176,12 @@ export default {
           this.setReBuildMarker(true)
           if (response.error) {
             const { msgKey } = response.error
-            // if (msgKey === 'Invalid coordinates') {
-            //   this.setMessage(msgKey)
-            // }
             this.setResults([])
             this.setDetailView(false)
             this.setSelectedResultId('')
             this.setSelectedResult({})
             this.setIsErrorMsg(true)
-            this.setMessage(msgKey)
+            this.setMsgKey(msgKey)
             this.setRezoom(false)
           } else {
             let theResults = response.features
@@ -213,19 +215,20 @@ export default {
         })
     },
     setMessages() {
-      let message
+      const numOfHits = this.results.length
+      let messageKey
       if (this.searchOption === 'address') {
-        message =
-          this.results.length > 0
-            ? `${this.results.length} träffar`
-            : 'Sökningen gav inga träffar'
+        messageKey =
+          numOfHits === 0
+            ? 'home.noHits'
+            : numOfHits === 1
+            ? "home.hit'"
+            : 'home.hits'
       } else {
-        message =
-          this.results.length > 1
-            ? `${this.results.length - 1} träff samt "Din plats"`
-            : 'Visar “Din plats"'
+        messageKey =
+          this.results.length > 1 ? 'home.dinplats' : 'home.displyDinPlats'
       }
-      this.setMessage(message)
+      this.setMsgKey(messageKey)
     },
   },
 }

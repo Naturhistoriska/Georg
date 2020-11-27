@@ -47,10 +47,16 @@ export default {
     this.dmsSubtitle = 'WGS84 DMS'
     this.ddmSubtitle = 'WGS84 DDM'
     this.ddSubtitle = 'WGS84 DD (lat, lon)'
-    this.sweref99Subtitle = 'SWEREF99 TM (nord, öst)'
-    this.rt90Subtitle = 'RT90 (nord, öst)'
+    // this.sweref99Subtitle = this.$t('result.sweref99')
+    // this.rt90Subtitle = this.$t('result.rt90')
   },
   computed: {
+    sweref99Subtitle: function() {
+      return this.$t('result.sweref99')
+    },
+    rt90Subtitle: function() {
+      return this.$t('result.rt90')
+    },
     latLon: function() {
       const { dd } = this.coordinates
       return `${dd[0]}, ${dd[1]}`

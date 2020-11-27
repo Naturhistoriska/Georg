@@ -52,8 +52,9 @@ export default {
     ...mapGetters([
       'detailView',
       'displayResults',
+      'isAddressSearch',
       'isErrorMsg',
-      'message',
+      'msgKey',
       'results',
     ]),
     backtolist: function() {
@@ -71,11 +72,21 @@ export default {
     },
     msg: function() {
       if (this.isErrorMsg) {
-        if (this.message === 'Invalid coordinates') {
+        if (this.msgKey === 'Invalid coordinates') {
           return this.$t('error.inValidCoordinates')
         }
       }
-      return ''
+      const numOfHits = this.results.length
+      if (this.isAddressSearch) {
+        return numOfHits === 0
+          ? this.$t(`${this.msgKey}`)
+          : `${numOfHits} ${this.$t(this.msgKey)}`
+      }
+      return numOfHits === 0
+        ? ''
+        : numOfHits === 1
+        ? this.$t(`${this.msgKey}`)
+        : `${numOfHits} ${this.$t(this.msgKey)}`
     },
   },
   methods: {

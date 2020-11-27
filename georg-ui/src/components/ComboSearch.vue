@@ -118,7 +118,7 @@ export default {
     ...mapMutations([
       'setDetailView',
       'setIsErrorMsg',
-      'setMessage',
+      'setMsgKey',
       'setReBuildMarker',
       'setResults',
       'setRezoom',
@@ -146,7 +146,7 @@ export default {
         this.setSelectedResult(selectedResult)
         this.setSelectedMarker(selectedResult)
         this.setIsErrorMsg(false)
-        this.setMessage('1 träffar')
+        this.setMsgKey('')
         this.setResults(results)
         this.setDetailView(true)
         this.setRezoom(true)
@@ -161,7 +161,7 @@ export default {
         this.$emit('search', this.search, this.searchCountry)
         this.isLoading = false
         this.entries = []
-        this.pushUrl(this.search)
+        // this.pushUrl(this.search)
       }
     },
     autoCompleteSearch() {
@@ -181,15 +181,16 @@ export default {
       }
       this.autoSearch = true
     },
-    pushUrl(name) {
-      const decodeUrl = decodeURIComponent(this.$route.fullPath)
-      if (decodeUrl !== `/search?place_name=${name}`) {
-        this.$router.push({
-          path: 'search',
-          query: { place_name: name },
-        })
-      }
-    },
+    // pushUrl(name) {
+    //   const locale = this.$i18n.locale
+    //   const decodeUrl = decodeURIComponent(this.$route.fullPath)
+    //   if (decodeUrl !== `/${locale}/search?place_name=${name}`) {
+    //     this.$router.push({
+    //       name: 'Search',
+    //       query: { place_name: name },
+    //     })
+    //   }
+    // },
     getAbbr(source) {
       switch (source) {
         case 'whosonfirst':
