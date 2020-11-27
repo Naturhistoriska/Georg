@@ -9,7 +9,12 @@
         id="backResultListLink"
         >{{ backtolist }}</a
       >
-      <div :role="[isErrorMsg ? 'alert' : 'status']" v-else id="message" :class="[isErrorMsg ? errorclass : msgclass]">
+      <div
+        :role="[isErrorMsg ? 'alert' : 'status']"
+        v-else
+        id="message"
+        :class="[isErrorMsg ? errorclass : msgclass]"
+      >
         {{ message }}
       </div>
       <v-spacer></v-spacer>
