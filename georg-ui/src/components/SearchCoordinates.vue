@@ -7,7 +7,7 @@
       dense
       hide-details
       v-model="coordinates"
-      placeholder="Sök plats"
+      :placeholder="$t('home.searchPlace')"
       append-icon="search"
       autofocus
       clearable

@@ -42,9 +42,10 @@ export default {
   props: ['currentLocale', 'dialogStatus'],
   data() {
     return {
-      selectedLocale: this.currentLocale,
+      // selectedLocale: this.currentLocale,
       // selectedLocale: Trans.currentLocale,
       theLocale: this.currentLocale,
+      localeChanged: false,
     }
   },
   // activated: {
@@ -61,18 +62,26 @@ export default {
       })
       return supportLocale
     },
-    // selectedLocale: {
-    //   set(selectedLocale) {
-    //     this.theLocale = selectedLocale
-    //   },
-    //   get() {
-    //     return this.theLocale
-    //   },
-    // },
+    selectedLocale: {
+      set(selectedLocale) {
+        console.log('set....')
+        this.theLocale = selectedLocale
+        // this.localeChanged = false
+      },
+      get() {
+        console.log('what is locale...', this.theLocale, this.currentLocale)
+        // this.theLocale = this.currentLocale
+        // if (this.localeChanged) {
+        //   return this.selectedLocale
+        // }
+        return this.currentLocale
+      },
+    },
   },
   methods: {
     switchLocale(value) {
       this.selectedLocale = value
+      this.localeChanged = true
     },
     closeDialog() {
       this.$emit('close-dialog', this.selectedLocale)
