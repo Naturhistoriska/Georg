@@ -39,7 +39,7 @@
           om tillgänglighet till digital offentlig service. Om du inte är nöjd
           med hur vi hanterar ditt påpekande om bristande innehåll kan du
           <a href="https://www.digg.se/tdosanmalan"
-            >anmäla till Myndighetn för digital förvatning</a
+            >anmäla till Myndigheten för digital förvaltning</a
           >
           och påtala det.
         </p>
