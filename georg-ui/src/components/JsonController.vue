@@ -36,7 +36,7 @@
         @keypress="addDinPlats"
         tabindex="0"
         role="button"
-        aria-label="Lägg till din plats"
+        :aria-label="$t('result.addDinplats')"
       >
         <v-icon left>mdi-map-marker-plus</v-icon>
         Din plats

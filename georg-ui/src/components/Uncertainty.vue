@@ -15,7 +15,7 @@
           v-for="tag in tags"
           :key="tag.label"
           role="button"
-          :aria-label="'Sätt osäkerhet till ' + tag.label"
+          :aria-label="$t('result.setUncertaintyTo', { label: tag.label })"
           @click="addAccuracyValue(tag.value)"
           @keypress="addAccuracyValue(tag.value)"
           >{{ tag.label }}</v-chip
@@ -41,7 +41,7 @@
             <v-btn
               @click="setUncertaintyValue"
               @keypress="setUncertaintyValue"
-              aria-label="Sätt osäkerhet"
+              :aria-label="$t('result.setUncertainty')"
               color="red darken-2"
               text
               :disabled="disableSetUncertaintyBtn"

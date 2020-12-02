@@ -30,7 +30,7 @@
           @focus="expand = true"
           @blur="expand = false"
           v-clipboard="value"
-          :aria-label="'Kopiera ' + value + ' till urklipp'"
+          :aria-label="$t('result.copy', { value: value })"
         >
           <BaseIcon v-bind:small="true">{{ copyIconName }}</BaseIcon>
         </v-btn>

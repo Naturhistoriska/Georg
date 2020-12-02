@@ -7,7 +7,7 @@
       />
       <ItemContent v-bind:title="$t('result.dataFromGbif')" />
       <BaseIconButton
-        aria-label="Visa information om datakällan"
+        :aria-label="$t('result.displayDatasource')"
         v-bind:iconName="iconToggleGbifData"
       />
     </v-list-item>
@@ -22,7 +22,7 @@
         <BaseIconButton
           v-bind:iconName="opennewicon"
           v-bind:href="datasetUrl"
-          aria-label="Öppna datasetet hos GBIF i ett nytt fönster"
+          :aria-label="$t('result.openGbifDataset')"
         />
       </v-list-item>
       <v-list-item :href="occurrenceUrl" target="_blank">
@@ -35,7 +35,7 @@
         <BaseIconButton
           v-bind:iconName="opennewicon"
           v-bind:href="occurrenceUrl"
-          aria-label="Öppna denna GBIF occurrence i ett nytt fönster"
+          :aria-label="$t('result.openGbif')"
         />
       </v-list-item>
     </div>

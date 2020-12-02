@@ -10,7 +10,7 @@
     <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn
-        aria-label="Stäng"
+        :aria-label="$t('common.close')"
         right
         color="blue darken-1"
         text

@@ -22,7 +22,7 @@
       </v-list-item-content>
       <v-card-actions>
         <v-btn
-          aria-label="Stäng"
+          :aria-label="$t('common.close')"
           right
           color="blue darken-1"
           text

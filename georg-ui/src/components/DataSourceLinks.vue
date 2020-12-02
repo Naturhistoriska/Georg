@@ -10,7 +10,7 @@
       <BaseIconButton
         v-bind:iconName="openNewIconName"
         v-bind:href="externallink"
-        aria-label="Öppna information om datakällan i ett nytt fönster"
+        :aria-label="$t('result.openDataSource')"
       />
     </v-list-item>
   </v-list>

@@ -56,7 +56,7 @@
 
     <v-app-bar app clipped-left color="blue darken-2" dark dense>
       <v-app-bar-nav-icon
-        aria-label="Open navigation menu"
+        :aria-label="$t('result.setUncertainty')"
         v-if="
           (this.$vuetify.breakpoint.xs && this.routeName === 'About') ||
             this.routeName === 'Contact' ||
