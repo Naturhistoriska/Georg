@@ -6,7 +6,7 @@
         v-bind:iconName="importIconName"
       />
       <ItemContent v-bind:title="dataFromSource" />
-      <span class="visuallyhidden"> (öppnas i ett nytt fönster)</span>
+      <span class="visuallyhidden"> ({{ $t('result.openNewWindow') }})</span>
       <BaseIconButton
         v-bind:iconName="openNewIconName"
         v-bind:href="externallink"

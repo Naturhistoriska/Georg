@@ -5,7 +5,7 @@
         v-bind:iconColor="redDarkenColor"
         v-bind:iconName="markerWithRadius"
       />
-      <ItemTitle>Osäkerhetsradie</ItemTitle>
+      <ItemTitle>{{ $t('result.uncertainty') }}</ItemTitle>
       <ItemAction />
     </v-list-item>
     <v-card class="ml-16" id="v-card-uncertainty" flat>
@@ -45,7 +45,7 @@
               color="red darken-2"
               text
               :disabled="disableSetUncertaintyBtn"
-              >Sätt osäkerhet</v-btn
+              >{{ $t('result.setUncertainty') }}</v-btn
             >
           </v-col>
         </v-row>

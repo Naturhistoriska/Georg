@@ -18,7 +18,7 @@
           v-bind:subtitle="occurrenceDataset"
           v-bind:title="datasetTitle"
         />
-        <span class="visuallyhidden"> (öppnas i ett nytt fönster)</span>
+        <span class="visuallyhidden"> ({{ $t('result.openNewWindow') }})</span>
         <BaseIconButton
           v-bind:iconName="opennewicon"
           v-bind:href="datasetUrl"
@@ -31,7 +31,7 @@
           v-bind:subtitle="occurrenceId"
           v-bind:title="selectedMarker.properties.addendum.gbif.occurrenceID"
         />
-        <span class="visuallyhidden"> (öppnas i ett nytt fönster)</span>
+        <span class="visuallyhidden"> ({{ $t('result.openNewWindow') }})</span>
         <BaseIconButton
           v-bind:iconName="opennewicon"
           v-bind:href="occurrenceUrl"
