@@ -29,7 +29,10 @@ export default {
       return layer === 'socken' ? this.$t('result.parish') : layer
     },
     title: function() {
-      const { addendum, name } = this.selectedMarker.properties
+      const { addendum, gid, name } = this.selectedMarker.properties
+      if (gid === 'newMarker') {
+        return this.$t('result.yourLocationText')
+      }
       return this.isGbif ? addendum.georg.locationDisplayLabel : name
     },
     latlng: function() {

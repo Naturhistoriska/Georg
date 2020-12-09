@@ -1,9 +1,9 @@
 <template>
   <v-list-item role="option" @keypress.prevent="onclick()">
     <v-list-item-content @click.prevent="onclick()">
-      <v-list-item-title class="red--text text--darken-2">{{
-        name
-      }}</v-list-item-title>
+      <v-list-item-title class="red--text text--darken-2"
+        >{{ $t('result.yourLocationText') }}
+      </v-list-item-title>
       <v-list-item-subtitle class="text--primary">
         {{ county }}
         {{ region }}
