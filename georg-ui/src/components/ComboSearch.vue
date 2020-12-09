@@ -146,7 +146,7 @@ export default {
         this.setSelectedResult(selectedResult)
         this.setSelectedMarker(selectedResult)
         this.setIsErrorMsg(false)
-        this.setMsgKey('')
+        this.setMsgKey('home.hit')
         this.setResults(results)
         this.setDetailView(true)
         this.setRezoom(true)
@@ -181,16 +181,16 @@ export default {
       }
       this.autoSearch = true
     },
-    // pushUrl(name) {
-    //   const locale = this.$i18n.locale
-    //   const decodeUrl = decodeURIComponent(this.$route.fullPath)
-    //   if (decodeUrl !== `/${locale}/search?place_name=${name}`) {
-    //     this.$router.push({
-    //       name: 'Search',
-    //       query: { place_name: name },
-    //     })
-    //   }
-    // },
+    pushUrl(name) {
+      const locale = this.$i18n.locale
+      const decodeUrl = decodeURIComponent(this.$route.fullPath)
+      if (decodeUrl !== `/${locale}/search?place_name=${name}`) {
+        this.$router.push({
+          name: 'Search',
+          query: { place_name: name },
+        })
+      }
+    },
     getAbbr(source) {
       switch (source) {
         case 'whosonfirst':
