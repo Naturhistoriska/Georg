@@ -76,6 +76,12 @@ export default {
           return this.$t('error.inValidCoordinates')
         }
       }
+      if (this.msgKey === 'newMarker') {
+        return this.$t('home.displyDinPlats')
+      }
+      if (this.msgKey === 'coordinatesSearch') {
+        return this.$t('result.hitsAndYourLocation')
+      }
       const numOfHits = this.results.length
       if (this.isAddressSearch) {
         return numOfHits === 0
@@ -86,7 +92,7 @@ export default {
         ? ''
         : numOfHits === 1
         ? this.$t(`${this.msgKey}`)
-        : `${numOfHits} ${this.$t(this.msgKey)}`
+        : `${numOfHits - 1} ${this.$t(this.msgKey)}`
     },
   },
   methods: {

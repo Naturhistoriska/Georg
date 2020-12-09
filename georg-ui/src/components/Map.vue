@@ -289,7 +289,7 @@ export default {
             this.setSelectedMarker(result)
           }
           if (this.results.length === 1) {
-            this.setMsgKey('home.displyDinPlats')
+            this.setMsgKey('newMarker')
             this.setIsErrorMsg(false)
           }
           this.setResults(this.results)

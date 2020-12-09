@@ -93,9 +93,6 @@ export default {
           ? this.searchCoordinates
           : this.searchText
     },
-    // openLanguageSetting: function() {
-    //   this.dialog = this.openLanguageSetting
-    // },
   },
   methods: {
     ...mapMutations([
@@ -154,8 +151,7 @@ export default {
           this.setSelectedResultId(selectedResultId)
           this.setSelectedResult(selectedResult)
           this.setSelectedMarker(selectedResult)
-          // this.setErrorMsgKey()
-          this.setMessages()
+          this.setMessages('address')
           this.setIsErrorMsg(false)
           this.setResults(this.results)
           this.setRezoom(this.results.length > 0)
@@ -202,7 +198,8 @@ export default {
               this.setSelectedMarker({})
               this.setDetailView(false)
             }
-            this.setMessages()
+            this.setMessages('coordinates')
+            // this.setMsgKey('result.hitsAndYourLocation')
             this.setResults(this.results)
             this.setIsErrorMsg(false)
             this.setRezoom(true)
@@ -214,10 +211,10 @@ export default {
           this.setSearchCoordinates(value)
         })
     },
-    setMessages() {
+    setMessages(typeSearch) {
       const numOfHits = this.results.length
       let messageKey
-      if (this.searchOption === 'address') {
+      if (typeSearch === 'address') {
         messageKey =
           numOfHits === 0
             ? 'home.noHits'
@@ -226,7 +223,11 @@ export default {
             : 'home.hits'
       } else {
         messageKey =
-          this.results.length > 1 ? 'home.dinplats' : 'home.displyDinPlats'
+          numOfHits === 1
+            ? 'home.displyDinPlats'
+            : numOfHits === 2
+            ? 'result.hitAndYourLocation'
+            : 'result.hitsAndYourLocation'
       }
       this.setMsgKey(messageKey)
     },

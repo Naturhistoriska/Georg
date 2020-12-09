@@ -102,7 +102,7 @@
     "inSweden": "in Sweden",
     "searchPlace": "Search place",
     "viaCoordinate": "via coordinate",
-    "displyDinPlats": "Display \"Din plats\"",
+    "displyDinPlats": "Display \"Your location\"",
     "dinplats": "hits to \"Din plats\""
   },
   "common": {
@@ -123,7 +123,9 @@
     "clipboard": "till urklipp",
     "copy": "Copy",
     "copyToClipboard": "Copied to Clipboard",
+    "copyJsonToClipboard": "The JSON has been copied to the clipboard",
     "copyValueToClipboard": "Copy {value} to clipboard",
+    "createDinplatsFromCoordinates": "Create your location from coordinates",
     "dataFromGbif": "Data from GBIF",
     "dataFromWof": "Data from Who's On First (WOF)",
     "dataFromOsm": "Data from OpenStreetMap (OSM)",
@@ -132,6 +134,8 @@
     "displayJson": "Display JSON",
     "displayDatasource": "Visa information om datakällan",
     "fromGbif": "Location from a GBIF source",
+    "hitAndYourLocation": "hit and \"Your location\"",
+    "hitsAndYourLocation": "hits and \"Your location\"",
     "noGeodetic": "The source has no geodetic date.",
     "openDataSource": "Öppna information om datakällan i ett nytt fönster",
     "openGbif": "Öppna denna GBIF occurrence i ett nytt fönster",
@@ -144,7 +148,8 @@
     "setUncertaintyTo": "Sätt osäkerhet till {label}",
     "sweref99": "SWEREF99 TM (north, east)",
     "uncertainty": "uncertainty",
-    "wgs84": "WGS84 has been adopted."
+    "wgs84": "WGS84 has been adopted.",
+    "yourLocationText": "Your location"
   },
   "error": {
     "inValidCoordinates": "TODO: change to English\n Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
