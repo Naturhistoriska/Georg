@@ -101,7 +101,7 @@
           </v-btn>
         </v-col>
 
-        <v-col class="pl-3" cols="2">
+        <v-col class="pl-3 text-right" cols="2">
           <v-btn color="grey darken-3" text @click="onLanguageClick()">
             <v-icon left dark> mdi-web </v-icon
             >{{ $t('footer.currentLanguage') }}
