@@ -31,7 +31,7 @@
               type="number"
               color="red darken-2"
               v-model="accuracyValue"
-              label="Radie ?"
+              :label="$t('result.radiusLabel')"
               min="0"
               max="10000000"
               @keyup.enter="setUncertaintyValue"

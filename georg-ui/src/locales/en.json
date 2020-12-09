@@ -145,7 +145,7 @@
     "setUncertaintyTo": "Set uncertainty to {label}",
     "sweref99": "SWEREF99 TM (north, east)",
     "uncertainty": "Uncertainty radius",
-    "radius": "radius",
+    "radiusLabel": "Radius ?",
     "wgs84": "WGS84 has been assumed.",
     "yourLocationText": "Your place",
     "createDinplatsFromCoordinates": "Creating your location from coordinates"

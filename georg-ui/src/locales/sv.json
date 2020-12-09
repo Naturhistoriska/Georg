@@ -147,7 +147,7 @@
     "sweref99": "SWEREF99 TM (nord, öst)",
     "uncertainty": "osäkerhetsradie",
     "wgs84": "WGS84 har antagits.",
-    "radius": "radie",
+    "radiusLabel": "Radie ?",
     "yourLocationText": "Din plats",
     "createDinplatsFromCoordinates": "Skapar din plats från koordinaterna"
   },
