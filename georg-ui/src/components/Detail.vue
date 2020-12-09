@@ -48,7 +48,7 @@
         <v-list-item-action></v-list-item-action>
         <v-alert outlined type="warning" color="grey darken-1" border="left">
           {{ $t('result.noGeodetic') }}
-          <br />{{ $t('result.wgs84') }}
+          {{ $t('result.wgs84') }}
         </v-alert>
       </v-list-item>
     </v-list>

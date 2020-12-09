@@ -13,7 +13,7 @@
         <h2>{{ $t('accessibility.what') }}</h2>
         <p>
           {{ $t('accessibility.whatText') }}
-          <a href="mailto: georg@nrm.se">georg@nrm.se</a>
+          <a href="mailto: georg@nrm.se">georg@nrm.se</a>.
         </p>
         <h2>{{ $t('accessibility.report') }}</h2>
         <p>
@@ -29,7 +29,7 @@
           <a href="https://www.digg.se/tdosanmalan">{{
             $t('accessibility.supervisionLink')
           }}</a>
-          {{ $t('accessibility.supervisionText1') }}
+         {{ $t('accessibility.supervisionText1') }}
         </p>
 
         <h2>{{ $t('accessibility.techInfo') }}</h2>
