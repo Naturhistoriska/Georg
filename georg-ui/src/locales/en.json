@@ -112,12 +112,13 @@
     "en": "English",
     "sv": "Svenska"
   },
-  "result": { 
+  "result": {
     "accordingwof": "according to Who's On First",
     "accordingsvh": "according to Virtual Herbarium",
     "accordingoa": "according to OpenAddresses",
     "accordingosm": "according to OpenStreetMap",
     "addDinplats": "Add to your location",
+    "createDinplatsFromCoordinates": "Creating your location from coordinates",
     "clipboard": "to clipboard",
     "copy": "Copy",
     "copyToClipboard": "Copied to Clipboard",
@@ -147,8 +148,7 @@
     "uncertainty": "Uncertainty radius",
     "radiusLabel": "Radius ?",
     "wgs84": "WGS84 has been assumed.",
-    "yourLocationText": "Your place",
-    "createDinplatsFromCoordinates": "Creating your location from coordinates"
+    "yourLocationText": "Your place"
   },
   "error": {
     "inValidCoordinates": "Coordinates must be formatted like one of these:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"

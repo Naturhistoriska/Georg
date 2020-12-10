@@ -69,7 +69,7 @@
     "supervision": "Tillsyn",
     "supervisionText": "Myndigheten för digital förvaltning har ansvaret för tillsyn för lagenom tillgänglighet till digital offentlig service. Om du inte är nöjd med hur vi hanterar ditt påpekande om bristande innehåll kan du",
     "supervisionLink": "anmäla till Myndighetn för digital förvatning",
-    "supervisionText1": "och påtala det.",
+    "supervisionText1": " och påtala det.",
     "techInfo": "Teknisk information om webbplatsens tillgänglighet",
     "techInfoText": "Den här webbplatsen är helt förenlig med lagen om tillgänglighet till digital offentlig service.",
     "contentNotAvailable": "Innehåll som inte är tillgängligt",
@@ -148,8 +148,7 @@
     "uncertainty": "osäkerhetsradie",
     "wgs84": "WGS84 har antagits.",
     "radiusLabel": "Radie ?",
-    "yourLocationText": "Din plats",
-    "createDinplatsFromCoordinates": "Skapar din plats från koordinaterna"
+    "yourLocationText": "Din plats"
   },
   "error": {
     "inValidCoordinates": "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
