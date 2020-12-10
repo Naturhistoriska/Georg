@@ -253,8 +253,8 @@ header {
   position: absolute;
   width: 1px;
 }
-.country-select .v-input__control .v-input__slot{
-    padding-right: 0px !important;
-    padding-left: 0px !important;
+.country-select .v-input__control .v-input__slot {
+  padding-right: 0px !important;
+  padding-left: 0px !important;
 }
 </style>
