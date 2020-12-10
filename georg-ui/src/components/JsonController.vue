@@ -4,6 +4,7 @@
       <v-chip
         color="grey darken-2"
         outlined
+        small
         class="mr-2"
         tabindex="0"
         @click.stop="dialog = !dialog"
@@ -12,12 +13,12 @@
         :aria-label="$t('result.displayJson')"
       >
         <!--Display dialog and snackbar should be fixed properly so that both works for clicking and pressing enter.-->
-        <v-icon left>mdi-code-tags</v-icon
-        >{{ $t('result.displayJson') }}
+        <v-icon small left>mdi-code-tags</v-icon>{{ $t('result.displayJson') }}
       </v-chip>
       <v-chip
         color="grey darken-2"
         outlined
+        small
         class="mr-2"
         tabindex="0"
         v-clipboard="jsonString"
@@ -26,20 +27,23 @@
         role="button"
         :aria-label="$t('result.copy')"
       >
-        <v-icon left>mdi-content-copy</v-icon>{{ $t('result.copy') }}
+        <v-icon small left smalll>mdi-content-copy</v-icon
+        >{{ $t('result.copy') }}
       </v-chip>
       <v-chip
         v-if="!isDinPlats"
         color="grey darken-2"
         outlined
+        small
         class="mr-2"
         @click="addDinPlats"
         @keypress="addDinPlats"
         tabindex="0"
         role="button"
+        smalll
         :aria-label="$t('result.addDinplats')"
       >
-        <v-icon left>mdi-map-marker-plus</v-icon>
+        <v-icon small left>mdi-map-marker-plus</v-icon>
         {{ $t('result.yourLocationText') }}
       </v-chip>
     </v-card-text>
