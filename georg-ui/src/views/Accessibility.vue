@@ -28,8 +28,8 @@
           {{ $t('accessibility.supervisionText') }}
           <a href="https://www.digg.se/tdosanmalan">{{
             $t('accessibility.supervisionLink')
-          }}</a>
-         {{ $t('accessibility.supervisionText1') }}
+          }}</a
+          >{{ $t('accessibility.supervisionText1') }}
         </p>
 
         <h2>{{ $t('accessibility.techInfo') }}</h2>
