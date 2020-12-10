@@ -146,7 +146,7 @@ export default {
         this.setSelectedResult(selectedResult)
         this.setSelectedMarker(selectedResult)
         this.setIsErrorMsg(false)
-        this.setMsgKey('home.hit')
+        this.setMsgKey('addressSearch')
         this.setResults(results)
         this.setDetailView(true)
         this.setRezoom(true)

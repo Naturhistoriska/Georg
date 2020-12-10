@@ -212,22 +212,22 @@ export default {
         })
     },
     setMessages(typeSearch) {
-      const numOfHits = this.results.length
+      // const numOfHits = this.results.length
       let messageKey
       if (typeSearch === 'address') {
-        messageKey =
-          numOfHits === 0
-            ? 'home.noHits'
-            : numOfHits === 1
-            ? "home.hit'"
-            : 'home.hits'
+        messageKey = 'addressSearch'
+        // numOfHits === 0
+        //   ? 'home.noHits'
+        //   : numOfHits === 1
+        //   ? "home.hit'"
+        //   : 'home.hits'
       } else {
-        messageKey =
-          numOfHits === 1
-            ? 'home.displyDinPlats'
-            : numOfHits === 2
-            ? 'result.hitAndYourLocation'
-            : 'result.hitsAndYourLocation'
+        messageKey = 'coordinatesSearch'
+        // numOfHits === 1
+        //   ? 'home.displyDinPlats'
+        //   : numOfHits === 2
+        //   ? 'result.hitAndYourLocation'
+        //   : 'result.hitsAndYourLocation'
       }
       this.setMsgKey(messageKey)
     },

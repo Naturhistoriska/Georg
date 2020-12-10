@@ -79,20 +79,25 @@ export default {
       if (this.msgKey === 'newMarker') {
         return this.$t('home.displyDinPlats')
       }
-      if (this.msgKey === 'coordinatesSearch') {
-        return this.$t('result.hitsAndYourLocation')
-      }
       const numOfHits = this.results.length
-      if (this.isAddressSearch) {
+      if (this.msgKey === 'coordinatesSearch') {
+        const resultCount = numOfHits - 1
         return numOfHits === 0
-          ? this.$t(`${this.msgKey}`)
-          : `${numOfHits} ${this.$t(this.msgKey)}`
+          ? ''
+          : numOfHits === 1
+          ? this.$t('home.displyDinPlats')
+          : numOfHits === 2
+          ? `${resultCount} ${this.$t('result.hitAndYourLocation')}`
+          : `${resultCount} ${this.$t('result.hitsAndYourLocation')}`
       }
-      return numOfHits === 0
-        ? ''
-        : numOfHits === 1
-        ? this.$t(`${this.msgKey}`)
-        : `${numOfHits - 1} ${this.$t(this.msgKey)}`
+      if (this.msgKey === 'addressSearch') {
+        return numOfHits === 0
+          ? this.$t('home.noHits')
+          : numOfHits === 1
+          ? `${numOfHits} ${this.$t('home.hit')}`
+          : `${numOfHits} ${this.$t('home.hits')}`
+      }
+      return ''
     },
   },
   methods: {
