@@ -23,7 +23,7 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import Detail from '../components/Detail'
+// import Detail from '../components/Detail'
 import Map from '../components/Map'
 import Message from '../components/Message'
 import Results from '../components/Results'
@@ -35,8 +35,7 @@ const service = new Service()
 export default {
   name: 'Home',
   components: {
-    Detail,
-    // LocaleSwitcher,
+    Detail: () => import('../components/Detail'),
     Map,
     Message,
     Results,
@@ -44,7 +43,6 @@ export default {
   },
   data() {
     return {
-      // dialog: false,
       mapHeight: 'height: 1500px',
       passInValue: null,
       results: [],
@@ -55,9 +53,6 @@ export default {
   created() {
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
-    // this.errorMsg =
-    //   "Koordinaterna måste anges på något av följande sätt:\n 57°46'7\" N 14°49'37\" E\n 57°46.113480' N 14°49.621740' E\n 57.768558 14.827029"
-
     const { place_name, coordinates } = this.$route.query
     if (place_name) {
       const country = this.$route.query.country
@@ -199,7 +194,6 @@ export default {
               this.setDetailView(false)
             }
             this.setMessages('coordinates')
-            // this.setMsgKey('result.hitsAndYourLocation')
             this.setResults(this.results)
             this.setIsErrorMsg(false)
             this.setRezoom(true)
@@ -216,18 +210,8 @@ export default {
       let messageKey
       if (typeSearch === 'address') {
         messageKey = 'addressSearch'
-        // numOfHits === 0
-        //   ? 'home.noHits'
-        //   : numOfHits === 1
-        //   ? "home.hit'"
-        //   : 'home.hits'
       } else {
         messageKey = 'coordinatesSearch'
-        // numOfHits === 1
-        //   ? 'home.displyDinPlats'
-        //   : numOfHits === 2
-        //   ? 'result.hitAndYourLocation'
-        //   : 'result.hitsAndYourLocation'
       }
       this.setMsgKey(messageKey)
     },
