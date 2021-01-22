@@ -1,12 +1,22 @@
 package se.nrm.georg.service.logic;
-  
-import java.io.Serializable;
+   
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;  
+import java.util.HashMap;
+import java.util.List; 
+import java.util.Map; 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject; 
 import lombok.extern.slf4j.Slf4j;   
+import org.apache.commons.csv.CSVRecord;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import se.nrm.georg.service.logic.coordinates.CoordinatesHelper;
+import se.nrm.georg.service.logic.csv.CSVParser; 
+import se.nrm.georg.service.logic.csv.util.CSVHeader;
 import se.nrm.georg.service.logic.json.CoordinatesJson;
-import se.nrm.georg.service.logic.services.ExternalServices;
+import se.nrm.georg.service.logic.pelias.PeliasLogic;
+import se.nrm.georg.service.logic.services.ExternalServices; 
 import se.nrm.georg.service.util.Util;
 
 /**
@@ -19,13 +29,17 @@ public class GeorgLogic implements Serializable {
   @Inject  
   private InitialProperties props;  
   @Inject
+  private CSVParser csv;
+  @Inject
+  private PeliasLogic pelias;
+  @Inject
   private ExternalServices service; 
   @Inject
-  private CoordinatesJson coordinates; 
-  
+  private CoordinatesJson coordinates;  
+   
   private String peliasPath;   
   private final String comma = ",";  
-  private final String emptySpace = " ";  
+  private final String emptySpace = " ";   
    
   public GeorgLogic() {
     
@@ -38,9 +52,28 @@ public class GeorgLogic implements Serializable {
   }
   
   @PostConstruct 
-  public void init() {
-    peliasPath = props.getPeliasPath();    
+  public void init() { 
+    peliasPath = props.getPeliasPath();   
   }
+ 
+  
+  public String processBatch(InputPart uploadFile) {  
+    List<CSVRecord> records;
+    Map<String, String> map = new HashMap(); 
+    try {
+      records = csv.readCsv(uploadFile.getBody(InputStream.class, null));  
+      records.stream()
+              .map(r -> r.toMap())
+              .forEach(m -> { 
+                map.put(m.get(CSVHeader.Id.name()), m.get(CSVHeader.SourceLocality.name()));
+              });
+       
+      return pelias.processBatch(map, peliasPath, csv);  
+    } catch (IOException ex) {
+      log.error((ex.getMessage()));
+    } 
+    return null;
+  } 
     
   public String searchAddress(String address, String source, String layer, 
           String countryCode, int size) {

@@ -45,6 +45,14 @@ public class CoordinatesHelper {
     return instance;
   }
   
+  public String buildDMS(double lat, double lng) {  
+    StringBuilder sb = new StringBuilder();
+    sb.append(buildDMS(lat, true));
+    sb.append(" ");
+    sb.append(buildDMS(lng, false)); 
+    return sb.toString(); 
+  }
+  
   public String buildDMS(double value, boolean isLat) { 
     
     double absValue = Math.abs(value);

@@ -14,9 +14,9 @@ public class Util {
   private final String autoComplete = "autocomplete?"; 
   private final String textQuery = "text="; 
   private final String sourceQry = "&sources=";
-  private final String layerQry = "&layers=";
-//  private final String coarseLayer = "&layers=coarse";
+  private final String layerQry = "&layers="; 
   private final String sizeQry = "&size=";
+  private final String sizeOne = "size=1";
   private final String reverseGeoCode = "reverse?";
   private final String pointLat = "point.lat=";
   private final String pointLon = "point.lon=";
@@ -61,8 +61,18 @@ public class Util {
 //    sb.append(boundaryCircle);
 //    sb.append(coarseLayer);
     return sb.toString().trim();
-  } 
-  
+  }
+
+  public String buildBatchUrl(String peliasPath) {
+    StringBuilder sb = new StringBuilder();
+    sb.append(peliasPath);
+    sb.append(search);
+    sb.append(sizeOne); 
+    sb.append(and);
+    sb.append(textQuery);
+    return sb.toString();
+  }
+
   private String buildSearchUrl(String peliasPath, String searchType, String text, 
           String sources, String layers, String countryCode, int size) {
     log.info("searchType : {}", searchType); 

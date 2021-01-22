@@ -2,17 +2,29 @@ package se.nrm.georg.service;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException; 
+import java.io.OutputStream;
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import lombok.extern.slf4j.Slf4j;
+import javax.ws.rs.QueryParam; 
+import javax.ws.rs.core.MediaType; 
+import javax.ws.rs.core.Response; 
+import javax.ws.rs.core.StreamingOutput;
+import lombok.extern.slf4j.Slf4j; 
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import se.nrm.georg.service.logic.GeorgLogic;
 import se.nrm.georg.service.logic.exceptions.ErrorMessageBuilder;
 
@@ -23,22 +35,23 @@ import se.nrm.georg.service.logic.exceptions.ErrorMessageBuilder;
 @Path("/")
 @Api(tags = {"georg"})
 @SwaggerDefinition(
-  info = @Info(
+        info = @Info(
                 title = "Georg API",
                 version = "1.0"
         ),
-  tags = {
+        tags = {
           @Tag(name = "georg", description = "Georeference tool")
         })
 @Produces(MediaType.APPLICATION_JSON)
 @Slf4j
 public class GeorgAPI {
 
+  private final String file = "file";
+
   @Inject
   private GeorgLogic logic;
   @Inject
   private ErrorMessageBuilder errorBuilder;
-
 
   @GET
   @Path("/geoCoding")
@@ -99,9 +112,102 @@ public class GeorgAPI {
 
     try {
       return Response.ok(logic.coordinatesSearch(coordinates)).build();
-    } catch(NumberFormatException ex) {
+    } catch (NumberFormatException ex) {
       log.info(ex.getMessage());
       return Response.ok(errorBuilder.buildInvalidCoordinatesMessage()).build();
+    }
+  }
+
+  @POST
+  @Path("/upload")
+  @ApiOperation(value = "Batch upload")
+  @ApiResponses(value = {
+    @ApiResponse(code = 200, message = "File uploaded")})
+  @Consumes(MediaType.MULTIPART_FORM_DATA)
+  @Produces(MediaType.APPLICATION_OCTET_STREAM)
+  public Response uploadFile(MultipartFormDataInput input) throws IOException {
+    log.info("upload");
+
+    InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
+    String filePath = logic.processBatch(uploadFile); 
+    log.info("file path... {}", filePath);  
+    File fileDownload = new File(filePath);
+    StreamingOutput stream = (OutputStream out) -> { 
+      try(FileInputStream inp = new FileInputStream(fileDownload)) {
+        byte[] buff = new byte[1024];
+        int len = 0;
+        while ((len = inp.read(buff)) >= 0) {
+          out.write(buff, 0, len);
+        }
+        out.flush();
+      } catch (Exception e) {
+        log.error(e.getMessage());
+      } finally {
+        log.info("Remove stream file: " + fileDownload);
+        fileDownload.delete();
+      } 
+    };
+    return Response.ok(stream).build();
+    
+    
+    
+    
+    
+    
+    
+//    String fileName = getFileName(uploadFile.getHeaders());
+//    String finalFileName = "/Users/idali/georg_batch/" + fileName;
+    
+   
+//    ResponseBuilder response = Response.ok((Object) fileDownload);
+//    response.header("Content-Disposition", "attachment;filename=batch_download.json");
+//    return response.build();
+
+
+//    InputStream inputStream = uploadFile.getBody(InputStream.class, null);
+//    byte[] bytes = IOUtils.toByteArray(inputStream);
+//    //constructs upload file path
+//    String fileName = getFileName(uploadFile.getHeaders());
+//    
+//
+//    writeFile(bytes, finalFileName);
+ 
+//    return Response.status(200)
+//            .entity("uploadFile is called, Uploaded file name : " + finalFileName).build();
+  }
+
+//  private String getFileName(MultivaluedMap<String, String> header) {
+//    log.info("getFileName : {}", header);
+//    log.info("filename : {}", header.get("filename"));
+//    String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
+//
+//    for (String filename : contentDisposition) {
+//      log.info("filename: {}", filename);
+//      if ((filename.trim().startsWith("filename"))) {
+//
+//        String[] name = filename.split("=");
+//
+//        String finalFileName = name[1].trim().replaceAll("\"", "");
+//        return finalFileName;
+//      }
+//    }
+//    return "test";
+//  }
+
+  //save to somewhere
+  private void writeFile(byte[] content, String filename) {
+
+    File newFile = new File(filename);
+    try {
+      if (!newFile.exists()) { 
+        newFile.createNewFile(); 
+      }
+      try (FileOutputStream fop = new FileOutputStream(newFile)) {
+        fop.write(content);
+        fop.flush();
+      }
+    } catch (IOException ex) {
+      log.error(ex.getMessage());
     }
 
   }
