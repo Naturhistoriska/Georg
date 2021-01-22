@@ -1,5 +1,7 @@
 /georg-service/target/
 
+/georg-api
+
 /georg-ui/dist
 /georg-ui/certs/*
 /georg-ui/node_modules
@@ -12,3 +14,4 @@ notes
 .DS_Store
 /georg-service/nbproject/
 /georg-ui/nbproject/private/
+/georg-api/target/
