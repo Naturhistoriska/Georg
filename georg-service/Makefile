@@ -3,9 +3,9 @@
 all: build
 
 build:
-	docker build -t georgnrm/georg-api:v1.0 .
+	docker build -t georgnrm/georg-api:v2.0 .
 
 
 # docker login
 release:
-	docker push georgnrm/georg-api:v1.0
+	docker push georgnrm/georg-api:v2.0
