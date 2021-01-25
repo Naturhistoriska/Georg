@@ -11,6 +11,7 @@ import org.json.JSONObject;
 import se.nrm.georg.service.logic.coordinates.CoordinatesHelper;
 import se.nrm.georg.service.logic.csv.CSVParser;
 import se.nrm.georg.service.logic.json.JsonParser;
+import se.nrm.georg.service.logic.json.UncertaintyParser;
 import se.nrm.georg.service.logic.services.ExternalServices;
 import se.nrm.georg.service.model.CSVBean;
 import se.nrm.georg.service.util.Util;
@@ -27,6 +28,9 @@ public class PeliasLogic {
   private JsonParser parser;  
   @Inject
   private ExternalServices service; 
+  @Inject
+  private UncertaintyParser uncertainty;
+  
   private final String noSearchResult = "No result";
   
   public String processBatch(Map<String, String> map, String peliasPath, CSVParser csv) {
@@ -43,13 +47,16 @@ public class PeliasLogic {
               JSONArray jsonArray = parser.getJsonArray(json, "features");
               if (jsonArray.length() > 0) {
                 JSONObject featureJson = jsonArray.getJSONObject(0);
-                String label = featureJson.getJSONObject("properties").getString("label");
+                JSONObject propertiesJson = featureJson.getJSONObject("properties");
+                String label = propertiesJson.getString("label");
                 JSONObject geometryJson = featureJson.getJSONObject("geometry");
                 JSONArray coordinates = parser.getJsonArray(geometryJson, "coordinates"); 
                 double doubleLng = coordinates.getBigDecimal(0).setScale(6, RoundingMode.HALF_UP).doubleValue();
                 double doubleLat = coordinates.getBigDecimal(1).setScale(6, RoundingMode.HALF_UP).doubleValue();    
+//                int uncertainty = propertiesJson.getJSONObject("addendum").getJSONObject("georg").getInt("coordinateUncertaintyInMeters");
+                
                 bean = new CSVBean(id, name, label, 
-                        CoordinatesHelper.getInstance().buildDMS(doubleLat, doubleLng)); 
+                        CoordinatesHelper.getInstance().buildDMS(doubleLat, doubleLng), uncertainty.getUncertainty(featureJson)); 
               } else {
                 bean = new CSVBean(id, name, noSearchResult); 
               }
