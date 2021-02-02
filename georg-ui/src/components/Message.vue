@@ -50,6 +50,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'batchData',
       'detailView',
       'displayResults',
       'isAddressSearch',
@@ -79,7 +80,11 @@ export default {
       if (this.msgKey === 'newMarker') {
         return this.$t('home.displyDinPlats')
       }
-      const numOfHits = this.results.length
+      const numOfHits =
+        this.msgKey === 'batch' ? this.batchData.length : this.results.length
+      if (this.msgKey === 'batch') {
+        return `${numOfHits} ${this.$t('batch.records')}`
+      }
       if (this.msgKey === 'coordinatesSearch') {
         const resultCount = numOfHits - 1
         return numOfHits === 0
