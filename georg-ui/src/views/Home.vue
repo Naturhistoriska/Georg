@@ -16,7 +16,7 @@
         v-else
       />
       <h2 v-if="results.length" class="visuallyhidden">Resultat</h2>
-      <Message />
+      <Message v-if="!isBatch" />
       <Results
         v-bind:height="resultsHeight"
         v-if="!detailView && displayResults && !isBatch"
@@ -52,7 +52,7 @@ export default {
   },
   data() {
     return {
-      data: [],
+      // data: [],
       checkbox: true,
       mapHeight: 'height: 1500px',
       screenWidth: 'width: 400px',
@@ -243,17 +243,27 @@ export default {
 
     upload(file) {
       service
-        .upload(file, event => {
-          this.progress = Math.round((100 * event.loaded) / event.total)
-        })
+        .upload(file)
         .then(response => {
-          this.data = response.data
-          this.setBatchData(this.data)
-          this.setIsErrorMsg(false)
-          this.setMsgKey('batch')
+          this.setIsErrorMsg(response.error)
+          console.log('is error....', response)
+          if (response.error) {
+            const { msgKey } = response.error
+            this.setMsgKey(msgKey)
+          } else {
+            this.setBatchData(response)
+          }
+
+          // this.setIsErrorMsg(false)
+          // this.setMsgKey('batch')
         })
+        // .then(response => {
+        //   this.data = response.data
+        //   this.setBatchData(this.data)
+        //   this.setIsErrorMsg(false)
+        //   this.setMsgKey('batch')
+        // })
         .catch(() => {
-          this.progress = 0
           this.message = 'Could not upload the file!'
           this.currentFile = undefined
         })

@@ -45,24 +45,23 @@ export default class Service {
     return null
   }
 
-  async upload(file, onUploadProgress) {
+  async upload(file) {
     console.log('service upload')
     const url = `${baseUrl}upload?type=json`
     let formData = new FormData()
     formData.append('file', file)
-    // const response = await axios.post(url, formData, {
+    const response = await axios.post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    console.log('service.response : ', response.data)
+    return response.data
+    // return axios.post(url, formData, {
     //   headers: {
     //     'Content-Type': 'multipart/form-data',
     //   },
     //   onUploadProgress,
     // })
-    // console.log('service.response : ', response.data)
-    // return response.data
-    return axios.post(url, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      onUploadProgress,
-    })
   }
 }

@@ -1,15 +1,61 @@
 <template>
-  <div>
+  <div class="mt-n5 ml-n4 pa-0">
     <h3 class="text--darken-2 v-card__title ">
       {{ $t('batch.batch') }}
     </h3>
-    <v-card-subtitle>
-      {{ $t('batch.batchText') }}
-    </v-card-subtitle>
-    <v-row class="pl-6">
+    <h5 class="v-card__subtitle">{{ $t('batch.batchText') }}</h5>
+    <v-sheet class="ml-3 mt-n2 pa-0" max-width="380">
+      <v-row class="ma-0 pa-0">
+        <v-file-input
+          accept="csv"
+          dense
+          loader-height="3"
+          :label="$t('batch.fileInput')"
+          prepend-inner-icon="attach_file"
+          prepend-icon=""
+          show-size
+          :loading="loading"
+          @change="upload"
+          @click="onClick"
+          @click:clear="clear"
+        ></v-file-input>
+        <ActionIconButton
+          v-bind:iconName="questionIcon"
+          :aria-label="$t('batch.batchHelpMarker')"
+          @on-icon-click="openCloseHelpText"
+        />
+      </v-row>
+      <v-row class="ml-0 mr-0 mt-n2 pa-0" v-if="showHelpText">
+        <v-list-item style="background: #FCF9D4;">
+          <v-list-item-content>
+            <v-list-item-subtitle
+              v-html="$t('batch.batchHelpText')"
+            ></v-list-item-subtitle>
+            <router-link to="/sv/om#aboutBatch" class="routerlink">{{
+              $t('batch.batchHelpLink')
+            }}</router-link>
+          </v-list-item-content>
+          <v-list-item-action @click.prevent="!showHelpText" class="ma-0 pa-0 ">
+            <ActionIconButton
+              v-bind:iconName="this.closeIcon"
+              :aria-label="$t('batch.batchCloseHelp')"
+              @on-icon-click="openCloseHelpText"
+            />
+          </v-list-item-action>
+        </v-list-item>
+      </v-row>
+      <ResultHeader
+        v-bind:isBatch="true"
+        @display-results="handleDisplayResult"
+        v-if="currentFile && !loading"
+      />
+    </v-sheet>
+
+    <!-- <v-row class="ml-4 mt-n1 pa-0">
       <v-file-input
         accept="csv"
         dense
+        loader-height="3"
         :label="$t('batch.fileInput')"
         prepend-inner-icon="attach_file"
         prepend-icon=""
@@ -24,8 +70,8 @@
         :aria-label="$t('batch.batchHelpMarker')"
         @on-icon-click="openCloseHelpText"
       />
-    </v-row>
-    <v-row class="pl-4 pr-3" v-if="showHelpText">
+    </v-row> -->
+    <!-- <v-row class="ml-2 mr-0 mt-n2 pa-0" v-if="showHelpText">
       <v-list-item style="background: #FCF9D4;" class="pa-2">
         <v-list-item-content>
           <v-list-item-subtitle
@@ -43,10 +89,16 @@
           />
         </v-list-item-action>
       </v-list-item>
-    </v-row>
-    <v-row v-if="currentFile && !loading">
-      <BatchData @on-table-click="expandTable" @on-list-click="collapseTable" />
-    </v-row>
+    </v-row> -->
+    <div v-if="displayResults">
+      <v-divider class="mt-2"></v-divider>
+      <v-row class="ml-2 mr-0 mt-n2 pa-0">
+        <BatchData
+          @on-table-click="expandTable"
+          @on-list-click="collapseTable"
+        />
+      </v-row>
+    </div>
   </div>
 </template>
 
@@ -55,16 +107,16 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Batch',
   components: {
-    BatchData: () => import('../components/BatchData'),
     ActionIconButton: () => import('./baseComponents/ActionIconButton'),
+    BatchData: () => import('../components/BatchData'),
+    ResultHeader: () => import('../components/ResultHeader'),
   },
   data() {
     return {
-      loading: false,
       currentFile: undefined,
-      // progress: 0,
+      displayResults: false,
       fileInfos: [],
-      // data: null,
+      loading: false,
       showHelpText: false,
     }
   },
@@ -75,21 +127,28 @@ export default {
   watch: {
     batchData() {
       this.loading = false
+      this.displayResults = this.currentFile ? true : false
+    },
+    isErrorMsg() {
+      this.loading = false
     },
   },
   computed: {
-    ...mapGetters(['batchData']),
+    ...mapGetters(['batchData', 'isErrorMsg']),
   },
   methods: {
+    handleDisplayResult() {
+      this.displayResults = !this.displayResults
+    },
     expandTable() {
       this.$emit('expand-table')
     },
     collapseTable() {
-      console.log('clapsTable', screen.width + 'px')
       this.$emit('collapse-table')
     },
     clear() {
-      // this.loading = false
+      this.displayResults = false
+      console.log('clean...', this.displayResults)
       this.$emit('clear-file')
     },
     onClick() {
