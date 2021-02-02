@@ -5,6 +5,7 @@ const gbifApi = process.env.VUE_APP_GBIF_API
 
 export default class Service {
   async fetchAddressResults(address, countryCode) {
+    // const url = `${baseUrl}geoCoding?address=${address}&countryCode=${countryCode}`
     const url = `${baseUrl}geoCoding?address=${address}&countryCode=${countryCode}`
     const response = await axios.get(url)
     return response.data
@@ -38,5 +39,30 @@ export default class Service {
     const url = `${gbifApi}occurrence/search?datesetKey=${dataset}&occurrenceID=${occurrenceId}`
     const response = await axios.get(url)
     return response.data
+  }
+
+  async getFiles() {
+    return null
+  }
+
+  async upload(file, onUploadProgress) {
+    console.log('service upload')
+    const url = `${baseUrl}upload?type=json`
+    let formData = new FormData()
+    formData.append('file', file)
+    // const response = await axios.post(url, formData, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data',
+    //   },
+    //   onUploadProgress,
+    // })
+    // console.log('service.response : ', response.data)
+    // return response.data
+    return axios.post(url, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      onUploadProgress,
+    })
   }
 }
