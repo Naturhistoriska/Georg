@@ -1,5 +1,5 @@
 package se.nrm.georg.service.model;
-
+   
 /**
  *
  * @author idali
@@ -9,11 +9,12 @@ public class CSVBean {
   private String id;
   private String sourceLocality;
   private String suggestedLocality;
+  private double lat;
+  private double lng;
   private String latLngDMS;
-  private int uncertainty;
-  
-  public CSVBean() {
-    
+  private int uncertainty; 
+   
+  public CSVBean() { 
   }
   
   public CSVBean(String id, String sourceLocality) {
@@ -26,23 +27,19 @@ public class CSVBean {
     this.sourceLocality = sourceLocality;
     this.suggestedLocality = suggestedLocality; 
   }
-  
-  public CSVBean(String id, String sourceLocality, String suggestedLocality, String latLngDMS) {
-    this.id = id;
-    this.sourceLocality = sourceLocality;
-    this.suggestedLocality = suggestedLocality;
-    this.latLngDMS = latLngDMS; 
-  }
+ 
   
   public CSVBean(String id, String sourceLocality, String suggestedLocality, 
-          String latLngDMS, int uncertainty) {
+          double lat, double lng, String latLngDMS, int uncertainty) {
     this.id = id;
     this.sourceLocality = sourceLocality;
     this.suggestedLocality = suggestedLocality;
+    this.lat = lat;
+    this.lng = lng;
     this.latLngDMS = latLngDMS;
-    this.uncertainty = uncertainty;
+    this.uncertainty = uncertainty; 
   }
-
+ 
   public String getId() {
     return id;
   }
@@ -67,12 +64,8 @@ public class CSVBean {
     this.suggestedLocality = suggestedLocality;
   }
 
-  public String getLatLngDMS() {
+  public String getLatLngDMS() {  
     return latLngDMS;
-  }
-
-  public void setLatLngDMS(String latLngDMS) {
-    this.latLngDMS = latLngDMS;
   }
 
   public int getUncertainty() {
@@ -81,5 +74,13 @@ public class CSVBean {
 
   public void setUncertainty(int uncertainty) {
     this.uncertainty = uncertainty;
+  } 
+
+  public double getLat() {
+    return lat;
+  } 
+  
+  public double getLng() {
+    return lng;
   } 
 }

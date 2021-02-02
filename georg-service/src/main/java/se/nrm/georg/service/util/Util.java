@@ -1,5 +1,7 @@
 package se.nrm.georg.service.util;
  
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -102,4 +104,10 @@ public class Util {
     }
     return sb.toString().trim();
   } 
+  
+  
+  
+  public double convertBigDecimalToDouble(BigDecimal n) {
+    return n.setScale(6, RoundingMode.HALF_UP).doubleValue();
+  }
 }

@@ -125,11 +125,13 @@ public class GeorgAPI {
     @ApiResponse(code = 200, message = "File uploaded")})
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public Response uploadFile(MultipartFormDataInput input) throws IOException {
-    log.info("upload");
+  public Response uploadFile(MultipartFormDataInput input, @QueryParam("type") String returnType) throws IOException {
+    log.info("upload : {}", returnType);
 
     InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
-    String filePath = logic.processBatch(uploadFile); 
+    String filePath = logic.processBatch(uploadFile, returnType); 
+    
+    
     log.info("file path... {}", filePath);  
     File fileDownload = new File(filePath);
     StreamingOutput stream = (OutputStream out) -> { 
@@ -147,52 +149,10 @@ public class GeorgAPI {
         fileDownload.delete();
       } 
     };
-    return Response.ok(stream).build();
-    
-    
-    
-    
-    
-    
-    
-//    String fileName = getFileName(uploadFile.getHeaders());
-//    String finalFileName = "/Users/idali/georg_batch/" + fileName;
-    
-   
-//    ResponseBuilder response = Response.ok((Object) fileDownload);
-//    response.header("Content-Disposition", "attachment;filename=batch_download.json");
-//    return response.build();
-
-
-//    InputStream inputStream = uploadFile.getBody(InputStream.class, null);
-//    byte[] bytes = IOUtils.toByteArray(inputStream);
-//    //constructs upload file path
-//    String fileName = getFileName(uploadFile.getHeaders());
-//    
-//
-//    writeFile(bytes, finalFileName);
- 
-//    return Response.status(200)
-//            .entity("uploadFile is called, Uploaded file name : " + finalFileName).build();
+    return Response.ok(stream).build(); 
   }
 
-//  private String getFileName(MultivaluedMap<String, String> header) {
-//    log.info("getFileName : {}", header);
-//    log.info("filename : {}", header.get("filename"));
-//    String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
-//
-//    for (String filename : contentDisposition) {
-//      log.info("filename: {}", filename);
-//      if ((filename.trim().startsWith("filename"))) {
-//
-//        String[] name = filename.split("=");
-//
-//        String finalFileName = name[1].trim().replaceAll("\"", "");
-//        return finalFileName;
-//      }
-//    }
-//    return "test";
-//  }
+ 
 
   //save to somewhere
   private void writeFile(byte[] content, String filename) {

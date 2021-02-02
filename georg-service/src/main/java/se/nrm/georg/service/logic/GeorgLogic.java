@@ -14,9 +14,11 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import se.nrm.georg.service.logic.coordinates.CoordinatesHelper;
 import se.nrm.georg.service.logic.csv.CSVParser; 
 import se.nrm.georg.service.logic.csv.util.CSVHeader;
+import se.nrm.georg.service.logic.file.FileHandler;
 import se.nrm.georg.service.logic.json.CoordinatesJson;
 import se.nrm.georg.service.logic.pelias.PeliasLogic;
 import se.nrm.georg.service.logic.services.ExternalServices; 
+import se.nrm.georg.service.model.CSVBean;
 import se.nrm.georg.service.util.Util;
 
 /**
@@ -28,8 +30,11 @@ public class GeorgLogic implements Serializable {
   
   @Inject  
   private InitialProperties props;  
-  @Inject
-  private CSVParser csv;
+//  @Inject
+//  private CSVParser csv;
+  
+  @Inject 
+  private FileHandler fileHandler;
   @Inject
   private PeliasLogic pelias;
   @Inject
@@ -57,18 +62,18 @@ public class GeorgLogic implements Serializable {
   }
  
   
-  public String processBatch(InputPart uploadFile) {  
+  public String processBatch(InputPart uploadFile, String type) {  
     List<CSVRecord> records;
     Map<String, String> map = new HashMap(); 
     try {
-      records = csv.readCsv(uploadFile.getBody(InputStream.class, null));  
+      records = fileHandler.readCsv(uploadFile.getBody(InputStream.class, null));  
       records.stream()
               .map(r -> r.toMap())
               .forEach(m -> { 
                 map.put(m.get(CSVHeader.Id.name()), m.get(CSVHeader.SourceLocality.name()));
-              });
-       
-      return pelias.processBatch(map, peliasPath, csv);  
+              }); 
+      List<CSVBean> beans = pelias.processBatch(map, peliasPath); 
+      return fileHandler.createFile(beans, type); 
     } catch (IOException ex) {
       log.error((ex.getMessage()));
     } 
