@@ -1,19 +1,20 @@
 <template v-model="batch">
   <v-data-table
-    :headers="currentHeader"
-    :items="batchData"
-    :single-expand="singleExpand"
-    :show-expand="showExpand"
-    :loading="loading"
     :footer-props="{
       itemsPerPageText: '',
       itemsPerPageOptions: [],
     }"
-    dense
+    :headers="currentHeader"
+    :items="batchData"
+    :loading="loading"
+    :single-expand="singleExpand"
     :single-select="singleSelect"
-    show-select
+    :show-expand="showExpand"
+    class="mt-5"
+    dense
     hide-default-header
-    class="ma-0 pa-0"
+    mobile-breakpoint="0"
+    show-select
     v-model="selected"
     @current-items="currentData"
   >
@@ -67,7 +68,6 @@
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'BatchData',
-  props: ['height'],
   data() {
     return {
       checked: false,
