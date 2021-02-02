@@ -61,6 +61,14 @@ const routes = [
         },
       },
       {
+        path: 'batch',
+        name: 'Batch',
+        component: load('Home'),
+        meta: {
+          title: 'Batch | Georg',
+        },
+      },
+      {
         path: 'kontakt',
         name: 'Kontakt',
         component: load('Contact'),
@@ -130,6 +138,44 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes,
+  // scrollBehavior: (to, from, savedPosition) => {
+  //   if (to.hash) {
+  //     Vue.nextTick(() => {
+  //       document.getElementById(to.hash.substring(1)).scrollIntoView()
+  //     })
+  //     //Does not work but it's the vue way
+  //     return { selector: to.hash }
+  //   }
+
+  //   if (savedPosition) {
+  //     //Did not test this but maybe it also does not work
+  //     return savedPosition
+  //   }
+
+  //   document.getElementById('app').scrollIntoView()
+  //   //Does not work but it's the vue way
+  //   return { x: 0, y: 0 }
+  // },
+  // scrollBehavior: (to, from, savedPosition) => {
+  //   console.log('test.....')
+  //   // This is the workaround
+  //   if (to.name === 'about' && from.name === 'about') {
+  //     return savedPosition || { x: 0, y: 0 }
+  //   }
+
+  //   if (to.name.startsWith('products') && from.name.startsWith('products')) {
+  //     return null
+  //   }
+
+  //   return savedPosition || { x: 0, y: 0 }
+  // },
+  scrollBehavior: function(to) {
+    if (to.hash) {
+      return {
+        selector: to.hash,
+      }
+    }
+  },
 })
 
 export default router
