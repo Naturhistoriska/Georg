@@ -76,6 +76,20 @@
       <v-toolbar-title class="title">
         <v-tabs color="white" right background-color="blue darken-2" optional>
           <v-tab
+            id="searchLink"
+            key="search"
+            class="white--text "
+            :to="$i18nRoute({ name: 'Home' })"
+            >{{ $t('menu.search') }}
+          </v-tab>
+          <v-tab
+            id="batchLink"
+            key="batch"
+            class="white--text "
+            :to="$i18nRoute({ name: 'Batch' })"
+            >{{ $t('menu.batch') }}
+          </v-tab>
+          <v-tab
             id="aboutLink"
             key="about"
             class="white--text "
@@ -133,7 +147,7 @@ export default {
     $route(to) {
       document.title = to.meta.title || 'Georg'
       const { name } = to
-      this.drawer = name !== 'Home' && name !== 'Search'
+      this.drawer = name !== 'Home' && name !== 'Search' && name != 'Batch'
       this.routeName = name
     },
   },

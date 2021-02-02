@@ -186,6 +186,7 @@ export default {
     ...mapGetters([
       'accuracy',
       'addDinPlats',
+      'currentBatch',
       'detailView',
       'reBuildMarker',
       'results',
@@ -221,6 +222,9 @@ export default {
           this.addUnertainties()
         }
       })
+    },
+    currentBatch() {
+      this.buildBatchMarker()
     },
     addDinPlats: function() {
       if (this.addDinPlats) {
@@ -315,6 +319,21 @@ export default {
     highlightMarker() {
       this.buildMarkers()
       this.addUnertainties()
+    },
+
+    buildBatchMarker() {
+      this.resetLayerGroup()
+      this.currentBatch.forEach(result => {
+        const { id, lat, lng } = result
+        const marker = L.marker([lat, lng], {
+          icon: MAP_ICONS.greyIcon,
+        }).bindTooltip(id, {
+          permanent: true,
+          direction: 'right',
+          className: 'leaflet-tooltip-own',
+        })
+        marker.addTo(this.layerGroup)
+      })
     },
 
     buildMarkers() {
@@ -623,4 +642,20 @@ export default {
 .leaflet-popup-content {
   margin: 19px !important;
 }
+.leaflet-tooltip-own {
+  font-size: 8px;
+  padding: 2px;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  pointer-events: none;
+}
+/* .leaflet-tooltip-left.myCSSClass::before {
+  border-left-color: cyan;
+}
+.leaflet-tooltip-right.myCSSClass::before {
+  border-right-color: cyan;
+} */
 </style>

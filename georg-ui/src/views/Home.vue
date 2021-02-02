@@ -1,17 +1,25 @@
 <template>
   <div id="container" class="container container--fluid">
-    <v-card id="navi" :class="{ 'card-sm': $vuetify.breakpoint.smAndUp }">
+    <v-card id="navi" :style="screenWidth">
+      <Batch
+        v-if="isBatch"
+        @upload="upload"
+        @expand-table="expandTable"
+        @collapse-table="collapseTable"
+        @clear-file="removeFile"
+      />
       <Search
         v-bind:passInValue="passInValue"
         @clear-search="clear"
         @search-address="searchAddress"
         @search-coordinates="searchCoors"
+        v-else
       />
       <h2 v-if="results.length" class="visuallyhidden">Resultat</h2>
       <Message />
       <Results
         v-bind:height="resultsHeight"
-        v-if="!detailView && displayResults"
+        v-if="!detailView && displayResults && !isBatch"
       />
     </v-card>
     <Detail v-if="detailView && displayResults" v-bind:height="resultsHeight" />
@@ -35,6 +43,7 @@ const service = new Service()
 export default {
   name: 'Home',
   components: {
+    Batch: () => import('../components/Batch'),
     Detail: () => import('../components/Detail'),
     Map,
     Message,
@@ -43,7 +52,10 @@ export default {
   },
   data() {
     return {
+      data: [],
+      checkbox: true,
       mapHeight: 'height: 1500px',
+      screenWidth: 'width: 400px',
       passInValue: null,
       results: [],
       resultsHeight: 'height: 1400px',
@@ -80,8 +92,16 @@ export default {
       'searchText',
       'displayResults',
     ]),
+    isBatch() {
+      const path = this.$route.fullPath
+      return path.includes('batch')
+    },
   },
   watch: {
+    // $route(to) {
+    //   const { name } = to
+    //   console.log('name...', name)
+    // },
     searchOption: function() {
       this.passInValue =
         this.searchOption === 'address'
@@ -91,6 +111,8 @@ export default {
   },
   methods: {
     ...mapMutations([
+      'setBatchData',
+      'setCurrentBatch',
       'setDetailView',
       'setHovedResultId',
       'setIsErrorMsg',
@@ -106,6 +128,17 @@ export default {
       'setSearchCoordinates',
       'setSearchText',
     ]),
+    expandTable() {
+      this.screenWidth = `width: ${screen.width}px`
+    },
+    collapseTable() {
+      this.screenWidth = 'width: 400px'
+    },
+    removeFile() {
+      this.setMsgKey('')
+      this.setBatchData([])
+      this.setCurrentBatch([])
+    },
     clear() {
       this.setDetailView(false)
       this.setHovedResultId('')
@@ -148,6 +181,7 @@ export default {
           this.setSelectedMarker(selectedResult)
           this.setMessages('address')
           this.setIsErrorMsg(false)
+          // this.setMessages('addressSearch', false)
           this.setResults(this.results)
           this.setRezoom(this.results.length > 0)
           this.setReBuildMarker(true)
@@ -158,7 +192,6 @@ export default {
           this.setSearchOption('address')
         })
     },
-
     searchCoors(value) {
       this.results = []
       service
@@ -173,6 +206,7 @@ export default {
             this.setSelectedResult({})
             this.setIsErrorMsg(true)
             this.setMsgKey(msgKey)
+            // this.setMessages(msgKey, true)
             this.setRezoom(false)
           } else {
             let theResults = response.features
@@ -193,9 +227,10 @@ export default {
               this.setSelectedMarker({})
               this.setDetailView(false)
             }
-            this.setMessages('coordinates')
+            // this.setMessages('coordinatesSearch', false)
             this.setResults(this.results)
             this.setIsErrorMsg(false)
+            this.setMessages('coordinates')
             this.setRezoom(true)
           }
         })
@@ -203,6 +238,24 @@ export default {
         .finally(() => {
           this.setSearchOption('coordinates')
           this.setSearchCoordinates(value)
+        })
+    },
+
+    upload(file) {
+      service
+        .upload(file, event => {
+          this.progress = Math.round((100 * event.loaded) / event.total)
+        })
+        .then(response => {
+          this.data = response.data
+          this.setBatchData(this.data)
+          this.setIsErrorMsg(false)
+          this.setMsgKey('batch')
+        })
+        .catch(() => {
+          this.progress = 0
+          this.message = 'Could not upload the file!'
+          this.currentFile = undefined
         })
     },
     setMessages(typeSearch) {
@@ -215,6 +268,20 @@ export default {
       }
       this.setMsgKey(messageKey)
     },
+    // setMessages(typeSearch) {
+    //   // this.setMessages(msg)
+    //   // this.setIsErrorMsg(isError)
+    //   const messageKey =
+    //     typeSearch === 'address' ? 'addressSearch' : 'coordinatesSearch'
+    //   this.setMsgKey(messageKey)
+    // },
+    // setMessages(msg, isError) {
+    //   this.setMessages(msg)
+    //   this.setIsErrorMsg(isError)
+    //   // const messageKey =
+    //   //   typeSearch === 'address' ? 'addressSearch' : 'coordinatesSearch'
+    //   // this.setMsgKey(messageKey)
+    // },
   },
 }
 </script>
