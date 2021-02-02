@@ -86,7 +86,7 @@ export default {
     },
   },
   methods: {
-    openOrCloseGbifData() {
+    openOrCloseGbifData(event) {
       event.preventDefault()
       this.displayGbifData = !this.displayGbifData
       this.iconToggleGbifData = this.displayGbifData
