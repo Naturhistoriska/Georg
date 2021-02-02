@@ -3,7 +3,9 @@
     "home": "Georg",
     "about": "About Georg",
     "accessibility": "Accessibility",
-    "openNavigationMenu": "Open navigation menu"
+    "batch": "Batch",
+    "openNavigationMenu": "Open navigation menu",
+    "search": "Find place"
   },
   "about": {
     "about":"About Georg",
@@ -88,7 +90,25 @@
     "nrm": "Swedish Museum of Natural History",
     "currentLanguage": "ENGLISH"
   },
- "home": {
+  "batch": {
+    "batch": "Batch",
+    "batchText": "Georeference several specimens from a file",
+    "fileInput": "File input",
+    "batchHelpText": "<b>Upload a file in CSV-format</b> and get suggestions of matching locations which you can edit before downloading.",
+    "batchHelpLink": "Read more about up - and downloading of CSV-files in Georg.",
+    "batchHelpMarker": "Batch upload help",
+    "batchCloseHelp": "Close",
+    "sourceInput": "Source input",
+    "source": "<b>Source input:</b> {source}",
+    "noResult": "No result",
+    "records": "Records",
+    "result": "<b>Result:</b> {label}; {lat}, {lng} lat, lng WGS84 DD; {uncertainty} km uncertainty",
+    "suggestedLocality": "Suggested locality",
+    "coordinatesDMS": "Coordinates (WGS84 DMS)",
+    "uncertainty": "Uncertainty radius (m)"
+  },
+  "home": {
+    "chooseArea": "Select area",
     "backToReslut": "Back to result list",
     "backToResluts": "Back to result list",
     "displyDinPlats": "Display \"Your location\"",

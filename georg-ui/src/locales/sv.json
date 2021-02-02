@@ -3,7 +3,9 @@
     "home": "Georg",
     "about": "Om Georg",
     "accessibility": "Tillgänglighetsredogörelse",
-    "openNavigationMenu": "Open navigation menu"
+    "batch": "Batch",
+    "openNavigationMenu": "Open navigation menu",
+    "search": "Hitta plats"
   } ,
   "about": {
     "about":"Om Georg",
@@ -88,7 +90,25 @@
     "nrm": "Naturhistoriska riksmuseet",
     "currentLanguage": "SVENSKA"
   },
+  "batch": {
+    "batch": "Batch",
+    "batchText": "Georeference several specimens from a file",
+    "fileInput": "Filinmatning",
+    "batchHelpText": "<b>Ladda upp en fil i CSV-format</b> och få förslag på matchande platser som du kan redigera innan du laddar ner.",
+    "batchHelpLink": "Läs mer om upp - och nedladdning av CSV-filer i Georg.",
+    "batchHelpMarker": "Batch upload help",
+    "batchCloseHelp": "Stänga",
+    "sourceInput": "Källinmatning",
+    "source": "<b>Källinmatning:</b> {source}",
+    "noResult": "Inget resultat",
+    "records": "Records",
+    "result": "<b>Resultat:</b> {label}; {lat}, {lng} lat, lng WGS84 DD; {uncertainty} km osäkerhet",
+    "suggestedLocality": "Föreslagen lokalitet",
+    "coordinatesDMS": "Koordinater (WGS84 DMS)",
+    "uncertainty": "Osäkerhetsradie (m)"
+  },
   "home": {
+    "chooseArea": "Välj område",
     "backToReslut": "Till träfflistan",
     "backToResluts": "Tillbaka till listan",
     "displyDinPlats": "Visar \"Din plats\"",
