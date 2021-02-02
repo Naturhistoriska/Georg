@@ -1,6 +1,8 @@
 const state = {
   accuracy: -1,
   addDinPlats: false,
+  batchData: [],
+  currentBatch: [],
   displayResults: true,
   hoveredResultId: '',
   isAddressSearch: true,
@@ -23,6 +25,8 @@ const state = {
 const getters = {
   accuracy: state => state.accuracy,
   addDinPlats: state => state.addDinPlats,
+  batchData: state => state.batchData,
+  currentBatch: state => state.currentBatch,
   detailView: state => state.isDetailView,
   displayResults: state => state.displayResults,
   hoveredResultId: state => state.hoveredResultId,
@@ -50,6 +54,8 @@ const actions = {}
 const mutations = {
   setAccuracy: (state, payload) => (state.accuracy = payload),
   setAddDinPlats: (state, payload) => (state.addDinPlats = payload),
+  setBatchData: (state, payload) => (state.batchData = payload),
+  setCurrentBatch: (state, payload) => (state.currentBatch = payload),
   setDetailView: (state, payload) => (state.isDetailView = payload),
   setDisplayResults: (state, payload) => (state.displayResults = payload),
   setHovedResultId: (state, payload) => (state.hoveredResultId = payload),
