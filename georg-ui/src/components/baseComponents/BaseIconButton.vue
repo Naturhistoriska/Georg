@@ -15,7 +15,7 @@
 <script>
 import BaseIcon from './BaseIcon'
 export default {
-  name: 'IconButton',
+  name: 'BaseIconButton',
   components: {
     BaseIcon,
   },
