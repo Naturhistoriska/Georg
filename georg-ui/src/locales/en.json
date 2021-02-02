@@ -91,6 +91,7 @@
     "currentLanguage": "ENGLISH"
   },
   "batch": {
+    "backToResultTable": "Back to result table",
     "batch": "Batch",
     "batchText": "Georeference several specimens from a file",
     "fileInput": "File input",
@@ -101,6 +102,7 @@
     "sourceInput": "Source input",
     "source": "<b>Source input:</b> {source}",
     "noResult": "No result",
+    "numberOfRecords": "{number} records",
     "records": "Records",
     "result": "<b>Result:</b> {label}; {lat}, {lng} lat, lng WGS84 DD; {uncertainty} km uncertainty",
     "suggestedLocality": "Suggested locality",

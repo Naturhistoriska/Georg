@@ -91,6 +91,7 @@
     "currentLanguage": "SVENSKA"
   },
   "batch": {
+    "backToResultTable": "Tillbaka till resultattabellen",
     "batch": "Batch",
     "batchText": "Georeference several specimens from a file",
     "fileInput": "Filinmatning",
@@ -101,6 +102,7 @@
     "sourceInput": "Källinmatning",
     "source": "<b>Källinmatning:</b> {source}",
     "noResult": "Inget resultat",
+    "numberOfRecords": "{number} records",
     "records": "Records",
     "result": "<b>Resultat:</b> {label}; {lat}, {lng} lat, lng WGS84 DD; {uncertainty} km osäkerhet",
     "suggestedLocality": "Föreslagen lokalitet",
