@@ -120,6 +120,8 @@
             {{ $t('about.apiLinkText') }} </a
           >.
         </p>
+        <h2 id="aboutBatch">About batch</h2>
+        <p>Batch help</p>
         <h2>{{ $t('about.version') }}</h2>
         <p>{{ $t('about.version') }}: {{ version }}</p>
         <p>
