@@ -1,8 +1,8 @@
 <template>
   <v-btn text small :class="classname" @click="onclick">
-    <BaseIcon v-bind:name="iconPrepend" v-if="iconPrepend" />
+    <BaseIcon v-if="iconPrepend">{{ iconPrepend }}</BaseIcon>
     {{ text }}
-    <BaseIcon v-bind:name="iconAppend" v-if="iconAppend" />
+    <BaseIcon v-if="iconAppend">{{ iconAppend }}</BaseIcon>
   </v-btn>
 </template>
 <script>
