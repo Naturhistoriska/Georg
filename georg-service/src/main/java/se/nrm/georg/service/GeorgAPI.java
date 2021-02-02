@@ -130,8 +130,10 @@ public class GeorgAPI {
 
     InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
     String filePath = logic.processBatch(uploadFile, returnType); 
-    
-    
+    if(filePath == null) {
+      return Response.ok(errorBuilder.buildInvalidCSVFileMessage()).build(); 
+    }
+     
     log.info("file path... {}", filePath);  
     File fileDownload = new File(filePath);
     StreamingOutput stream = (OutputStream out) -> { 

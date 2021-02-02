@@ -37,9 +37,8 @@ public class PeliasLogic {
   private final String latLngWGS = "lat, lng WGS84 DD; ";
   private final String kmUncertainty = " km uncertainty";
   
-  public List<CSVBean> processBatch(Map<String, String> map, String peliasPath) {
-    List<CSVBean> beans = new ArrayList();
- 
+  public List<CSVBean> processBatch(Map<String, String> map, String peliasPath) { 
+    List<CSVBean> beans = new ArrayList(); 
  
     peliasUrl = Util.getInstance().buildBatchUrl(peliasPath);
     map.entrySet().stream()
@@ -71,6 +70,7 @@ public class PeliasLogic {
   }
 
   public String search(String address) {
+    log.info("search... {}", address); 
     return service.getResults(peliasUrl.concat(address));
   }
 

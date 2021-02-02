@@ -11,8 +11,7 @@ import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;   
 import org.apache.commons.csv.CSVRecord;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import se.nrm.georg.service.logic.coordinates.CoordinatesHelper;
-import se.nrm.georg.service.logic.csv.CSVParser; 
+import se.nrm.georg.service.logic.coordinates.CoordinatesHelper; 
 import se.nrm.georg.service.logic.csv.util.CSVHeader;
 import se.nrm.georg.service.logic.file.FileHandler;
 import se.nrm.georg.service.logic.json.CoordinatesJson;
@@ -69,9 +68,14 @@ public class GeorgLogic implements Serializable {
       records = fileHandler.readCsv(uploadFile.getBody(InputStream.class, null));  
       records.stream()
               .map(r -> r.toMap())
+              .filter(m -> m.containsKey(CSVHeader.Id.name()))
+              .filter(m -> m.containsKey(CSVHeader.SourceLocality.name()))
               .forEach(m -> { 
                 map.put(m.get(CSVHeader.Id.name()), m.get(CSVHeader.SourceLocality.name()));
-              }); 
+              });  
+      if(map.isEmpty()) {
+        return null;
+      }
       List<CSVBean> beans = pelias.processBatch(map, peliasPath); 
       return fileHandler.createFile(beans, type); 
     } catch (IOException ex) {

@@ -15,9 +15,14 @@ public class ErrorMessageBuilder {
   private final String errorKey = "error";
   private final String msgKey = "msgKey";
   private final String invalidCoordinates = "Invalid coordinates";
+  private final String invalidCsvFile = "Invalid CSV file";
    
   public String buildInvalidCoordinatesMessage() {  
     return parser.buildJsonObject(errorKey, parser.buildJsonObject(msgKey, invalidCoordinates)).toString(); 
+  }
+  
+  public String buildInvalidCSVFileMessage() {
+    return parser.buildJsonObject(errorKey, parser.buildJsonObject(msgKey, invalidCsvFile)).toString();  
   }
   
 }
