@@ -1,5 +1,5 @@
 <template>
-  <v-btn text small :class="classname" @click="onclick">
+  <v-btn text small :color="btnColor" :class="classname" @click="onclick">
     <BaseIcon v-if="iconPrepend">{{ iconPrepend }}</BaseIcon>
     {{ text }}
     <BaseIcon v-if="iconAppend">{{ iconAppend }}</BaseIcon>
@@ -8,11 +8,11 @@
 <script>
 import BaseIcon from './BaseIcon'
 export default {
-  name: 'IconButton',
+  name: 'TextButton',
   components: {
     BaseIcon,
   },
-  props: ['classname', 'iconPrepend', 'iconAppend', 'text'],
+  props: ['btnColor', 'classname', 'iconPrepend', 'iconAppend', 'text'],
   methods: {
     onclick() {
       this.$emit('clicked')
