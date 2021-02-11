@@ -5,6 +5,8 @@ import store from './store'
 
 import vuetify from './plugins/vuetify'
 import Clipboard from 'v-clipboard'
+// import { Ripple } from 'vuetify/lib/directives'
+import JsonCSV from 'vue-json-csv'
 
 import 'vuetify/dist/vuetify.css'
 
@@ -24,12 +26,17 @@ import App from './App.vue'
 Vue.component('l-map', LMap)
 Vue.component('l-tile-layer', LTileLayer)
 Vue.component('l-marker', LMarker)
+Vue.component('downloadCsv', JsonCSV)
+
 Vue.config.performance = true
 
 Vue.prototype.$i18nRoute = Trans.i18nRoute.bind(Trans)
 Vue.config.productionTip = false
 
 Vue.use(Clipboard, vuetify, {
+  // directives: {
+  //   Ripple,
+  // },
   theme: {
     primary: '#FF6E40',
     secondary: '#FF9E80',
