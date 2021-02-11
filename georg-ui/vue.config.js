@@ -1,6 +1,9 @@
 process.env.VUE_APP_VERSION = require('./package.json').version
 
 module.exports = {
+  // devServer: {
+  //   proxy: 'http://localhost:8180',
+  // },
   // pluginOptions: {
   //   proxy: {
   //     enabled: true,
