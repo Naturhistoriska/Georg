@@ -37,7 +37,7 @@ import se.nrm.georg.service.logic.exceptions.ErrorMessageBuilder;
 @SwaggerDefinition(
         info = @Info(
                 title = "Georg API",
-                version = "1.0"
+                version = "2.1"
         ),
         tags = {
           @Tag(name = "georg", description = "Georeference tool")
@@ -89,7 +89,7 @@ public class GeorgAPI {
   @GET
   @Path("/reverse")
   @ApiOperation(value = "Get reverse geocoding",
-          notes = "Returns status",
+          notes = "Return search results in json",
           response = String.class
   )
   @Produces(MediaType.APPLICATION_JSON)
@@ -103,7 +103,7 @@ public class GeorgAPI {
   @GET
   @Path("/coordinates")
   @ApiOperation(value = "Search coordinates in different formate",
-          notes = "Returns status",
+          notes = "Return search results in json",
           response = String.class
   )
   @Produces(MediaType.APPLICATION_JSON)
@@ -120,7 +120,9 @@ public class GeorgAPI {
 
   @POST
   @Path("/upload")
-  @ApiOperation(value = "Batch upload")
+  @ApiOperation(value = "Batch upload",
+          notes = "Upload csv file with minimum two columns (Id, SourceLocality). Return search results in json",
+          response = String.class)
   @ApiResponses(value = {
     @ApiResponse(code = 200, message = "File uploaded")})
   @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -129,8 +131,9 @@ public class GeorgAPI {
     log.info("upload : {}", returnType);
 
     InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
+ 
     String filePath = logic.processBatch(uploadFile, returnType); 
-    if(filePath == null) {
+    if(filePath == null) {  
       return Response.ok(errorBuilder.buildInvalidCSVFileMessage()).build(); 
     }
      
@@ -152,25 +155,5 @@ public class GeorgAPI {
       } 
     };
     return Response.ok(stream).build(); 
-  }
-
- 
-
-  //save to somewhere
-  private void writeFile(byte[] content, String filename) {
-
-    File newFile = new File(filename);
-    try {
-      if (!newFile.exists()) { 
-        newFile.createNewFile(); 
-      }
-      try (FileOutputStream fop = new FileOutputStream(newFile)) {
-        fop.write(content);
-        fop.flush();
-      }
-    } catch (IOException ex) {
-      log.error(ex.getMessage());
-    }
-
-  }
+  } 
 }

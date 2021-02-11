@@ -5,7 +5,7 @@
 
   <groupId>se.nrm.georg</groupId>
   <artifactId>georg</artifactId>
-  <version>2.0</version>
+  <version>2.1</version>
   <packaging>pom</packaging>
   <name>${project.artifactId}</name>
 
@@ -76,11 +76,11 @@
       <version>4.13.1</version>
       <scope>test</scope>
     </dependency>
-
+  
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-module-junit4</artifactId>
-      <version>1.7.0</version>
+      <version>1.7.4</version>
       <scope>test</scope>
     </dependency>
 
