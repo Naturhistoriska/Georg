@@ -338,7 +338,6 @@ export default {
           : 'back-tooltip-class leaflet-tooltip-own'
         const pane = isSelected ? 'topMarker' : 'lowerMarker'
         const icon = isSelected ? MAP_ICONS.blueIcon : MAP_ICONS.greyIcon
-        console.log('isSelected', isSelected)
         const marker = L.marker([lat, lng], {
           icon,
           pane,

@@ -46,7 +46,6 @@ export default class Service {
   }
 
   async upload(file) {
-    console.log('service upload')
     const url = `${baseUrl}upload?type=json`
     let formData = new FormData()
     formData.append('file', file)
@@ -55,7 +54,6 @@ export default class Service {
         'Content-Type': 'multipart/form-data',
       },
     })
-    console.log('service.response : ', response.data)
     return response.data
     // return axios.post(url, formData, {
     //   headers: {

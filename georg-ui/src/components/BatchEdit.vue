@@ -27,8 +27,6 @@ export default {
         id: this.selectedBatch[0].id,
         source: this.selectedBatch[0].sourceLocality,
       })
-
-      console.log('subtitle...', this.subtitle)
     } else {
       this.title = this.$t('batch.multipleEdit')
       this.subtitle = this.selectedBatch[1].id
@@ -37,7 +35,6 @@ export default {
   computed: {
     ...mapGetters(['selectedBatch']),
     mytitle: function() {
-      console.log('mytitle...', this.selectedBatch.length)
       return this.$t('common.edit')
     },
   },

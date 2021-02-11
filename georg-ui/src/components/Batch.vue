@@ -129,7 +129,6 @@ export default {
     },
     clear() {
       this.displayResults = false
-      console.log('clean...', this.displayResults)
       this.$emit('clear-file')
     },
     onClick() {

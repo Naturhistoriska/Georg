@@ -138,7 +138,6 @@ export default {
       if (this.options.rowsPerPage == null || this.options.totalItems == null) {
         return 0
       }
-      console.log('inside pages()', this.options.totalItems)
       return Math.ceil(this.options.totalItems / this.options.rowsPerPage)
     },
   },
@@ -149,28 +148,28 @@ export default {
         this.selected.length !== this.batchData.length
     },
 
-    options: {
-      handler() {
-        try {
-          // this.pagination.page = this.currentPage
-          console.log('********pagination watcher fired********')
-          //console.log('watch totalItems', this.pagination.totalItems)
-          console.log(
-            'options page',
-            this.options.page,
-            'currnet page',
-            this.currentPage
-          )
-          console.log('initialize', this.init)
-          if (this.options.page !== this.currentPage) {
-            this.currentPage = this.options.page
-          }
-        } catch (error) {
-          console.log('getData()', error)
-        }
-      },
-      deep: true,
-    },
+    // options: {
+    //   handler() {
+    //     try {
+    //       // this.pagination.page = this.currentPage
+    //       console.log('********pagination watcher fired********')
+    //       //console.log('watch totalItems', this.pagination.totalItems)
+    //       console.log(
+    //         'options page',
+    //         this.options.page,
+    //         'currnet page',
+    //         this.currentPage
+    //       )
+    //       console.log('initialize', this.init)
+    //       if (this.options.page !== this.currentPage) {
+    //         this.currentPage = this.options.page
+    //       }
+    //     } catch (error) {
+    //       console.log('getData()', error)
+    //     }
+    //   },
+    //   deep: true,
+    // },
   },
   methods: {
     ...mapMutations([
