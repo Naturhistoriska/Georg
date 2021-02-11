@@ -1,19 +1,20 @@
 <template>
   <div id="container" class="container container--fluid">
-    <v-card id="navi" :style="screenWidth">
-      <Batch
-        v-if="isBatch"
-        @upload="upload"
-        @expand-table="expandTable"
-        @collapse-table="collapseTable"
-        @clear-file="removeFile"
-      />
+    <Batch
+      v-if="isBatch"
+      v-bind:width="screenWidth"
+      @upload="upload"
+      @expand-table="expandTable"
+      @collapse-table="collapseTable"
+      @clear-file="removeFile"
+    />
+    <v-card id="navi" :style="screenWidth" v-else>
       <Search
         v-bind:passInValue="passInValue"
         @clear-search="clear"
         @search-address="searchAddress"
         @search-coordinates="searchCoors"
-        v-else
+        v-if="!isBatch"
       />
       <h2 v-if="results.length" class="visuallyhidden">Resultat</h2>
       <Message v-if="!isBatch" />
@@ -246,7 +247,6 @@ export default {
         .upload(file)
         .then(response => {
           this.setIsErrorMsg(response.error)
-          console.log('is error....', response)
           if (response.error) {
             const { msgKey } = response.error
             this.setMsgKey(msgKey)

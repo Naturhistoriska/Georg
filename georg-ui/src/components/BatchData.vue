@@ -17,6 +17,8 @@
     show-select
     v-model="selected"
     @current-items="currentData"
+    @input="handleClick"
+    :options.sync="options"
   >
     <template v-slot:header="{ props: { headers } }">
       <thead class="v-data-table-header" align="end">
@@ -76,7 +78,8 @@ export default {
       selected: [],
       // expanded: [],
       singleExpand: true,
-      pagination: true,
+      currentPage: 0,
+      options: { rowsPerPage: 10 },
       showExpand: true,
       fullHeaders: [
         {
@@ -121,9 +124,23 @@ export default {
   },
   mounted() {
     this.currentHeader = this.headers
+    this.selected = this.selectedBatch
+    // // store current page number first
+    // this.prevPage = this.pagination.page
+
+    // this.$nextTick().then(() => {
+    //   this.$set(this.pagination, 'page', this.prevPage)
+    // })
   },
   computed: {
-    ...mapGetters(['batchData']),
+    ...mapGetters(['batchData', 'currentBatch', 'selectedBatch']),
+    pages() {
+      if (this.options.rowsPerPage == null || this.options.totalItems == null) {
+        return 0
+      }
+      console.log('inside pages()', this.options.totalItems)
+      return Math.ceil(this.options.totalItems / this.options.rowsPerPage)
+    },
   },
   watch: {
     selected: function() {
@@ -131,9 +148,36 @@ export default {
         this.selected.length !== 0 &&
         this.selected.length !== this.batchData.length
     },
+
+    options: {
+      handler() {
+        try {
+          // this.pagination.page = this.currentPage
+          console.log('********pagination watcher fired********')
+          //console.log('watch totalItems', this.pagination.totalItems)
+          console.log(
+            'options page',
+            this.options.page,
+            'currnet page',
+            this.currentPage
+          )
+          console.log('initialize', this.init)
+          if (this.options.page !== this.currentPage) {
+            this.currentPage = this.options.page
+          }
+        } catch (error) {
+          console.log('getData()', error)
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
-    ...mapMutations(['setReBuildMarker', 'setCurrentBatch']),
+    ...mapMutations([
+      'setCurrentBatch',
+      'setReBuildMarker',
+      'setSelectedBatch',
+    ]),
 
     toggleAll() {
       if (this.checked) {
@@ -145,6 +189,9 @@ export default {
     currentData(data) {
       this.setCurrentBatch(data)
       this.setReBuildMarker(true)
+    },
+    handleClick() {
+      this.setSelectedBatch(this.selected)
     },
     onListClick() {
       this.currentHeader = this.headers

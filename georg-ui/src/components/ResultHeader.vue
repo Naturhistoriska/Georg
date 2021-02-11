@@ -4,7 +4,7 @@
       <a
         href=""
         class="grey--text text--darken-3 body-2 pl-1"
-        v-if="detailView"
+        v-if="detailView || isEdit"
         @click.prevent="backToResultList()"
         id="backResultListLink"
         >{{ backLinkText }}</a
@@ -38,7 +38,7 @@ export default {
   components: {
     TextButton,
   },
-  props: ['isBatch'],
+  props: ['isBatch', 'isEdit'],
   data() {
     return {
       displayResults: true,
@@ -91,9 +91,10 @@ export default {
       'setRezoom',
     ]),
     backToResultList() {
-      this.setDetailView(false)
-      this.setReBuildMarker(true)
-      this.setRezoom(true)
+      this.$emit('back-results')
+      // this.setDetailView(false)
+      // this.setReBuildMarker(true)
+      // this.setRezoom(true)
     },
     onDisplayResultsClick() {
       this.displayResults = !this.displayResults

@@ -192,6 +192,7 @@ export default {
       'results',
       'hoveredResultId',
       'rezoom',
+      'selectedBatch',
       'selectedMarker',
       'selectedResult',
       'selectedResultId',
@@ -223,9 +224,7 @@ export default {
         }
       })
     },
-    currentBatch() {
-      this.buildBatchMarker()
-    },
+
     addDinPlats: function() {
       if (this.addDinPlats) {
         const lat = this.selectedMarker.geometry.coordinates[1]
@@ -238,6 +237,14 @@ export default {
       this.$nextTick(() => {
         this.$refs.myMap.mapObject.flyTo([this.center[0], this.center[1]], 5)
       })
+    },
+
+    /**** batch *****/
+    currentBatch() {
+      this.buildBatchMarker()
+    },
+    selectedBatch: function() {
+      this.buildBatchMarker()
     },
   },
   methods: {
@@ -325,12 +332,21 @@ export default {
       this.resetLayerGroup()
       this.currentBatch.forEach(result => {
         const { id, lat, lng } = result
+        let isSelected = this.selectedBatch.find(record => record['id'] === id)
+        const className = isSelected
+          ? 'front-tooltip-class leaflet-tooltip-own'
+          : 'back-tooltip-class leaflet-tooltip-own'
+        const pane = isSelected ? 'topMarker' : 'lowerMarker'
+        const icon = isSelected ? MAP_ICONS.blueIcon : MAP_ICONS.greyIcon
+        console.log('isSelected', isSelected)
         const marker = L.marker([lat, lng], {
-          icon: MAP_ICONS.greyIcon,
+          icon,
+          pane,
         }).bindTooltip(id, {
           permanent: true,
           direction: 'right',
-          className: 'leaflet-tooltip-own',
+          // className: 'leaflet-tooltip-own',
+          className,
         })
         marker.addTo(this.layerGroup)
       })
@@ -651,6 +667,13 @@ export default {
   -ms-user-select: none;
   user-select: none;
   pointer-events: none;
+}
+.back-tooltip-class {
+  z-index: -100;
+}
+
+.front-tooltip-class {
+  z-index: 100;
 }
 /* .leaflet-tooltip-left.myCSSClass::before {
   border-left-color: cyan;
