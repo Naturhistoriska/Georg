@@ -45,7 +45,7 @@ public class Util {
     return buildSearchUrl(peliasPath, autoComplete, text, sources, layers, countryCode, size);  
   } 
  
-  public String buildGeoCodePath(String peliasPath, String address, 
+  public String buildAddressSearchPath(String peliasPath, String address, 
           String sources, String layers, String countryCode, int size) {
     return buildSearchUrl(peliasPath, search, address, sources, layers, countryCode, size);   
   }
@@ -104,10 +104,12 @@ public class Util {
     }
     return sb.toString().trim();
   } 
+   
+  public double convertBigDecimalToDouble(BigDecimal value) {
+    return value.setScale(6, RoundingMode.HALF_UP).doubleValue();
+  }
   
-  
-  
-  public double convertBigDecimalToDouble(BigDecimal n) {
-    return n.setScale(6, RoundingMode.HALF_UP).doubleValue();
+  public double roundDoubleToSix(Double value) {
+    return convertBigDecimalToDouble(new BigDecimal(value.toString())); 
   }
 }

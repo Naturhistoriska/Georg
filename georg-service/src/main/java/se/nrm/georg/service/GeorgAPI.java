@@ -8,8 +8,7 @@ import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileInputStream; 
 import java.io.IOException; 
 import java.io.OutputStream;
 import javax.inject.Inject;
@@ -65,7 +64,7 @@ public class GeorgAPI {
           @QueryParam("countryCode") String countryCode,
           @QueryParam("size") int size) {
     log.info("getGeoCode: {}, {}", address, source);
-
+   
     return Response.ok(logic.searchAddress(address, source, layer, countryCode, size)).build();
   }
 

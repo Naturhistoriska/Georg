@@ -59,11 +59,11 @@ public class JsonParserTest {
   @Test
   public void testConvertStringToJson() {
     System.out.println("convertStringToJson");
-
-    instance = new JsonParser();
+ 
     JSONObject result = instance.convertStringToJson(jsonString);
     assertNotNull(result);
     assertEquals(result.getString("type"), "FeatureCollection");
+    assertEquals(1, result.getJSONArray("features").length());
   }
 
   /**
@@ -72,8 +72,7 @@ public class JsonParserTest {
   @Test
   public void testGetJsonArray() {
     System.out.println("getJsonArray");
-    JSONObject json = instance.convertStringToJson(jsonString);
-    instance = new JsonParser();
+    JSONObject json = instance.convertStringToJson(jsonString); 
     JSONArray result = instance.getJsonArray(json, "features");
     assertNotNull(result);
     assertEquals(result.length(), 1);
@@ -87,11 +86,27 @@ public class JsonParserTest {
     System.out.println("getJsonObject");
 
     JSONObject json = instance.convertStringToJson(jsonString);
-    String key = "geocoding";
-    instance = new JsonParser();
+    String key = "geocoding"; 
     JSONObject result = instance.getJsonObject(json, key);
     assertNotNull(result);
     assertEquals(result.getString("attribution"), "http://api:4000/attribution");
+  }
+  
+  /**
+   * Test of getString method, of class JsonParser.
+   */
+  @Test
+  public void testGetString() {
+    System.out.println("getString");
+
+    JSONObject json = instance.convertStringToJson(jsonString);
+    String key = "country";  
+    JSONArray array = instance.getJsonArray(json, "features");
+    JSONObject properties = array.getJSONObject(0).getJSONObject("properties");
+    String result = instance.getString(properties, key);
+    
+    assertNotNull(result);
+    assertEquals(result, "Sweden");
   }
 
   /**
@@ -101,8 +116,7 @@ public class JsonParserTest {
   public void testBuildJsonObject_String_String() {
     System.out.println("buildJsonObject");
     String key = "item";
-    String value = "item 1";
-    instance = new JsonParser(); 
+    String value = "item 1"; 
     JSONObject result = instance.buildJsonObject(key, value);
     assertNotNull(result);
     assertEquals(result.getString(key), value);
@@ -172,8 +186,7 @@ public class JsonParserTest {
     array.put(0, lat);
     array.put(1, lng); 
     instance = new JsonParser(); 
-    JSONObject result = instance.buildJsonObject(array, key);
-    System.out.println("result..." + result.getString(key));
+    JSONObject result = instance.buildJsonObject(array, key); 
     assertEquals(result.getString(key), "\"59\" \"15\"");
   }
 

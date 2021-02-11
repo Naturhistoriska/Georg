@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.List;   
-import java.util.Optional;
+import java.util.List;    
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -111,37 +110,6 @@ public class FileHandler {
       log.error(ex.getMessage());
      } 
   } 
- 
-
-//    FileWriter out = null;
-//    File tempFile = null;
-//    try {   
-//      tempFile = File.createTempFile(tempFileName, csv); 
-//      out = new FileWriter(tempFile); 
-//      try (CSVPrinter printer = new CSVPrinter(out, CSVFormat.DEFAULT
-//              .withHeader(CSVHeader.class))) {
-//        beans.stream()
-//                .forEach(bean -> {
-//                  printRow(bean, printer);
-//                });
-//      }
-//      return tempFile.toString();
-//    } catch (IOException ex) {
-//      log.error(ex.getMessage());
-//    } finally {
-//      try {
-//        if (out != null) {
-//          out.close();
-//        }
-//        if(tempFile != null) {
-//          tempFile.deleteOnExit();
-//        }
-//      } catch (IOException ex) {
-//        log.error(ex.getMessage());
-//      }
-//    }
-//    return null;
-//  }
   
   private void printRow(CSVBean bean, CSVPrinter printer) {
     try {

@@ -16,13 +16,23 @@ public class ErrorMessageBuilder {
   private final String msgKey = "msgKey";
   private final String invalidCoordinates = "Invalid coordinates";
   private final String invalidCsvFile = "Invalid CSV file";
+  
+  public ErrorMessageBuilder() {
+    
+  }
+  
+  public ErrorMessageBuilder(JsonParser parser) {
+    this.parser = parser;
+  }
    
   public String buildInvalidCoordinatesMessage() {  
-    return parser.buildJsonObject(errorKey, parser.buildJsonObject(msgKey, invalidCoordinates)).toString(); 
+    return parser.buildJsonObject(errorKey, 
+            parser.buildJsonObject(msgKey, invalidCoordinates)).toString(); 
   }
   
   public String buildInvalidCSVFileMessage() {
-    return parser.buildJsonObject(errorKey, parser.buildJsonObject(msgKey, invalidCsvFile)).toString();  
+    return parser.buildJsonObject(errorKey, 
+            parser.buildJsonObject(msgKey, invalidCsvFile)).toString();  
   }
   
 }

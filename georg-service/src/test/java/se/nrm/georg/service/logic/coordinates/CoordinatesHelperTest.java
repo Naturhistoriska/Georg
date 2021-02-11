@@ -1,9 +1,9 @@
 package se.nrm.georg.service.logic.coordinates;
 
-import org.junit.After; 
+import org.junit.After;  
 import org.junit.Before; 
 import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.*; 
 
 /**
  *
@@ -24,7 +24,6 @@ public class CoordinatesHelperTest {
   
   public CoordinatesHelperTest() {
   }
- 
   
   @Before
   public void setUp() {
@@ -44,7 +43,19 @@ public class CoordinatesHelperTest {
     System.out.println("getInstance");  
     assertNotNull(instance); 
   }
-
+ 
+  /**
+   * Test of buildDMS method, of class CoordinatesHelper.
+   */
+  @Test
+  public void testBuildDMS_double_double() {
+    System.out.println("buildDMS");
+   
+    String expResult = "57°21'36.7\" N 15°21'36.7\" E";
+    String result = instance.buildDMS(lat, lng);
+    assertEquals(expResult, result); 
+  }
+    
   /**
    * Test of buildDMS method, of class CoordinatesHelper.
    */
@@ -239,5 +250,5 @@ public class CoordinatesHelperTest {
     double expLat = lat * (-1);
     assertEquals(expLat, result[0], lat); 
     assertEquals(lng, result[1], lng); 
-  }
+  } 
 }

@@ -22,7 +22,7 @@ public class ExternalServices implements Serializable {
     
   }
   
-  public String getResults(String servicePath) {
+  public String search(String servicePath) {
     log.info("getResult : {}", servicePath);
     
     client = ClientBuilder.newClient();  

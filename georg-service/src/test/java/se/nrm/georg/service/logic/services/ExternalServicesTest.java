@@ -77,7 +77,7 @@ public class ExternalServicesTest {
   @Test
   public void testGetResults() {
     System.out.println("getResults");   
-    String result = instance.getResults(servicePath);
+    String result = instance.search(servicePath);
     assertEquals(jsonString, result); 
      
     verify(client, times(1)).target(any(String.class));

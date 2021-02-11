@@ -48,7 +48,7 @@ public class CoordinatesHelper {
   public String buildDMS(double lat, double lng) {  
     StringBuilder sb = new StringBuilder();
     sb.append(buildDMS(lat, true));
-    sb.append(" ");
+    sb.append(emptySpace);
     sb.append(buildDMS(lng, false)); 
     return sb.toString(); 
   }
@@ -59,8 +59,7 @@ public class CoordinatesHelper {
     int degree = getDegree(absValue);
     double dbMinutes = getMinutes(absValue, degree);
     int minutes = (int) dbMinutes; 
-    double dbSecond = getSeconds(dbMinutes); 
-//    int second = (int) Math.round(dbSecond);  
+    double dbSecond = getSeconds(dbMinutes);  
     
     return buildCoordinatesString(String.valueOf(degree), 
             String.valueOf(minutes), df.format(dbSecond), 
@@ -71,8 +70,7 @@ public class CoordinatesHelper {
 
     double absValue = Math.abs(value);
     int degree =  getDegree(absValue);
-    double minutes = getMinutes(absValue, degree);
-//    BigDecimal bd = new BigDecimal(minutes).setScale(6, RoundingMode.HALF_UP);
+    double minutes = getMinutes(absValue, degree); 
     
     return buildCoordinatesString(String.valueOf(degree), 
             df1.format(minutes), null, getDirection(value, isLat)); 
@@ -116,7 +114,7 @@ public class CoordinatesHelper {
   public Double[] getLatAndLng(String coordinates) { 
     Double lat = 0.0;
     Double lng = 0.0;
-    if(CoordinatesHelper.getInstance().isDD(coordinates)) {
+    if(isDD(coordinates)) {
       String[] coors = coordinates.split(emptySpace);
       lat = Double.valueOf(coors[0]); 
       lng = coors.length == 2 ? Double.valueOf(coors[1]) : Double.valueOf(coors[2]);
@@ -194,7 +192,13 @@ public class CoordinatesHelper {
     return value < 0 ? isLat ? south : west : isLat ? north : east;
   }
   
-  
+  /**
+   * 
+   * @param value - Coordinate in DDM format
+   * @param isSouthOrWest
+   * @return double
+   * @throws NumberFormatException 
+   */
   private double convertDDMToDD(String value, boolean isSouthOrWest) throws NumberFormatException {
     int degrees = getDegrees(value); 
     double minutes = getMinutesInDouble(value); 
@@ -202,20 +206,22 @@ public class CoordinatesHelper {
     return isSouthOrWest ? (-1) * dd : dd;
   }
 
+  /**
+   * 
+   * @param value - Coordinate in DMS format
+   * @param isSouthOrWest 
+   * @return double
+   */
   private double convertDMSToDD(String value, boolean isSouthOrWest) {
     int degrees = getDegrees(value);
     int minutes = getMinutes(value);
     double seconds = getSeconds(value);
-       
-//    double decimal = ((minutes * 60) + seconds);
-//    return degrees + decimal / 3600;  
+        
     if(isSouthOrWest) {
       degrees = degrees * (-1);
     }
 
     DMSCoordinate dmsCoord = new DMSCoordinate(degrees, minutes, seconds);
     return dmsCoord.getDecimalDegrees();
-  }
-
-
+  }  
 }

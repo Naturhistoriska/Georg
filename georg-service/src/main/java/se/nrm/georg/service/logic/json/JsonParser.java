@@ -10,6 +10,8 @@ import org.json.JSONObject;
  */
 @Slf4j
 public class JsonParser {
+  
+  private final String emptySpace = " ";
  
   public JsonParser() { 
   }
@@ -26,24 +28,44 @@ public class JsonParser {
     return json.getJSONObject(key);
   }
   
+  public String getString(JSONObject json, String key) {
+    return json.getString(key);
+  }
+  
   public JSONObject buildJsonObject(String key, String value) {
     JSONObject jsonObject = new JSONObject(); 
     jsonObject.put(key, value);  
     return jsonObject;
   }
    
-  public JSONObject buildJsonObject(JSONObject json, String key, double lat, double lng) {
+  /**
+   * 
+   * @param json
+   * @param key
+   * @param lng
+   * @param lat
+   * @return JSONObject
+   */
+  public JSONObject buildJsonObject(JSONObject json, String key, double lng, double lat) {
     JSONArray array = new JSONArray();
-    array.put(0, lat);
-    array.put(1, lng);
+    array.put(0, lng);
+    array.put(1, lat);
     json.put(key, array);
     return json;
   }
-   
-  public JSONObject buildJsonObject(JSONObject json, String key, String lat, String lng) {
+  
+  /**
+   * 
+   * @param json
+   * @param key
+   * @param lng
+   * @param lat
+   * @return JSONObject
+   */
+  public JSONObject buildJsonObject(JSONObject json, String key, String lng, String lat) {
     JSONArray array = new JSONArray();
-    array.put(0, lat);
-    array.put(1, lng);
+    array.put(0, lng);
+    array.put(1, lat);
     json.put(key, array);
     return json;
   }
@@ -55,7 +77,7 @@ public class JsonParser {
   
   public JSONObject buildJsonObject(JSONArray jsonArray, String key) { 
     JSONObject jsonObject = new JSONObject();
-    jsonObject.put(key, jsonArray.join(" ")); 
+    jsonObject.put(key, jsonArray.join(emptySpace)); 
     return jsonObject;
   } 
   
