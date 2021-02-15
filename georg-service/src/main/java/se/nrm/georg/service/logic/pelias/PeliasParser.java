@@ -69,7 +69,7 @@ public class PeliasParser {
    * @return JSONObject - pelias search result in json
    */
   public JSONObject stringToJson(String jsonString) {
-    log.info("stringToJson");
+    log.info("stringToJson"); 
     return parser.convertStringToJson(jsonString);
   }
   
@@ -112,7 +112,6 @@ public class PeliasParser {
   public JSONArray getBBox(JSONObject json) { 
     return json.has(bbox) ? json.getJSONArray(bbox) : null;
   }
- 
   
   /**
    * 
@@ -161,9 +160,9 @@ public class PeliasParser {
     return getGeometry(json).getJSONArray(coordinatesKey); 
   }
   
-  public void addCoordinatesJson(JSONObject propertyJson, double lat, double lng) {
+  public void addCoordinatesJson(JSONObject propertyJson, double lat, double lng) { 
     propertyJson.put(coordinatesKey,
-              buildCoordinatesTransformationJson(lat, lng));
+              buildCoordinatesTransformationJson(lat, lng)); 
   }
   
   public void addCoordinatesToGeometry(JSONObject geometry, double lat, double lng) {
