@@ -27,7 +27,7 @@ public class CSVParser {
   public Map<String, String> convertCSVToMap(List<CSVRecord> records) {
     
     Predicate<Map<String, String>> predicate =  
-            m -> m.containsKey(CSVHeader.Id.name()) && m.containsKey(CSVHeader.SourceLocality.name());; 
+            m -> m.containsKey(CSVHeader.Id.name()) && m.containsKey(CSVHeader.SourceLocality.name());
     
     Map<String, String> map = new HashMap();
     records.stream()
