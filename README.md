@@ -4,9 +4,11 @@
 [![codecov](https://codecov.io/gh/Naturhistoriska/Georg/branch/master/graph/badge.svg)](https://codecov.io/gh/Naturhistoriska/Georg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Georg is a web application for georeferencing natural history collections. It aims to facilitate georeferencing of museum specimens by taking advantage of digitised information about collecting locations.
+Georg is a web application designed to support georeferencing, or, the process of obtaining geographic coordinates from a locality description, for natural history collections data. It allows a user to select among suggested matches to the entered text string or by choosing a map point and then selecting a named place based on geographic proximity to the marker. Georg currently supports single-locality queries as well as limited batch processing for uploaded lists of localities.
 
-The development of Georg is funded through the [Swedish Taxonomy Initiative](https://www.artdatabanken.se/en/verksamhet/svenska-artprojektet/) and [SYNTHESYS+](https://www.synthesys.info).
+Georeferencing is a prerequisite to using natural history collections data in research or visualization that relies on geospatial interpretations. At natural history collections and herbaria, locality data often represents rigorous interpretation  of expedition or collecting data. Our intention is to facilitate use of these interpretations while encouraging greater refinement of existing georeferencing workflows.
+
+Data capture at natural history collections often takes place with an emphasis on particular geographic regions, taxonomic groups, or expeditions. Customized subsets of localities compiled under these georeferencing themes are used in Georg to assign coordinates in the context of relevant interpretations available from the biodiversity informatics community. This is also likely to improve feedback on the original data through more rigorous evaluation under novel georeferencing themes, a process that is otherwise limited to basic validation prior to data use or visualization.
 
 ## How Georg works
 
@@ -66,3 +68,6 @@ Georg consists of four parts:
 ## License
 
 > Georg and its source code is distributed under the [MIT license](https://choosealicense.com/licenses/mit/).
+
+## Funding
+Georg development was funded in 2019 by the [Swedish Taxonomy Initiative](https://www.artdatabanken.se/en/verksamhet/svenska-artprojektet/) and in 2021 by [SYNTHESYS+](https://www.synthesys.info).
