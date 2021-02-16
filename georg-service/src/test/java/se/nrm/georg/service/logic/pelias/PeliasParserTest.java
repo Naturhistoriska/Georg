@@ -145,7 +145,7 @@ public class PeliasParserTest {
 
     ProjCoordinate mockRt90 = mock(ProjCoordinate.class);
     ProjCoordinate mockSweRef = mock(ProjCoordinate.class);
- 
+
     doNothing().when(mockRt90).setValue(rt90x, rt90y);
     doNothing().when(mockSweRef).setValue(sweRefx, sweRefy);
 
@@ -361,6 +361,20 @@ public class PeliasParserTest {
     assertFalse(result);
   }
 
+  @Test
+  public void testHasUncertaintyFalse3() {
+    String georg = "{\n"
+            + "	\"georg\": {\n"
+            + "		\"verbatimTokens\": [], \n"
+            + "		\"locationDisplayLabel\": \"Eknäset, Strångsjö, Katrineholm\"\n"
+            + "	}\n"
+            + "}";
+
+    JSONObject georgJson = new JSONObject(georg);
+    boolean result = instance.hasUncertainty(georgJson);
+    assertFalse(result);
+  }
+
   /**
    * Test of getUncertaintyInMeters method, of class PeliasParser.
    */
@@ -460,14 +474,55 @@ public class PeliasParserTest {
    */
   @Test
   public void testAddDinPlats() {
-    System.out.println("addDinPlats"); 
-    
+    System.out.println("addDinPlats");
+
     double lat = 59.350000;
-    double lng = 17.916700;  
-    JSONObject result = instance.addDinPlats(properties, lat, lng); 
+    double lng = 17.916700;
+    JSONObject result = instance.addDinPlats(properties, lat, lng);
     assertNotNull(result);
     assertEquals(result.getJSONObject("properties").getString("gid"), "newMarker");
     assertEquals(result.getJSONObject("properties").getString("name"), "Din plats");
+  }
+  
+  @Test
+  public void testAddDinPlatsWithNull() {
+    System.out.println("addDinPlats");
+
+    double lat = 59.350000;
+    double lng = 17.916700;
+    JSONObject result = instance.addDinPlats(null, lat, lng);
+    assertNotNull(result);
+    assertEquals(result.getJSONObject("properties").getString("gid"), "newMarker");
+    assertEquals(result.getJSONObject("properties").getString("name"), "Din plats");
+  }
+
+  /**
+   * Test of addDinPlats method, of class PeliasParser.
+   */
+  @Test
+  public void testAddDinPlatsWithData() {
+    System.out.println("addDinPlats");
+
+    double lat = 59.350000;
+    double lng = 17.916700;
+
+    String propertiesString = "{\n"
+            + "	\"country\": \"Sweden\",\n"
+            + "	\"county\": \"Katrineholm\",\n"
+            + "	\"source\": \"gbif\",\n"
+            + "	\"layer\": \"nhrs-nrm\",\n"
+            + "	\"id\": \"13199\", \n"
+            + "	\"region\": \"Sodermanland\", \n"
+            + "}";
+    JSONObject propertiesJson = new JSONObject(propertiesString);
+
+    JSONObject result = instance.addDinPlats(propertiesJson, lat, lng); 
+    assertNotNull(result);
+    assertEquals(result.getJSONObject("properties").getString("gid"), "newMarker");
+    assertEquals(result.getJSONObject("properties").getString("name"), "Din plats");
+    assertEquals(result.getJSONObject("properties").getString("country"), "Sweden");
+    assertEquals(result.getJSONObject("properties").getString("county"), "Katrineholm");
+    assertEquals(result.getJSONObject("properties").getString("region"), "Sodermanland");
   }
 
 }

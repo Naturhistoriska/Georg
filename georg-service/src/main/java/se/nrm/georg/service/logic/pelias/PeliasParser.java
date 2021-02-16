@@ -203,7 +203,7 @@ public class PeliasParser {
     propertiesJson.put(idKey, newMarker);
     propertiesJson.put(gidKey, newMarker);
     propertiesJson.put(nameKey, dinPlats);
-    propertiesJson.put(coordinatesKey, buildCoordinatesTransformationJson(lat, lng));
+    propertiesJson.put(coordinatesKey, buildCoordinatesTransformationJson(lat, lng)); 
     if (json != null) {   
       if (json.has(countryKey)) {
         propertiesJson.put(countryKey, json.getString(countryKey));

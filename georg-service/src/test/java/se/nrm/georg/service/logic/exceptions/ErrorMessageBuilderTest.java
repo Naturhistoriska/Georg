@@ -37,6 +37,14 @@ public class ErrorMessageBuilderTest {
 
   @After
   public void tearDown() {
+    instance = null;
+  }
+   
+  @Test(expected = NullPointerException.class)
+  public void testDefaultConstructor() {
+    instance = new ErrorMessageBuilder();
+    assertNotNull(instance);
+    instance.buildInvalidCSVFileMessage();
   }
 
   /**
@@ -93,7 +101,7 @@ public class ErrorMessageBuilderTest {
     when(parser.buildJsonObject(any(String.class), eq(invalidCsvJson))).thenReturn(invalidCsvErrorJson);
  
     String expResult = "{\"error\":{\"msgKey\":\"Invalid CSV file\"}}";
-    String result = instance.buildInvalidCoordinatesMessage(); 
+    String result = instance.buildInvalidCSVFileMessage(); 
     assertEquals(expResult, result); 
     
     verify(parser, times(1)).buildJsonObject(any(String.class), any(String.class));

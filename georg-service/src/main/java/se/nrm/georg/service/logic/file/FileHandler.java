@@ -24,7 +24,7 @@ import se.nrm.georg.service.model.CSVBean;
 @Slf4j
 public class FileHandler {
   
-   private CSVFormat csvFileFormat; 
+  private CSVFormat csvFileFormat; 
 //  private final char tabSepartor = '\t';
   private final String tempFileName = "georgTempFile";
   private final String csvSuffix = ".csv";
