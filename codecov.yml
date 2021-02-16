@@ -14,4 +14,5 @@ coverage:
 # which folders/files to ignore
 ignore:
   - georg-service/src/main/java/se/nrm/georg/service/logic/Main.java
+  - georg-service/src/main/java/se/nrm/georg/service/model/*
   - project-initdata.yml
