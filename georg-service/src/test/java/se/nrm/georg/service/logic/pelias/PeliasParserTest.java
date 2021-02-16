@@ -145,12 +145,7 @@ public class PeliasParserTest {
 
     ProjCoordinate mockRt90 = mock(ProjCoordinate.class);
     ProjCoordinate mockSweRef = mock(ProjCoordinate.class);
-
-//    when(mockRt90.).thenReturn(rt90x);
-//    when(mockRt90.y).thenReturn(rt90y);
-//    
-//    when(mockSweRef.x).thenReturn(sweRefx);
-//    when(mockSweRef.y).thenReturn(sweRefy);
+ 
     doNothing().when(mockRt90).setValue(rt90x, rt90y);
     doNothing().when(mockSweRef).setValue(sweRefx, sweRefy);
 
