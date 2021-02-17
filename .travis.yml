@@ -4,9 +4,8 @@ matrix:
       sudo: false
       jdk:
         - openjdk8
-      cache:
-        directories:
-          - georg-backend
+      before_install:
+        - cd ./georg-backend
         install: true
         dist: trusty
         script: "mvn cobertura:cobertura"
