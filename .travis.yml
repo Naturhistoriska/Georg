@@ -5,13 +5,13 @@ matrix:
       jdk:
         - openjdk8
       before_install:
-        - cd ./georg-backend
-        install: true
-        dist: trusty
-        script: "mvn cobertura:cobertura"
-        after_success:
-          # - codecov
-          - bash <(curl -s https://codecov.io/bash)
+        - cd georg-backend
+      install: true
+      dist: trusty
+      script: "mvn cobertura:cobertura"
+      after_success:
+        # - codecov
+        - bash <(curl -s https://codecov.io/bash)
 
     - language: node_js
       node_js:
