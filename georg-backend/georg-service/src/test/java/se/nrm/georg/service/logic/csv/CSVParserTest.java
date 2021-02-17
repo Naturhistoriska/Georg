@@ -106,7 +106,7 @@ public class CSVParserTest {
     assertFalse(result.containsKey("a6"));
     
     assertTrue(result.containsValue("Sollentuna"));
-    assertTrue(result.containsValue("Stockholm"));
+    assertTrue(result.containsValue("Tyreso"));
     assertTrue(result.containsValue("Stockholm"));
     assertFalse(result.containsValue("Bromma"));
     assertFalse(result.containsValue("Linkoping"));
