@@ -115,9 +115,7 @@ public class GeorgLogic implements Serializable {
             .getLatAndLng(coordinatesString.replace(comma, emptySpace));   
       
     return coordinates.addCoordinatesTransformation(
-            pelias.reverseSearch(latLng[0], latLng[1]), latLng[0], latLng[1]); 
-
-//    return coordinates.addCoordinatesTransformation(service.search(peliasUrl), latLng[0], latLng[1], false); 
+            pelias.reverseSearch(latLng[0], latLng[1]), latLng[0], latLng[1]);  
   } 
   
   /**
