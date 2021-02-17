@@ -18,6 +18,8 @@ import org.junit.After;
 import org.junit.Before; 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 import se.nrm.georg.service.model.CSVBean;
 
 /**
@@ -25,13 +27,14 @@ import se.nrm.georg.service.model.CSVBean;
  * @author idali
  */
 public class FileHandlerTest {
+
+  private FileHandler instance; 
   
-  private FileHandler instance;
   private List<CSVBean> beans;
-  
+
   public FileHandlerTest() {
   }
- 
+
   @Before
   public void setUp() {
     beans = new ArrayList();
@@ -66,6 +69,7 @@ public class FileHandlerTest {
     List<CSVRecord> result = instance.readCsv(input);
     assertEquals(result.size(), 3); 
   }
+
 
   /**
    * Test of createFile method, of class FileHandler.

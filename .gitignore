@@ -15,3 +15,5 @@ notes
 /georg-service/nbproject/
 /georg-ui/nbproject/private/
 /georg-api/target/
+/georg-backend/georg-service/nbproject/
+/georg-backend/georg-service/target/
