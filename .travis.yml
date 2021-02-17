@@ -7,12 +7,12 @@ matrix:
       cache:
         directories:
           - georg-backend
-          install: true
-          dist: trusty
-          script: "mvn cobertura:cobertura"
-          after_success:
-            # - codecov
-            - bash <(curl -s https://codecov.io/bash)
+        install: true
+        dist: trusty
+        script: "mvn cobertura:cobertura"
+        after_success:
+          # - codecov
+          - bash <(curl -s https://codecov.io/bash)
 
     - language: node_js
       node_js:
