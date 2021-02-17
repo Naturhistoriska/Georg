@@ -4,12 +4,15 @@ matrix:
       sudo: false
       jdk:
         - openjdk8
-      install: true
-      dist: trusty
-      script: "mvn cobertura:cobertura"
-      after_success:
-        # - codecov
-        - bash <(curl -s https://codecov.io/bash)
+      cache:
+        directories:
+          - georg-backend
+          install: true
+          dist: trusty
+          script: "mvn cobertura:cobertura"
+          after_success:
+            # - codecov
+            - bash <(curl -s https://codecov.io/bash)
 
     - language: node_js
       node_js:
