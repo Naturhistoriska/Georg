@@ -98,7 +98,8 @@ Same as Reverse geocoding, this endpoint allows user send in coordinats (latitud
    * '59°21'03.0" N 17°56'20.1" E',
    * '59°21.050' N 17°56.336' E'
 > Batch upload
-This endpoint consumes MULTIPART_FORM_DATA which allows user to upload a csv file with minimum of two columns: Id, SourceLocality, and get best match result for each locality back as csv or json file. You can download sample csv templet from [github](https://github.com/Naturhistoriska/Georg).
+This endpoint consumes MULTIPART_FORM_DATA which allows user to upload a csv file with minimum of two columns: Id, SourceLocality, and get best match result for each locality back as csv or json file. You can find sample csv templet from [github](https://github.com/Naturhistoriska/Georg/blob/master/data/georg_batch.csv). To download sample csv templet, run:
+cURL -o /{path_to_directory}/sample.csv https://raw.githubusercontent.com/Naturhistoriska/Georg/master/data/georg_batch.csv
 Batch upload takes query parameters:
 * type - the type of file returned by API. Currently API supports two type of files returned by API: csv and json
 ### Examples access API
