@@ -1,8 +1,7 @@
 # georg-service
-georg-service is a web service build on top of georg-pelias. It serves as API for Georg. The API provides endpoints for text such as locality search, reverse search and batch upload.
+georg-service is a web service build on top of georg-pelias. It serves as API for Georg. The API provides endpoints for forward geocoding, reverse geocoding and batch upload.
 
-This documentation will help you clone and setup the repository and then start the application.
-
+This documentation helps you clone and setup the repository and run the application.
 ## Prerequisites
 Java 8
 Maven 3.5.0
@@ -100,6 +99,7 @@ Same as Reverse geocoding, this endpoint allows user send in coordinats (latitud
 > Batch upload
 This endpoint consumes MULTIPART_FORM_DATA which allows user to upload a csv file with minimum of two columns: Id, SourceLocality, and get best match result for each locality back as csv or json file. You can find sample csv templet from [github](https://github.com/Naturhistoriska/Georg/blob/master/data/georg_batch.csv). To download sample csv templet, run:
 cURL -o /{path_to_directory}/sample.csv https://raw.githubusercontent.com/Naturhistoriska/Georg/master/data/georg_batch.csv
+
 Batch upload takes query parameters:
 * type - the type of file returned by API. Currently API supports two type of files returned by API: csv and json
 ### Examples access API
@@ -132,3 +132,4 @@ make build
 ```
 make release
 ```
+
