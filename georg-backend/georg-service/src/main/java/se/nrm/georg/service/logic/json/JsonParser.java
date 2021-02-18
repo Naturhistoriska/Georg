@@ -2,6 +2,7 @@ package se.nrm.georg.service.logic.json;
  
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -16,7 +17,8 @@ public class JsonParser {
   public JsonParser() { 
   }
   
-  public JSONObject convertStringToJson(String jsonString) {
+  public JSONObject convertStringToJson(String jsonString) throws JSONException { 
+    log.info("convertStringToJson : {}", jsonString);
     return new JSONObject(jsonString);
   }
   

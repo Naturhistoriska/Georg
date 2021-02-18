@@ -15,7 +15,8 @@ public class ErrorMessageBuilder {
   private final String errorKey = "error";
   private final String msgKey = "msgKey";
   private final String invalidCoordinates = "Invalid coordinates";
-  private final String invalidCsvFile = "Invalid CSV file";
+  private final String invalidCsvFile = "Invalid CSV file"; 
+  private final String peliasNotAvailable = "Pelias is not available";
   
   public ErrorMessageBuilder() {
     
@@ -33,6 +34,11 @@ public class ErrorMessageBuilder {
   public String buildInvalidCSVFileMessage() {
     return parser.buildJsonObject(errorKey, 
             parser.buildJsonObject(msgKey, invalidCsvFile)).toString();  
+  }
+  
+  public String buildPeliasNotAvailableMessage() {
+    return parser.buildJsonObject(errorKey, 
+            parser.buildJsonObject(msgKey, peliasNotAvailable)).toString();  
   }
   
 }

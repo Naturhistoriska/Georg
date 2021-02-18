@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
+import javax.ws.rs.ProcessingException;
 import lombok.extern.slf4j.Slf4j;  
 import se.nrm.georg.service.logic.InitialProperties;   
+import se.nrm.georg.service.logic.exceptions.GeorgException;
 import se.nrm.georg.service.logic.services.ExternalServices;
 import se.nrm.georg.service.model.CSVBean;
 import se.nrm.georg.service.util.Util;
@@ -49,8 +51,8 @@ public class GeoreferencingPelias {
     return peliasPath;
   }
    
-  public String search(String text, String sources, String layers, 
-          String countryCode, int size, boolean isAutocompleteSearch) {
+  public String search(String text, String sources, String layers, String countryCode, 
+          int size, boolean isAutocompleteSearch) throws ProcessingException {
     peliasUrl = isAutocompleteSearch ? 
             Util.getInstance()
                     .bunildAutoCompleteSearchPath(peliasPath, text, sources, layers, countryCode, size) 
@@ -64,7 +66,7 @@ public class GeoreferencingPelias {
     return service.search(peliasUrl);
   }
   
-  public String reverseSearch(double lat, double lng) {
+  public String reverseSearch(double lat, double lng) throws GeorgException  {
     peliasUrl = Util.getInstance().buildReverseGeoCodePath(peliasPath, lat, lng); 
     // For local test
 //    if(isLocal()) {

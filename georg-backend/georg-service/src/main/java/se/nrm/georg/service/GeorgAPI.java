@@ -24,8 +24,10 @@ import javax.ws.rs.core.StreamingOutput;
 import lombok.extern.slf4j.Slf4j; 
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.json.JSONException;
 import se.nrm.georg.service.logic.GeorgLogic;
 import se.nrm.georg.service.logic.exceptions.ErrorMessageBuilder;
+import se.nrm.georg.service.logic.exceptions.GeorgException;
 
 /**
  *
@@ -53,7 +55,7 @@ public class GeorgAPI {
   private ErrorMessageBuilder errorBuilder;
 
   @GET
-  @Path("/geoCoding")
+  @Path("/search")
   @ApiOperation(value = "Get geocoding",
           notes = "Return search results in json",
           response = String.class
@@ -65,11 +67,16 @@ public class GeorgAPI {
           @QueryParam("size") int size) {
     log.info("getGeoCode: {}, {}", address, source);
    
-    return Response.ok(logic.searchAddress(address, source, layer, countryCode, size)).build();
+    try {
+      return Response.ok(logic.searchAddress(address, source, layer, countryCode, size)).build();
+    } catch(GeorgException | JSONException ex) { 
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
+    } 
   }
 
   @GET
-  @Path("/search")
+  @Path("/autocomplete")
   @ApiOperation(value = "Search",
           notes = "Return search results in json",
           response = String.class
@@ -82,7 +89,12 @@ public class GeorgAPI {
           @QueryParam("size") int size) {
     log.info("search: {}, {}", text, countryCode);
 
-    return Response.ok(logic.runAutocompleteSearch(text, sources, layers, countryCode, size)).build();
+    try {
+      return Response.ok(logic.runAutocompleteSearch(text, sources, layers, countryCode, size)).build();
+    } catch(GeorgException | JSONException ex) { 
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
+    }
   }
 
   @GET
@@ -96,7 +108,15 @@ public class GeorgAPI {
           @QueryParam("lng") double lon) {
     log.info("getReverseGeoCode: {}, {}", lat, lon);
 
-    return Response.ok(logic.reverseSearch(lat, lon)).build();
+    try {
+      return Response.ok(logic.reverseSearch(lat, lon)).build();
+      
+      
+    } catch(GeorgException | JSONException ex) { 
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
+    }
+    
   }
 
   @GET
@@ -114,6 +134,9 @@ public class GeorgAPI {
     } catch (NumberFormatException ex) {
       log.info(ex.getMessage());
       return Response.ok(errorBuilder.buildInvalidCoordinatesMessage()).build();
+    } catch(GeorgException | JSONException ex) { 
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
     }
   }
 
@@ -130,18 +153,24 @@ public class GeorgAPI {
     log.info("upload : {}", returnType);
 
     InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
- 
-    String filePath = logic.processBatch(uploadFile, returnType); 
-    if(filePath == null) {  
-      return Response.ok(errorBuilder.buildInvalidCSVFileMessage()).build(); 
+    
+    String filePath;
+    try {
+      filePath = logic.processBatch(uploadFile, returnType); 
+      if(filePath == null) {  
+        return Response.ok(errorBuilder.buildInvalidCSVFileMessage()).build(); 
+      } 
+    } catch(GeorgException ex) { 
+      return Response.status(Response.Status.NOT_FOUND)
+              .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
     }
-     
+   
     log.info("file path... {}", filePath);  
     File fileDownload = new File(filePath);
     StreamingOutput stream = (OutputStream out) -> { 
       try(FileInputStream inp = new FileInputStream(fileDownload)) {
         byte[] buff = new byte[1024];
-        int len = 0;
+        int len;
         while ((len = inp.read(buff)) >= 0) {
           out.write(buff, 0, len);
         }

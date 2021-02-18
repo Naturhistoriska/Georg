@@ -1,20 +1,22 @@
 package se.nrm.georg.service.logic;
-   
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;   
-import java.util.List; 
-import java.util.Map;  
-import javax.inject.Inject; 
-import lombok.extern.slf4j.Slf4j;   
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
+import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVRecord;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import se.nrm.georg.service.logic.coordinates.CoordinatesHelper; 
+import org.json.JSONException;
+import se.nrm.georg.service.logic.coordinates.CoordinatesHelper;
 import se.nrm.georg.service.logic.coordinates.CoordinatesParser;
-import se.nrm.georg.service.logic.csv.CSVParser; 
-import se.nrm.georg.service.logic.file.FileHandler; 
-import se.nrm.georg.service.logic.pelias.GeoreferencingPelias;  
-import se.nrm.georg.service.model.CSVBean; 
+import se.nrm.georg.service.logic.csv.CSVParser;
+import se.nrm.georg.service.logic.exceptions.GeorgException;
+import se.nrm.georg.service.logic.file.FileHandler;
+import se.nrm.georg.service.logic.pelias.GeoreferencingPelias;
+import se.nrm.georg.service.model.CSVBean;
 
 /**
  *
@@ -22,57 +24,57 @@ import se.nrm.georg.service.model.CSVBean;
  */
 @Slf4j
 public class GeorgLogic implements Serializable {
-   
-  @Inject 
-  private FileHandler fileHandler; 
+
+  @Inject
+  private FileHandler fileHandler;
   @Inject
   private GeoreferencingPelias pelias;
   @Inject
   private CSVParser csv;
-   
+
   @Inject
   private CoordinatesParser coordinates;
-     
-  private final String comma = ",";  
-  private final String emptySpace = " ";   
-   
+
+  private final String comma = ",";
+  private final String emptySpace = " ";
+
   public GeorgLogic() {
-    
+
   }
-  
-  public GeorgLogic(CoordinatesParser coordinates, CSVParser csv, 
-          FileHandler fileHandler, GeoreferencingPelias pelias) { 
+
+  public GeorgLogic(CoordinatesParser coordinates, CSVParser csv,
+          FileHandler fileHandler, GeoreferencingPelias pelias) {
     this.coordinates = coordinates;
     this.csv = csv;
-    this.fileHandler = fileHandler; 
+    this.fileHandler = fileHandler;
     this.pelias = pelias;
-  } 
- 
+  }
+
   /**
-   * 
+   *
    * @param uploadFile - uploaded csv file
    * @param type - return file type (csv or json)
-   * 
+   *
    * @return String - temporary file path
    */
-  public String processBatch(InputPart uploadFile, String type) {  
+  public String processBatch(InputPart uploadFile, String type) throws GeorgException {
     List<CSVRecord> records;
-    Map<String, String> map; 
-    try { 
-      records = fileHandler.readCsv(uploadFile.getBody(InputStream.class, null));    
-      map = csv.convertCSVToMap(records);  
-      if(!map.isEmpty()) { 
-        List<CSVBean> beans = pelias.processBatch(map);  
-        return fileHandler.createFile(beans, type); 
+    Map<String, String> map;
+    try {
+      records = fileHandler.readCsv(uploadFile.getBody(InputStream.class, null));
+      map = csv.convertCSVToMap(records);
+      if (!map.isEmpty()) {
+        List<CSVBean> beans = pelias.processBatch(map);
+        return fileHandler.createFile(beans, type);
       }
     } catch (IOException ex) {
-      log.error((ex.getMessage())); 
-    } 
+      log.error((ex.getMessage()));
+    }
     return null;
-  } 
-    
+  }
+
   /**
-   * 
+   *
    * @param address - Address or place for search
    * @param source - Data source (ex: gbif, wof, osm, etc....)
    * @param layer - Data layer (ex: nhrs-nrm, s-fbo, locality, etc...)
@@ -80,15 +82,15 @@ public class GeorgLogic implements Serializable {
    * @param size - Number of results for return
    * @return String
    */
-  public String searchAddress(String address, String source, String layer, 
-          String countryCode, int size) {
+  public String searchAddress(String address, String source, String layer,
+          String countryCode, int size) throws JSONException, GeorgException  {
     log.info("searchAddress"); 
     return coordinates.addCoordinatesTransformation(
-            pelias.search(address, source, layer, countryCode, size, false));  
+              pelias.search(address, source, layer, countryCode, size, false)); 
   }
-   
+
   /**
-   * 
+   *
    * @param text - text for search
    * @param sources - Data source (ex: gbif, wof, osm, etc....)
    * @param layers - Data layer (ex: nhrs-nrm, s-fbo, locality, etc...)
@@ -97,35 +99,33 @@ public class GeorgLogic implements Serializable {
    * @return String
    */
   public String runAutocompleteSearch(String text, String sources, String layers,
-          String countryCode, int size) {
+          String countryCode, int size)  throws JSONException, GeorgException  {
     log.info("runAutocompleteSearch");
+ 
     return coordinates.addCoordinatesTransformation(
-            pelias.search(text, sources, layers, countryCode, size, true)); 
-  } 
-  
+              pelias.search(text, sources, layers, countryCode, size, true)); 
+  }
+
   /**
-   * 
-   * @param coordinatesString - Coordinates in one String for search. 
+   *
+   * @param coordinatesString - Coordinates in one String for search.
    * @return String
    */
-  public String coordinatesSearch(String coordinatesString) {
-    System.out.println("coordinatesSearch..." + coordinatesString);
-
+  public String coordinatesSearch(String coordinatesString) throws JSONException, GeorgException {   
     Double[] latLng = CoordinatesHelper.getInstance()
-            .getLatAndLng(coordinatesString.replace(comma, emptySpace));   
-      
+            .getLatAndLng(coordinatesString.replace(comma, emptySpace)); 
     return coordinates.addCoordinatesTransformation(
-            pelias.reverseSearch(latLng[0], latLng[1]), latLng[0], latLng[1]);  
-  } 
-  
+              pelias.reverseSearch(latLng[0], latLng[1]), latLng[0], latLng[1]); 
+  }
+
   /**
-   * 
+   *
    * @param lat - latitude
    * @param lng - longitude
    * @return String
    */
-  public String reverseSearch(double lat, double lng) {
-    log.info("reverseSearch " );  
+  public String reverseSearch(double lat, double lng) throws JSONException, GeorgException {
+    log.info("reverseSearch "); 
     return coordinates.addCoordinatesTransformationNewPlace(pelias.reverseSearch(lat, lng), lat, lng); 
   }
 }
