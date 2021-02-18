@@ -61,11 +61,16 @@ public class GeorgAPI {
           response = String.class
   )
   @Produces(MediaType.APPLICATION_JSON)
-  public Response search(@QueryParam("address") String address,
-          @QueryParam("source") String source, @QueryParam("layer") String layer,
+  public Response search(@QueryParam("text") String address,
+          @QueryParam("sources") String source, @QueryParam("layers") String layer,
           @QueryParam("countryCode") String countryCode,
           @QueryParam("size") int size) {
     log.info("getGeoCode: {}, {}", address, source);
+    
+    if(address == null || address.trim().isEmpty()) {
+      return Response.status(Response.Status.BAD_REQUEST)
+              .entity(errorBuilder.buildSearchTextMissingMessage()).build();
+    }
    
     try {
       return Response.ok(logic.searchAddress(address, source, layer, countryCode, size)).build();
@@ -88,6 +93,11 @@ public class GeorgAPI {
           @QueryParam("countryCode") String countryCode,
           @QueryParam("size") int size) {
     log.info("search: {}, {}", text, countryCode);
+    
+    if(text == null || text.trim().isEmpty()) {
+      return Response.status(Response.Status.BAD_REQUEST)
+              .entity(errorBuilder.buildSearchTextMissingMessage()).build();
+    }
 
     try {
       return Response.ok(logic.runAutocompleteSearch(text, sources, layers, countryCode, size)).build();
@@ -109,9 +119,7 @@ public class GeorgAPI {
     log.info("getReverseGeoCode: {}, {}", lat, lon);
 
     try {
-      return Response.ok(logic.reverseSearch(lat, lon)).build();
-      
-      
+      return Response.ok(logic.reverseSearch(lat, lon)).build();  
     } catch(GeorgException | JSONException ex) { 
       return Response.status(Response.Status.NOT_FOUND)
               .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
