@@ -57,12 +57,7 @@ public class GeoreferencingPelias {
             Util.getInstance()
                     .bunildAutoCompleteSearchPath(peliasPath, text, sources, layers, countryCode, size) 
             : Util.getInstance()
-                    .buildAddressSearchPath(peliasPath, text, sources, layers, countryCode, size);    
-    
-    // For local test
-//    if(isAutocompleteSearch && isLocal()) {
-//      peliasUrl = "https://georg-test.nrm.se/api/search?text=" + text;
-//    }
+                    .buildAddressSearchPath(peliasPath, text, sources, layers, countryCode, size);   
     return service.search(peliasUrl);
   }
   
@@ -78,7 +73,7 @@ public class GeoreferencingPelias {
 //  private boolean isLocal() {
 //    return peliasPath.equals(localTestUrl);
 //  }
-  
+//  
   public List<CSVBean> processBatch(Map<String, String> map) { 
     List<CSVBean> beans = new ArrayList(); 
  
