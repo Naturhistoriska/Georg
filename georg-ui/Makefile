@@ -3,9 +3,9 @@
 all: build
 
 build:
-	docker build -t georgnrm/georg-ui:v1.2.0 .
+	docker build -t georgnrm/georg-ui:v1.2.1 .
 
 
 # docker login
 release:
-	docker push georgnrm/georg-ui:v1.2.0
+	docker push georgnrm/georg-ui:v1.2.1
