@@ -1,7 +1,8 @@
 # georg-service
-georg-service is a web service build on top of georg-pelias. It serves as API for Georg. The API provides endpoints for forward geocoding, reverse geocoding and batch upload.
+A web service build on top of [georg-pelias](https://github.com/Naturhistoriska/georg-pelias.git). It serves as API for Georg Application. The API provides endpoints for forward geocoding, reverse geocoding and batch upload.
 
-This documentation helps you clone and setup the repository and run the application.
+george-service is written by JAVA 8. We use maven 3 to build the project.
+This documentation will help you clone, setup the repository, and run the application.
 ## Prerequisites
 Java 8
 Maven 3.5.0
@@ -23,11 +24,10 @@ mvn clean package
 ```
 ### Run
 ### Start georg-pelias
-Follow instructions on how to setup and run [georg-pelias](https://github.com/Naturhistoriska/georg-pelias) in georg-perlias github repository
-
-### Config pelias path:
+Follow the instructions on [github repository](https://github.com/Naturhistoriska/georg-pelias) to setup and run georg-pelias
+### Configurations:
+Config project environment variables in project-initdata.yml file. This file is located at the root of georg-backend directory
 ```
-Open project-initdata.yml
 ## YAML Template.
 ---
 swarm:
@@ -35,9 +35,10 @@ swarm:
     offset: 100
   pelias:
     path: http://localhost:4000/v1/
-
-Replace path by pelias path
 ```
+Open the file, and replace swarm:pelias:path to your local pelias intance.
+georg-service build with wildfly-swarm microservices framework, by run mvn clean package builds the project, embadded Wildfly application server into a fat jar or war file. Wildfy runs on port 8080. The swarm:port:offset: 100, set the Wildfly port number offset 100 to 8080. Wildfly starts to run on port 8180
+
 #### Start API
 ```
 java -jar georg-service/target/georgApi-thorntail.jar -Sinitdata
@@ -132,4 +133,3 @@ make build
 ```
 make release
 ```
-
