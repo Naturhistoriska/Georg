@@ -1,14 +1,16 @@
 # georg-service
-A web service build on top of [georg-pelias](https://github.com/Naturhistoriska/georg-pelias.git). It serves as API for Georg Application. The API provides endpoints for forward geocoding, reverse geocoding and batch upload.
+georg-service is a  web service build on top of [georg-pelias](https://github.com/Naturhistoriska/georg-pelias.git). It serves as API for Georg Application. The API provides endpoints for forward geocoding, reverse geocoding and batch upload.
 
 george-service is written by JAVA 8. We use maven 3 to build the project.
-This documentation will help you clone, setup the repository, and run the application.
+This documentation will help you clone, setup this repository, and run the application.
 ## Prerequisites
+```
 Java 8
 Maven 3.5.0
 Docker
 docker-compose
 georg-pelias
+```
 ## Setup
 ### Clone the repository
 ```
