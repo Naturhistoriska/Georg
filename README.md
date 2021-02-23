@@ -32,7 +32,7 @@ Georg consists of four parts:
   * [Botany (UPS)](https://doi.org/10.15468/ufmslw)
 * [Sweden's Virtual Herbarium (SVH)](https://github.com/mossnisse/Virtuella-Herbariet)
 
-**[georg-service](https://github.com/Naturhistoriska/Georg/tree/master/georg-service)**
+**[georg-service](https://github.com/Naturhistoriska/Georg/tree/master/georg-backend)**
 
 > API build on top of georg-pelias. It allows user to send a text with locality information, or coordinates and get back location suggestions (in JSON format). API is also possible for users to upload a csv file with list of locality information, and get back the best match location suggestion for each locality (in both JSON or CSV format).
 > Current API provides five endpoints:
