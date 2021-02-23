@@ -13,6 +13,7 @@ notes
 /georg-ui/certs/*
 
 .DS_Store
+georg-backend/georg-service/nbproject/
 /georg-service/nbproject/
 /georg-ui/nbproject/private/
 /georg-api/target/
