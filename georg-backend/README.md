@@ -50,7 +50,8 @@ java -jar georg-service/target/georgApi-thorntail.jar -Sinitdata
 georg-service API starts at localhost port 8180
 ## How to use API
 Refer to [API Documention](https://georg.nrm.se/swagger-ui/index.html?url=/api/swagger.json) for available endpoints
-Currently API provides five endpoints:
+
+Currently API provides following five endpoints:
 * Forward geocoding (/api/search)
 * Autocomplete (/api/autocomplete)
 * Reverse geocoding (/api/reverse)
@@ -61,7 +62,7 @@ A free text search to find a place by searching for an address or name.
 This search takes query parameters and options:
 * text - locality information (This query parameter is required)
 * sources - data sources are imported into pelias (Optional).
-    * georg-pelias currently supports following data sources (It is possible to expand over the world):
+    * georg-pelias currently supports following data sources (georg-pelias only supports datasources over the nordic countries. It is possible to expand datasources over the world):
         * Who's on First (wof)
         * OpenAddresses (oa)
         * OpenStreetMap (osm)
@@ -87,14 +88,15 @@ This search takes query parameters and options:
         * s-fbo (From GBIF)
         * socken (From swe-virtual-herbarium)
 * countryCode - Search for specific country (Optional)
-    * At present georg-pelias only can georference locations in the nordic countries. By default, the search searches locations in all the nordic countries. By add countryCode swe, the search searches locations only in Swed
-* size - define number of suggestions shall be returned from API. The default number is 10
+    * At present georg-pelias only can georference locations in the nordic countries. By default, the search searches locations in all the nordic countries. By add countryCode swe, the search searches locations only in Sweden
+* size - define number of suggestions shall be returned from API. The default size is 10
 > Autocomplete
 With autocomplete, user can type in text from georg-ui and get a real-time result suggestions back without having to type the whole location. Autocomplete takes same query parameters and options as Forward geocoding.
 
 > Reverse geocoding
-Find what is located at a certain coordinate location. Reverse geocoding can not georeference on custom dataset based on limition of Pelias.
-Reverse geocoding takes query parameters and options:
+Find what is located at a certain coordinate location. Reverse geocoding are not working on custom datasets based on limition of Pelias.
+
+Reverse geocoding takes following query parameters:
 * lat - latitude
 * lng - longitude
 > Reverse geocoding with coordinates
@@ -103,11 +105,13 @@ Same as Reverse geocoding, this endpoint allows user send in coordinats (latitud
    * '59°21'03.0" N 17°56'20.1" E',
    * '59°21.050' N 17°56.336' E'
 > Batch upload
-This endpoint consumes MULTIPART_FORM_DATA which allows user to upload a csv file with minimum of two columns: Id, SourceLocality, and get best match result for each locality back as csv or json file. You can find sample csv templet from [github](https://github.com/Naturhistoriska/Georg/blob/master/data/georg_batch.csv). To download sample csv templet, run:
+This endpoint consumes MULTIPART_FORM_DATA which allows user to upload a csv file with minimum of two columns: Id, SourceLocality, and get best match result for each locality back as csv or json file. You can find sample csv templet from [github](https://github.com/Naturhistoriska/Georg/blob/master/data/georg_batch.csv).
+
+To download sample csv templet, run:
 cURL -o /{path_to_directory}/sample.csv https://raw.githubusercontent.com/Naturhistoriska/Georg/master/data/georg_batch.csv
 
 Batch upload takes query parameters:
-* type - the type of file returned by API. Currently API supports two type of files returned by API: csv and json
+* type - the type of file returned by API. Currently API supports two type of files to returned from API: csv and json
 ### Examples access API
 > Access API via web browser:
 ```
@@ -134,8 +138,7 @@ Goto georg-service directory and run:
 cd georg-service
 make build
 ```
-### Release docker image
+### Release docker image to Docker hub
 ```
 make release
 ```
-
