@@ -26,9 +26,9 @@ mvn clean package
 ```
 ### Run
 ### Start georg-pelias
-Follow the instructions on [github repository](https://github.com/Naturhistoriska/georg-pelias) to setup and run georg-pelias
+Follow the instructions on [georg-pelias github repository](https://github.com/Naturhistoriska/georg-pelias) to setup and run georg-pelias
 ### Configurations:
-georg-service is built with wildfly-swarm microservices framework. It builds an uber JAR that includes the minimal Java EE APIs and implementations necessary to run the service. Wildfly-swarm uses external configurations to config system and environment variables.
+georg-service is build with wildfly-swarm microservices framework. It builds an uber JAR that includes the minimal Java EE APIs and implementations necessary to run the service. georg-service uses external configurations, a project-initdata.yml file to config system and environment variables.
 
 The configuration project-initdata.yml file is located at the root of georg-backend
 
@@ -41,12 +41,13 @@ swarm:
   pelias:
     path: http://localhost:4000/v1/
 ```
-Open the file, replace swarm:pelias:path to your local pelias intance. The swarm:port:offset is the offset of wildfly AS port number, by default wildfly runs at port 8080.
+Open the file, replace swarm:pelias:path to your local pelias instance. The swarm:port:offset is the offset of wildfly AS port number. By default wildfly runs at port 8080.
 
 #### Start API
 ```
 java -jar georg-service/target/georgApi-thorntail.jar -Sinitdata
 ```
+georg-service API starts at localhost port 8180
 ## How to use API
 Refer to [API Documention](https://georg.nrm.se/swagger-ui/index.html?url=/api/swagger.json) for available endpoints
 Currently API provides five endpoints:
