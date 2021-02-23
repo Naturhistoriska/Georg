@@ -1,8 +1,8 @@
 # georg-service
-georg-service is a  web service build on top of [georg-pelias](https://github.com/Naturhistoriska/georg-pelias.git). It serves as API for Georg Application. The API provides endpoints for forward geocoding, reverse geocoding and batch upload.
+georg-service is a web service build on top of [georg-pelias](https://github.com/Naturhistoriska/georg-pelias.git). It serves as API for Georg Application. The API provides endpoints for forward geocoding, reverse geocoding and batch upload.
 
 george-service is written by JAVA 8. We use maven 3 to build the project.
-This documentation will help you clone, setup this repository, and run the application.
+This documentation will help you clone, setup the repository, and run the application.
 ## Prerequisites
 ```
 Java 8
@@ -28,7 +28,10 @@ mvn clean package
 ### Start georg-pelias
 Follow the instructions on [github repository](https://github.com/Naturhistoriska/georg-pelias) to setup and run georg-pelias
 ### Configurations:
-Config project environment variables in project-initdata.yml file. This file is located at the root of georg-backend directory
+georg-service is built with wildfly-swarm microservices framework. It builds an uber JAR that includes the minimal Java EE APIs and implementations necessary to run the service. Wildfly-swarm uses external configurations to config system and environment variables.
+
+The configuration project-initdata.yml file is located at the root of georg-backend
+
 ```
 ## YAML Template.
 ---
@@ -38,8 +41,7 @@ swarm:
   pelias:
     path: http://localhost:4000/v1/
 ```
-Open the file, and replace swarm:pelias:path to your local pelias intance.
-georg-service build with wildfly-swarm microservices framework, by run mvn clean package builds the project, embadded Wildfly application server into a fat jar or war file. Wildfy runs on port 8080. The swarm:port:offset: 100, set the Wildfly port number offset 100 to 8080. Wildfly starts to run on port 8180
+Open the file, replace swarm:pelias:path to your local pelias intance. The swarm:port:offset is the offset of wildfly AS port number, by default wildfly runs at port 8080.
 
 #### Start API
 ```
@@ -135,3 +137,4 @@ make build
 ```
 make release
 ```
+
