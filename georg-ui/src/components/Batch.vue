@@ -58,6 +58,7 @@
           />
         </v-sheet>
         <div v-if="displayResults && !editMode">
+          <BatchController />
           <v-divider class="mt-2"></v-divider>
           <v-row class="ml-2 mr-0 mt-n2 pa-0">
             <BatchData
@@ -80,6 +81,7 @@ export default {
   components: {
     ActionIconButton: () => import('./baseComponents/ActionIconButton'),
     BatchAction: () => import('../components/BatchAction'),
+    BatchController: () => import('../components/BatchController'),
     BatchData: () => import('../components/BatchData'),
     BatchEdit: () => import('../components/BatchEdit'),
     ResultHeader: () => import('../components/ResultHeader'),
