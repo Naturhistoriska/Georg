@@ -99,10 +99,9 @@ export default {
     },
   },
   watch: {
-    // $route(to) {
-    //   const { name } = to
-    //   console.log('name...', name)
-    // },
+    $route() {
+      this.screenWidth = 'width: 400px'
+    },
     searchOption: function() {
       this.passInValue =
         this.searchOption === 'address'
