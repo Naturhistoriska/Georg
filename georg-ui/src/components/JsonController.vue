@@ -40,7 +40,6 @@
         @keypress="addDinPlats"
         tabindex="0"
         role="button"
-        smalll
         :aria-label="$t('result.addDinplats')"
       >
         <v-icon small left>mdi-map-marker-plus</v-icon>
