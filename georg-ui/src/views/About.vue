@@ -108,6 +108,17 @@
         <p>
           {{ $t('about.browserDescription') }}
         </p>
+        <h2 id="aboutBatch">About batch upload</h2>
+        <p>
+          Batch upload allows user to upload csv file with locality information
+          for georeference, and get the best match suggestion for each locality
+          in csv back from API. You can download sample csv templete from Georg
+          github. To download sample csv file from github, run:
+        </p>
+        <p>
+          cURL -o /{path_to_directory}/sample.csv
+          https://raw.githubusercontent.com/Naturhistoriska/Georg/master/data/georg_batch.csv
+        </p>
         <h2>{{ $t('about.api') }}</h2>
         <p>
           {{ $t('about.apiText') }}
@@ -120,8 +131,6 @@
             {{ $t('about.apiLinkText') }} </a
           >.
         </p>
-        <h2 id="aboutBatch">About batch</h2>
-        <p>Batch help</p>
         <h2>{{ $t('about.version') }}</h2>
         <p>{{ $t('about.version') }}: {{ version }}</p>
         <p>
