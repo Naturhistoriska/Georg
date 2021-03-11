@@ -91,6 +91,7 @@
     "currentLanguage": "ENGLISH"
   },
   "batch": {
+    "adjustFilter": "Adjust filter",
     "backToResultTable": "Back to result table",
     "batch": "Batch",
     "batchEditSubtitle": "<b>ID {id}</b> {source}",
@@ -99,6 +100,7 @@
     "batchHelpLink": "Read more about up - and downloading of CSV-files in Georg.",
     "batchHelpMarker": "Batch upload help",
     "batchCloseHelp": "Close",
+    "copyBatchLink": "Copy batch link",
     "download": "Download",
     "fileInput": "File input",
     "multipleEdit": "Edit multiple",

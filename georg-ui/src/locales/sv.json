@@ -91,10 +91,12 @@
     "currentLanguage": "SVENSKA"
   },
   "batch": {
+    "adjustFilter": "Justera filtret",
     "backToResultTable": "Tillbaka till resultattabellen",
     "batch": "Batch",
     "batchEditSubtitle": "<b>ID {id}</b> {source}",
     "batchText": "Georeference several specimens from a file",
+    "copyBatchLink": "Kopiera batchlänk",
     "download": "Ladda ner",
     "batchHelpText": "<b>Ladda upp en fil i CSV-format</b> och få förslag på matchande platser som du kan redigera innan du laddar ner.",
     "batchHelpLink": "Läs mer om upp - och nedladdning av CSV-filer i Georg.",
