@@ -82,13 +82,13 @@
             :to="$i18nRoute({ name: 'Home' })"
             >{{ $t('menu.search') }}
           </v-tab>
-          <v-tab
+          <!-- <v-tab
             id="batchLink"
             key="batch"
             class="white--text "
             :to="$i18nRoute({ name: 'Batch' })"
             >{{ $t('menu.batch') }}
-          </v-tab>
+          </v-tab> -->
           <v-tab
             id="aboutLink"
             key="about"
