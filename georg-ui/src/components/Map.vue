@@ -87,8 +87,16 @@ const MAP_ICONS = {
   }),
 }
 
-const southWest = new L.LatLng(55.1961173, 12.8018162)
-const northEast = new L.LatLng(68.346545, 23.2360731)
+// UK
+// 59.910922, -16.220795
+// 41.541278, -18.637028
+// 60.522108, 8.424772
+// 45.613872, 8.864087
+
+const southWest = new L.LatLng(41.541278, -18.637028)
+const northEast = new L.LatLng(60.522108, 8.864087)
+// const southWest = new L.LatLng(55.1961173, 12.8018162)
+// const northEast = new L.LatLng(68.346545, 23.2360731)
 const initialBound = new L.LatLngBounds(southWest, northEast)
 
 export default {
