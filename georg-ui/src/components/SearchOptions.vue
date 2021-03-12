@@ -50,10 +50,10 @@ export default {
   }),
   created() {
     const country = this.$route.query.country
-    this.country = this.$t('home.inNordic')
+    this.country = this.$t('home.inUK')
     if (country) {
       this.country =
-        country === '' ? this.$t('home.inNordic') : this.$t('home.inSweden')
+        country === '' ? this.$t('home.inUK') : this.$t('home.inSweden')
     }
     // const nodicTex = this.$t('home.inNordic')
     // const swedenTex = this.$t('home.inSweden')
@@ -65,14 +65,17 @@ export default {
   computed: {
     ...mapGetters(['searchCountry', 'searchOption']),
     isCountrySelectDisabled: function() {
-      return this.coordinates ? true : false
+      return true
+      // return this.coordinates ? true : false
     },
     dropdown_countries: function() {
-      const nodicText = this.$t('home.inNordic')
-      const swedenText = this.$t('home.inSweden')
+      // const nodicText = this.$t('home.inNordic')
+      // const swedenText = this.$t('home.inSweden')
+      const ukText = this.$t('home.inUnitedKingdom')
       return [
-        { text: nodicText, value: '' },
-        { text: swedenText, value: 'SWE' },
+        // { text: nodicText, value: '' },
+        // { text: swedenText, value: 'SWE' },
+        { text: ukText, value: 'UK' },
       ]
     },
     select: {
@@ -80,6 +83,7 @@ export default {
         this.country = select
       },
       get() {
+        return this.$t('home.inUnitedKingdom')
         // const country = this.$route.query.country
         // if (country) {
         //   return country === ''
@@ -87,9 +91,9 @@ export default {
         //     : this.$t('home.inSweden')
         // } else
         //  if (this.country) {
-        return this.country === 'i Sverige' || this.country === 'in Sweden'
-          ? this.$t('home.inSweden')
-          : this.$t('home.inNordic')
+        // return this.country === 'i Sverige' || this.country === 'in Sweden'
+        //   ? this.$t('home.inSweden')
+        //   : this.$t('home.inNordic')
         // }
         // return this.$t('home.inNordic')
       },
