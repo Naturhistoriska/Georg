@@ -18,7 +18,7 @@ public class JsonParser {
   }
   
   public JSONObject convertStringToJson(String jsonString) throws JSONException { 
-    log.info("convertStringToJson : {}", jsonString);
+    log.info("convertStringToJson" );
     return new JSONObject(jsonString);
   }
   
