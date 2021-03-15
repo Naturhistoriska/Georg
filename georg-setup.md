@@ -113,13 +113,11 @@ sudo usermod -aG docker $USER
 ```
 
 Then ctl-d to logout from server and login server again
-Run
+To verify docker user is set, run
 
 ```
 docker info
 ```
-
-To verify docker user is set
 
 #### Install docker-compose
 
