@@ -1,0 +1,9 @@
+## YAML Template.
+---
+swarm:
+  context:
+    path: api
+  port:
+    offset: 100
+  pelias:
+    path: http://api:4000/v1/
