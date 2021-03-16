@@ -484,7 +484,7 @@ pelias import osm
 pelias import polylines
 ```
 
-Start up pelias
+### Start up pelias
 
 ```
 sudo pelias compose up
