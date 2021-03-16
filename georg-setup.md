@@ -98,10 +98,10 @@ sudo add-apt-repository \
 sudo apt-get install docker-ce
 ```
 
-After installation, to check installation, run
+After installation, run:
 
 ```
-sudo apt-get install docker-ce
+docker —version
 ```
 
 #### Setup docker user
