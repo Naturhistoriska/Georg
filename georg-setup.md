@@ -410,7 +410,7 @@ Create pelias.json
 }
 ```
 
-### Create data directory for in mount
+### Create data directory for UK data in mount
 
 ```
 cd /mnt/data
