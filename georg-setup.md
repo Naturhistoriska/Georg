@@ -609,7 +609,7 @@ cd georg-ui
 
 ### Configure environment
 
-Congure georg API url at VUE_APP_GEORG_API
+Configure georg API url at VUE_APP_GEORG_API
 
 ```
 nano .env
