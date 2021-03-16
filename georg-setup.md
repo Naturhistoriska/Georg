@@ -137,10 +137,10 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 ### Setup georg-pelias repository
 
-cd to directory where georg, and georg-pelias will be installed
-Clone the georg-pelias repository
+cd to georg installation directory and clone the georg-pelias repository
 
 ```
+cd /path_to_georg_directory/
 git clone https://github.com/Naturhistoriska/georg-pelias.git
 cd georg-pelias
 sudo ln -s “$(pwd)/pelias” /usr/local/bin/pelias
