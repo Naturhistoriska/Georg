@@ -5,6 +5,7 @@ This guide will help you setup server for georg.
 ## Setup mount
 
 First we mount external space for data store.
+
 To mount data into /mnt, run:
 
 ```
