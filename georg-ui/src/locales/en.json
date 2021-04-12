@@ -92,6 +92,7 @@
   },
   "batch": {
     "adjustFilter": "Adjust filter",
+    "apply": "Apply",
     "backToResultTable": "Back to result table",
     "batch": "Batch",
     "batchEditSubtitle": "<b>ID {id}</b> {source}",
@@ -100,7 +101,10 @@
     "batchHelpLink": "Read more about up - and downloading of CSV-files in Georg.",
     "batchHelpMarker": "Batch upload help",
     "batchCloseHelp": "Close",
+    "clear": "Clear",
     "copyBatchLink": "Copy batch link",
+    "country": "Country",
+    "dataSource": "Data sources",
     "download": "Download",
     "fileInput": "File input",
     "multipleEdit": "Edit multiple",
@@ -131,12 +135,14 @@
     "inSweden": "in Sweden"
   },
   "common": {
+    "cancel": "Cancel",
     "close": "Close",
     "contactus": "Contact us",
     "edit": "Edit",
     "delete": "Delete",
     "languageSetting": "Language setting",
     "ok": "Ok",
+    "save": "Save",
     "selectLanguage": "Select language",
     "en": "English",
     "sv": "Svenska"
