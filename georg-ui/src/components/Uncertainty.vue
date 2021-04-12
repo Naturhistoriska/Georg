@@ -80,13 +80,9 @@ export default {
     }
   },
   created() {
-    this.redDarkenColor = 'red darken-2'
-    this.markerWithRadius = 'mdi-map-marker-radius'
-    this.iconToggleGbifData = 'mdi-chevron-down'
-    this.importIconName = 'mdi-database-import'
-    this.occurrenceDataset = 'GBIF Occurrence dataset'
-    this.occurrenceId = 'GBIF Occurrence ID'
-    this.opennewicon = 'mdi-open-in-new'
+    console.log('editView...', this.editView)
+    this.redDarkenColor = this.editView ? '' : 'red darken-2'
+    this.markerWithRadius = this.editView ? '' : 'mdi-map-marker-radius'
   },
   mounted() {
     if (this.accuracy >= 0) {
@@ -110,7 +106,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['accuracy', 'selectedMarker']),
+    ...mapGetters(['accuracy', 'editView', 'selectedMarker']),
   },
   methods: {
     ...mapMutations(['setAccuracy']),
