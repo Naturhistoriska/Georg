@@ -5,7 +5,7 @@
       itemsPerPageOptions: [],
     }"
     :headers="currentHeader"
-    :items="batchData"
+    :items="batch"
     :loading="loading"
     :single-expand="singleExpand"
     :single-select="singleSelect"
@@ -70,12 +70,14 @@
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'BatchData',
+  // props: ['batch'],
   data() {
     return {
       checked: false,
       indeterminate: false,
       singleSelect: false,
       selected: [],
+      batch: [],
       // expanded: [],
       singleExpand: true,
       currentPage: 0,
@@ -116,6 +118,10 @@ export default {
           text: `${this.$t('batch.sourceInput')}`,
           value: 'sourceLocality',
         },
+        // {
+        //   text: 'Datasource',
+        //   value: 'dataSources',
+        // },
         { text: true, icon: true, value: 'data-table-expand' },
       ],
       currentHeader: [],
@@ -128,18 +134,13 @@ export default {
     // // store current page number first
     // this.prevPage = this.pagination.page
 
-    // this.$nextTick().then(() => {
-    //   this.$set(this.pagination, 'page', this.prevPage)
-    // })
-  },
-  computed: {
-    ...mapGetters(['batchData', 'currentBatch', 'selectedBatch']),
-    pages() {
-      if (this.options.rowsPerPage == null || this.options.totalItems == null) {
-        return 0
-      }
-      return Math.ceil(this.options.totalItems / this.options.rowsPerPage)
-    },
+    this.$nextTick().then(() => {
+      this.batch = !this.filters
+        ? this.batchData
+        : this.filters.hasFilters
+        ? this.filteredData
+        : this.batchData
+    })
   },
   watch: {
     selected: function() {
@@ -171,6 +172,22 @@ export default {
     //   deep: true,
     // },
   },
+  computed: {
+    ...mapGetters([
+      'batchData',
+      'currentBatch',
+      'filters',
+      'filteredData',
+      'selectedBatch',
+    ]),
+    pages() {
+      if (this.options.rowsPerPage == null || this.options.totalItems == null) {
+        return 0
+      }
+      return Math.ceil(this.options.totalItems / this.options.rowsPerPage)
+    },
+  },
+
   methods: {
     ...mapMutations([
       'setCurrentBatch',
