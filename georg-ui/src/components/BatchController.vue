@@ -1,10 +1,10 @@
 <template>
-  <div class="text-center">
+  <div class="text-left pl-3">
     <v-chip
       color="grey darken-2"
       outlined
       small
-      class="mr-2"
+      class="ma-2"
       @click="adjustFilter"
       @keypress="adjustFilter"
       role="button"
@@ -14,8 +14,17 @@
       {{ $t('batch.adjustFilter') }}
     </v-chip>
 
-    <v-chip class="ma-2" outlined>
-      <v-icon left>
+    <v-chip
+      color="grey darken-2"
+      outlined
+      small
+      class="ma-2"
+      @click="copyBatch"
+      @keypress="adjustFilter"
+      role="button"
+      :aria-label="$t('batch.copyBatchLink')"
+    >
+      <v-icon small left>
         mdi-link-variant
       </v-icon>
       {{ $t('batch.copyBatchLink') }}
@@ -25,6 +34,13 @@
 <script>
 export default {
   name: 'BatchController',
-  methods: {},
+  methods: {
+    adjustFilter() {
+      this.$emit('adjust-filter')
+    },
+    copyBatch() {
+      console.log('copyBatch')
+    },
+  },
 }
 </script>
