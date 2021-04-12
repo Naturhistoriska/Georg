@@ -53,7 +53,9 @@ export default {
     ...mapGetters([
       'batchData',
       'detailView',
-      // 'displayResults',
+      // 'displayResults'
+      'filters',
+      'filteredData',
       'isErrorMsg',
       'results',
     ]),
@@ -78,20 +80,28 @@ export default {
           ? this.$t('error.inValidCoordinates')
           : 'Invalid CSV file'
       }
-      return this.isBatch
-        ? this.$t('batch.numberOfRecords', { number: this.batchData.length })
-        : ''
+      if (this.isBatch) {
+        const num = !this.filters
+          ? this.batchData.length
+          : this.filters.hasFilters
+          ? this.filteredData.length
+          : this.batchData.length
+        return this.$t('batch.numberOfRecords', { number: num })
+      }
+      return ''
     },
   },
   methods: {
     ...mapMutations([
       'setDetailView',
+      'setEditView',
       // 'setDisplayResults',
       'setReBuildMarker',
       'setRezoom',
     ]),
     backToResultList() {
-      this.$emit('back-results')
+      this.setEditView(false)
+      // this.$emit('back-results')
       // this.setDetailView(false)
       // this.setReBuildMarker(true)
       // this.setRezoom(true)
