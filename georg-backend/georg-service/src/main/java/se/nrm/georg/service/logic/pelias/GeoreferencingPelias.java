@@ -81,7 +81,8 @@ public class GeoreferencingPelias {
     map.entrySet().stream()  
             .forEach(m -> { 
               String name = m.getValue(); 
-              beans.add(convertor.createBean(service.search(peliasUrl.concat(name)), m.getKey(), name));  
+              beans.add(convertor.createBean(service.search(peliasUrl.concat(name)), 
+                      m.getKey(), name));  
     }); 
     return beans; 
   } 
