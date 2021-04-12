@@ -3,10 +3,12 @@
     <Batch
       v-if="isBatch"
       v-bind:width="screenWidth"
-      @upload="upload"
-      @expand-table="expandTable"
-      @collapse-table="collapseTable"
+      @batch-edit="batchEdit"
       @clear-file="removeFile"
+      @collapse-table="collapseTable"
+      @expand-table="expandTable"
+      @open-adjustFilter="openAdjustFilters"
+      @upload="upload"
     />
     <v-card id="navi" :style="screenWidth" v-else>
       <Search
@@ -53,7 +55,7 @@ export default {
   },
   data() {
     return {
-      // data: [],
+      editData: [],
       checkbox: true,
       mapHeight: 'height: 1500px',
       screenWidth: 'width: 400px',
@@ -87,11 +89,12 @@ export default {
   computed: {
     ...mapGetters([
       'detailView',
+      'displayResults',
       'isAddressSearch',
       'searchOption',
       'searchCoordinates',
       'searchText',
-      'displayResults',
+      'selectedBatch',
     ]),
     isBatch() {
       const path = this.$route.fullPath
@@ -101,6 +104,7 @@ export default {
   watch: {
     $route() {
       this.screenWidth = 'width: 400px'
+      this.setReBuildMarker(true)
     },
     searchOption: function() {
       this.passInValue =
@@ -114,6 +118,9 @@ export default {
       'setBatchData',
       'setCurrentBatch',
       'setDetailView',
+      'setEditData',
+      'setFilters',
+      'setFilteredData',
       'setHovedResultId',
       'setIsErrorMsg',
       'setMsgKey',
@@ -128,16 +135,39 @@ export default {
       'setSearchCoordinates',
       'setSearchText',
     ]),
+    batchEdit() {
+      this.editData = []
+      this.selectedBatch.forEach(batch => {
+        service
+          .fetchAddressResults(batch.sourceLocality)
+          .then(response => {
+            const data = {
+              id: batch.id,
+              data: response.features,
+            }
+            this.editData.push(data)
+            this.setEditData(this.editData)
+          })
+          .catch(function() {})
+          .finally(() => {})
+      })
+      console.log('editData...', this.editData.length)
+    },
     expandTable() {
       this.screenWidth = `width: ${screen.width}px`
     },
     collapseTable() {
       this.screenWidth = 'width: 400px'
     },
+    openAdjustFilters() {
+      this.screenWidth = 'width: 400px'
+    },
     removeFile() {
       this.setMsgKey('')
       this.setBatchData([])
       this.setCurrentBatch([])
+      this.setFilteredData([])
+      this.setFilters({})
     },
     clear() {
       this.setDetailView(false)
@@ -252,16 +282,7 @@ export default {
           } else {
             this.setBatchData(response)
           }
-
-          // this.setIsErrorMsg(false)
-          // this.setMsgKey('batch')
         })
-        // .then(response => {
-        //   this.data = response.data
-        //   this.setBatchData(this.data)
-        //   this.setIsErrorMsg(false)
-        //   this.setMsgKey('batch')
-        // })
         .catch(() => {
           this.message = 'Could not upload the file!'
           this.currentFile = undefined
