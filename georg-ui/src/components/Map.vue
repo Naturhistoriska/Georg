@@ -188,6 +188,7 @@ export default {
       'addDinPlats',
       'currentBatch',
       'detailView',
+      'editView',
       'reBuildMarker',
       'results',
       'hoveredResultId',
@@ -244,6 +245,12 @@ export default {
       this.buildBatchMarker()
     },
     selectedBatch: function() {
+      this.buildBatchMarker()
+    },
+    setSelectedEditData: function() {
+      this.buildBatchMarker()
+    },
+    editView: function() {
       this.buildBatchMarker()
     },
   },
@@ -328,14 +335,31 @@ export default {
       this.addUnertainties()
     },
 
+    tooltipClassName(isSelected) {
+      if (this.editView) {
+        return 'leaflet-tooltip-own'
+      }
+      return isSelected
+        ? 'front-tooltip-class leaflet-tooltip-own'
+        : 'back-tooltip-class leaflet-tooltip-own'
+    },
+
+    selectedRecord(id) {
+      if (this.editView) {
+        return true
+      }
+      return this.selectedBatch.find(record => record['id'] === id)
+    },
+
     buildBatchMarker() {
       this.resetLayerGroup()
-      this.currentBatch.forEach(result => {
+      const batchData = this.editView ? this.selectedBatch : this.currentBatch
+
+      batchData.forEach(result => {
         const { id, lat, lng } = result
-        let isSelected = this.selectedBatch.find(record => record['id'] === id)
-        const className = isSelected
-          ? 'front-tooltip-class leaflet-tooltip-own'
-          : 'back-tooltip-class leaflet-tooltip-own'
+        const isSelected = this.selectedRecord(id)
+        const className = this.tooltipClassName(isSelected)
+
         const pane = isSelected ? 'topMarker' : 'lowerMarker'
         const icon = isSelected ? MAP_ICONS.blueIcon : MAP_ICONS.greyIcon
         const marker = L.marker([lat, lng], {
