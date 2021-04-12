@@ -1,7 +1,11 @@
 <template>
   <div>
     <v-card id="batch" :style="width">
-      <div class="mt-n5 ml-n4 pa-0">
+      <AdjustFilter
+        v-if="adjustFilter"
+        @close-adjust-filter="closeAdjustFilter"
+      />
+      <div class="mt-n5 ml-n4 pa-0" v-else>
         <h3 class="text--darken-2 v-card__title ">
           {{ $t('batch.batch') }}
         </h3>
@@ -13,6 +17,7 @@
               dense
               loader-height="3"
               :label="$t('batch.fileInput')"
+              :value="currentFile"
               prepend-inner-icon="attach_file"
               prepend-icon=""
               show-size
@@ -50,15 +55,14 @@
             </v-list-item>
           </v-row>
           <ResultHeader
-            v-bind:isEdit="editMode"
+            v-bind:isEdit="editView"
             v-bind:isBatch="true"
             @display-results="handleDisplayResult"
-            @back-results="backToTable"
             v-if="currentFile && !loading"
           />
         </v-sheet>
-        <div v-if="displayResults && !editMode">
-          <BatchController />
+        <div v-if="displayResults && !editView">
+          <BatchController @adjust-filter="openAdjustFilter" />
           <v-divider class="mt-2"></v-divider>
           <v-row class="ml-2 mr-0 mt-n2 pa-0">
             <BatchData
@@ -66,11 +70,11 @@
               @on-list-click="collapseTable"
             />
           </v-row>
-          <BatchAction @on-edit="handleBatchEdit" />
+          <BatchAction @edit-batch="handleEdit" />
         </div>
       </div>
     </v-card>
-    <BatchEdit v-if="displayResults && editMode" />
+    <BatchEdit v-if="displayResults && editView" />
   </div>
 </template>
 
@@ -79,6 +83,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Batch',
   components: {
+    AdjustFilter: () => import('../components/AdjustFilter'),
     ActionIconButton: () => import('./baseComponents/ActionIconButton'),
     BatchAction: () => import('../components/BatchAction'),
     BatchController: () => import('../components/BatchController'),
@@ -88,7 +93,8 @@ export default {
   },
   data() {
     return {
-      editMode: false,
+      adjustFilter: false,
+      // editMode: false,
       currentFile: undefined,
       displayResults: false,
       fileInfos: [],
@@ -111,15 +117,23 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['batchData', 'isErrorMsg']),
+    ...mapGetters(['batchData', 'isErrorMsg', 'editView', 'selectedBatch']),
   },
   methods: {
-    handleBatchEdit() {
-      this.editMode = true
+    closeAdjustFilter() {
+      this.adjustFilter = !this.adjustFilter
     },
-    backToTable() {
-      this.editMode = false
+    openAdjustFilter() {
+      this.adjustFilter = !this.adjustFilter
+      this.$emit('open-adjustFilter')
     },
+    // handleBatchEdit() {
+    //   this.$emit('batch-edit')
+    //   this.editMode = true
+    // },
+    // backToTable() {
+    //   this.editMode = false
+    // },
     handleDisplayResult() {
       this.displayResults = !this.displayResults
     },
@@ -145,6 +159,10 @@ export default {
       }
       this.$emit('upload', this.currentFile)
       this.loading = true
+    },
+    handleEdit() {
+      console.log('handleEdit')
+      this.$emit('batch-edit')
     },
     openCloseHelpText() {
       this.showHelpText = !this.showHelpText
