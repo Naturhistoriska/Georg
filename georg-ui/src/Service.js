@@ -6,13 +6,19 @@ const gbifApi = process.env.VUE_APP_GBIF_API
 export default class Service {
   async fetchAddressResults(address, countryCode) {
     // const url = `${baseUrl}geoCoding?address=${address}&countryCode=${countryCode}`
-    const url = `${baseUrl}search?text=${address}&countryCode=${countryCode}`
+    const url =
+      countryCode === undefined
+        ? `${baseUrl}search?text=${address}`
+        : `${baseUrl}search?text=${address}&countryCode=${countryCode}`
     const response = await axios.get(url)
     return response.data
   }
 
   async autoCompleteSearch(value, countryCode) {
-    const url = `${baseUrl}autocomplete?text=${value}&countryCode=${countryCode}`
+    const url =
+      countryCode === undefined
+        ? `${baseUrl}autocomplete?text=${value}`
+        : `${baseUrl}autocomplete?text=${value}&countryCode=${countryCode}`
     const response = await axios.get(url)
     return response.data
   }
