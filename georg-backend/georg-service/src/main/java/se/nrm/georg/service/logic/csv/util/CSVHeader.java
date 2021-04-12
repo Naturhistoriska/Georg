@@ -9,7 +9,8 @@ public enum CSVHeader {
   SourceLocality,
   SuggestedLocality,
   Coordinates,
-  Uncertainty
-  
-  
+  Uncertainty,
+  DataSources,
+  Layers,
+  Country
 }

@@ -39,8 +39,12 @@ public class PeliasParser {
   private final String feature = "Feature";
   private final String point = "Point";
   private final String countryKey = "country";
+  private final String countryAKey = "country_a";
   private final String regionKey = "region";
   private final String countyKey = "county";
+  private final String sourceKey = "source";
+  private final String layerKey = "layer";
+  private final String emptyString = "";
   
   private final String ddKey = "dd";
   private final String dmsKey = "dms";
@@ -107,6 +111,22 @@ public class PeliasParser {
   
   public String getLabel(JSONObject json) { 
     return json.getString(labelKey);
+  }
+  
+  public String getSource(JSONObject json) { 
+    return json.getString(sourceKey);
+  }
+  
+  public String getLayer(JSONObject json) {
+    return json.getString(layerKey);
+  }
+  
+  public String getCountryCode(JSONObject json) {
+    return json.has(countryAKey) ? json.getString(countryAKey) : emptyString;
+  }
+  
+  public String getCountry(JSONObject json) {
+    return json.has(countryKey) ? json.getString(countryKey) : emptyString;
   }
   
   public JSONArray getBBox(JSONObject json) { 

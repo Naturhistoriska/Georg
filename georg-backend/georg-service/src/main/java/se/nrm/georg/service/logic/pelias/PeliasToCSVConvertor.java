@@ -36,6 +36,7 @@ public class PeliasToCSVConvertor {
    * @param jsonString
    * @param id
    * @param locality
+   * 
    * @return CSVBean
    */
   public CSVBean createBean(String jsonString, String id, String locality) {
@@ -46,15 +47,16 @@ public class PeliasToCSVConvertor {
       return new CSVBean(id, locality, noSearchResult);
     }
 
-    JSONObject propertiesJson = parser.getProperties(feature);
-    String label = parser.getLabel(propertiesJson); 
-    
+    JSONObject propertiesJson = parser.getProperties(feature);  
     int uncertaintyInMeter = uncertainty.getUncertainty(feature, propertiesJson, parser); 
 
     JSONArray coordinates = parser.getCoordinates(feature); 
     double doubleLat = Util.getInstance().convertBigDecimalToDouble(coordinates.getBigDecimal(1));
     double doubleLng = Util.getInstance().convertBigDecimalToDouble(coordinates.getBigDecimal(0));
-    return new CSVBean(id, locality, label, doubleLat, doubleLng,
-            CoordinatesHelper.getInstance().buildDMS(doubleLat, doubleLng), uncertaintyInMeter);
+    
+    return new CSVBean(id, locality, parser.getLabel(propertiesJson), 
+            doubleLat, doubleLng, CoordinatesHelper.getInstance().buildDMS(doubleLat, doubleLng), 
+            uncertaintyInMeter, parser.getSource(propertiesJson), 
+            parser.getLayer(propertiesJson), parser.getCountry(propertiesJson));
   }
 }

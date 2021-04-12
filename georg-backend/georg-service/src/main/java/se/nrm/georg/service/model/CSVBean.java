@@ -13,7 +13,10 @@ public class CSVBean {
   private double lng;
   private String latLngDMS;
   private int uncertainty; 
-   
+  private String dataSources;
+  private String layers;
+  private String country;
+          
   public CSVBean() { 
   }
   
@@ -30,7 +33,8 @@ public class CSVBean {
  
   
   public CSVBean(String id, String sourceLocality, String suggestedLocality, 
-          double lat, double lng, String latLngDMS, int uncertainty) {
+          double lat, double lng, String latLngDMS, int uncertainty, 
+          String dataSources, String layers, String country) {
     this.id = id;
     this.sourceLocality = sourceLocality;
     this.suggestedLocality = suggestedLocality;
@@ -38,6 +42,9 @@ public class CSVBean {
     this.lng = lng;
     this.latLngDMS = latLngDMS;
     this.uncertainty = uncertainty; 
+    this.dataSources = dataSources;
+    this.layers = layers;
+    this.country = country;
   }
  
   public String getId() {
@@ -82,5 +89,17 @@ public class CSVBean {
   
   public double getLng() {
     return lng;
+  } 
+
+  public String getDataSources() {
+    return dataSources;
+  }
+
+  public String getLayers() {
+    return layers;
+  } 
+
+  public String getCountry() {
+    return country;
   } 
 }
