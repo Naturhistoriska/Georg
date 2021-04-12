@@ -10,7 +10,14 @@
       >
         {{ $t('common.edit') }}
       </v-btn>
-      <v-btn color="primary" :disabled="disable" outlined small class="ml-2">
+      <v-btn
+        color="primary"
+        :disabled="disable"
+        outlined
+        small
+        class="ml-2"
+        @click="onDelete"
+      >
         {{ $t('common.delete') }}
       </v-btn>
       <v-spacer></v-spacer>
@@ -23,7 +30,7 @@
   </v-sheet>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'BatchAction',
   data() {
@@ -40,8 +47,16 @@ export default {
     ...mapGetters(['batchData', 'selectedBatch']),
   },
   methods: {
+    ...mapMutations(['setBatchData', 'setEditView']),
     openEdit() {
-      this.$emit('on-edit')
+      this.setEditView(true)
+      this.$emit('edit-batch')
+    },
+    onDelete() {
+      let editData = this.batchData.filter(batch => {
+        return !this.selectedBatch.includes(batch)
+      })
+      this.setBatchData(editData)
     },
   },
 }
