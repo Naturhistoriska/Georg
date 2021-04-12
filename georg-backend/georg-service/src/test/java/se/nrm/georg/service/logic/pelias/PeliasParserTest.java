@@ -508,6 +508,7 @@ public class PeliasParserTest {
 
     String propertiesString = "{\n"
             + "	\"country\": \"Sweden\",\n"
+            + "	\"country_a\": \"SWE\",\n"
             + "	\"county\": \"Katrineholm\",\n"
             + "	\"source\": \"gbif\",\n"
             + "	\"layer\": \"nhrs-nrm\",\n"

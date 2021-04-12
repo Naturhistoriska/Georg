@@ -137,6 +137,8 @@ public class PeliasToCSVConvertorTest {
     verify(parser, times(1)).getFirstFeature(any(JSONObject.class));
     verify(parser, times(1)).getProperties(feature);
     verify(parser, times(1)).getLabel(properties);
+    verify(parser, times(1)).getSource(properties);
+    verify(parser, times(1)).getLayer(properties);
     verify(parser, times(1)).getCoordinates(feature);
     verify(uncertainty, times(1)).getUncertainty(feature, properties, parser);
   }
