@@ -38,7 +38,7 @@
                 <v-list-item-subtitle
                   v-html="$t('batch.batchHelpText')"
                 ></v-list-item-subtitle>
-                <router-link to="/sv/om#aboutBatch" class="routerlink">{{
+                <router-link :to="aboutBatchLink" class="routerlink">{{
                   $t('batch.batchHelpLink')
                 }}</router-link>
               </v-list-item-content>
@@ -118,6 +118,12 @@ export default {
   },
   computed: {
     ...mapGetters(['batchData', 'isErrorMsg', 'editView', 'selectedBatch']),
+    aboutBatchLink() {
+      const locale = this.$i18n.locale
+      return locale === 'sv'
+        ? `/${locale}/om#aboutBatch`
+        : `/${locale}/about#aboutBatch`
+    },
   },
   methods: {
     closeAdjustFilter() {
