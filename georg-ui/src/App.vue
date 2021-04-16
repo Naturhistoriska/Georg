@@ -24,13 +24,7 @@
       <v-list nav>
         <v-list-item key="contactLink" @click="onContackLinkclick()">
           <v-list-item-content>
-            <v-list-item-title
-              :class="[
-                this.routeName === 'Contact'
-                  ? 'blue--text text--darken-2'
-                  : 'grey--text text--darken-2',
-              ]"
-            >
+            <v-list-item-title :class="contactActiveLinkColor">
               {{ $t('common.contactus') }}
             </v-list-item-title>
           </v-list-item-content>
@@ -40,13 +34,7 @@
           @click="onAccessibilityLinkclick()"
         >
           <v-list-item-content>
-            <v-list-item-title
-              :class="[
-                this.routeName === 'Accessibility'
-                  ? 'blue--text text--darken-2'
-                  : 'grey--text text--darken-2',
-              ]"
-            >
+            <v-list-item-title :class="accessibilityActiveLinkColor">
               {{ $t('menu.accessibility') }}
             </v-list-item-title>
           </v-list-item-content>
@@ -155,10 +143,17 @@ export default {
     aboutUrl() {
       return this.$i18n.locale === 'sv' ? 'Om' : 'About'
     },
-    activeLinkColor() {
-      return this.routeName === 'Contact'
-        ? 'background: #edf3f8;'
-        : 'background: #FFFFFF;'
+    contactActiveLinkColor() {
+      return this.routeName === 'Contact' || this.routeName === 'Kontakt'
+        ? 'blue--text text--darken-2'
+        : 'grey--text text--darken-2'
+    },
+    accessibilityActiveLinkColor() {
+      return this.routeName === 'Accessibility' ||
+        this.routeName === 'Tillganglighetsredogorelse'
+        ? 'blue--text text--darken-2'
+        : 'grey--text text--darken-2'
+    },
     },
   },
   methods: {
