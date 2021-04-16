@@ -137,6 +137,14 @@ export default {
   },
   computed: {
     aboutUrl() {
+      console.log('this.routeName', this.routeName)
+      if (
+        this.routeName !== 'Batch' &&
+        this.routeName !== 'Search' &&
+        this.routeName !== 'Home'
+      ) {
+        return this.routeName
+      }
       return this.$i18n.locale === 'sv' ? 'Om' : 'About'
     },
     contactActiveLinkColor() {
