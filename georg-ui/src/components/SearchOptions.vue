@@ -66,6 +66,7 @@ export default {
     ...mapGetters(['searchCountry', 'searchOption']),
     isCountrySelectDisabled: function() {
       return this.coordinates ? true : false
+      // return this.searchOption !== 'address'
     },
     dropdown_countries: function() {
       const nodicText = this.$t('home.inNordic')
@@ -103,6 +104,9 @@ export default {
     //   }
     //   return this.$t('home.inNordic')
     // },
+  },
+  mounted() {
+    this.coordinates = this.searchOption == 'address' ? null : this.searchOption
   },
   watch: {
     searchCountry: function() {

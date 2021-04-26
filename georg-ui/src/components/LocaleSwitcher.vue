@@ -42,7 +42,6 @@ export default {
   props: ['currentLocale', 'dialogStatus'],
   data() {
     return {
-      // selectedLocale: this.currentLocale,
       selectedLocale: Trans.currentLocale,
       theLocale: this.currentLocale,
     }

@@ -137,7 +137,6 @@ export default {
   },
   computed: {
     aboutUrl() {
-      console.log('this.routeName', this.routeName)
       if (
         this.routeName !== 'Batch' &&
         this.routeName !== 'Search' &&

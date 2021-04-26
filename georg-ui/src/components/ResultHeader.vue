@@ -24,8 +24,8 @@
         v-bind:classname="textclass"
         v-bind:text="displaytoggle"
         v-bind:iconAppend="icon"
-        v-if="!isErrorMsg"
-        @clicked="onDisplayResultsClick"
+        v-if="showButton"
+        @clicked="setDisplayResults(!displayResults)"
       />
     </v-card-actions>
   </div>
@@ -41,7 +41,8 @@ export default {
   props: ['isBatch', 'isEdit'],
   data() {
     return {
-      displayResults: true,
+      // displayResults: true,
+      // showButton: true,
     }
   },
   created() {
@@ -53,7 +54,7 @@ export default {
     ...mapGetters([
       'batchData',
       'detailView',
-      // 'displayResults'
+      'displayResults',
       'filters',
       'filteredData',
       'isErrorMsg',
@@ -67,7 +68,7 @@ export default {
         : this.$t('home.backToResluts')
     },
     displaytoggle: function() {
-      return this.displayResults === true
+      return this.displayResults
         ? this.$t('home.hideResults')
         : this.$t('home.displyResults')
     },
@@ -90,12 +91,18 @@ export default {
       }
       return ''
     },
+    showButton: function() {
+      if (this.isBatch) {
+        return !this.isErrorMsg
+      }
+      return true
+    },
   },
   methods: {
     ...mapMutations([
       'setDetailView',
       'setEditView',
-      // 'setDisplayResults',
+      'setDisplayResults',
       'setReBuildMarker',
       'setRezoom',
     ]),
@@ -106,10 +113,10 @@ export default {
       // this.setReBuildMarker(true)
       // this.setRezoom(true)
     },
-    onDisplayResultsClick() {
-      this.displayResults = !this.displayResults
-      this.$emit('display-results')
-    },
+    // onDisplayResultsClick() {
+    //   this.displayResults = !this.displayResults
+    //   this.$emit('display-results')
+    // },
   },
 }
 </script>

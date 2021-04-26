@@ -4,28 +4,43 @@
       v-if="isBatch"
       v-bind:width="screenWidth"
       @batch-edit="batchEdit"
-      @clear-file="removeFile"
       @collapse-table="collapseTable"
       @expand-table="expandTable"
       @open-adjustFilter="openAdjustFilters"
       @upload="upload"
     />
-    <v-card id="navi" :style="screenWidth" v-else>
+    <PlaceSearch
+      v-else
+      v-bind:height="resultsHeight"
+      v-bind:width="screenWidth"
+      @clear-search="clear"
+      @search-address="searchAddress"
+      @search-coordinates="searchCoors"
+    />
+
+    <!-- <v-card id="navi" :style="screenWidth" v-else>
+      <PlaceSearch
+        v-bind:height="resultsHeight"
+        @clear-search="clear"
+        @search-address="searchAddress"
+        @search-coordinates="searchCoors"
+      />
+    </v-card> -->
+    <!-- <v-card id="navi" :style="screenWidth" v-else>
       <Search
         v-bind:passInValue="passInValue"
         @clear-search="clear"
         @search-address="searchAddress"
         @search-coordinates="searchCoors"
-        v-if="!isBatch"
       />
       <h2 v-if="results.length" class="visuallyhidden">Resultat</h2>
-      <Message v-if="!isBatch" />
+      <Message />
       <Results
         v-bind:height="resultsHeight"
         v-if="!detailView && displayResults && !isBatch"
       />
-    </v-card>
-    <Detail v-if="detailView && displayResults" v-bind:height="resultsHeight" />
+    </v-card> -->
+    <!-- <Detail v-if="detailView && displayResults" v-bind:height="resultsHeight" /> -->
     <div id="infoi">
       <Map v-bind:mapHeight="mapHeight" />
     </div>
@@ -35,10 +50,10 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 // import Detail from '../components/Detail'
-import Map from '../components/Map'
-import Message from '../components/Message'
-import Results from '../components/Results'
-import Search from '../components/Search'
+// import Map from '../components/Map'
+// import Message from '../components/Message'
+// import Results from '../components/Results'
+// import Search from '../components/Search'
 import Service from '../Service'
 
 const service = new Service()
@@ -47,11 +62,12 @@ export default {
   name: 'Home',
   components: {
     Batch: () => import('../components/Batch'),
-    Detail: () => import('../components/Detail'),
-    Map,
-    Message,
-    Results,
-    Search,
+    // Detail: () => import('../components/Detail'),
+    Map: () => import('../components/Map'),
+    PlaceSearch: () => import('../components/PlaceSearch'),
+    // Message,
+    // Results,
+    // Search,
   },
   data() {
     return {
@@ -59,10 +75,10 @@ export default {
       checkbox: true,
       mapHeight: 'height: 1500px',
       screenWidth: 'width: 400px',
-      passInValue: null,
+      // passInValue: null,
       results: [],
       resultsHeight: 'height: 1400px',
-      tile: false,
+      // tile: false,
     }
   },
   created() {
@@ -89,7 +105,7 @@ export default {
   computed: {
     ...mapGetters([
       'detailView',
-      'displayResults',
+      // 'displayResults',
       'isAddressSearch',
       'searchOption',
       'searchCoordinates',
@@ -104,23 +120,20 @@ export default {
   watch: {
     $route() {
       this.screenWidth = 'width: 400px'
-      this.setReBuildMarker(true)
+      // this.setReBuildMarker(true)
     },
-    searchOption: function() {
-      this.passInValue =
-        this.searchOption === 'address'
-          ? this.searchCoordinates
-          : this.searchText
-    },
+    // searchOption: function() {
+    //   this.passInValue =
+    //     this.searchOption === 'address'
+    //       ? this.searchCoordinates
+    //       : this.searchText
+    // },
   },
   methods: {
     ...mapMutations([
       'setBatchData',
-      'setCurrentBatch',
       'setDetailView',
       'setEditData',
-      'setFilters',
-      'setFilteredData',
       'setHovedResultId',
       'setIsErrorMsg',
       'setMsgKey',
@@ -151,7 +164,6 @@ export default {
           .catch(function() {})
           .finally(() => {})
       })
-      console.log('editData...', this.editData.length)
     },
     expandTable() {
       this.screenWidth = `width: ${screen.width}px`
@@ -162,29 +174,29 @@ export default {
     openAdjustFilters() {
       this.screenWidth = 'width: 400px'
     },
-    removeFile() {
-      this.setMsgKey('')
-      this.setBatchData([])
-      this.setCurrentBatch([])
-      this.setFilteredData([])
-      this.setFilters({})
-    },
+    // removeFile() {
+    //   this.setMsgKey('')
+    //   this.setBatchData([])
+    //   this.setCurrentBatch([])
+    //   this.setFilteredData([])
+    //   this.setFilters({})
+    // },
     clear() {
       this.setDetailView(false)
       this.setHovedResultId('')
       this.setMsgKey('')
       this.setReBuildMarker(true)
       this.setResults([])
-      this.setSearchCoordinates('')
       this.setSelectedMarker({})
       this.setSelectedResultId('')
       this.setSelectedResult({})
-      this.setSearchText(null)
-      if (this.$route.fullPath !== '/${locale}') {
-        this.$router.push({
-          name: 'Home',
-        })
-      }
+      // this.passInValue = null
+      // const locale = this.$i18n.locale
+      // if (this.$route.fullPath !== `/${locale}/`) {
+      //   this.$router.push({
+      //     name: 'Home',
+      //   })
+      // }
     },
     handleResize() {
       const windowHeight = window.innerHeight - 84
@@ -279,13 +291,19 @@ export default {
           if (response.error) {
             const { msgKey } = response.error
             this.setMsgKey(msgKey)
+            this.setBatchData([])
+            this.setIsErrorMsg(true)
           } else {
             this.setBatchData(response)
+            this.setIsErrorMsg(false)
           }
         })
         .catch(() => {
           this.message = 'Could not upload the file!'
           this.currentFile = undefined
+        })
+        .finally(() => {
+          console.log('upload done....')
         })
     },
     setMessages(typeSearch) {
@@ -322,15 +340,15 @@ export default {
   overflow: auto;
   height: 100%; /* To make sure height is ok in Safari*/
 }
-#navi {
+/* #navi {
   padding: 12px 16px;
   z-index: 2;
   min-width: 300px;
-}
+} */
 
-.card-sm {
+/* .card-sm {
   width: 400px;
-}
+} */
 #infoi {
   width: 100%;
   height: 100%;

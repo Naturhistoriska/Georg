@@ -73,6 +73,7 @@ export default {
   // props: ['batch'],
   data() {
     return {
+      alreadyMounted: false,
       checked: false,
       indeterminate: false,
       singleSelect: false,
@@ -128,49 +129,64 @@ export default {
       loading: false,
     }
   },
+  // created() {
+  // console.log('create....', this.batchData.length)
+  // this.batch = !this.filters
+  // ? this.batchData
+  // : this.filters.hasFilters
+  // ? this.filteredData
+  // : this.batchData
+  // },
   mounted() {
+    this.alreadyMounted = true
     this.currentHeader = this.headers
     this.selected = this.selectedBatch
+    this.batch = !this.filters
+      ? this.batchData
+      : this.filters.hasFilters
+      ? this.filteredData
+      : this.batchData
     // // store current page number first
     // this.prevPage = this.pagination.page
 
-    this.$nextTick().then(() => {
-      this.batch = !this.filters
-        ? this.batchData
-        : this.filters.hasFilters
-        ? this.filteredData
-        : this.batchData
-    })
+    // this.$nextTick().then(() => {
+    //   this.batch = !this.filters
+    //     ? this.batchData
+    //     : this.filters.hasFilters
+    //     ? this.filteredData
+    //     : this.batchData
+    // })
   },
   watch: {
+    // batchData: function() {
+    //   this.batch = this.batchData
+    // },
     selected: function() {
       this.indeterminate =
         this.selected.length !== 0 &&
         this.selected.length !== this.batchData.length
     },
 
-    // options: {
-    //   handler() {
-    //     try {
-    //       // this.pagination.page = this.currentPage
-    //       console.log('********pagination watcher fired********')
-    //       //console.log('watch totalItems', this.pagination.totalItems)
-    //       console.log(
-    //         'options page',
-    //         this.options.page,
-    //         'currnet page',
-    //         this.currentPage
-    //       )
-    //       console.log('initialize', this.init)
-    //       if (this.options.page !== this.currentPage) {
-    //         this.currentPage = this.options.page
-    //       }
-    //     } catch (error) {
-    //       console.log('getData()', error)
-    //     }
-    //   },
-    //   deep: true,
-    // },
+    options: {
+      handler() {
+        try {
+          // // this.pagination.page = this.currentPage
+          // console.log('********pagination watcher fired********')
+          // //console.log('watch totalItems', this.pagination.totalItems)
+          // console.log(
+          //   'options page',
+          //   this.options.page,
+          //   'currnet page',
+          //   this.currentPage
+          // )
+          // console.log('initialize', this.init)
+          if (this.options.page !== this.currentPage) {
+            this.currentPage = this.options.page
+          }
+        } catch (error) {}
+      },
+      deep: true,
+    },
   },
   computed: {
     ...mapGetters([
@@ -178,6 +194,7 @@ export default {
       'currentBatch',
       'filters',
       'filteredData',
+      'isErrorMsg',
       'selectedBatch',
     ]),
     pages() {
@@ -203,8 +220,12 @@ export default {
       }
     },
     currentData(data) {
-      this.setCurrentBatch(data)
-      this.setReBuildMarker(true)
+      console.log('set batch data', data.length, this.alreadyMounted)
+      if (this.alreadyMounted) {
+        this.setCurrentBatch(data)
+      }
+
+      // this.setReBuildMarker(true)
     },
     handleClick() {
       this.setSelectedBatch(this.selected)

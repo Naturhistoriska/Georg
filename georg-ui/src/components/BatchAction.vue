@@ -21,7 +21,7 @@
         {{ $t('common.delete') }}
       </v-btn>
       <v-spacer></v-spacer>
-      <download-csv :data="batchData" name="georgData.csv" class="btn">
+      <download-csv :data="batch" name="georgData.csv" class="btn">
         <v-btn color="primary" small>
           {{ $t('batch.download') }}
         </v-btn>
@@ -44,7 +44,15 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['batchData', 'selectedBatch']),
+    ...mapGetters(['batchData', 'filters', 'filteredData', 'selectedBatch']),
+
+    batch() {
+      return !this.filters
+        ? this.batchData
+        : this.filters.hasFilters
+        ? this.filteredData
+        : this.batchData
+    },
   },
   methods: {
     ...mapMutations(['setBatchData', 'setEditView']),

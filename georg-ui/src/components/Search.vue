@@ -16,7 +16,7 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import ComboSearch from './ComboSearch'
 import SearchCoordinates from './SearchCoordinates'
 import SearchOptions from './SearchOptions'
@@ -34,6 +34,10 @@ export default {
       isAddressSearch: true,
     }
   },
+  mounted() {
+    this.setReBuildMarker(true)
+    this.isAddressSearch = this.searchOption === 'address'
+  },
   computed: {
     ...mapGetters(['searchOption']),
   },
@@ -43,6 +47,7 @@ export default {
     },
   },
   methods: {
+    ...mapMutations(['setReBuildMarker']),
     clear() {
       this.$emit('clear-search')
     },

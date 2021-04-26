@@ -148,10 +148,11 @@ export default {
       zoom: 0,
     }
   },
-
+  // created() {
+  //   this.bounds = initialBound
+  // },
   mounted() {
     this.bounds = initialBound
-
     this.$refs.myMap.mapObject.createPane('topMarker')
     this.$refs.myMap.mapObject.getPane('topMarker').style.zIndex = 888
 
@@ -166,7 +167,7 @@ export default {
 
     this.$nextTick(() => {
       this.$refs.myMap.mapObject.zoomControl.setPosition('bottomright')
-      this.$refs.myMap.mapObject.fitBounds(this.bounds)
+      this.$refs.myMap.mapObject.fitBounds(initialBound)
       this.$refs.myMap.mapObject.invalidateSize()
     })
 
@@ -198,6 +199,10 @@ export default {
       'selectedResult',
       'selectedResultId',
     ]),
+    isBatch() {
+      const path = this.$route.fullPath
+      return path.includes('batch')
+    },
 
     iconColor: function() {
       return this.enableAddMapMarkers ? 'red darken-2' : '#424242'
@@ -210,7 +215,11 @@ export default {
   watch: {
     propertyAAndPropertyB() {
       if (this.reBuildMarker) {
-        this.highlightMarker()
+        if (this.isBatch) {
+          this.buildBatchMarker()
+        } else {
+          this.highlightMarker()
+        }
       }
       if (this.rezoom) {
         this.fitMapBounds()
@@ -316,6 +325,12 @@ export default {
         .catch(function() {})
         .finally(() => {
           this.isLoaded = false
+          const locale = this.$i18n.locale
+          if (this.$route.fullPath === `/${locale}/batch`) {
+            this.$router.push({
+              name: 'Home',
+            })
+          }
         })
     },
     removeUncertainties() {

@@ -18,6 +18,7 @@
               loader-height="3"
               :label="$t('batch.fileInput')"
               :value="currentFile"
+              :disabled="loading"
               prepend-inner-icon="attach_file"
               prepend-icon=""
               show-size
@@ -25,7 +26,16 @@
               @change="upload"
               @click="onClick"
               @click:clear="clear"
-            ></v-file-input>
+            >
+              <template v-slot:append-outer>
+                <v-progress-circular
+                  v-if="loading"
+                  color="grey"
+                  indeterminate
+                  small
+                />
+              </template>
+            </v-file-input>
             <ActionIconButton
               v-bind:iconName="questionIcon"
               :aria-label="$t('batch.batchHelpMarker')"
@@ -54,14 +64,20 @@
               </v-list-item-action>
             </v-list-item>
           </v-row>
-          <ResultHeader
+          <!-- <ResultHeader
             v-bind:isEdit="editView"
             v-bind:isBatch="true"
             @display-results="handleDisplayResult"
             v-if="currentFile && !loading"
+          /> -->
+          <ResultHeader
+            v-bind:isEdit="editView"
+            v-bind:isBatch="true"
+            v-if="currentFile && !loading"
           />
         </v-sheet>
-        <div v-if="displayResults && !editView">
+        <!-- <div v-if="displayResults && !editView"> -->
+        <div v-if="showResults">
           <BatchController @adjust-filter="openAdjustFilter" />
           <v-divider class="mt-2"></v-divider>
           <v-row class="ml-2 mr-0 mt-n2 pa-0">
@@ -74,12 +90,17 @@
         </div>
       </div>
     </v-card>
-    <BatchEdit v-if="displayResults && editView" />
+    <BatchEdit
+      v-if="displayResults && editView"
+      @change-uncertainty="changeUncertainty"
+    />
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
+// import Service from '../Service'
+// const service = new Service()
 export default {
   name: 'Batch',
   components: {
@@ -91,18 +112,20 @@ export default {
     BatchEdit: () => import('../components/BatchEdit'),
     ResultHeader: () => import('../components/ResultHeader'),
   },
+  props: ['width'],
   data() {
     return {
       adjustFilter: false,
       // editMode: false,
       currentFile: undefined,
-      displayResults: false,
-      fileInfos: [],
+      // displayResults: false,
+      showResult: false,
+      // fileInfos: [],
       loading: false,
+      fileURL: null,
       showHelpText: false,
     }
   },
-  props: ['width'],
   created() {
     this.questionIcon = 'mdi-help-circle'
     this.closeIcon = 'mdi-close-circle'
@@ -110,22 +133,95 @@ export default {
   watch: {
     batchData() {
       this.loading = false
-      this.displayResults = this.currentFile ? true : false
+      // this.displayResults = this.currentFile ? true : false
     },
     isErrorMsg() {
       this.loading = false
+      // this.displayResults = !this.isErrorMsg
+      if (this.isErrorMsg) {
+        this.setCurrentBatch([])
+      }
     },
   },
+  mounted() {
+    if (!this.currentFile) {
+      this.currentFile = this.uploadedFile
+    }
+    if (this.currentFile) {
+      this.setDisplayResults(true)
+      // this.displayResults = true
+    }
+    // this.setReBuildMarker(true)
+  },
   computed: {
-    ...mapGetters(['batchData', 'isErrorMsg', 'editView', 'selectedBatch']),
+    ...mapGetters([
+      'batchData',
+      'displayResults',
+      'isErrorMsg',
+      'editView',
+      'reBuildMarker',
+      'selectedBatch',
+      'uploadedFile',
+    ]),
     aboutBatchLink() {
       const locale = this.$i18n.locale
       return locale === 'sv'
         ? `/${locale}/om#aboutBatch`
         : `/${locale}/about#aboutBatch`
     },
+    showResults: function() {
+      if (
+        this.currentFile &&
+        !this.isErrorMsg &&
+        !this.loading &&
+        this.displayResults
+      ) {
+        return true
+      }
+      return false
+    },
+    // showResults: {
+    //   set(displayResult) {
+    //     this.displayResults = displayResult
+    //   },
+    //   get() {
+    //     if (this.editView) {
+    //       return false
+    //     }
+    //     if (
+    //       this.currentFile &&
+    //       !this.isErrorMsg &&
+    //       !this.loading &&
+    //       this.displayResults
+    //     ) {
+    //       return true
+    //     }
+    //     return this.displayResults
+    //   },
+    // },
+
+    // showResults() {
+    //   if (this.editView) {
+    //     return false
+    //   }
+    //   if (this.currentFile && !this.isErrorMsg && !this.loading) {
+    //     return true
+    //   }
+    //   return false
+    // },
   },
   methods: {
+    ...mapMutations([
+      'setBatchData',
+      'setCurrentBatch',
+      'setDisplayResults',
+      'setFilteredData',
+      'setFilters',
+      'setIsErrorMsg',
+      'setMsgKey',
+      'setReBuildMarker',
+      'setUploadedFile',
+    ]),
     closeAdjustFilter() {
       this.adjustFilter = !this.adjustFilter
     },
@@ -140,9 +236,10 @@ export default {
     // backToTable() {
     //   this.editMode = false
     // },
-    handleDisplayResult() {
-      this.displayResults = !this.displayResults
-    },
+    // handleDisplayResult() {
+    //   this.displayResults = !this.displayResults
+    //   this.showResults = this.displayResults
+    // },
     expandTable() {
       this.$emit('expand-table')
     },
@@ -150,29 +247,40 @@ export default {
       this.$emit('collapse-table')
     },
     clear() {
-      this.displayResults = false
-      this.$emit('clear-file')
+      this.currentFile = null
+      this.setDisplayResults(false)
+      this.setMsgKey('')
+      this.setBatchData([])
+      this.setCurrentBatch([])
+      this.setFilteredData([])
+      this.setFilters({})
+      this.setIsErrorMsg(false)
+      // this.$emit('clear-file')
     },
     onClick() {
       this.showHelpText = false
     },
-    upload(file) {
-      this.currentFile = file
-      if (!this.currentFile) {
-        this.loading = false
-        this.message = 'Please select a file!'
-        return
+    async upload(file) {
+      if (file && file.name) {
+        this.currentFile = file
+        if (!this.currentFile) {
+          this.loading = false
+          this.message = 'Please select a file!'
+          return
+        }
+        this.$emit('upload', this.currentFile)
+        this.loading = true
+        this.setUploadedFile(file)
+        this.setDisplayResults(true)
       }
-      this.$emit('upload', this.currentFile)
-      this.loading = true
     },
     handleEdit() {
-      console.log('handleEdit')
       this.$emit('batch-edit')
     },
     openCloseHelpText() {
       this.showHelpText = !this.showHelpText
     },
+    changeUncertainty() {},
   },
 }
 </script>

@@ -23,7 +23,7 @@
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'SearchCoordinates',
-  props: ['passInValue'],
+  // props: ['passInValue'],
   data() {
     return {
       coordinates: '',
@@ -32,12 +32,15 @@ export default {
     }
   },
   mounted() {
+    // if (this.coordinates === '') {
+    //   if (this.passInValue !== null && this.passInValue !== '') {
+    //     this.coordinates = this.passInValue
+    //   } else {
+    //      this.coordinates = this.searchCoordinates
+    //   }
+    // }
     if (this.coordinates === '') {
-      if (this.passInValue !== null && this.passInValue !== '') {
-        this.coordinates = this.passInValue
-      } else {
-        this.coordinates = this.searchCoordinates
-      }
+      this.coordinates = this.searchCoordinates
     }
     this.setSearchCoordinates(this.coordinates)
   },
@@ -52,6 +55,7 @@ export default {
   methods: {
     ...mapMutations(['setAccuracy', 'setSearchCoordinates']),
     clear() {
+      this.setSearchCoordinates('')
       this.$emit('clear-search')
     },
     search(e) {

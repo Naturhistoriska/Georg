@@ -46,7 +46,7 @@ export default {
     ItemContent,
     ItemIcon,
   },
-  props: ['passInValue'],
+  // props: ['passInValue'],
   data: () => ({
     autoSearch: true,
     entries: [],
@@ -61,12 +61,13 @@ export default {
     this.tleClass = 'font-weight-medium body-2 text-truncate'
   },
   mounted() {
-    if (this.select === null) {
-      if (this.passInValue !== null && this.passInValue !== '') {
-        this.select = this.passInValue
-      } else {
-        this.select = this.searchText
-      }
+    if (this.select === null || this.select === '') {
+      // if (this.passInValue !== null && this.passInValue !== '') {
+      //   this.select = this.passInValue
+      // } else {
+      //   this.select = this.searchText
+      // }
+      this.select = this.searchText
       this.entries = []
       this.autoSearch = false
     }
@@ -133,6 +134,7 @@ export default {
     clear() {
       this.search = null
       this.entries = []
+      this.setSearchText('')
       this.$emit('clear-search')
     },
     filterResult({ id }) {

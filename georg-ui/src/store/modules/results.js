@@ -26,6 +26,7 @@ const state = {
   searchCountry: '',
   searchText: '',
   searchCoordinates: '',
+  uploadedFile: null,
 }
 
 const getters = {
@@ -59,6 +60,7 @@ const getters = {
   searchOption: state => state.searchOption,
   searchText: state => state.searchText,
   searchCoordinates: state => state.searchCoordinates,
+  uploadedFile: state => state.uploadedFile,
 }
 
 const actions = {}
@@ -91,6 +93,7 @@ const mutations = {
   setSearchOption: (state, payload) => (state.searchOption = payload),
   setSearchText: (state, payload) => (state.searchText = payload),
   setSearchCoordinates: (state, payload) => (state.searchCoordinates = payload),
+  setUploadedFile: (state, payload) => (state.uploadedFile = payload),
 }
 
 export default {

@@ -45,58 +45,15 @@
         </v-row>
       </v-sheet>
     </v-list-item-group>
-
-    <!-- <v-combobox
-      v-model="select"
-      :items="items"
-      auto-select-first
-      dense
-      :label="$t('batch.suggestedLocality')"
-      single
-      prepend-icon="mdi-map-marker"
-    >
-      <template v-slot:prepend>
-        <v-icon color="blue darken-2">mdi-map-marker</v-icon>
-      </template>
-   <template v-slot:item="{ item }">
-          <ItemContent
-            v-bind:tleClass="tleClass"
-            v-bind:title="item.fullName"
-          />
-        </template>
-    </v-combobox> -->
-    <!-- <v-list-item role="option" @keypress.prevent="onclick()">
-      <ItemIcon v-bind:iconColor="iconColor" v-bind:iconName="edit" />
-      <v-list-item-content @click.prevent="onclick()">
-        uncertainty
-      </v-list-item-content>
-    </v-list-item> -->
-
-    <!-- <div
-      v-if="selectedBatch.length"
-      id="scroll-target"
-      class="overflow-y-auto"
-      :style="height"
-    >
-      <div id="editList">
-        batch....
-        <template v-for="batch in selectedBatch">
-          batch....d...d
-          <Edit v-bind:batch="batch" :key="batch.id" />
-        </template>
-      </div>
-    </div> -->
   </v-card>
 </template>
 <script>
-import { mapGetters } from 'vuex'
-// import ItemContent from './baseComponents/ItemContent'
+import { mapGetters, mapMutations } from 'vuex'
 import ItemIcon from './baseComponents/ItemIcon'
 import Uncertainty from '../components/Uncertainty'
 export default {
   name: 'BatchEdit',
   components: {
-    // ItemContent,
     ItemIcon,
     Uncertainty,
   },
@@ -120,6 +77,7 @@ export default {
         id: this.selectedBatch[0].id,
         source: this.selectedBatch[0].sourceLocality,
       })
+      this.uncertainty = this.selectedBatch[0].uncertainty
     } else {
       this.title = this.$t('batch.multipleEdit')
       this.subtitle = this.selectedBatch[1].id
@@ -131,7 +89,6 @@ export default {
       let elements = []
       this.editData.map(entry => {
         entry.data.map(item => {
-          // const { gid, name, region, source } = item.properties
           const { coordinates, country, gid, name, region } = item.properties
 
           let fullName = region !== undefined ? `${name}, ${region}` : `${name}`
@@ -166,11 +123,15 @@ export default {
         if (this.suggestedLocality) {
           return this.suggestedLocality
         }
+        if (this.selectedBatch.length === 1) {
+          return this.selectedBatch[0].suggestedLocality
+        }
         return this.items.length > 0 ? this.items[0].fullName : ''
       },
     },
   },
   methods: {
+    ...mapMutations(['setEditView']),
     onSelect() {
       this.disable = false
     },
@@ -182,8 +143,11 @@ export default {
         element.lng = lng
         Element.dms = dms
       })
+      this.setEditView(false)
     },
-    onCancel() {},
+    onCancel() {
+      this.setEditView(false)
+    },
   },
 }
 </script>

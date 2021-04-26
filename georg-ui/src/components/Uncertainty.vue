@@ -45,8 +45,8 @@
               color="red darken-2"
               text
               :disabled="disableSetUncertaintyBtn"
-              >{{ $t('result.setUncertainty') }}</v-btn
-            >
+              >{{ $t('result.setUncertainty') }}
+            </v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -80,14 +80,19 @@ export default {
     }
   },
   created() {
-    console.log('editView...', this.editView)
     this.redDarkenColor = this.editView ? '' : 'red darken-2'
     this.markerWithRadius = this.editView ? '' : 'mdi-map-marker-radius'
   },
   mounted() {
-    if (this.accuracy >= 0) {
-      this.accuracyValue = this.accuracy
+    this.disableSetUncertaintyBtn = true
+    if (this.editView) {
+      this.accuracyValue = this.selectedBatch[0].uncertainty
       this.uncertintyChangedByChip = true
+    } else {
+      if (this.accuracy >= 0) {
+        this.accuracyValue = this.accuracy
+        this.uncertintyChangedByChip = true
+      }
     }
   },
   watch: {
@@ -106,19 +111,25 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(['accuracy', 'editView', 'selectedMarker']),
+    ...mapGetters(['accuracy', 'editView', 'selectedBatch', 'selectedMarker']),
   },
   methods: {
     ...mapMutations(['setAccuracy']),
     setUncertaintyValue() {
-      this.selectedMarker.properties.coordinateUncertaintyInMeters = this.accuracyValue
-      this.setAccuracy(this.accuracyValue)
-      this.disableSetUncertaintyBtn = true
-      this.msgClass = 'grey--text'
+      if (!this.editView) {
+        this.selectedMarker.properties.coordinateUncertaintyInMeters = this.accuracyValue
+        this.setAccuracy(this.accuracyValue)
+        this.disableSetUncertaintyBtn = true
+        this.msgClass = 'grey--text'
+      }
     },
     addAccuracyValue(value) {
       this.accuracyValue = value
-      this.setUncertaintyValue()
+      if (!this.editView) {
+        this.setUncertaintyValue()
+      } else {
+        this.$emit('change-uncertainty', value)
+      }
       this.uncertintyChangedByChip = true
     },
     checkUncertaintyValue() {
