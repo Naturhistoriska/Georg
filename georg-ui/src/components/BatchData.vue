@@ -183,7 +183,11 @@ export default {
           if (this.options.page !== this.currentPage) {
             this.currentPage = this.options.page
           }
-        } catch (error) {}
+        } catch (error) {
+          if (error) {
+            return
+          }
+        }
       },
       deep: true,
     },
