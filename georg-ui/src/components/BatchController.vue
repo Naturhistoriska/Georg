@@ -38,9 +38,7 @@ export default {
     adjustFilter() {
       this.$emit('adjust-filter')
     },
-    copyBatch() {
-      console.log('copyBatch')
-    },
+    copyBatch() {},
   },
 }
 </script>
