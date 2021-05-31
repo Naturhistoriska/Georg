@@ -8,7 +8,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.csv.CSVRecord;
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+//import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.json.JSONException;
 import se.nrm.georg.service.logic.coordinates.CoordinatesHelper;
 import se.nrm.georg.service.logic.coordinates.CoordinatesParser;
@@ -57,19 +57,22 @@ public class GeorgLogic implements Serializable {
    *
    * @return String - temporary file path
    */
-  public String processBatch(InputPart uploadFile, String type) throws GeorgException {
+//  public String processBatch(InputPart uploadFile, String type) throws GeorgException {
+  public String processBatch(InputStream uploadFile, String type) throws GeorgException, IOException {
+    log.info("processBatch...{}", uploadFile.available());
     List<CSVRecord> records;
     Map<String, String> map;
-    try {
-      records = fileHandler.readCsv(uploadFile.getBody(InputStream.class, null));
+//    try {
+      records = fileHandler.readCsv(uploadFile);
+//      records = fileHandler.readCsv(uploadFile.getBody(InputStream.class, null));
       map = csv.convertCSVToMap(records);
       if (!map.isEmpty()) {
         List<CSVBean> beans = pelias.processBatch(map);
         return fileHandler.createFile(beans, type);
       }
-    } catch (IOException ex) {
-      log.error((ex.getMessage()));
-    }
+//    } catch (IOException ex) {
+//      log.error((ex.getMessage()));
+//    }
     return null;
   }
 

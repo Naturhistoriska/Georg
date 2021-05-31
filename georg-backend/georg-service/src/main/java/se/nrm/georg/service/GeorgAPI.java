@@ -10,7 +10,12 @@ import io.swagger.annotations.Tag;
 import java.io.File;
 import java.io.FileInputStream; 
 import java.io.IOException; 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -22,8 +27,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response; 
 import javax.ws.rs.core.StreamingOutput;
 import lombok.extern.slf4j.Slf4j; 
-import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import org.apache.commons.io.IOUtils;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+//import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+//import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.json.JSONException;
 import se.nrm.georg.service.logic.GeorgLogic;
 import se.nrm.georg.service.logic.exceptions.ErrorMessageBuilder;
@@ -48,12 +57,31 @@ import se.nrm.georg.service.logic.exceptions.GeorgException;
 public class GeorgAPI {
 
   private final String file = "file";
+  private final static String GEORG = "georg-service is a web service build on top of georg-pelias. "
+          + "It serves as API for Georg Application. The API provides endpoints for forward geocoding, "
+          + "reverse geocoding and batch upload.";
 
   @Inject
   private GeorgLogic logic;
   @Inject
   private ErrorMessageBuilder errorBuilder;
-
+  
+  public GeorgAPI() {
+    
+  }
+  
+  @GET
+  @Path("/")
+  @ApiOperation(value = "Get georg API",
+          notes = "Return search results in json",
+          response = String.class
+  )
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response geocode() {
+    log.info("geocode");
+    return Response.ok(GEORG).build(); 
+  }
+  
   @GET
   @Path("/search")
   @ApiOperation(value = "Get geocoding",
@@ -78,8 +106,8 @@ public class GeorgAPI {
       return Response.status(Response.Status.NOT_FOUND)
               .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
     } 
-  }
-
+  } 
+  
   @GET
   @Path("/autocomplete")
   @ApiOperation(value = "Search",
@@ -154,17 +182,22 @@ public class GeorgAPI {
           notes = "Upload csv file with minimum two columns (Id, SourceLocality). Return search results in json",
           response = String.class)
   @ApiResponses(value = {
-    @ApiResponse(code = 200, message = "File uploaded")})
-  @Consumes(MediaType.MULTIPART_FORM_DATA)
-  @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public Response uploadFile(MultipartFormDataInput input, @QueryParam("type") String returnType) throws IOException {
-    log.info("upload : {}", returnType);
-
-    InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
+    @ApiResponse(code = 200, message = "File uploaded")}) 
+  @Consumes({MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON})
+//  @Consumes(MediaType.MULTIPART_FORM_DATA )
+//  @Produces(MediaType.APPLICATION_OCTET_STREAM) 
+  @Produces(MediaType.APPLICATION_JSON) 
+//  public Response uploadFile(MultipartFormDataInput input, @QueryParam("type") String returnType) throws IOException {
+//  public Response uploadFile(FormDataMultiPart input, @QueryParam("type") String returnType) throws IOException {
+  public Response uploadFile(@FormDataParam("data") InputStream uploadFile) throws IOException {
+    log.info("upload : {} ", uploadFile.available());
+ 
+//    InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
     
     String filePath;
     try {
-      filePath = logic.processBatch(uploadFile, returnType); 
+      filePath = logic.processBatch(uploadFile, "json"); 
+      log.info("filePath : {}", filePath);
       if(filePath == null) {  
         return Response.ok(errorBuilder.buildInvalidCSVFileMessage()).build(); 
       } 
@@ -175,21 +208,25 @@ public class GeorgAPI {
    
     log.info("file path... {}", filePath);  
     File fileDownload = new File(filePath);
-    StreamingOutput stream = (OutputStream out) -> { 
-      try(FileInputStream inp = new FileInputStream(fileDownload)) {
-        byte[] buff = new byte[1024];
-        int len;
-        while ((len = inp.read(buff)) >= 0) {
-          out.write(buff, 0, len);
-        }
-        out.flush();
-      } catch (Exception e) {
-        log.error(e.getMessage());
-      } finally {
-        log.info("Remove stream file: " + fileDownload);
-        fileDownload.delete();
-      } 
-    };
-    return Response.ok(stream).build(); 
+    String content = new String(Files.readAllBytes(Paths.get(filePath)));
+ 
+//    StreamingOutput stream = (OutputStream out) -> { 
+//      try(FileInputStream inp = new FileInputStream(fileDownload)) {
+//        byte[] buff = new byte[1024];
+//        int len;
+//        while ((len = inp.read(buff)) >= 0) {
+//          out.write(buff, 0, len);
+//        }
+//        out.flush();
+//      } catch (Exception e) {
+//        log.error(e.getMessage());
+//      } finally {
+//        log.info("Remove stream file: " + fileDownload);
+//        fileDownload.delete();
+//      } 
+//    }; 
+ 
+//    return Response.ok(stream).build();  
+      return Response.ok(content).build();
   } 
 }
