@@ -82,8 +82,9 @@ Output:
 <details>
   <summary>Examples from API call</summary>
 
-> $ restish -o json -q text=val -q size=1 georg-stage/api/search
-```{
+> restish -o json -q text=val -q size=1 georg/api/search
+```
+{
   "body": {
     "bbox": [
       -2.693038,
@@ -220,6 +221,630 @@ Output:
     "Content-Length": "1970",
     "Content-Type": "application/json",
     "Date": "Tue, 01 Jun 2021 07:33:47 GMT",
+    "Server": "nginx/1.13.10",
+    "Strict-Transport-Security": "max-age=31536000"
+  },
+  "links": {},
+  "proto": "HTTP/2.0",
+  "status": 200
+}
+```
+
+> restish -o json -q text=sol -q size=1 georg/api/autocomplete
+```
+{
+  "body": {
+    "bbox": [
+      -1.86920046973,
+      52.3547232052,
+      -1.71586682844,
+      52.4582724906
+    ],
+    "features": [
+      {
+        "bbox": [
+          -1.86920046973,
+          52.3547232052,
+          -1.71586682844,
+          52.4582724906
+        ],
+        "geometry": {
+          "coordinates": [
+            -1.78094,
+            52.41426
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "centroid",
+          "coordinates": {
+            "dd": [
+              "52.414260",
+              "-1.780940"
+            ],
+            "ddm": [
+              "52°24.856' N",
+              "1°46.856' W"
+            ],
+            "dms": [
+              "52°24'51.3\" N",
+              "1°46'51.4\" W"
+            ],
+            "rt90": [
+              "5955744",
+              "308456"
+            ],
+            "sweref99": [
+              "5940726",
+              "-636973"
+            ]
+          },
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Solihull",
+          "county_gid": "whosonfirst:county:1360699057",
+          "gid": "whosonfirst:locality:1125891303",
+          "id": "1125891303",
+          "label": "Solihull, England, United Kingdom",
+          "layer": "locality",
+          "locality": "Solihull",
+          "locality_gid": "whosonfirst:locality:1125891303",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "Solihull",
+          "region": "West Midlands",
+          "region_gid": "whosonfirst:region:1360698605",
+          "source": "whosonfirst",
+          "source_id": "1125891303"
+        },
+        "type": "Feature"
+      }
+    ],
+    "geocoding": {
+      "attribution": "http://api:4000/attribution",
+      "engine": {
+        "author": "Mapzen",
+        "name": "Pelias",
+        "version": "1.0"
+      },
+      "query": {
+        "lang": {
+          "defaulted": true,
+          "iso6391": "en",
+          "iso6393": "eng",
+          "name": "English",
+          "via": "default"
+        },
+        "layers": [
+          "venue",
+          "street",
+          "country",
+          "macroregion",
+          "region",
+          "county",
+          "localadmin",
+          "locality",
+          "borough",
+          "neighbourhood",
+          "continent",
+          "empire",
+          "dependency",
+          "macrocounty",
+          "macrohood",
+          "microhood",
+          "disputed",
+          "postalcode",
+          "ocean",
+          "marinearea"
+        ],
+        "parsed_text": {
+          "locality": "sol",
+          "subject": "sol"
+        },
+        "parser": "pelias",
+        "private": false,
+        "querySize": 20,
+        "size": 1,
+        "text": "sol"
+      },
+      "timestamp": 1622535355748,
+      "version": "0.2",
+      "warnings": [
+        "performance optimization: excluding 'address' layer"
+      ]
+    },
+    "type": "FeatureCollection"
+  },
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Length": "1729",
+    "Content-Type": "application/json",
+    "Date": "Tue, 01 Jun 2021 08:15:55 GMT",
+    "Server": "nginx/1.13.10",
+    "Strict-Transport-Security": "max-age=31536000"
+  },
+  "links": {},
+  "proto": "HTTP/2.0",
+  "status": 200
+}
+```
+
+> restish -o json -q lat=53.348190 -q lng=-1.744850 georg/api/reverse
+```
+{
+  "body": {
+    "bbox": [
+      -1.744889,
+      53.3479508,
+      -1.743283,
+      53.3485705
+    ],
+    "features": [
+      {
+        "geometry": {
+          "coordinates": [
+            -1.744889,
+            53.348225
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.9,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.005,
+          "gid": "openstreetmap:venue:node/7435727942",
+          "id": "node/7435727942",
+          "label": "Hope (Post Office), Hope, England, United Kingdom",
+          "layer": "venue",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "Hope (Post Office)",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "node/7435727942"
+        },
+        "type": "Feature"
+      },
+      {
+        "bbox": [
+          -1.7441802,
+          53.3484531,
+          -1.7439756,
+          53.3485705
+        ],
+        "geometry": {
+          "coordinates": [
+            -1.744108,
+            53.348498
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.8,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.06,
+          "gid": "openstreetmap:venue:way/240179635",
+          "id": "way/240179635",
+          "label": "Hope Garage, Hope, England, United Kingdom",
+          "layer": "venue",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "Hope Garage",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "way/240179635"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            -1.74392,
+            53.348392
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.8,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.066,
+          "gid": "openstreetmap:venue:node/2479364025",
+          "housenumber": "18",
+          "id": "node/2479364025",
+          "label": "Grasshopper Cafe, Hope, England, United Kingdom",
+          "layer": "venue",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "Grasshopper Cafe",
+          "postalcode": "S33 6RD",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "node/2479364025",
+          "street": "Castleton Road"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            -1.74392,
+            53.348392
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.8,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.066,
+          "gid": "openstreetmap:address:node/2479364025",
+          "housenumber": "18",
+          "id": "node/2479364025",
+          "label": "18 Castleton Road, Hope, England, United Kingdom",
+          "layer": "address",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "18 Castleton Road",
+          "postalcode": "S33 6RD",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "node/2479364025",
+          "street": "Castleton Road"
+        },
+        "type": "Feature"
+      },
+      {
+        "bbox": [
+          -1.7437942,
+          53.3479508,
+          -1.743319,
+          53.3482248
+        ],
+        "geometry": {
+          "coordinates": [
+            -1.743569,
+            53.348114
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.8,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.086,
+          "gid": "openstreetmap:venue:way/338790459",
+          "id": "way/338790459",
+          "label": "Woodroffe Arms, Hope, England, United Kingdom",
+          "layer": "venue",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "Woodroffe Arms",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "way/338790459"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            -1.74341,
+            53.348425
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.8,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.099,
+          "gid": "openstreetmap:venue:node/1842957872",
+          "housenumber": "10",
+          "id": "node/1842957872",
+          "label": "Curry Cabbin, Hope, England, United Kingdom",
+          "layer": "venue",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "Curry Cabbin",
+          "postalcode": "S33 6RD",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "node/1842957872",
+          "street": "Castleton Road"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            -1.74341,
+            53.348425
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.8,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.099,
+          "gid": "openstreetmap:address:node/1842957872",
+          "housenumber": "10",
+          "id": "node/1842957872",
+          "label": "10 Castleton Road, Hope, England, United Kingdom",
+          "layer": "address",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "10 Castleton Road",
+          "postalcode": "S33 6RD",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "node/1842957872",
+          "street": "Castleton Road"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            -1.743361,
+            53.348454
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.7,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.103,
+          "gid": "openstreetmap:address:node/4818108387",
+          "housenumber": "8",
+          "id": "node/4818108387",
+          "label": "8 Castleton Road, Hope, England, United Kingdom",
+          "layer": "address",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "8 Castleton Road",
+          "postalcode": "S33 6RD",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "node/4818108387",
+          "street": "Castleton Road"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            -1.743361,
+            53.348454
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.7,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.103,
+          "gid": "openstreetmap:venue:node/4818108387",
+          "housenumber": "8",
+          "id": "node/4818108387",
+          "label": "The Valley Rambler, Hope, England, United Kingdom",
+          "layer": "venue",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "The Valley Rambler",
+          "postalcode": "S33 6RD",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "node/4818108387",
+          "street": "Castleton Road"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            -1.743283,
+            53.348341
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "confidence": 0.7,
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Derbyshire",
+          "county_a": "DBY",
+          "county_gid": "whosonfirst:county:1360698765",
+          "distance": 0.105,
+          "gid": "openstreetmap:venue:node/913350003",
+          "id": "node/913350003",
+          "label": "18 Bikes Ltd, Hope, England, United Kingdom",
+          "layer": "venue",
+          "localadmin": "Hope",
+          "localadmin_gid": "whosonfirst:localadmin:404433149",
+          "locality": "Hope",
+          "locality_gid": "whosonfirst:locality:1126059691",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "name": "18 Bikes Ltd",
+          "region": "Derbyshire",
+          "region_gid": "whosonfirst:region:1360698539",
+          "source": "openstreetmap",
+          "source_id": "node/913350003"
+        },
+        "type": "Feature"
+      },
+      {
+        "geometry": {
+          "coordinates": [
+            -1.74485,
+            53.34819
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "coordinates": {
+            "dd": [
+              "53.348190",
+              "-1.744850"
+            ],
+            "ddm": [
+              "53°20.891' N",
+              "1°44.691' W"
+            ],
+            "dms": [
+              "53°20'53.5\" N",
+              "1°44'41.5\" W"
+            ],
+            "rt90": [
+              "6057628",
+              "336729"
+            ],
+            "sweref99": [
+              "6042736",
+              "-609934"
+            ]
+          },
+          "country": "United Kingdom",
+          "county": "Derbyshire",
+          "gid": "newMarker",
+          "id": "newMarker",
+          "name": "Din plats",
+          "region": "Derbyshire"
+        },
+        "type": "Feature"
+      }
+    ],
+    "geocoding": {
+      "attribution": "http://api:4000/attribution",
+      "engine": {
+        "author": "Mapzen",
+        "name": "Pelias",
+        "version": "1.0"
+      },
+      "query": {
+        "boundary.circle.lat": 53.34819,
+        "boundary.circle.lon": -1.74485,
+        "lang": {
+          "defaulted": true,
+          "iso6391": "en",
+          "iso6393": "eng",
+          "name": "English",
+          "via": "default"
+        },
+        "point.lat": 53.34819,
+        "point.lon": -1.74485,
+        "private": false,
+        "querySize": 20,
+        "size": 10
+      },
+      "timestamp": 1622535510042,
+      "version": "0.2"
+    },
+    "type": "FeatureCollection"
+  },
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Length": "9704",
+    "Content-Type": "application/json",
+    "Date": "Tue, 01 Jun 2021 08:18:30 GMT",
     "Server": "nginx/1.13.10",
     "Strict-Transport-Security": "max-age=31536000"
   },
