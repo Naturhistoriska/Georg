@@ -56,6 +56,181 @@ Georg consists of four parts:
 
 > A tool for processing customized dataset before importing them into georg-pelias
 
+### How to run georg API with CLI
+Georg API works with Restish. Restish is a CLI for interacting with REST API.
+Reference: **[Restish](https://rest.sh/#/guide?id=guide)** for installation and configuration
+
+Installation
+> brew tap danielgtaylor/restish && brew install restish
+restish --version
+
+Comfiguration:
+>restish api configure **<#name_of_service>**
+ex: restish api configure georg
+? Base URI **<type in url>**
+Save and exit
+
+Basic usage:
+Examples:
+> restish -o json q text=val georg/api/search
+restish -o json -q text=val georg/api/autocomplete
+restish -o json -q lat=53.348190 -q lng=-1.744850 georg/api/reverse
+restish post -o json georg/api/upload?type=json <georg_batch.csv
+
+Output:
+> $ restish -o json -q text=val -q size=1 georg-stage/api/search
+
+<details>
+  <summary>Click to expand</summary>
+
+```{
+  "body": {
+    "bbox": [
+      -2.693038,
+      53.72626,
+      -2.693038,
+      53.72626
+    ],
+    "features": [
+      {
+        "geometry": {
+          "coordinates": [
+            -2.693038,
+            53.72626
+          ],
+          "type": "Point"
+        },
+        "properties": {
+          "accuracy": "point",
+          "addendum": {
+            "osm": {
+              "phone": "+44 1772 313001",
+              "website": "https://www.vjhughesoptometrist.co.uk/",
+              "wheelchair": "limited"
+            }
+          },
+          "confidence": 1,
+          "coordinates": {
+            "dd": [
+              "53.726260",
+              "-2.693038"
+            ],
+            "ddm": [
+              "53°43.576' N",
+              "2°41.582' W"
+            ],
+            "dms": [
+              "53°43'34.5\" N",
+              "2°41'34.9\" W"
+            ],
+            "rt90": [
+              "6115236",
+              "285694"
+            ],
+            "sweref99": [
+              "6099636",
+              "-661542"
+            ]
+          },
+          "country": "United Kingdom",
+          "country_a": "GBR",
+          "country_gid": "whosonfirst:country:85633159",
+          "county": "Lancashire",
+          "county_a": "LAN",
+          "county_gid": "whosonfirst:county:1360698817",
+          "gid": "openstreetmap:venue:node/6207526900",
+          "housenumber": "15",
+          "id": "node/6207526900",
+          "label": "Val Hughes, Farington, England, United Kingdom",
+          "layer": "venue",
+          "localadmin": "Farington",
+          "localadmin_gid": "whosonfirst:localadmin:404434425",
+          "locality": "Farington",
+          "locality_gid": "whosonfirst:locality:1360755763",
+          "macroregion": "England",
+          "macroregion_gid": "whosonfirst:macroregion:404227469",
+          "match_type": "exact",
+          "name": "Val Hughes",
+          "postalcode": "PR5 5RU",
+          "region": "Lancashire",
+          "region_gid": "whosonfirst:region:1360698567",
+          "source": "openstreetmap",
+          "source_id": "node/6207526900",
+          "street": "Hope Terrace"
+        },
+        "type": "Feature"
+      }
+    ],
+    "geocoding": {
+      "attribution": "http://api:4000/attribution",
+      "engine": {
+        "author": "Mapzen",
+        "name": "Pelias",
+        "version": "1.0"
+      },
+      "query": {
+        "lang": {
+          "defaulted": true,
+          "iso6391": "en",
+          "iso6393": "eng",
+          "name": "English",
+          "via": "default"
+        },
+        "layers": [
+          "venue",
+          "street",
+          "country",
+          "macroregion",
+          "region",
+          "county",
+          "localadmin",
+          "locality",
+          "borough",
+          "neighbourhood",
+          "continent",
+          "empire",
+          "dependency",
+          "macrocounty",
+          "macrohood",
+          "microhood",
+          "disputed",
+          "postalcode",
+          "ocean",
+          "marinearea"
+        ],
+        "parsed_text": {
+          "subject": "val*"
+        },
+        "parser": "pelias",
+        "private": false,
+        "querySize": 20,
+        "size": 1,
+        "text": "val*"
+      },
+      "timestamp": 1622532827308,
+      "version": "0.2",
+      "warnings": [
+        "performance optimization: excluding 'address' layer"
+      ]
+    },
+    "type": "FeatureCollection"
+  },
+  "headers": {
+    "Access-Control-Allow-Origin": "*",
+    "Content-Length": "1970",
+    "Content-Type": "application/json",
+    "Date": "Tue, 01 Jun 2021 07:33:47 GMT",
+    "Server": "nginx/1.13.10",
+    "Strict-Transport-Security": "max-age=31536000"
+  },
+  "links": {},
+  "proto": "HTTP/2.0",
+  "status": 200
+}
+```
+</details>
+
+
 ### How does georg work in practice?
 
 * We gather locality information for georeferenced locations from different data sources.
