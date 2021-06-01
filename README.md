@@ -78,11 +78,13 @@ restish -o json -q lat=53.348190 -q lng=-1.744850 georg/api/reverse
 restish post -o json georg/api/upload?type=json <georg_batch.csv
 
 Output:
-
-<details>
-  <summary>Examples from API call</summary>
+Examples from API call
 
 > restish -o json -q text=val -q size=1 georg/api/search
+
+<details>
+  <summary>Click to open response</summary>
+
 ```
 {
   "body": {
@@ -229,8 +231,14 @@ Output:
   "status": 200
 }
 ```
+</details>
+
 
 > restish -o json -q text=sol -q size=1 georg/api/autocomplete
+
+<details>
+  <summary>Click to open response</summary>
+
 ```
 {
   "body": {
@@ -369,8 +377,14 @@ Output:
   "status": 200
 }
 ```
+</details>
+
 
 > restish -o json -q lat=53.348190 -q lng=-1.744850 georg/api/reverse
+
+<details>
+  <summary>Click to open response</summary>
+
 ```
 {
   "body": {
