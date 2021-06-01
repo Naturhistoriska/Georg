@@ -80,7 +80,8 @@ restish post -o json georg/api/upload?type=json <georg_batch.csv
 Output:
 
 <details>
-  <summary>List of reponse from API call</summary>
+  <summary>Examples from API call</summary>
+
 > $ restish -o json -q text=val -q size=1 georg-stage/api/search
 ```{
   "body": {
