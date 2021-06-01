@@ -11,7 +11,7 @@ Georeferencing is a prerequisite to using natural history collections data in re
 Data capture at natural history collections often takes place with an emphasis on particular geographic regions, taxonomic groups, or expeditions. Customized subsets of localities compiled under these georeferencing themes are used in Georg to assign coordinates in the context of relevant interpretations available from the biodiversity informatics community. This is also likely to improve feedback on the original data through more rigorous evaluation under novel georeferencing themes, a process that is otherwise limited to basic validation prior to data use or visualization.
 
 ## How Georg works
-
+ 
 Georg consists of four parts:
 
 * georg-pelias,
