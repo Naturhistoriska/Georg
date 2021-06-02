@@ -8,7 +8,7 @@
 /georg-ui/node_modules
 
 nb-configuration.xml
-notes
+*notes
 
 /georg-ui/certs/*
 
