@@ -155,6 +155,7 @@ export default {
         this.setReBuildMarker(true)
         const { name } = selectedResult.properties
         this.pushUrl(name)
+        this.$emit('select-result')
       }
     },
     searchAddress() {

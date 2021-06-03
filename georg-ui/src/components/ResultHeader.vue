@@ -28,6 +28,10 @@
         @clicked="setDisplayResults(!displayResults)"
       />
     </v-card-actions>
+    <v-divider
+      class="mt-2"
+      v-if="results.length > 0 && displayResults"
+    ></v-divider>
   </div>
 </template>
 <script>
@@ -57,6 +61,7 @@ export default {
       'displayResults',
       'filters',
       'filteredData',
+      'msgKey',
       'isErrorMsg',
       'results',
     ]),
@@ -81,6 +86,9 @@ export default {
           ? this.$t('error.inValidCoordinates')
           : 'Invalid CSV file'
       }
+      if (this.msgKey === 'newMarker') {
+        return this.$t('home.displyDinPlats')
+      }
       if (this.isBatch) {
         const num = !this.filters
           ? this.batchData.length
@@ -89,13 +97,31 @@ export default {
           : this.batchData.length
         return this.$t('batch.numberOfRecords', { number: num })
       }
+      const numOfHits = this.results.length
+      if (this.msgKey === 'coordinatesSearch') {
+        const resultCount = numOfHits - 1
+        return numOfHits === 0
+          ? ''
+          : numOfHits === 1
+          ? this.$t('home.displyDinPlats')
+          : numOfHits === 2
+          ? `${resultCount} ${this.$t('result.hitAndYourLocation')}`
+          : `${resultCount} ${this.$t('result.hitsAndYourLocation')}`
+      }
+      if (this.msgKey === 'addressSearch') {
+        return numOfHits === 0
+          ? this.$t('home.noHits')
+          : numOfHits === 1
+          ? `${numOfHits} ${this.$t('home.hit')}`
+          : `${numOfHits} ${this.$t('home.hits')}`
+      }
       return ''
     },
     showButton: function() {
       if (this.isBatch) {
         return !this.isErrorMsg
       }
-      return true
+      return this.results.length > 0
     },
   },
   methods: {
@@ -107,6 +133,7 @@ export default {
       'setRezoom',
     ]),
     backToResultList() {
+      this.setDetailView(!this.detailView)
       this.setEditView(false)
       // this.$emit('back-results')
       // this.setDetailView(false)

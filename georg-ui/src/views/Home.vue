@@ -12,8 +12,10 @@
     <PlaceSearch
       v-else
       v-bind:height="resultsHeight"
+      v-bind:showResults="showResults"
       v-bind:width="screenWidth"
       @clear-search="clear"
+      @select-result="selectResult"
       @search-address="searchAddress"
       @search-coordinates="searchCoors"
     />
@@ -78,6 +80,7 @@ export default {
       // passInValue: null,
       results: [],
       resultsHeight: 'height: 1400px',
+      showResults: false,
       // tile: false,
     }
   },
@@ -94,7 +97,7 @@ export default {
           country.toLowerCase() === 'swe'
         ? 'SWE'
         : ''
-      this.searchAddress(this.$route.query.place_name, countryCode)
+      this.searchAddress(place_name, countryCode)
     } else if (coordinates) {
       this.searchCoors(this.$route.query.coordinates)
     }
@@ -182,6 +185,7 @@ export default {
     //   this.setFilters({})
     // },
     clear() {
+      this.showResults = false
       this.setDetailView(false)
       this.setHovedResultId('')
       this.setMsgKey('')
@@ -204,8 +208,12 @@ export default {
       this.mapHeight = 'height: ' + windowHeight + 'px'
       this.resultsHeight = 'max-height: ' + boxHeight + 'px'
     },
+    selectResult() {
+      this.showResults = true
+    },
     searchAddress(value, country) {
       this.setSearchText(value)
+      this.showResults = true
       service
         .fetchAddressResults(value, country)
         .then(response => {
@@ -236,6 +244,7 @@ export default {
     },
     searchCoors(value) {
       this.results = []
+      this.showResults = true
       service
         .coordinatesSearch(value)
         .then(response => {
@@ -302,9 +311,7 @@ export default {
           this.message = 'Could not upload the file!'
           this.currentFile = undefined
         })
-        .finally(() => {
-          console.log('upload done....')
-        })
+        .finally(() => {})
     },
     setMessages(typeSearch) {
       // const numOfHits = this.results.length

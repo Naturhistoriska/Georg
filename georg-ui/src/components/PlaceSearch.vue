@@ -6,6 +6,7 @@
         v-if="isAddressSearch"
         @clear-search="clear"
         @search="handleAddressSearch"
+        @select-result="selectResult"
       />
       <SearchCoordinates
         v-else
@@ -18,10 +19,14 @@
         v-bind:isBatch="false"
         @display-results="handleDisplayResult"
       /> -->
-      <ResultHeader v-bind:isEdit="false" v-bind:isBatch="false" />
-      <Results v-bind:height="height" v-if="!detailView && displayResults" />
+      <ResultHeader
+        v-bind:isEdit="false"
+        v-bind:isBatch="false"
+        v-if="showResults"
+      />
+      <Results v-bind:height="height" v-if="!detailView && showResults" />
     </v-card>
-    <Detail v-if="detailView && displayResults" v-bind:height="height" />
+    <Detail v-if="detailView && showResults" v-bind:height="height" />
   </div>
 </template>
 <script>
@@ -42,7 +47,7 @@ export default {
     SearchCoordinates,
     SearchOptions,
   },
-  props: ['height', 'width'],
+  props: ['height', 'showResults', 'width'],
   data() {
     return {
       isAddressSearch: true,
@@ -54,14 +59,22 @@ export default {
     const rebuitMarker = this.results.length > 0
     this.setReBuildMarker(rebuitMarker)
   },
+  watch: {
+    searchOption: function() {
+      this.isAddressSearch = this.searchOption === 'address'
+    },
+  },
   computed: {
     ...mapGetters([
       // 'batchData',
       'detailView',
-      'displayResults',
+      // 'displayResults',
       'results',
       'searchOption',
     ]),
+    // displayHeader: function() {
+    //   return this.results.length > 0
+    // },
   },
   methods: {
     ...mapMutations(['setReBuildMarker']),
@@ -79,6 +92,9 @@ export default {
     handleCoordinateSearch(value) {
       this.$emit('search-coordinates', value)
       this.pushUrl(value)
+    },
+    selectResult() {
+      this.$emit('select-result')
     },
     pushUrl(value, country) {
       const locale = this.$i18n.locale
