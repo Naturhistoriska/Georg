@@ -64,12 +64,6 @@
               </v-list-item-action>
             </v-list-item>
           </v-row>
-          <!-- <ResultHeader
-            v-bind:isEdit="editView"
-            v-bind:isBatch="true"
-            @display-results="handleDisplayResult"
-            v-if="currentFile && !loading"
-          /> -->
           <ResultHeader
             v-bind:isEdit="editView"
             v-bind:isBatch="true"
@@ -77,7 +71,7 @@
           />
         </v-sheet>
         <!-- <div v-if="displayResults && !editView"> -->
-        <div v-if="showResults">
+        <div v-if="showResults && !editView">
           <BatchController @adjust-filter="openAdjustFilter" />
           <v-divider class="mt-2"></v-divider>
           <v-row class="ml-2 mr-0 mt-n2 pa-0">
@@ -275,6 +269,7 @@ export default {
       }
     },
     handleEdit() {
+      console.log('handleEdit')
       this.$emit('batch-edit')
     },
     openCloseHelpText() {

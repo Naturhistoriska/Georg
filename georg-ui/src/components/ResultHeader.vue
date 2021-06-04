@@ -133,7 +133,7 @@ export default {
       'setRezoom',
     ]),
     backToResultList() {
-      this.setDetailView(!this.detailView)
+      this.setDetailView(false)
       this.setEditView(false)
       // this.$emit('back-results')
       // this.setDetailView(false)
