@@ -166,7 +166,6 @@ export default {
         this.selected.length !== 0 &&
         this.selected.length !== this.batchData.length
     },
-
     options: {
       handler() {
         try {
@@ -218,13 +217,12 @@ export default {
 
     toggleAll() {
       if (this.checked) {
-        this.selected = this.batchData
+        this.selected = this.currentBatch
       } else {
         this.selected = []
       }
     },
     currentData(data) {
-      console.log('set batch data', data.length, this.alreadyMounted)
       if (this.alreadyMounted) {
         this.setCurrentBatch(data)
       }
