@@ -388,6 +388,7 @@ export default {
         })
         marker.addTo(this.layerGroup)
       })
+      this.addBatchUnertainties()
     },
 
     buildMarkers() {
@@ -575,17 +576,34 @@ export default {
       })
     },
 
+    addBatchUnertainties() {
+      this.removeUncertainties()
+      this.selectedBatch.forEach(result => {
+        const { lat, lng, uncertainty } = result
+        const circleOptions = this.circleOptionBlue
+        if (uncertainty > 0) {
+          const circle = new L.Circle(
+            [lat, lng],
+            parseInt(uncertainty),
+            circleOptions
+          ).addTo(this.$refs.myMap.mapObject)
+
+          this.circles.push(circle)
+        }
+      })
+    },
+
     addUncertainty(result) {
-      const uncertity = this.uncertainty(result)
+      const uncertainty = this.uncertainty(result)
       const circleOptions =
         result.properties.gid === 'newMarker'
           ? this.circleOptionRed
           : this.circleOptionBlue
 
-      if (uncertity > 0) {
+      if (uncertainty > 0) {
         const circle = new L.Circle(
           [result.geometry.coordinates[1], result.geometry.coordinates[0]],
-          parseInt(uncertity),
+          parseInt(uncertainty),
           circleOptions
         ).addTo(this.$refs.myMap.mapObject)
 
