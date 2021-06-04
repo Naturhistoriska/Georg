@@ -15,6 +15,7 @@
     </v-chip>
 
     <v-chip
+      v-if="false"
       color="grey darken-2"
       outlined
       small
