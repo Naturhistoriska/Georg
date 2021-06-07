@@ -578,17 +578,18 @@ export default {
 
     addBatchUnertainties() {
       this.removeUncertainties()
-      this.selectedBatch.forEach(result => {
-        const { lat, lng, uncertainty } = result
-        const circleOptions = this.circleOptionBlue
-        if (uncertainty > 0) {
-          const circle = new L.Circle(
-            [lat, lng],
-            parseInt(uncertainty),
-            circleOptions
-          ).addTo(this.$refs.myMap.mapObject)
-
-          this.circles.push(circle)
+      this.currentBatch.forEach(batch => {
+        if (this.selectedBatch.includes(batch)) {
+          const { lat, lng, uncertainty } = batch
+          const circleOptions = this.circleOptionBlue
+          if (uncertainty > 0) {
+            const circle = new L.Circle(
+              [lat, lng],
+              parseInt(uncertainty),
+              circleOptions
+            ).addTo(this.$refs.myMap.mapObject)
+            this.circles.push(circle)
+          }
         }
       })
     },
