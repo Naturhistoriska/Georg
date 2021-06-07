@@ -217,7 +217,7 @@ export default {
 
     toggleAll() {
       if (this.checked) {
-        this.selected = this.currentBatch
+        this.selected = this.batchData
       } else {
         this.selected = []
       }
