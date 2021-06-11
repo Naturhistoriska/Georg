@@ -62,10 +62,11 @@ export default {
   },
   data() {
     return {
+      dataChanged: false,
       disable: true,
-      title: '',
       subtitle: '',
       suggestedLocality: null,
+      title: '',
       uncertainty: null,
     }
   },
@@ -147,6 +148,7 @@ export default {
     ...mapMutations(['setAccuracy', 'setEditView']),
     onSelect() {
       this.disable = false
+      this.dataChanged = true
       const { uncertainty } = this.select
       if (uncertainty) {
         this.uncertainty = uncertainty
@@ -155,15 +157,22 @@ export default {
     },
     handleSave() {
       const { fullName, lat, lng, dms } = this.select
-      console.log('selected..', this.select)
-      this.selectedBatch.forEach(element => {
-        element.suggestedLocality = fullName
-        element.lat = lat
-        element.lng = lng
-        element.dms = dms
-        element.uncertainty =
-          this.uncertainty != null ? this.uncertainty : element.uncertainty
-      })
+      if (this.dataChanged) {
+        this.selectedBatch.forEach(element => {
+          element.suggestedLocality = fullName
+          element.lat = lat
+          element.lng = lng
+          element.dms = dms
+          element.uncertainty =
+            this.uncertainty != null ? this.uncertainty : element.uncertainty
+        })
+      } else {
+        this.selectedBatch.forEach(element => {
+          element.uncertainty =
+            this.uncertainty != null ? this.uncertainty : element.uncertainty
+        })
+      }
+      this.dataChanged = false
       this.setEditView(false)
     },
     onCancel() {
