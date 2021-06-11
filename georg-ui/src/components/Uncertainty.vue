@@ -85,18 +85,26 @@ export default {
   },
   mounted() {
     this.disableSetUncertaintyBtn = true
-    if (this.editView) {
-      this.accuracyValue = this.selectedBatch[0].uncertainty
-      this.uncertintyChangedByChip = true
-    } else {
-      if (this.accuracy >= 0) {
-        this.accuracyValue = this.accuracy
-        this.uncertintyChangedByChip = true
-      }
-    }
+    this.accuracyValue = this.editView
+      ? this.selectedBatch[0].uncertainty
+      : this.accuracy >= 0
+      ? this.accuracy
+      : null
+    this.uncertintyChangedByChip = this.accuracyValue
+
+    // if (this.editView) {
+    //   this.accuracyValue = this.selectedBatch[0].uncertainty
+    //   this.uncertintyChangedByChip = true
+    // } else {
+    //   if (this.accuracy >= 0) {
+    //     this.accuracyValue = this.accuracy
+    //     this.uncertintyChangedByChip = true
+    //   }
+    // }
   },
   watch: {
     accuracyValue: function() {
+      console.log('accuracyValue', this.accuracyValue)
       this.$nextTick(() => {
         this.checkUncertaintyValue()
         if (!this.uncertintyChangedByChip) {
@@ -107,12 +115,14 @@ export default {
       })
     },
     accuracy: function() {
+      console.log('accuracy', this.accuracy)
       this.accuracyValue = this.accuracy < 0 ? null : this.accuracy
     },
   },
   computed: {
     ...mapGetters(['accuracy', 'editView', 'selectedBatch', 'selectedMarker']),
   },
+  props: ['isBatch'],
   methods: {
     ...mapMutations(['setAccuracy']),
     setUncertaintyValue() {
@@ -121,6 +131,8 @@ export default {
         this.setAccuracy(this.accuracyValue)
         this.disableSetUncertaintyBtn = true
         this.msgClass = 'grey--text'
+      } else {
+        this.$emit('change-uncertainty', this.accuracyValue)
       }
     },
     addAccuracyValue(value) {

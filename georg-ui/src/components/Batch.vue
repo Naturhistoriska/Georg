@@ -84,10 +84,7 @@
         </div>
       </div>
     </v-card>
-    <BatchEdit
-      v-if="displayResults && editView"
-      @change-uncertainty="changeUncertainty"
-    />
+    <BatchEdit v-if="displayResults && editView" />
   </div>
 </template>
 
@@ -206,6 +203,7 @@ export default {
   },
   methods: {
     ...mapMutations([
+      'setAccuracy',
       'setBatchData',
       'setCurrentBatch',
       'setDisplayResults',
@@ -269,6 +267,7 @@ export default {
       }
     },
     handleEdit() {
+      this.setAccuracy(-1)
       this.$emit('batch-edit')
     },
     openCloseHelpText() {

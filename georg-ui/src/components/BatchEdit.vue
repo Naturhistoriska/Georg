@@ -32,7 +32,10 @@
           </v-combobox>
         </v-list-item-content>
       </v-list-item>
-      <Uncertainty />
+      <Uncertainty
+        v-bind:isBatch="true"
+        @change-uncertainty="handleEditUncertainty"
+      />
       <v-sheet class="ml-6 mr-6 mt-0 mb-6 pa-0" max-width="380">
         <v-row>
           <v-btn color="primary" small :disabled="disable" @click="handleSave">
@@ -63,6 +66,7 @@ export default {
       title: '',
       subtitle: '',
       suggestedLocality: null,
+      uncertainty: null,
     }
   },
   created() {
@@ -77,7 +81,7 @@ export default {
         id: this.selectedBatch[0].id,
         source: this.selectedBatch[0].sourceLocality,
       })
-      this.uncertainty = this.selectedBatch[0].uncertainty
+      // this.uncertainty = this.selectedBatch[0].uncertainty
     } else {
       this.title = this.$t('batch.multipleEdit')
       this.subtitle = this.selectedBatch[1].id
@@ -89,7 +93,14 @@ export default {
       let elements = []
       this.editData.map(entry => {
         entry.data.map(item => {
-          const { coordinates, country, gid, name, region } = item.properties
+          const {
+            coordinates,
+            country,
+            gid,
+            name,
+            region,
+            source,
+          } = item.properties
 
           let fullName = region !== undefined ? `${name}, ${region}` : `${name}`
           fullName =
@@ -97,10 +108,11 @@ export default {
 
           const { dd, dms } = coordinates
           const dmsString = `${dms[0]} ${dms[1]}`
-          // const uncertainty =
-          //   source === 'gbif' || source === 'swe-virtual-herbarium'
-          //     ? entry.properties.addendum.georg.coordinateUncertaintyInMeters
-          //     : undefined
+          const uncertainty =
+            source === 'gbif' || source === 'swe-virtual-herbarium'
+              ? item.properties.addendum.georg.coordinateUncertaintyInMeters
+              : undefined
+          console.log('what,..', fullName, source, uncertainty)
           const element = {
             fullName,
             id: gid,
@@ -108,6 +120,7 @@ export default {
             lat: dd[0],
             lng: dd[1],
             dms: dmsString,
+            uncertainty,
           }
           elements.push(element)
         })
@@ -131,22 +144,34 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setEditView']),
+    ...mapMutations(['setAccuracy', 'setEditView']),
     onSelect() {
       this.disable = false
+      const { uncertainty } = this.select
+      if (uncertainty) {
+        this.uncertainty = uncertainty
+        this.setAccuracy(uncertainty)
+      }
     },
     handleSave() {
       const { fullName, lat, lng, dms } = this.select
+      console.log('selected..', this.select)
       this.selectedBatch.forEach(element => {
         element.suggestedLocality = fullName
         element.lat = lat
         element.lng = lng
-        Element.dms = dms
+        element.dms = dms
+        element.uncertainty =
+          this.uncertainty != null ? this.uncertainty : element.uncertainty
       })
       this.setEditView(false)
     },
     onCancel() {
       this.setEditView(false)
+    },
+    handleEditUncertainty(value) {
+      this.disable = false
+      this.uncertainty = value
     },
   },
 }
