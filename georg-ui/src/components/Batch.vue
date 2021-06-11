@@ -269,13 +269,11 @@ export default {
       }
     },
     handleEdit() {
-      console.log('handleEdit')
       this.$emit('batch-edit')
     },
     openCloseHelpText() {
       this.showHelpText = !this.showHelpText
     },
-    changeUncertainty() {},
   },
 }
 </script>
