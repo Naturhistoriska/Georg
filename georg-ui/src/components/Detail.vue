@@ -37,7 +37,7 @@
         />
         <v-divider inset></v-divider>
       </div>
-      <Uncertainty v-if="isNewMarker" />
+      <Uncertainty v-if="isNewMarker" v-bind:isBatch="false" />
       <GbifDataSourceLinks v-else-if="isGbif" />
       <DataSourceLinks
         v-bind:externallink="externallink"
