@@ -161,6 +161,12 @@ export default {
     // batchData: function() {
     //   this.batch = this.batchData
     // },
+    batchData: function() {
+      this.batch = this.batchData
+    },
+    selectedBatch: function() {
+      this.selected = this.selectedBatch
+    },
     selected: function() {
       this.indeterminate =
         this.selected.length !== 0 &&

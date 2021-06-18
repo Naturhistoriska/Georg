@@ -104,7 +104,6 @@ export default {
   },
   watch: {
     accuracyValue: function() {
-      console.log('accuracyValue', this.accuracyValue)
       this.$nextTick(() => {
         this.checkUncertaintyValue()
         if (!this.uncertintyChangedByChip) {
@@ -115,7 +114,6 @@ export default {
       })
     },
     accuracy: function() {
-      console.log('accuracy', this.accuracy)
       this.accuracyValue = this.accuracy < 0 ? null : this.accuracy
     },
   },

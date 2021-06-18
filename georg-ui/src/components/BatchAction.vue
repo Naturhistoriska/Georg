@@ -60,7 +60,7 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(['setBatchData', 'setEditView']),
+    ...mapMutations(['setBatchData', 'setEditView', 'setSelectedBatch']),
     openEdit() {
       this.setEditView(true)
       this.$emit('edit-batch')
@@ -70,6 +70,7 @@ export default {
         return !this.selectedBatch.includes(batch)
       })
       this.setBatchData(editData)
+      this.setSelectedBatch([])
     },
   },
 }

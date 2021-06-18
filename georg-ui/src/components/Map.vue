@@ -213,6 +213,13 @@ export default {
   },
 
   watch: {
+    $route() {
+      if (this.isBatch) {
+        this.buildBatchMarker()
+      } else {
+        this.highlightMarker()
+      }
+    },
     propertyAAndPropertyB() {
       if (this.reBuildMarker) {
         if (this.isBatch) {

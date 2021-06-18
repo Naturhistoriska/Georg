@@ -113,7 +113,6 @@ export default {
             source === 'gbif' || source === 'swe-virtual-herbarium'
               ? item.properties.addendum.georg.coordinateUncertaintyInMeters
               : undefined
-          console.log('what,..', fullName, source, uncertainty)
           const element = {
             fullName,
             id: gid,
