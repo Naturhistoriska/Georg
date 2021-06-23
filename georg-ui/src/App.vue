@@ -112,6 +112,7 @@
 <script>
 import LocaleSwitcher from './components/LocaleSwitcher'
 import { Trans } from '@/plugins/Translation'
+import { mapGetters } from 'vuex'
 export default {
   name: 'App',
   components: {
@@ -133,9 +134,19 @@ export default {
       const { name } = to
       this.drawer = name !== 'Home' && name !== 'Search' && name != 'Batch'
       this.routeName = name
+
+      if (name === 'Home') {
+        const locale = this.$i18n.locale
+        const pushUrl =
+          this.searchOption === 'address'
+            ? `/${locale}/search?place_name=${this.searchText}`
+            : `/${locale}/search?coordinates=${this.searchCoordinates}`
+        this.pushUrl(pushUrl)
+      }
     },
   },
   computed: {
+    ...mapGetters(['searchCoordinates', 'searchOption', 'searchText']),
     aboutUrl() {
       if (
         this.routeName !== 'Batch' &&
