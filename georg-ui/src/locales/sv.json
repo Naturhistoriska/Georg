@@ -1,9 +1,9 @@
 {
   "menu": {
-    "home": "Georg",
     "about": "Om Georg",
     "accessibility": "Tillgänglighetsredogörelse",
     "batch": "Batch",
+    "home": "Georg",
     "openNavigationMenu": "Open navigation menu",
     "search": "Hitta plats"
   } ,
@@ -96,8 +96,11 @@
     "backToResultTable": "Tillbaka till resultattabellen",
     "batch": "Batch",
     "batchEditSubtitle": "<b>ID {id}</b> {source}",
+    "batchEditMultipleSubtitle": "<b>IDs (se karta): </b> {ids}",
     "batchText": "Georeference several specimens from a file",
     "clear": "Rensa",
+    "editComfirmTitle": "Ändra lokalitet för flera poster?",
+    "editComfirmSubtitle": "Alla {numOfRecords} poster får den nya lokalitet",
     "copyBatchLink": "Kopiera batchlänk",
     "country": "Land",
     "dataSource": "Datakällor",
@@ -138,14 +141,16 @@
     "cancel": "Avbryt",
     "close": "Stäng",
     "contactus": "Kontakta oss",
-    "edit": "Redigera",
     "delete": "Radera",
+    "edit": "Redigera",
+    "en": "English",
     "languageSetting": "Språkinställning",
+    "no": "NEJ",
     "ok": "Ok",
     "save": "Spara",
     "selectLanguage": "Välj språk",
-    "en": "English",
-    "sv": "Svenska"
+    "sv": "Svenska",
+    "yes": "JA"
   },
   "result": {
     "accordingwof": "enligt Who's On First",

@@ -1,9 +1,9 @@
 {
   "menu": {
-    "home": "Georg",
     "about": "About Georg",
     "accessibility": "Accessibility",
     "batch": "Batch",
+    "home": "Georg",
     "openNavigationMenu": "Open navigation menu",
     "search": "Find place"
   },
@@ -96,12 +96,15 @@
     "backToResultTable": "Back to result table",
     "batch": "Batch",
     "batchEditSubtitle": "<b>ID {id}</b> {source}",
+    "batchEditMultipleSubtitle": "<b>IDs (see map): </b> {ids}",
     "batchText": "Georeference several specimens from a file",
     "batchHelpText": "<b>Upload a file in CSV-format</b> and get suggestions of matching locations which you can edit before downloading.",
     "batchHelpLink": "Read more about up - and downloading of CSV-files in Georg.",
     "batchHelpMarker": "Batch upload help",
     "batchCloseHelp": "Close",
     "clear": "Clear",
+    "editComfirmTitle": "Change locality for multiple records?",
+    "editComfirmSubtitle": "All {numOfRecords} reocrds will get the new locality",
     "copyBatchLink": "Copy batch link",
     "country": "Country",
     "dataSource": "Data sources",
@@ -138,14 +141,16 @@
     "cancel": "Cancel",
     "close": "Close",
     "contactus": "Contact us",
-    "edit": "Edit",
     "delete": "Delete",
+    "edit": "Edit",
+    "en": "English",
     "languageSetting": "Language setting",
+    "no": "NO",
     "ok": "Ok",
     "save": "Save",
     "selectLanguage": "Select language",
-    "en": "English",
-    "sv": "Svenska"
+    "sv": "Svenska",
+    "yes": "YES"
   },
   "result": {
     "accordingwof": "according to Who's On First",
