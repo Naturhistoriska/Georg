@@ -3,7 +3,7 @@
     <v-row>
       <v-btn
         color="primary"
-        :disabled="disableEdit"
+        :disabled="disableButton"
         outlined
         small
         @click="openEdit"
@@ -12,7 +12,7 @@
       </v-btn>
       <v-btn
         color="primary"
-        :disabled="disableDelete"
+        :disabled="disableButton"
         outlined
         small
         class="ml-2"
@@ -35,14 +35,14 @@ export default {
   name: 'BatchAction',
   data() {
     return {
+      disableButton: true,
       disableEdit: true,
       disableDelete: true,
     }
   },
   watch: {
     selectedBatch() {
-      this.disableDelete = this.selectedBatch.length <= 0
-      this.disableEdit = this.selectedBatch.length !== 1
+      this.disableButton = this.selectedBatch.length <= 0
     },
   },
   computed: {
