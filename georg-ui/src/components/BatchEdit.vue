@@ -48,21 +48,30 @@
         </v-row>
       </v-sheet>
     </v-list-item-group>
+    <ComfirmationDialog
+      @close-dialog="closeDialog"
+      v-bind:dialogStatus="dialogStatus"
+      v-bind:dialogType="dialogType"
+    />
   </v-card>
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+import ComfirmationDialog from '../components/ComfirmationDialog'
 import ItemIcon from './baseComponents/ItemIcon'
 import Uncertainty from '../components/Uncertainty'
 export default {
   name: 'BatchEdit',
   components: {
+    ComfirmationDialog,
     ItemIcon,
     Uncertainty,
   },
   data() {
     return {
       dataChanged: false,
+      dialogStatus: false,
+      dialogType: 'batchEdit',
       disable: true,
       subtitle: '',
       suggestedLocality: null,
@@ -85,7 +94,11 @@ export default {
       // this.uncertainty = this.selectedBatch[0].uncertainty
     } else {
       this.title = this.$t('batch.multipleEdit')
-      this.subtitle = this.selectedBatch[1].id
+
+      let ids = this.selectedBatch.map(batch => batch.id).join(', ')
+      this.subtitle = this.$t('batch.batchEditMultipleSubtitle', {
+        ids,
+      })
     }
   },
   computed: {
@@ -155,9 +168,17 @@ export default {
       }
     },
     handleSave() {
+      if (this.selectedBatch.length > 1) {
+        this.dialogStatus = true
+      } else {
+        this.updateData()
+      }
+    },
+    updateData() {
       const { fullName, lat, lng, dms } = this.select
       if (this.dataChanged) {
         this.selectedBatch.forEach(element => {
+          element.sourceLocality = fullName
           element.suggestedLocality = fullName
           element.lat = lat
           element.lng = lng
@@ -180,6 +201,14 @@ export default {
     handleEditUncertainty(value) {
       this.disable = false
       this.uncertainty = value
+    },
+    closeDialog(value) {
+      this.dialogStatus = false
+      if (value === 'save') {
+        this.updateData()
+      } else {
+        this.onCancel()
+      }
     },
   },
 }
