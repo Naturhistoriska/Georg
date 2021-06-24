@@ -50,8 +50,8 @@ export default {
     $route(to) {
       const { locale } = to.params
       this.selectedLocale = locale
-      this.drawer = name !== 'Home' && name !== 'Search'
-      this.routeName = name
+      // this.drawer = name !== 'Home' && name !== 'Search'
+      // this.routeName = name
     },
   },
   computed: {
@@ -82,19 +82,9 @@ export default {
     // },
   },
   methods: {
-    switchLocale() {
-      // this.selectedLocale = value
-      // this.localeChanged = true
-    },
+    switchLocale() {},
     closeDialog() {
       this.$emit('close-dialog', this.selectedLocale)
-      // const locale = this.selectedLocale
-      // if (this.$i18n.locale !== locale) {
-      //   const to = this.$router.resolve({ params: { locale } })
-      //   return Trans.changeLocale(locale).then(() => {
-      //     this.$router.push(to.location)
-      //   })
-      // }
     },
   },
 }
