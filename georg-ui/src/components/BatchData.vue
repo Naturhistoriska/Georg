@@ -48,7 +48,11 @@
       </thead>
     </template>
     <template v-slot:expanded-item="{ headers, item }">
-      <td :colspan="headers.length" class="ma-0 pb-2 pt-2">
+      <td
+        :colspan="headers.length"
+        class="ma-0 pb-2 pt-2"
+        style="white-space: normal;"
+      >
         <p v-html="$t('batch.source', { source: item.sourceLocality })"></p>
         <p
           v-if="item.latLngDMS"
@@ -118,6 +122,7 @@ export default {
         {
           text: `${this.$t('batch.sourceInput')}`,
           value: 'sourceLocality',
+          // sortable: true,
         },
         // {
         //   text: 'Datasource',
@@ -252,7 +257,19 @@ export default {
 }
 </script>
 <style scoped>
-table.v-table thead tr {
+.v-data-table >>> td {
+  /* display: inline-block; */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+/* table.v-table thead tr {
   height: 120px;
 }
+
+  */
+/* .truncate v-data-table >>> td {
+  white-space: normal !important;
+} */
 </style>
