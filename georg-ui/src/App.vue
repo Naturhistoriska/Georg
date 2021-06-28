@@ -60,10 +60,11 @@
       <v-toolbar-title class="title">
         <v-tabs color="white" right background-color="blue darken-2" optional>
           <v-tab
+            exact-path="http://localhost:8080/sv/search"
             id="searchLink"
             key="search"
             class="white--text "
-            :to="$i18nRoute({ name: 'Home' })"
+            :to="$i18nRoute({ name: searchUrl })"
             >{{ $t('menu.search') }}
           </v-tab>
           <v-tab
@@ -135,18 +136,23 @@ export default {
       this.drawer = name !== 'Home' && name !== 'Search' && name != 'Batch'
       this.routeName = name
 
-      if (name === 'Home') {
-        const locale = this.$i18n.locale
-        const pushUrl =
-          this.searchOption === 'address'
-            ? `/${locale}/search?place_name=${this.searchText}`
-            : `/${locale}/search?coordinates=${this.searchCoordinates}`
-        this.pushUrl(pushUrl)
+      if (name === 'Home' || name === 'Search') {
+        if (!!this.searchText || !!this.searchCoordinates) {
+          const locale = this.$i18n.locale
+          const pushUrl =
+            this.searchOption === 'address'
+              ? `/${locale}/search?place_name=${this.searchText}`
+              : `/${locale}/search?coordinates=${this.searchCoordinates}`
+          this.pushUrl(pushUrl)
+        }
       }
     },
   },
   computed: {
     ...mapGetters(['searchCoordinates', 'searchOption', 'searchText']),
+    searchUrl() {
+      return this.routeName === 'Home' ? 'Home' : 'Search'
+    },
     aboutUrl() {
       if (
         this.routeName !== 'Batch' &&
