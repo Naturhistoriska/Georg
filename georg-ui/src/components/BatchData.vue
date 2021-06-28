@@ -257,6 +257,10 @@ export default {
 }
 </script>
 <style scoped>
+/* table.v-table thead tr {
+  height: 120px;
+} */
+
 .v-data-table >>> td {
   /* display: inline-block; */
   white-space: nowrap;
@@ -264,9 +268,7 @@ export default {
   text-overflow: ellipsis;
   max-width: 140px;
 }
-/* table.v-table thead tr {
-  height: 120px;
-}
+/*
 
   */
 /* .truncate v-data-table >>> td {

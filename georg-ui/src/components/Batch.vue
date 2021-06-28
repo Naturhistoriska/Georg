@@ -74,7 +74,7 @@
         <div v-if="showResults && !editView">
           <BatchController @adjust-filter="openAdjustFilter" />
           <v-divider class="mt-2"></v-divider>
-          <v-row class="ml-2 mr-0 mt-n2 pa-0">
+          <v-row class="ml-2 mr-0 mt-n2 mb-2 pa-0">
             <BatchData
               @on-table-click="expandTable"
               @on-list-click="collapseTable"

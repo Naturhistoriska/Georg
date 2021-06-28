@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="ml-6 mr-6 mt-0 pa-0" max-width="380">
+  <v-sheet class="ml-6 mr-6 mt-3 mb-3 pa-0" max-width="380">
     <v-row>
       <v-btn
         color="primary"

@@ -1,7 +1,8 @@
 <template>
   <v-card
-    class="mt-2 overflow-y-auto"
+    class="mt-2"
     :class="{ 'card-sm': $vuetify.breakpoint.smAndUp }"
+    height="100%"
     id="v-card-edit"
   >
     <v-card-title class="blue--text v-card__title, text--darken-2 ">
@@ -36,7 +37,7 @@
         v-bind:isBatch="true"
         @change-uncertainty="handleEditUncertainty"
       />
-      <v-sheet class="ml-6 mr-6 mt-0 mb-6 pa-0" max-width="380">
+      <v-sheet class="ml-6 mr-6 mt-3 mb-6 pa-0" max-width="380">
         <v-row>
           <v-btn color="primary" small :disabled="disable" @click="handleSave">
             {{ $t('common.save') }}
@@ -217,8 +218,9 @@ export default {
 #v-card-edit {
   z-index: 2;
   min-width: 300px;
+  height: 100%;
 }
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   -webkit-appearance: none;
   width: 7px;
 }
@@ -226,7 +228,7 @@ export default {
   border-radius: 4px;
   background-color: rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
-}
+} */
 .card-sm {
   width: 400px;
 }
