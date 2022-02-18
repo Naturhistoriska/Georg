@@ -19,7 +19,7 @@ matrix:
       before_install:
         - cd georg-ui
       install:
-        - yarn install
+        - npm install
       script:
         - yarn test
 
