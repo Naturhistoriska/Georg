@@ -115,17 +115,18 @@ Batch upload takes query parameters:
 ### Examples access API
 > Access API via web browser:
 ```
-http://localhost:8180/search?text=stockholm
-http://localhost:8180/autocomplete?text=stockholm
-http://localhost:8180/reverse?lat=59.450880&lng=17.93102
-http://localhost:8180/coordinates?coordinates=59.450880,17.93102
+https://georg.nrm.se/api/search?text=stockholm
+https://georg.nrm.se/api/autocomplete?text=stockholm
+https://georg.nrm.se/api/reverse?lat=59.450880&lng=17.93102
+https://georg.nrm.se/api/coordinates?coordinates=59.450880,17.93102
 ```
 > Access API with command line:
 ```
-curl http://localhost:8180/search?text=stock | json_pp
-curl http://localhost:8180/autocomplete?text=stockholm | json_pp
-curl http://localhost:8180/reverse?lat=59.450880&lng=17.93102 | json_pp
-curl http://localhost:8180/coordinates?coordinates=59.450880,17.93102 | json_pp
+curl -k https://georg.nrm.se/api/search?text=stock | json_pp
+curl -k https://georg.nrm.se/api/autocomplete?text=stockholm | json_pp
+curl -k https://georg.nrm.se/api/reverse?lat=59.450880&lng=17.93102 | json_pp
+curl -k https://georg.nrm.se/api/coordinates?coordinates=59.450880,17.93102 | json_pp
+curl -k -F file=@batch.csv  https://georg.nrm.se/api/upload?type=json | json_pp
 ```
 > For batch upload:
 ```
