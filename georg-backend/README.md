@@ -124,7 +124,7 @@ https://georg.nrm.se/api/coordinates?coordinates=59.450880,17.93102
 ```
 curl -k https://georg.nrm.se/api/search?text=stock | json_pp
 curl -k https://georg.nrm.se/api/autocomplete?text=stockholm | json_pp
-curl -k 'https://georg.nrm.se/api/reverse?lat=59.450880&lng=17.93102' | json_pp
+curl -k https://georg.nrm.se/api/reverse?lat=59.450880&lng=17.93102 | json_pp
 curl -k https://georg.nrm.se/api/coordinates?coordinates=59.450880,17.93102 | json_pp
 curl -k -F file=@batch.csv  https://georg.nrm.se/api/upload?type=json | json_pp
 ```
