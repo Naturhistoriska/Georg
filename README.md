@@ -1,8 +1,13 @@
+# Try out Georg
+
+Click this [link](https://georg.nrm.se/sv) to try out Georg! 
+
 # Georg
 
 [![Build Status](https://travis-ci.com/Naturhistoriska/Georg.svg?branch=master)](https://travis-ci.com/Naturhistoriska/Georg)
 [![codecov](https://codecov.io/gh/Naturhistoriska/Georg/branch/master/graph/badge.svg)](https://codecov.io/gh/Naturhistoriska/Georg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 
 Georg is a web application designed to support georeferencing, or, the process of obtaining geographic coordinates from a locality description, for natural history collections data. It allows a user to select among suggested matches to the entered text string or by choosing a map point and then selecting a named place based on geographic proximity to the marker. Georg currently supports single-locality queries as well as limited batch processing for uploaded lists of localities.
 
