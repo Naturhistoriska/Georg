@@ -1,27 +1,29 @@
 package se.nrm.georg.service;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation; 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
 import java.io.File;
-import java.io.FileInputStream; 
-import java.io.IOException; 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
+import javax.ws.rs.Consumes; 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam; 
-import javax.ws.rs.core.MediaType; 
-import javax.ws.rs.core.Response; 
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
-import lombok.extern.slf4j.Slf4j; 
+import lombok.extern.slf4j.Slf4j;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.json.JSONException;
@@ -47,7 +49,7 @@ import se.nrm.georg.service.logic.exceptions.GeorgException;
 @Slf4j
 public class GeorgAPI {
 
-  private final String file = "file";
+  private final String file = "upload";
 
   @Inject
   private GeorgLogic logic;
@@ -66,18 +68,18 @@ public class GeorgAPI {
           @QueryParam("countryCode") String countryCode,
           @QueryParam("size") int size) {
     log.info("getGeoCode: {}, {}", address, source);
-    
-    if(address == null || address.trim().isEmpty()) {
+
+    if (address == null || address.trim().isEmpty()) {
       return Response.status(Response.Status.BAD_REQUEST)
               .entity(errorBuilder.buildSearchTextMissingMessage()).build();
     }
-   
+
     try {
       return Response.ok(logic.searchAddress(address, source, layer, countryCode, size)).build();
-    } catch(GeorgException | JSONException ex) { 
+    } catch (GeorgException | JSONException ex) {
       return Response.status(Response.Status.NOT_FOUND)
               .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
-    } 
+    }
   }
 
   @GET
@@ -93,15 +95,15 @@ public class GeorgAPI {
           @QueryParam("countryCode") String countryCode,
           @QueryParam("size") int size) {
     log.info("search: {}, {}", text, countryCode);
-    
-    if(text == null || text.trim().isEmpty()) {
+
+    if (text == null || text.trim().isEmpty()) {
       return Response.status(Response.Status.BAD_REQUEST)
               .entity(errorBuilder.buildSearchTextMissingMessage()).build();
     }
 
     try {
       return Response.ok(logic.runAutocompleteSearch(text, sources, layers, countryCode, size)).build();
-    } catch(GeorgException | JSONException ex) { 
+    } catch (GeorgException | JSONException ex) {
       return Response.status(Response.Status.NOT_FOUND)
               .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
     }
@@ -119,12 +121,12 @@ public class GeorgAPI {
     log.info("getReverseGeoCode: {}, {}", lat, lon);
 
     try {
-      return Response.ok(logic.reverseSearch(lat, lon)).build();  
-    } catch(GeorgException | JSONException ex) { 
+      return Response.ok(logic.reverseSearch(lat, lon)).build();
+    } catch (GeorgException | JSONException ex) {
       return Response.status(Response.Status.NOT_FOUND)
               .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
     }
-    
+
   }
 
   @GET
@@ -142,7 +144,7 @@ public class GeorgAPI {
     } catch (NumberFormatException ex) {
       log.info(ex.getMessage());
       return Response.ok(errorBuilder.buildInvalidCoordinatesMessage()).build();
-    } catch(GeorgException | JSONException ex) { 
+    } catch (GeorgException | JSONException ex) {
       return Response.status(Response.Status.NOT_FOUND)
               .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
     }
@@ -157,7 +159,11 @@ public class GeorgAPI {
     @ApiResponse(code = 200, message = "File uploaded")})
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
-  public Response uploadFile(MultipartFormDataInput input, @QueryParam("type") String returnType) throws IOException {
+  @ApiImplicitParams(
+          @ApiImplicitParam(dataType = "file", name = "upload",
+                  paramType = "formData", required = true)) 
+  public Response uploadFile(MultipartFormDataInput input, @QueryParam("type") String returnType) 
+          throws IOException {
     log.info("upload : {}", returnType);
 
     InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
@@ -190,6 +196,6 @@ public class GeorgAPI {
         fileDownload.delete();
       } 
     };
-    return Response.ok(stream).build(); 
-  } 
+    return Response.ok(stream).build();  
+  }
 }
