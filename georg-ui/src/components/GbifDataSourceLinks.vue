@@ -86,8 +86,7 @@ export default {
     },
   },
   methods: {
-    openOrCloseGbifData(event) {
-      event.preventDefault()
+    openOrCloseGbifData() {
       this.displayGbifData = !this.displayGbifData
       this.iconToggleGbifData = this.displayGbifData
         ? 'mdi-chevron-up'
