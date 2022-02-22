@@ -49,7 +49,7 @@ import se.nrm.georg.service.logic.exceptions.GeorgException;
 @Slf4j
 public class GeorgAPI {
 
-  private final String file = "upload";
+  private final String file = "file";
 
   @Inject
   private GeorgLogic logic;
@@ -160,11 +160,11 @@ public class GeorgAPI {
   @Consumes(MediaType.MULTIPART_FORM_DATA)
   @Produces(MediaType.APPLICATION_OCTET_STREAM)
   @ApiImplicitParams(
-          @ApiImplicitParam(dataType = "file", name = "upload",
+          @ApiImplicitParam(dataType = "file", name = "file",
                   paramType = "formData", required = true)) 
   public Response uploadFile(MultipartFormDataInput input, @QueryParam("type") String returnType) 
           throws IOException {
-    log.info("upload : {}", returnType);
+    log.info("upload : {} -- {}", returnType, input.getFormDataMap());
 
     InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
     
