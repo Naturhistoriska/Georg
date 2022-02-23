@@ -247,12 +247,13 @@ export default {
       this.setFilteredData([])
       this.setFilters({})
       this.setIsErrorMsg(false)
-      // this.$emit('clear-file')
+      this.$emit('collapse-table')
     },
     onClick() {
       this.showHelpText = false
     },
     async upload(file) {
+      this.$emit('collapse-table')
       if (file && file.name) {
         this.currentFile = file
         if (!this.currentFile) {
