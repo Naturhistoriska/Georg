@@ -60,7 +60,6 @@
       <v-toolbar-title class="title">
         <v-tabs color="white" right background-color="blue darken-2" optional>
           <v-tab
-            exact-path="http://localhost:8080/sv/search"
             id="searchLink"
             key="search"
             class="white--text "
