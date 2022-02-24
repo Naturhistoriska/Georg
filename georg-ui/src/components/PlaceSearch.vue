@@ -24,9 +24,9 @@
         v-bind:isBatch="false"
         v-if="showResults"
       />
-      <Results v-bind:height="height" v-if="!detailView && showResults" />
+      <Results v-bind:height="height" v-if="!detailView && displayResults" />
     </v-card>
-    <Detail v-if="detailView && showResults" v-bind:height="height" />
+    <Detail v-if="detailView && displayResults" v-bind:height="height" />
   </div>
 </template>
 <script>
@@ -68,7 +68,7 @@ export default {
     ...mapGetters([
       // 'batchData',
       'detailView',
-      // 'displayResults',
+      'displayResults',
       'results',
       'searchOption',
     ]),

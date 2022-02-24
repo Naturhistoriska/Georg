@@ -10,12 +10,13 @@
         >{{ backLinkText }}</a
       >
       <div
-        :role="[isErrorMsg ? 'alert' : 'status']"
+        :role="[hasError ? 'alert' : 'status']"
         v-else
         id="message"
-        :class="[isErrorMsg ? errorclass : msgclass]"
+        :class="[hasError ? errorclass : msgclass]"
       >
         {{ messages }}
+        {{ displayDividLine }}
       </div>
       <v-spacer></v-spacer>
       <TextButton
@@ -25,13 +26,14 @@
         v-bind:text="displaytoggle"
         v-bind:iconAppend="icon"
         v-if="showButton"
-        @clicked="setDisplayResults(!displayResults)"
+        @clicked="
+          isBatch
+            ? setDisplayBatchResults(!displayBatchResults)
+            : setDisplayResults(!displayResults)
+        "
       />
     </v-card-actions>
-    <v-divider
-      class="mt-2"
-      v-if="results.length > 0 && displayResults"
-    ></v-divider>
+    <v-divider class="mt-2" v-if="displayDividLine"></v-divider>
   </div>
 </template>
 <script>
@@ -59,12 +61,20 @@ export default {
       'batchData',
       'detailView',
       'displayResults',
+      'displayBatchResults',
       'filters',
       'filteredData',
       'msgKey',
       'isErrorMsg',
+      'isBatchErrorMsg',
       'results',
     ]),
+    displayDividLine: function() {
+      if (this.isBatch) {
+        return !this.isEdit
+      }
+      return this.results.length > 0 && this.displayResults && !this.detailView
+    },
     backLinkText: function() {
       return this.isBatch
         ? this.$t('batch.backToResultTable')
@@ -73,6 +83,11 @@ export default {
         : this.$t('home.backToResluts')
     },
     displaytoggle: function() {
+      if (this.isBatch) {
+        return this.displayBatchResults
+          ? this.$t('home.hideResults')
+          : this.$t('home.displyResults')
+      }
       return this.displayResults
         ? this.$t('home.hideResults')
         : this.$t('home.displyResults')
@@ -80,7 +95,22 @@ export default {
     icon: function() {
       return this.displayResults ? 'mdi-chevron-up' : 'mdi-chevron-down'
     },
+    hasError: function() {
+      return this.isErrorMsg || this.isBatchErrorMsg
+    },
     messages: function() {
+      if (this.isBatch) {
+        if (this.isBatchErrorMsg) {
+          return 'Invaild csv file.'
+        }
+        const num = !this.filters
+          ? this.batchData.length
+          : this.filters.hasFilters
+          ? this.filteredData.length
+          : this.batchData.length
+        return this.$t('batch.numberOfRecords', { number: num })
+      }
+
       if (this.isErrorMsg) {
         return this.msgKey === 'Invalid coordinates'
           ? this.$t('error.inValidCoordinates')
@@ -89,14 +119,7 @@ export default {
       if (this.msgKey === 'newMarker') {
         return this.$t('home.displyDinPlats')
       }
-      if (this.isBatch) {
-        const num = !this.filters
-          ? this.batchData.length
-          : this.filters.hasFilters
-          ? this.filteredData.length
-          : this.batchData.length
-        return this.$t('batch.numberOfRecords', { number: num })
-      }
+
       const numOfHits = this.results.length
       if (this.msgKey === 'coordinatesSearch') {
         const resultCount = numOfHits - 1
@@ -119,7 +142,7 @@ export default {
     },
     showButton: function() {
       if (this.isBatch) {
-        return !this.isErrorMsg
+        return !this.isBatchErrorMsg
       }
       return this.results.length > 0
     },
@@ -128,6 +151,7 @@ export default {
     ...mapMutations([
       'setDetailView',
       'setEditView',
+      'setDisplayBatchResults',
       'setDisplayResults',
       'setReBuildMarker',
       'setRezoom',
@@ -135,15 +159,7 @@ export default {
     backToResultList() {
       this.setDetailView(false)
       this.setEditView(false)
-      // this.$emit('back-results')
-      // this.setDetailView(false)
-      // this.setReBuildMarker(true)
-      // this.setRezoom(true)
     },
-    // onDisplayResultsClick() {
-    //   this.displayResults = !this.displayResults
-    //   this.$emit('display-results')
-    // },
   },
 }
 </script>

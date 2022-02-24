@@ -136,9 +136,11 @@ export default {
     ...mapMutations([
       'setBatchData',
       'setDetailView',
+      'setDisplayBatchResults',
       'setEditData',
       'setHovedResultId',
       'setIsErrorMsg',
+      'setIsBatchErrorMsg',
       'setMsgKey',
       'setReBuildMarker',
       'setResults',
@@ -177,13 +179,6 @@ export default {
     openAdjustFilters() {
       this.screenWidth = 'width: 400px'
     },
-    // removeFile() {
-    //   this.setMsgKey('')
-    //   this.setBatchData([])
-    //   this.setCurrentBatch([])
-    //   this.setFilteredData([])
-    //   this.setFilters({})
-    // },
     clear() {
       this.showResults = false
       this.setDetailView(false)
@@ -296,15 +291,16 @@ export default {
       service
         .upload(file)
         .then(response => {
-          this.setIsErrorMsg(response.error)
           if (response.error) {
             const { msgKey } = response.error
             this.setMsgKey(msgKey)
             this.setBatchData([])
-            this.setIsErrorMsg(true)
+            this.setIsBatchErrorMsg(true)
+            this.setDisplayBatchResults(false)
           } else {
             this.setBatchData(response)
-            this.setIsErrorMsg(false)
+            this.setIsBatchErrorMsg(false)
+            this.setDisplayBatchResults(true)
           }
         })
         .catch(() => {
@@ -323,20 +319,6 @@ export default {
       }
       this.setMsgKey(messageKey)
     },
-    // setMessages(typeSearch) {
-    //   // this.setMessages(msg)
-    //   // this.setIsErrorMsg(isError)
-    //   const messageKey =
-    //     typeSearch === 'address' ? 'addressSearch' : 'coordinatesSearch'
-    //   this.setMsgKey(messageKey)
-    // },
-    // setMessages(msg, isError) {
-    //   this.setMessages(msg)
-    //   this.setIsErrorMsg(isError)
-    //   // const messageKey =
-    //   //   typeSearch === 'address' ? 'addressSearch' : 'coordinatesSearch'
-    //   // this.setMsgKey(messageKey)
-    // },
   },
 }
 </script>

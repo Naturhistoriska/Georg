@@ -70,8 +70,7 @@
             v-if="currentFile && !loading"
           />
         </v-sheet>
-        <!-- <div v-if="displayResults && !editView"> -->
-        <div v-if="showResults && !editView">
+        <div v-if="displayBatchResults && !editView">
           <BatchController @adjust-filter="openAdjustFilter" />
           <v-divider class="mt-2"></v-divider>
           <v-row class="ml-2 mr-0 mt-n2 mb-2 pa-0">
@@ -84,14 +83,12 @@
         </div>
       </div>
     </v-card>
-    <BatchEdit v-if="displayResults && editView" />
+    <BatchEdit v-if="displayBatchResults && editView" />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-// import Service from '../Service'
-// const service = new Service()
 export default {
   name: 'Batch',
   components: {
@@ -107,11 +104,8 @@ export default {
   data() {
     return {
       adjustFilter: false,
-      // editMode: false,
       currentFile: undefined,
-      // displayResults: false,
       showResult: false,
-      // fileInfos: [],
       loading: false,
       fileURL: null,
       showHelpText: false,
@@ -124,12 +118,10 @@ export default {
   watch: {
     batchData() {
       this.loading = false
-      // this.displayResults = this.currentFile ? true : false
     },
-    isErrorMsg() {
+    isBatchErrorMsg() {
       this.loading = false
-      // this.displayResults = !this.isErrorMsg
-      if (this.isErrorMsg) {
+      if (this.isBatchErrorMsg) {
         this.setCurrentBatch([])
       }
     },
@@ -138,17 +130,17 @@ export default {
     if (!this.currentFile) {
       this.currentFile = this.uploadedFile
     }
-    if (this.currentFile) {
-      this.setDisplayResults(true)
-      // this.displayResults = true
+    if (this.currentFile && !this.isBatchErrorMsg) {
+      this.setDisplayBatchResults(true)
     }
-    // this.setReBuildMarker(true)
   },
   computed: {
     ...mapGetters([
       'batchData',
-      'displayResults',
-      'isErrorMsg',
+      // 'displayResults',
+      'displayBatchResults',
+      // 'isErrorMsg',
+      'isBatchErrorMsg',
       'editView',
       'reBuildMarker',
       'selectedBatch',
@@ -160,42 +152,13 @@ export default {
         ? `/${locale}/om#aboutBatch`
         : `/${locale}/about#aboutBatch`
     },
-    showResults: function() {
-      if (
-        this.currentFile &&
-        !this.isErrorMsg &&
-        !this.loading &&
-        this.displayResults
-      ) {
-        return true
-      }
-      return false
-    },
-    // showResults: {
-    //   set(displayResult) {
-    //     this.displayResults = displayResult
-    //   },
-    //   get() {
-    //     if (this.editView) {
-    //       return false
-    //     }
-    //     if (
-    //       this.currentFile &&
-    //       !this.isErrorMsg &&
-    //       !this.loading &&
-    //       this.displayResults
-    //     ) {
-    //       return true
-    //     }
-    //     return this.displayResults
-    //   },
-    // },
-
-    // showResults() {
-    //   if (this.editView) {
-    //     return false
-    //   }
-    //   if (this.currentFile && !this.isErrorMsg && !this.loading) {
+    // showResults: function() {
+    //   if (
+    //     this.currentFile &&
+    //     !this.isBatchErrorMsg &&
+    //     !this.loading &&
+    //     this.displayBatchResults
+    //   ) {
     //     return true
     //   }
     //   return false
@@ -206,10 +169,10 @@ export default {
       'setAccuracy',
       'setBatchData',
       'setCurrentBatch',
-      'setDisplayResults',
+      'setDisplayBatchResults',
       'setFilteredData',
       'setFilters',
-      'setIsErrorMsg',
+      'setIsBatchErrorMsg',
       'setMsgKey',
       'setReBuildMarker',
       'setUploadedFile',
@@ -221,17 +184,6 @@ export default {
       this.adjustFilter = !this.adjustFilter
       this.$emit('open-adjustFilter')
     },
-    // handleBatchEdit() {
-    //   this.$emit('batch-edit')
-    //   this.editMode = true
-    // },
-    // backToTable() {
-    //   this.editMode = false
-    // },
-    // handleDisplayResult() {
-    //   this.displayResults = !this.displayResults
-    //   this.showResults = this.displayResults
-    // },
     expandTable() {
       this.$emit('expand-table')
     },
@@ -240,13 +192,14 @@ export default {
     },
     clear() {
       this.currentFile = null
-      this.setDisplayResults(false)
+      this.setUploadedFile(null)
+      this.setDisplayBatchResults(false)
       this.setMsgKey('')
       this.setBatchData([])
       this.setCurrentBatch([])
       this.setFilteredData([])
       this.setFilters({})
-      this.setIsErrorMsg(false)
+      this.setIsBatchErrorMsg(false)
       this.$emit('collapse-table')
     },
     onClick() {
@@ -264,7 +217,7 @@ export default {
         this.$emit('upload', this.currentFile)
         this.loading = true
         this.setUploadedFile(file)
-        this.setDisplayResults(true)
+        // this.setDisplayBatchResults(true)
       }
     },
     handleEdit() {
