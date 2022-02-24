@@ -16,7 +16,6 @@
         :class="[hasError ? errorclass : msgclass]"
       >
         {{ messages }}
-        {{ displayDividLine }}
       </div>
       <v-spacer></v-spacer>
       <TextButton
@@ -96,7 +95,10 @@ export default {
       return this.displayResults ? 'mdi-chevron-up' : 'mdi-chevron-down'
     },
     hasError: function() {
-      return this.isErrorMsg || this.isBatchErrorMsg
+      if (this.isBatch) {
+        return this.isBatchErrorMsg
+      }
+      return this.isErrorMsg
     },
     messages: function() {
       if (this.isBatch) {
