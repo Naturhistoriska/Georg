@@ -77,7 +77,7 @@ export default {
     // },
   },
   methods: {
-    ...mapMutations(['setReBuildMarker']),
+    ...mapMutations(['setReBuildMarker', 'setDisplayResults']),
     clear() {
       this.$emit('clear-search')
       this.pushUrl()
@@ -88,10 +88,12 @@ export default {
     handleAddressSearch(value, country) {
       this.$emit('search-address', value, country)
       this.pushUrl(value, country)
+      this.setDisplayResults(true)
     },
     handleCoordinateSearch(value) {
       this.$emit('search-coordinates', value)
       this.pushUrl(value)
+      this.setDisplayResults(true)
     },
     selectResult() {
       this.$emit('select-result')

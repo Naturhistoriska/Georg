@@ -112,7 +112,6 @@ export default {
         fillOpacity: 0.3,
         pane: 'circleMarker',
       },
-
       circleOptionRed: {
         color: '#d32f2f',
         fillColor: '#d32f2f',
@@ -278,6 +277,7 @@ export default {
       'setAddDinPlats',
       'setAccuracy',
       'setDetailView',
+      'setDisplayResults',
       'setHovedResultId',
       'setIsErrorMsg',
       'setMsgKey',
@@ -335,6 +335,7 @@ export default {
         .catch(function() {})
         .finally(() => {
           this.isLoaded = false
+          this.setDisplayResults(true)
           const locale = this.$i18n.locale
           if (this.$route.fullPath === `/${locale}/batch`) {
             this.$router.push({

@@ -118,6 +118,7 @@ export default {
   methods: {
     ...mapMutations([
       'setDetailView',
+      'setDisplayResults',
       'setIsErrorMsg',
       'setMsgKey',
       'setReBuildMarker',
@@ -151,6 +152,7 @@ export default {
         this.setMsgKey('addressSearch')
         this.setResults(results)
         this.setDetailView(true)
+        this.setDisplayResults(true)
         this.setRezoom(true)
         this.setReBuildMarker(true)
         const { name } = selectedResult.properties
