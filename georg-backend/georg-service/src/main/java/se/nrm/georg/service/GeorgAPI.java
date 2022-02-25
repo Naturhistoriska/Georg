@@ -67,7 +67,7 @@ public class GeorgAPI {
           @QueryParam("sources") String source, @QueryParam("layers") String layer,
           @QueryParam("countryCode") String countryCode,
           @QueryParam("size") int size) {
-    log.info("getGeoCode: {}, {}", address, source);
+    log.info("search: {}, {}", address, source);
 
     if (address == null || address.trim().isEmpty()) {
       return Response.status(Response.Status.BAD_REQUEST)
@@ -84,7 +84,7 @@ public class GeorgAPI {
 
   @GET
   @Path("/autocomplete")
-  @ApiOperation(value = "Search",
+  @ApiOperation(value = "Autocomplete",
           notes = "Return search results in json",
           response = String.class
   )
@@ -94,7 +94,7 @@ public class GeorgAPI {
           @QueryParam("layers") String layers,
           @QueryParam("countryCode") String countryCode,
           @QueryParam("size") int size) {
-    log.info("search: {}, {}", text, countryCode);
+    log.info("autocomplete: {}, {}", text, countryCode);
 
     if (text == null || text.trim().isEmpty()) {
       return Response.status(Response.Status.BAD_REQUEST)
@@ -141,10 +141,9 @@ public class GeorgAPI {
 
     try {
       return Response.ok(logic.coordinatesSearch(coordinates)).build();
-    } catch (NumberFormatException ex) {
-      log.info(ex.getMessage());
+    } catch (NumberFormatException | GeorgException ex) {
       return Response.ok(errorBuilder.buildInvalidCoordinatesMessage()).build();
-    } catch (GeorgException | JSONException ex) {
+    } catch (JSONException ex) { 
       return Response.status(Response.Status.NOT_FOUND)
               .entity(errorBuilder.buildPeliasNotAvailableMessage()).build();
     }
@@ -164,7 +163,7 @@ public class GeorgAPI {
                   paramType = "formData", required = true)) 
   public Response uploadFile(MultipartFormDataInput input, @QueryParam("type") String returnType) 
           throws IOException {
-    log.info("upload : {} -- {}", returnType, input.getFormDataMap());
+    log.info("upload : {} ", returnType);
 
     InputPart uploadFile = input.getFormDataMap().get(file).get(0); 
     

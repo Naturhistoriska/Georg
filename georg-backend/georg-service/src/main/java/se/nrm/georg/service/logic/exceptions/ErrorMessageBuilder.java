@@ -17,7 +17,7 @@ public class ErrorMessageBuilder {
   private final String invalidCoordinates = "Invalid coordinates";
   private final String invalidCsvFile = "Invalid CSV file"; 
   private final String peliasNotAvailable = "Pelias is not available";
-  private final String missingSearchText = "Search text is missing";
+  private final String missingSearchText = "Search text is missing"; 
   
   public ErrorMessageBuilder() {
     

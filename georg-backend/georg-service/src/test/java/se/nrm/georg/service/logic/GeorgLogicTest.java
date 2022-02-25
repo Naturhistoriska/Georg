@@ -23,6 +23,7 @@ import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 import se.nrm.georg.service.logic.coordinates.CoordinatesParser;
 import se.nrm.georg.service.logic.csv.CSVParser;
+import se.nrm.georg.service.logic.exceptions.GeorgException;
 import se.nrm.georg.service.logic.file.FileHandler;
 import se.nrm.georg.service.logic.pelias.GeoreferencingPelias;
 import se.nrm.georg.service.model.CSVBean;
@@ -322,11 +323,22 @@ public class GeorgLogicTest {
   public void testCoordinatesSearchDDMWithComma() {
     System.out.println("testCoordinatesSearchDDMWithComma");
 
-    String coordinatesString = "61°40.230600', N 5°19.365600' E";
+    String coordinatesString = "61°40.230600' N, 5°19.365600' E";
     String result = instance.coordinatesSearch(coordinatesString);
     assertEquals(resultString, result);
 
     verify(mockPelias, times(1)).reverseSearch(any(Double.class), any(Double.class));
     verify(mockCoordinates, times(1)).addCoordinatesTransformation(any(String.class), any(Double.class), any(Double.class));
+  }
+  
+  @Test(expected = GeorgException.class)
+  public void testCoordinatesSearchThrowException() {
+    System.out.println("testCoordinatesSearchThrowException");
+
+    String coordinatesString = "161°40.230600' N, 5°19.365600' E";
+    instance.coordinatesSearch(coordinatesString); 
+
+    verify(mockPelias, times(0)).reverseSearch(any(Double.class), any(Double.class));
+    verify(mockCoordinates, times(0)).addCoordinatesTransformation(any(String.class), any(Double.class), any(Double.class));
   }
 }

@@ -12,6 +12,7 @@ import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.json.JSONException;
 import se.nrm.georg.service.logic.coordinates.CoordinatesHelper;
 import se.nrm.georg.service.logic.coordinates.CoordinatesParser;
+import se.nrm.georg.service.logic.coordinates.validation.CoordinatesValidation;
 import se.nrm.georg.service.logic.csv.CSVParser;
 import se.nrm.georg.service.logic.exceptions.GeorgException;
 import se.nrm.georg.service.logic.file.FileHandler;
@@ -113,7 +114,10 @@ public class GeorgLogic implements Serializable {
    */
   public String coordinatesSearch(String coordinatesString) throws JSONException, GeorgException {   
     Double[] latLng = CoordinatesHelper.getInstance()
-            .getLatAndLng(coordinatesString.replace(comma, emptySpace)); 
+            .getLatAndLng(coordinatesString.replace(comma, emptySpace));  
+    if(!CoordinatesValidation.getInstance().ivValidCoordinates(latLng[0], latLng[1])) {
+      throw new GeorgException("Coordinates out or range");
+    } 
     return coordinates.addCoordinatesTransformation(
               pelias.reverseSearch(latLng[0], latLng[1]), latLng[0], latLng[1]); 
   }
