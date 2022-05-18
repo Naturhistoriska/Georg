@@ -24,12 +24,9 @@
   </developers>
 
   <modules>
-    <module>georg-service</module>
-    <!--<module>georg-ui</module>-->
-    <!--<module>georg-api</module>-->
+    <module>georg-service</module> 
   </modules>
-
-
+ 
   <properties>
     <version.thorntail>2.6.0.Final</version.thorntail>
     <version.org.slf4j>1.7.25</version.org.slf4j>
