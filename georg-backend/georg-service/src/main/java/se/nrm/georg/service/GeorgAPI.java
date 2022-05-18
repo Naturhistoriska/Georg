@@ -7,13 +7,13 @@ import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
 import io.swagger.annotations.Tag;
-import java.io.File;
-import java.io.FileInputStream; 
+//import java.io.File;
+//import java.io.FileInputStream; 
 import java.io.IOException; 
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.Reader;
+//import java.io.InputStreamReader;
+//import java.io.OutputStream;
+//import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.inject.Inject;
@@ -25,11 +25,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam; 
 import javax.ws.rs.core.MediaType; 
 import javax.ws.rs.core.Response; 
-import javax.ws.rs.core.StreamingOutput;
+//import javax.ws.rs.core.StreamingOutput;
 import lombok.extern.slf4j.Slf4j; 
-import org.apache.commons.io.IOUtils;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+//import org.apache.commons.io.IOUtils;
+//import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+//import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 //import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 //import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -207,7 +207,7 @@ public class GeorgAPI {
     }
    
     log.info("file path... {}", filePath);  
-    File fileDownload = new File(filePath);
+//    File fileDownload = new File(filePath);
     String content = new String(Files.readAllBytes(Paths.get(filePath)));
  
 //    StreamingOutput stream = (OutputStream out) -> { 
