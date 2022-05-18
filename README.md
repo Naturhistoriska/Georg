@@ -21,20 +21,16 @@ Georg consists of four parts:
 
 **[georg-pelias](https://github.com/Naturhistoriska/georg-pelias.git)**
 
-> Forked out from [Pelias/Docker](https://github.com/pelias/docker.git). It is a search engine for places over the Nordic countries and possible to expand over the world. georg-pelias is dockerized. Currently data imported into georg-pelias are:
+> Forked out from [Pelias/Docker](https://github.com/pelias/docker.git). It is a search engine for places over the Nordic countries, or United Kingdom and possible to expand over the world. georg-pelias is dockerized. Currently data imported into georg-pelias are:
 
-* [Who's on first](https://whosonfirst.org/),
-* [OpenAddress](https://openaddresses.io/)
-* [OpenStreetMaps](https://www.openstreetmap.org/#map=4/62.99/17.64).
-* [GBIF Sweden](http://www.gbif.se/ipt/)
-  * [Entomological Collections (NHRS), Swedish Museum of Natural History (NRM)](<(https://doi.org/10.15468/fpzyjx)>)
-  * [Phanerogamic Botanical Collections (S)](<(https://doi.org/10.15468/yo3mmu)>)
-  * [Botany (UPS)](https://doi.org/10.15468/ufmslw)
-* [Sweden's Virtual Herbarium (SVH)](https://github.com/mossnisse/Virtuella-Herbariet)
+* [Who's on first](https://whosonfirst.org/)
+* [OpenStreetMaps](https://www.openstreetmap.org/#map=4/62.99/17.64)
 
-**[georg-service](https://github.com/Naturhistoriska/Georg/tree/master/georg-backend)**
+* OpenAddress data are not available in UK
 
-> API build on top of georg-pelias. It allows user to send a text with locality information, or coordinates and get back location suggestions (in JSON format). API is also possible for users to upload a csv file with list of locality information, and get back the best match location suggestion for each locality (in both JSON or CSV format).
+**[georg-service](https://github.com/Naturhistoriska/Georg/tree/ida/uk-development/georg-backend)**
+
+> API build on top of georg-pelias. It allows user to send a text with locality description, or coordinates and get back location suggestions (in JSON format). API is also possible for users to upload a csv file with list of locality descriptions, and get back the best match location suggestion for each locality (in JSON or CSV format).
 > Current API provides five endpoints:
 
 * search
@@ -43,9 +39,9 @@ Georg consists of four parts:
 * suggest
 * batch upload
 
-**[georg-ui](https://github.com/Naturhistoriska/Georg/tree/master/georg-ui)**
+**[georg-ui](https://github.com/Naturhistoriska/Georg/tree/ida/uk-development/georg-ui)**
 
-> A web based application that allows user to type in text with locality information and get back location suggestions, and display location on map. georg-ui is also allows user type in coordinates or click on map for reverse geo-coding. The batch upload inteface allows user to select csv file with list of locality information from local computer and upload that file to [API](https://georg.nrm.se/swagger-ui/index.html?url=/api/swagger.json) for georeferencing. [georg-ui](https://github.com/Naturhistoriska/Georg/tree/master/georg-ui) uses leaflet map component for displaying search results. Currently georg-ui uses three map layers:
+> A web based application that allows user to type in text with locality description, and get back location suggestions, and display suggested locations on map. georg-ui is also allows user type in coordinates or click on map for reverse geo-coding. [georg-ui](https://github.com/Naturhistoriska/Georg/tree/ida/uk-development/georg-ui) uses leaflet map component for displaying search results. Currently georg-ui uses three map layers:
 
 * OpenStreetMap
 * Lantmäteriet topografish
@@ -61,26 +57,26 @@ Georg API works with Restish. Restish is a CLI for interacting with REST API.
 Reference: **[Restish](https://rest.sh/#/guide?id=guide)** for installation and configuration
 
 Installation
-> brew tap danielgtaylor/restish && brew install restish
+> brew tap danielgtaylor/restish && brew install restish<br />
 restish --version
 
 Comfiguration:
->restish api configure **<#name_of_service>**
-ex: restish api configure georg
+>restish api configure **<#name_of_service>** <br />
+ex: restish api configure georg-stage
 ? Base URI **<type in url>**
 Save and exit
 
 Basic usage:
 Examples:
-> restish -o json q text=val georg/api/search
-restish -o json -q text=val georg/api/autocomplete
-restish -o json -q lat=53.348190 -q lng=-1.744850 georg/api/reverse
-restish post -o json georg/api/upload?type=json <georg_batch.csv
+> restish -o json -q text=val georg-stage/api/search <br />
+restish -o json -q text=val georg-stage/api/autocomplete  <br />
+restish -o json -q lat=53.348190 -q lng=-1.744850 georg-stage/api/reverse <br />
+restish post -o json georg-stage/api/upload?type=json <georg_batch.csv <br />
 
 Output:
 Examples from API call
 
-> restish -o json -q text=val -q size=1 georg/api/search
+> restish -o json -q text=val -q size=1 georg-stage/api/search
 
 <details>
   <summary>Click to open response</summary>
@@ -234,7 +230,7 @@ Examples from API call
 </details>
 
 
-> restish -o json -q text=sol -q size=1 georg/api/autocomplete
+> restish -o json -q text=sol -q size=1 georg-stage/api/autocomplete
 
 <details>
   <summary>Click to open response</summary>
@@ -380,7 +376,7 @@ Examples from API call
 </details>
 
 
-> restish -o json -q lat=53.348190 -q lng=-1.744850 georg/api/reverse
+> restish -o json -q lat=53.348190 -q lng=-1.744850 georg-stage/api/reverse
 
 <details>
   <summary>Click to open response</summary>
