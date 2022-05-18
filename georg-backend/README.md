@@ -49,7 +49,7 @@ java -jar georg-service/target/georgApi-thorntail.jar -Sinitdata
 ```
 georg-service API starts at localhost port 8180
 ## How to use API
-Refer to [API Documention](https://georg.nrm.se/swagger-ui/index.html?url=/api/swagger.json) for available endpoints
+Refer to [API Documention](https://georg-stage.nrm.se/swagger-ui/index.html?url=/api/swagger.json) for available endpoints
 
 Currently API provides following five endpoints:
 * Forward geocoding (/api/search)
@@ -57,53 +57,52 @@ Currently API provides following five endpoints:
 * Reverse geocoding (/api/reverse)
 * Reverse geocoding with coordinates (/api/coorinates)
 * Batch upload (/api/upload)
-> Forward geocoding
-A free text search to find a place by searching for an address or name.
+> Forward geocoding <br />
+A free text search to find a place by searching for an address or name. <br />
 This search takes query parameters and options:
-* text - locality information (This query parameter is required)
+* text - locality description (This query parameter is required)
 * sources - data sources are imported into pelias (Optional).
-    * georg-pelias currently supports following data sources (georg-pelias only supports datasources over the nordic countries. It is possible to expand datasources over the world):
+    * georg-pelias for UK currently supports following data sources:
         * Who's on First (wof)
-        * OpenAddresses (oa)
         * OpenStreetMap (osm)
-        * GBIF (gbif)
-        * swe-virtual-herbarium (swe-virtual-herbarium)
 * layers - subset of datasource (Optional).
     * georg-pelias supports following layers:
         * venue
         * street
         * locality
-        * localadmin
-        * postalcode
-        * neighbourhood
-        * county
-        * region
-        * macrohood
-        * borough
         * country
         * macroregion
+        * region
+        * county
+        * localadmin
+        * borough
+        * postalcode
+        * neighbourhood
+        * continent
+        * empire
         * dependency
-        * nhrs-nrm (From GBIF)
-        * uppsala-botany (From GBIF)
-        * s-fbo (From GBIF)
-        * socken (From swe-virtual-herbarium)
+        * macrocounty
+        * macrohood
+        * disputed
+        * ocean
+        * marinearea
 * countryCode - Search for specific country (Optional)
-    * At present georg-pelias only can georference locations in the nordic countries. By default, the search searches locations in all the nordic countries. By add countryCode swe, the search searches locations only in Sweden
+    * At present georg-pelias only can georference locations in UK.
 * size - define number of suggestions shall be returned from API. The default size is 10
-> Autocomplete
+> Autocomplete <br />
 With autocomplete, user can type in text from georg-ui and get a real-time result suggestions back without having to type the whole location. Autocomplete takes same query parameters and options as Forward geocoding.
 
-> Reverse geocoding
+> Reverse geocoding <br />
 Find what is located at a certain coordinate location. Reverse geocoding are not working on custom datasets based on limition of Pelias.
 
 Reverse geocoding takes following query parameters:
 * lat - latitude
 * lng - longitude
-> Reverse geocoding with coordinates
+> Reverse geocoding with coordinates <br />
 Same as Reverse geocoding, this endpoint allows user send in coordinats (latitude and longitude) as a whole text in different format. The supported formats are: dd, dms, and ddm. The latitude and longitude shall be separated by comma or space. ex:
-   * '59.350828, 17.938927',
-   * '59°21'03.0" N 17°56'20.1" E',
-   * '59°21.050' N 17°56.336' E'
+   * '51.462615, -0.988183',
+   * '51°27'45.4" N 0°59'17.5" W',
+   * '51°27.757' N 0°59.291' W'
 > Batch upload
 This endpoint consumes MULTIPART_FORM_DATA which allows user to upload a csv file with minimum of two columns: Id, SourceLocality, and get best match result for each locality back as csv or json file. You can find sample csv templet from [github](https://github.com/Naturhistoriska/Georg/blob/master/data/georg_batch.csv).
 
@@ -129,7 +128,7 @@ curl http://localhost:8180/coordinates?coordinates=59.450880,17.93102 | json_pp
 ```
 > For batch upload:
 ```
-curl -F file=@/Users/idali/georg_batch.csv  http://localhost:8180/upload?type=json | json_pp
+curl -F file=@georg_batch.csv  http://localhost:8180/upload?type=json | json_pp
 ```
 
 ### Build docker image
