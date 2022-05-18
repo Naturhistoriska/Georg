@@ -28,7 +28,7 @@ Georg consists of four parts:
 
 * OpenAddress data are not available in UK
 
-**[georg-service](https://github.com/Naturhistoriska/Georg/tree/ida/uk-development/georg-backend)**
+**[georg-service](https://github.com/Naturhistoriska/Georg/tree/ida/uk/georg-backend)**
 
 > API build on top of georg-pelias. It allows user to send a text with locality description, or coordinates and get back location suggestions (in JSON format). API is also possible for users to upload a csv file with list of locality descriptions, and get back the best match location suggestion for each locality (in JSON or CSV format).
 > Current API provides five endpoints:
@@ -39,9 +39,9 @@ Georg consists of four parts:
 * suggest
 * batch upload
 
-**[georg-ui](https://github.com/Naturhistoriska/Georg/tree/ida/uk-development/georg-ui)**
+**[georg-ui](https://github.com/Naturhistoriska/Georg/tree/ida/uk/georg-ui)**
 
-> A web based application that allows user to type in text with locality description, and get back location suggestions, and display suggested locations on map. georg-ui is also allows user type in coordinates or click on map for reverse geo-coding. [georg-ui](https://github.com/Naturhistoriska/Georg/tree/ida/uk-development/georg-ui) uses leaflet map component for displaying search results. Currently georg-ui uses three map layers:
+> A web based application that allows user to type in text with locality description, and get back location suggestions, and display suggested locations on map. georg-ui is also allows user type in coordinates or click on map for reverse geo-coding. [georg-ui](https://github.com/Naturhistoriska/Georg/tree/ida/uk/georg-ui) uses leaflet map component for displaying search results. Currently georg-ui uses three map layers:
 
 * OpenStreetMap
 * Lantmäteriet topografish
