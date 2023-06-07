@@ -6,14 +6,9 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
-//import java.io.File;
-//import java.io.FileInputStream; 
+import io.swagger.annotations.Tag; 
 import java.io.IOException; 
-import java.io.InputStream;
-//import java.io.InputStreamReader;
-//import java.io.OutputStream;
-//import java.io.Reader;
+import java.io.InputStream; 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import javax.inject.Inject;
@@ -24,15 +19,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam; 
 import javax.ws.rs.core.MediaType; 
-import javax.ws.rs.core.Response; 
-//import javax.ws.rs.core.StreamingOutput;
-import lombok.extern.slf4j.Slf4j; 
-//import org.apache.commons.io.IOUtils;
-//import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-//import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-//import org.jboss.resteasy.plugins.providers.multipart.InputPart;
-//import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
+import javax.ws.rs.core.Response;  
+import lombok.extern.slf4j.Slf4j;  
+import org.glassfish.jersey.media.multipart.FormDataParam; 
 import org.json.JSONException;
 import se.nrm.georg.service.logic.GeorgLogic;
 import se.nrm.georg.service.logic.exceptions.ErrorMessageBuilder;
@@ -44,7 +33,7 @@ import se.nrm.georg.service.logic.exceptions.GeorgException;
  */
 @Path("/")
 @Api(tags = {"georg"})
-@SwaggerDefinition(
+@SwaggerDefinition( 
         info = @Info(
                 title = "Georg API",
                 version = "2.1"
@@ -56,7 +45,7 @@ import se.nrm.georg.service.logic.exceptions.GeorgException;
 @Slf4j
 public class GeorgAPI {
 
-  private final String file = "file";
+//  private final String file = "file";
   private final static String GEORG = "georg-service is a web service build on top of georg-pelias. "
           + "It serves as API for Georg Application. The API provides endpoints for forward geocoding, "
           + "reverse geocoding and batch upload.";
